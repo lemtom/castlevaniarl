@@ -78,9 +78,9 @@ public class MonsterLoader {
 		try {
 			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
 			Hashtable<String, MonsterDefinition> hashMonsters = new Hashtable<String, MonsterDefinition>();
-            for (MonsterDefinition monster : monsters) {
-                hashMonsters.put(monster.getID(), monster);
-            }
+			for (MonsterDefinition monster : monsters) {
+				hashMonsters.put(monster.getID(), monster);
+			}
 
 			MonsterDocumentHandler handler = new MonsterDocumentHandler(hashMonsters);
 			MinML parser = new MinML();
