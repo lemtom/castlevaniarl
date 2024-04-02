@@ -6,7 +6,6 @@ import crl.game.Game;
 import crl.level.Level;
 import crl.npc.NPC;
 import crl.ui.Display;
-import crl.ui.UserAction;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 

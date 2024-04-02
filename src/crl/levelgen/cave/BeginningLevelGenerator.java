@@ -12,8 +12,6 @@ import crl.cuts.Unleasher;
 import crl.cuts.intro.Intro1;
 import crl.cuts.intro.Intro2;
 import crl.cuts.intro.Intro3;
-import crl.feature.Feature;
-import crl.feature.FeatureFactory;
 import crl.game.CRLException;
 import crl.level.Cell;
 import crl.level.Dispatcher;
@@ -22,59 +20,57 @@ import crl.level.MapCellFactory;
 import crl.levelgen.LevelGenerator;
 import crl.levelgen.StaticGenerator;
 
-public class BeginningLevelGenerator extends LevelGenerator{
-	private String baseWall, baseFloor, baseLava;
-	
-	public void init(String baseWall, String baseFloor, String baseLava){
+public class BeginningLevelGenerator extends LevelGenerator {
+	private String baseWall;
+	private String baseFloor;
+	private String baseLava;
+
+	public void init(String baseWall, String baseFloor, String baseLava) {
 		this.baseWall = baseWall;
 		this.baseFloor = baseFloor;
 		this.baseLava = baseLava;
 	}
-	
-	public Level generateLevel(int xdim, int ydim, boolean locked) throws CRLException{
-		/** Uses Cave Cellular automata, by SantiagoZ
-		 * Init (1) 30%
-		 * If 0 and more than 3 1 around, 1
-		 * If 1 and less than 2 1 around, 0
-		 * If 0 and more than 7 0 around, 2
+
+	public Level generateLevel(int xdim, int ydim, boolean locked) throws CRLException {
+		/**
+		 * Uses Cave Cellular automata, by SantiagoZ Init (1) 30% If 0 and more than 3 1
+		 * around, 1 If 1 and less than 2 1 around, 0 If 0 and more than 7 0 around, 2
 		 * If 2 and more than 2 0 around, 0
-		 * 
+		 * <p>
 		 * Run for 5 turns
 		 */
-		
-		CARandomInitializer vInit = new CARandomInitializer(new double [] {0.3}, true);
-		CARule [] vRules = new CARule []{
-			new CARule(0, CARule.MORE_THAN, 3, 1, 1),
-			new CARule(1, CARule.LESS_THAN, 2, 1, 0),
-			new CARule(0, CARule.MORE_THAN, 7, 0, 2),
-			new CARule(2, CARule.MORE_THAN, 2, 0, 0),
-		};
+
+		CARandomInitializer vInit = new CARandomInitializer(new double[] { 0.3 }, true);
+		CARule[] vRules = new CARule[] { new CARule(0, CARule.MORE_THAN, 3, 1, 1),
+				new CARule(1, CARule.LESS_THAN, 2, 1, 0), new CARule(0, CARule.MORE_THAN, 7, 0, 2),
+				new CARule(2, CARule.MORE_THAN, 2, 0, 0), };
 
 		int[][] intMap = null;
 		int xEntrance;
-		Matrix map = new Matrix(xdim,ydim);
+		Matrix map = new Matrix(xdim, ydim);
 		vInit.init(map);
 		SZCA.runCA(map, vRules, 5, false);
 		intMap = map.getArrays();
-		
-		int halfHeight = (int)(Math.round(intMap[0].length/3));
-		Position start = new Position(Util.rand(25, intMap.length-25), 2*halfHeight + Util.rand(0, halfHeight-15),2); 
-		
-		//Carve the exit to forest
-		xEntrance = Util.rand(5, intMap.length-5);
+
+		int halfHeight = Math.round(intMap[0].length / 3);
+		Position start = new Position(Util.rand(25, intMap.length - 25), 2 * halfHeight + Util.rand(0, halfHeight - 15),
+				2);
+
+		// Carve the exit to forest
+		xEntrance = Util.rand(5, intMap.length - 5);
 		intMap[xEntrance][0] = 0;
-		for (int i = 1; i < 4; i++){
-			intMap[xEntrance-1][i] = 0;
+		for (int i = 1; i < 4; i++) {
+			intMap[xEntrance - 1][i] = 0;
 			intMap[xEntrance][i] = 0;
-			intMap[xEntrance+1][i] = 0;
+			intMap[xEntrance + 1][i] = 0;
 		}
 
-		Position end = new Position(xEntrance, 0,2);
-		
-		//Run the wisps
-		WispSim.setWisps(new Wisp(start, 10,40,5),new Wisp(end, 10,40,5));
+		Position end = new Position(xEntrance, 0, 2);
+
+		// Run the wisps
+		WispSim.setWisps(new Wisp(start, 10, 40, 5), new Wisp(end, 10, 40, 5));
 		WispSim.run(intMap);
-		
+
 		String[][] tiles = new String[intMap.length][intMap[0].length];
 		Level ret = new Level();
 		for (int x = 0; x < intMap.length; x++)
@@ -85,45 +81,47 @@ public class BeginningLevelGenerator extends LevelGenerator{
 					tiles[x][y] = baseWall;
 				else if (intMap[x][y] == 2)
 					tiles[x][y] = baseLava;
-				else if (intMap[x][y] == 4){
+				else if (intMap[x][y] == 4) {
 					tiles[x][y] = baseFloor;
-					//ret.addBlood(new Position(x,y,0), 8);
+					// ret.addBlood(new Position(x,y,0), 8);
 				}
 
 		Cell[][] cells = renderLevel(tiles);
-		
+
 		Cell[][][] levelCells = new Cell[3][][];
 		levelCells[0] = new Cell[cells.length][cells[0].length];
 		levelCells[1] = new Cell[cells.length][cells[0].length];
 		levelCells[2] = cells;
 		ret.setCells(levelCells);
-		Position startUL = new Position(start.x - 10, start.y -7);
+		Position startUL = new Position(start.x - 10, start.y - 7);
 		String[][] startingMap = pickStartingMap();
-		ret.setUnleashers((Unleasher[])Util.randomElementOf(STARTING_UNLEASHERS));
+		ret.setUnleashers((Unleasher[]) Util.randomElementOf(STARTING_UNLEASHERS));
 		ret.setDispatcher(new Dispatcher());
 		StaticGenerator.getGenerator().renderOverLevel(ret, startingMap, charMap, startUL);
-		
-		int trees = (ret.getHeight() * ret.getWidth())/10;
-		for (int i = 0; i < trees; i++){
-			int xrnd = Util.rand(1, ret.getWidth() -1);
-			int yrnd = Util.rand(1, ret.getHeight() -1);
-			if (ret.getMapCell(xrnd, yrnd, ret.getDepth()-1).isSolid()){
+
+		int trees = (ret.getHeight() * ret.getWidth()) / 10;
+		for (int i = 0; i < trees; i++) {
+			int xrnd = Util.rand(1, ret.getWidth() - 1);
+			int yrnd = Util.rand(1, ret.getHeight() - 1);
+			if (ret.getMapCell(xrnd, yrnd, ret.getDepth() - 1).isSolid()) {
 				i--;
 				continue;
 			}
 			if (Util.chance(50))
-				ret.getCells()[ret.getDepth()-1][xrnd][yrnd] = MapCellFactory.getMapCellFactory().getMapCell("FOREST_TREE_1");
+				ret.getCells()[ret.getDepth() - 1][xrnd][yrnd] = MapCellFactory.getMapCellFactory()
+						.getMapCell("FOREST_TREE_1");
 			else
-				ret.getCells()[ret.getDepth()-1][xrnd][yrnd] = MapCellFactory.getMapCellFactory().getMapCell("FOREST_TREE_2");
+				ret.getCells()[ret.getDepth() - 1][xrnd][yrnd] = MapCellFactory.getMapCellFactory()
+						.getMapCell("FOREST_TREE_2");
 		}
-		
-		//ret.addExit(start, "_START");
+
+		// ret.addExit(start, "_START");
 		ret.addExit(end, "FOREST0");
 		return ret;
 	}
-	
-	private Hashtable charMap = new Hashtable();
-	
+
+	private Hashtable<String, String> charMap = new Hashtable<String, String>();
+
 	{
 		charMap.put("&", "FOREST_TREE");
 		charMap.put(".", "FOREST_GRASS");
@@ -138,79 +136,34 @@ public class BeginningLevelGenerator extends LevelGenerator{
 		charMap.put("-", "HOUSE_FLOOR");
 		charMap.put("<", "TOWN_STAIRSUP");
 		charMap.put(">", "TOWN_STAIRSDOWN");
-		
+
 		charMap.put("+", "SIGNPOST");
 	}
-	
-	private String[][] pickStartingMap(){
+
+	private String[][] pickStartingMap() {
 		return (String[][]) Util.randomElementOf(STARTING_MAPS);
 	}
-	
-	private String [][][] STARTING_MAPS = new String [][][]{
-			{
-				{
-					"                    ",
-					"             ---    ",
-					"  wwwwww     ->-    ",
-					"  w--b-w     ---    ",
-					"  w----w            ",
-					"  w----w     ---    ",
-					"  ---www     ---    ",
-					"         --  ---    ",
-					"   ---  --          ",
-					"            wwwwww  ",
-					"            w----w  ",
-					"            w----w  ",
-					"            w----w  ",
-					"            wwwwww  ",
-					"                    ",
-					
-				},{
-					"                    ",
-					"                    ",
-					"  --wwww      <     ",
-					"  w----w      -     ",
-					"  w------------     ",
-					"  w----w      -     ",
-					"  ---www      -     ",
-					"              -     ",
-					"              -     ",
-					"            ww-www  ",
-					"            w-----  ",
-					"            w----w  ",
-					"            --->-w  ",
-					"            ---www  ",
-					"                    ",
-				},{
-					".....%%%.........%%.",
-					"...&&&&.%%....&&&&.%",
-					"..w.wwww..&&&&w&&&&.",
-					"%...---%....&&&&....",
-					"%.%%---.....&&&&&&.%",
-					"..w.---w&...C..&&&&.",
-					"..w.%%ww..S..H.W.&&.",
-					"...&&.............W.",
-					"....W...............",
-					"....%.......w.ww.w&.",
-					"..&.........%-..-w.%",
-					"..........&&.----...",
-					"%.%...&&....w%-<-w&.",
-					".%&..%.&&...%%w.ww%%",
-					"%%%..%%%%.......%%%.",
-				}
 
-			}
-	};
-	
-	private Unleasher[][] STARTING_UNLEASHERS = new Unleasher[][]{
-			{
-				new Intro1(),
-				new Intro2(),
-				new Intro3()
-			},
-			
+	private String[][][] STARTING_MAPS = new String[][][] {
+			{ { "                    ", "             ---    ", "  wwwwww     ->-    ", "  w--b-w     ---    ",
+					"  w----w            ", "  w----w     ---    ", "  ---www     ---    ", "         --  ---    ",
+					"   ---  --          ", "            wwwwww  ", "            w----w  ", "            w----w  ",
+					"            w----w  ", "            wwwwww  ", "                    ",
+
+			}, { "                    ", "                    ", "  --wwww      <     ", "  w----w      -     ",
+					"  w------------     ", "  w----w      -     ", "  ---www      -     ", "              -     ",
+					"              -     ", "            ww-www  ", "            w-----  ", "            w----w  ",
+					"            --->-w  ", "            ---www  ", "                    ", },
+					{ ".....%%%.........%%.", "...&&&&.%%....&&&&.%", "..w.wwww..&&&&w&&&&.", "%...---%....&&&&....",
+							"%.%%---.....&&&&&&.%", "..w.---w&...C..&&&&.", "..w.%%ww..S..H.W.&&.",
+							"...&&.............W.", "....W...............", "....%.......w.ww.w&.",
+							"..&.........%-..-w.%", "..........&&.----...", "%.%...&&....w%-<-w&.",
+							".%&..%.&&...%%w.ww%%", "%%%..%%%%.......%%%.", }
+
+			} };
+
+	private Unleasher[][] STARTING_UNLEASHERS = new Unleasher[][] { { new Intro1(), new Intro2(), new Intro3() },
+
 	};
 
-	
 }
-

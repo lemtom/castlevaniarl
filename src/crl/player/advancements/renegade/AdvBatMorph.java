@@ -33,6 +33,7 @@ public class AdvBatMorph extends Advancement{
 		return "Turns into a flying bat";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

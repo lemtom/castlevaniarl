@@ -3,7 +3,6 @@ package sz.csi.wswing;
 import java.awt.event.*;
 
 import sz.csi.CharKey;
-import crl.ui.*;
 
 public class StrokeInformer implements KeyListener, java.io.Serializable{
 	private int bufferCode;

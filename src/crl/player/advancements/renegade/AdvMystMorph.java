@@ -33,6 +33,7 @@ public class AdvMystMorph extends Advancement{
 		return "Turns into thin myst";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

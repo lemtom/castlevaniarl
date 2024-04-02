@@ -14,15 +14,18 @@ public class Turtle extends HeartAction{
 		return "Turtle";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/turtleCry.wav";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;

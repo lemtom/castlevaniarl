@@ -1,11 +1,10 @@
 package crl.levelgen.featureCarve;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import crl.action.Action;
 
 import sz.util.Position;
-import sz.util.Util;
 
 public class CorridotFeature extends Feature {
 	private int length;
@@ -15,7 +14,7 @@ public class CorridotFeature extends Feature {
 		this.floor = floor;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, ArrayList hotspotss){
+	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, List<Position> hotspotss){
 		Position start = new Position(0,0);
 		switch (direction){
 		case Action.UP:

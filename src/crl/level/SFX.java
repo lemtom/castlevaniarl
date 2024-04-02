@@ -1,9 +1,7 @@
 package crl.level;
 
-import sz.util.*;
 import crl.action.*;
 import crl.ui.effects.*;
-import crl.ui.*;
 
 public class SFX extends Action{
 	private static SFX singleton = new SFX();
@@ -17,7 +15,7 @@ public class SFX extends Action{
 		drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getLevel().getPlayer().getPosition(), "SFX_THUNDER_FLASH"));
 	}
 
-	private final static int THUNDER = 1;
+	private static final int THUNDER = 1;
 	private int effect;
 
 	public void setEffect(int pEffect){

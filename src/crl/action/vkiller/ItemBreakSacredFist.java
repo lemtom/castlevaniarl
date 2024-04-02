@@ -14,9 +14,10 @@ public class ItemBreakSacredFist extends BeamProjectileSkill{
 		return "ItemBreakSacredFist";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 	
 	public int getDamage() {
@@ -59,19 +60,13 @@ public class ItemBreakSacredFist extends BeamProjectileSkill{
 	public String getSpellAttackDesc() {
 		return "holy blow";
 	}
-	
-	public boolean allowsSelfTarget() {
-		return false;
-	}
-	
-	public String plottedLocatedEffect() {
-		return null;
-	}
-	
+
+    @Override
 	public boolean piercesThru() {
 		return true;
 	}
 	
+	@Override
 	public void execute() {
 		super.execute();
 		Line line = new Line(getPlayer().getPosition(), targetPosition);

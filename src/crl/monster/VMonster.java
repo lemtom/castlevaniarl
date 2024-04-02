@@ -18,7 +18,7 @@ public class VMonster implements java.io.Serializable{
 	}
 
 	public Monster elementAt(int i){
-		return (Monster) monsters.elementAt(i);
+		return monsters.elementAt(i);
 	}
 	
 	public boolean contains(Monster who){
@@ -35,8 +35,8 @@ public class VMonster implements java.io.Serializable{
 
 	public Monster getMonsterAt(Position p){
 		for (int i = 0; i < monsters.size(); i++)
-			if (((Monster) monsters.elementAt(i)).getPosition().equals(p))
-				return (Monster) monsters.elementAt(i);
+			if ((monsters.elementAt(i)).getPosition().equals(p))
+				return monsters.elementAt(i);
 		return null;
 	}
 

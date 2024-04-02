@@ -1,18 +1,12 @@
 package sz.util;
 
-import java.awt.GridLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 public class Debug {
 
 	static int methodLevel;
 
-	final static boolean debug = false;
-	final static boolean timing = false;
-	final static boolean gossip = false;
+	static final boolean debug = false;
+	static final boolean timing = false;
+	static final boolean gossip = false;
 /*
 	static JTextArea testArea;
 	static {
@@ -28,7 +22,8 @@ public class Debug {
 		}
 		
 	}*/
-	static long firstTimer, lastTimer;
+	static long firstTimer;
+	static long lastTimer;
 
 	public static void startTimer(){
 		if (timing)
@@ -121,7 +116,7 @@ public class Debug {
 		if (o==null){
 			System.out.println(spaces(methodLevel+1) + "NULL");
 		} else
-			System.out.println(spaces(methodLevel+1) + o.toString());
+			System.out.println(spaces(methodLevel+1) + o);
 	}
 
 	public static void say(String s, int level){
@@ -132,11 +127,11 @@ public class Debug {
 
 	private static String spaces(int n){
 
-		String ret = "";
+		StringBuilder ret = new StringBuilder();
 		for (int i=0; i<n; i++){
-			ret += "   ";
+			ret.append("   ");
 		}
-		return ret;
+		return ret.toString();
 	}
 
 	public static void byebye(String msg){

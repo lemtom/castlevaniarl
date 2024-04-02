@@ -13,10 +13,12 @@ public class BearMorph extends MorphAction{
 		return "BearMorph";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/growll.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);

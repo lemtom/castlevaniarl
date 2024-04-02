@@ -4,6 +4,7 @@ import crl.npc.*;
 
 import java.util.*;
 
+import sz.csi.textcomponents.MenuItem;
 import sz.util.*;
 import crl.player.*;
 import crl.data.*;
@@ -37,11 +38,12 @@ public class Merchant extends NPC {
 		merchantName = merchantNames[Util.rand(0, merchantNames.length-1)];
 	}
 	
+	@Override
 	public String getDescription(){
 		return merchantName;
 	}
 	
-	public Vector getMerchandiseFor(Player player){
+	public Vector<MenuItem> getMerchandiseFor(Player player){
 		if (refreshTurns == -1 || player.getGameSessionInfo().getTurns() - refreshTurns > 1000)  {
 			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
 					merchandiseType == ItemDefinition.SHOP_WEAPONS ||
@@ -55,7 +57,7 @@ public class Merchant extends NPC {
 	}
 
 	//private Vector merchandises = new Vector();
-	private Vector inventory;
+	private Vector<MenuItem> inventory;
 
 	/*private void refreshMerchandise(Player player){
 		merchandises = new Vector();
@@ -87,8 +89,8 @@ public class Merchant extends NPC {
 					) 
 			return;
 		
-		inventory = new Vector();
-		Vector vectorIDs = new Vector();
+		inventory = new Vector<MenuItem>();
+		Vector<String> vectorIDs = new Vector<String>();
 		ItemDefinition[] defs = Items.getItemDefinitions();
 		int itemNumber = Util.rand(6,12);
 		int items = 0;
@@ -127,7 +129,7 @@ public class Merchant extends NPC {
 		}
 	}
 
-	private final static String[] merchantNames = new String []{
+	private static final String[] merchantNames = new String []{
 		"Kaleth",
 		"Adam",
 		"Invenior",
@@ -144,6 +146,7 @@ public class Merchant extends NPC {
 		"Emer"
 	};
 
+	@Override
 	public int getAttack(){
 		return 4;
 	}

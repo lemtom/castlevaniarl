@@ -1,6 +1,5 @@
 package crl.ui.consoleUI.effects;
 
-import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
@@ -37,9 +36,9 @@ public class CharAnimatedEffect extends CharEffect{
 		if (!ui.insideViewPort(absolute))
 			return;
 		char [] cframes = frames.toCharArray();
-		for (int j = 0; j<cframes.length; j++){
-			si.print(absolute.x, absolute.y, cframes[j], color);
-			animationPause();
-		}
+        for (char cframe : cframes) {
+            si.print(absolute.x, absolute.y, cframe, color);
+            animationPause();
+        }
 	}
 }

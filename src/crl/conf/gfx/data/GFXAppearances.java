@@ -12,7 +12,7 @@ public class GFXAppearances {
 	private int UI_SCALE;
 	private int WIDTH_HALF;
 	private int WIDTH_QUARTER;
-	private final static int ICON_SIZE = 16;
+	private static final int ICON_SIZE = 16;
 	private int CELL_HEIGHT;
 	private int WIDTH_NORMAL;
 	

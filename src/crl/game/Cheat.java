@@ -4,7 +4,7 @@ import sz.csi.CharKey;
 import crl.player.Player;
 
 public class Cheat {
-	private final static boolean enabled = false;
+	private static final boolean enabled = false;
 	public static boolean cheatConsole(Player player, int charCode){
 		if (!enabled)
 			return false;

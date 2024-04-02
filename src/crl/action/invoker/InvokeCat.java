@@ -13,10 +13,12 @@ public class InvokeCat extends SummonSkill{
 		return "S_CAT";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/kitty.wav";
 	}
 	
+	@Override
 	public int getHitBonus() {
 		return 2*getPlayer().getSoulPower();
 	}

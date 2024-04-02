@@ -12,6 +12,7 @@ public class UnleashSickles extends Action{
 		return "UNLEASH_SICKLES";
 	}
 	
+	@Override
 	public int getCost(){
 		return 40;
 	}

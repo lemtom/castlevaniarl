@@ -3,36 +3,32 @@ package crl.levelgen.patterns;
 import crl.cuts.Unleasher;
 import crl.cuts.ingame.deathHall.*;
 
-public class DeathHall extends StaticPattern
-{
-	public String getMapKey(){
+public class DeathHall extends StaticPattern {
+	public String getMapKey() {
 		return "HALL";
 	}
 
-	public DeathHall () {
-		cellMap = new String [][]{
-		{
-			"#######################",
-			"#,,,,,,,,,,,,,,,,,,,,,#",
-			"#,,,,,,,,,,,,,,,,,,,,,#",
-			"#,,,,,,,,,,,,,,,,,,,,,#",
-			"####===#########===####",
-			"#@......~@~.~@~......@#",
-			"#.....................#",
-			"#.....................#",
-			"#---------------------#",
-			"S----1----------------E",
-			"#---------------------#",
-			"#.....................#",
-			"#.....................#",
-			"#@......~@~.~@~......@#",
-			"####===#########===####",
-			"#,,,,,,,,,,,,,,,,,,,,,#",
-			"#,,,,,,,,,,,,,,,,,,,,,#",
-			"#,,,,,,,,,,,,,,,,,,,,,#",
-			"#######################",
-		}
-	};
+	public DeathHall() {
+		cellMap = new String[][] { { //
+				"#######################", //
+				"#,,,,,,,,,,,,,,,,,,,,,#", //
+				"#,,,,,,,,,,,,,,,,,,,,,#", //
+				"#,,,,,,,,,,,,,,,,,,,,,#", //
+				"####===#########===####", //
+				"#@......~@~.~@~......@#", //
+				"#.....................#", //
+				"#.....................#", //
+				"#---------------------#", //
+				"S----1----------------E", //
+				"#---------------------#", //
+				"#.....................#", //
+				"#.....................#", //
+				"#@......~@~.~@~......@#", //
+				"####===#########===####", //
+				"#,,,,,,,,,,,,,,,,,,,,,#", //
+				"#,,,,,,,,,,,,,,,,,,,,,#", //
+				"#,,,,,,,,,,,,,,,,,,,,,#", //
+				"#######################" } };
 
 		charMap.put("o", "MARBLE_COLUMN");
 		charMap.put(".", "MARBLE_FLOOR");
@@ -45,15 +41,10 @@ public class DeathHall extends StaticPattern
 		charMap.put("@", "GODNESS_STATUE");
 		charMap.put("-", "RED_CARPET");
 		charMap.put("1", "RED_CARPET MONSTER DEATH");
-		
-		unleashers = new Unleasher[] {
-			new DeathHall1(),
-			new DeathHall2(),
-		};
+
+		unleashers = new Unleasher[] { new DeathHall1(), new DeathHall2(), };
 	}
 
-	
-	
 	public String getDescription() {
 		return "Hall";
 	}
@@ -65,5 +56,5 @@ public class DeathHall extends StaticPattern
 	public String getMusicKeyNoon() {
 		return null;
 	}
-	
+
 }

@@ -75,7 +75,7 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
     }
 
     public String input(int l){
-	    String ret = "";
+	    StringBuilder ret = new StringBuilder();
 		CharKey read = new CharKey(CharKey.NONE);
 		while (true){
 			while (read.code == CharKey.NONE)
@@ -83,14 +83,14 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 			if (read.code == CharKey.ENTER)
 				break;
 			if (read.code == CharKey.BACKSPACE){
-				if (ret.equals("")){
+				if (ret.length() == 0){
 					read.code = CharKey.NONE;
 					continue;
 				}
 				if (ret.length() > 1)
-					ret = ret.substring(0, ret.length() -1);
+					ret = new StringBuilder(ret.substring(0, ret.length() - 1));
 				else
-					ret = "";
+					ret = new StringBuilder();
                 caretPosition.x--;
 				print(caretPosition.x, caretPosition.y, " ");
 
@@ -107,14 +107,14 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 					
 				String nuevo = read.toString();
 				print(caretPosition.x, caretPosition.y, nuevo+"_");
-				ret +=nuevo;
+				ret.append(nuevo);
 				caretPosition.x++;
 			}
 			refresh();
 			read.code = CharKey.NONE;
 
 		}
-		return ret;
+		return ret.toString();
     }
 
 	public boolean isInsideBounds(Position p){
@@ -198,12 +198,12 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 		return null;
 	}
 
-	private final static int KEY_BACKSPACE = InputChar.KEY_BACKSPACE;
-	private final static int KEY_UP = InputChar.KEY_UP;
-	private final static int KEY_DOWN = InputChar.KEY_DOWN;
-	private final static int KEY_F1 = InputChar.KEY_F1;
-	private final static int KEY_LEFT = InputChar.KEY_LEFT;
-	private final static int KEY_RIGHT = InputChar.KEY_RIGHT;
+	private static final int KEY_BACKSPACE = InputChar.KEY_BACKSPACE;
+	private static final int KEY_UP = InputChar.KEY_UP;
+	private static final int KEY_DOWN = InputChar.KEY_DOWN;
+	private static final int KEY_F1 = InputChar.KEY_F1;
+	private static final int KEY_LEFT = InputChar.KEY_LEFT;
+	private static final int KEY_RIGHT = InputChar.KEY_RIGHT;
 
 	private int ASCtoCharKeyCode(int code){
     	if (code >= 65 && code <= 90)

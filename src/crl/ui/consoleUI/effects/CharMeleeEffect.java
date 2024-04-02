@@ -2,7 +2,6 @@ package crl.ui.consoleUI.effects;
 
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
-import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import crl.action.*;
 

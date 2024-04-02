@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.sound.midi.MidiSystem;
@@ -90,29 +90,31 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 import crl.ui.graphicsUI.effects.GFXEffectFactory;
 
 public class Main {
-	private final static int JCURSES_CONSOLE = 0, SWING_GFX = 1, SWING_CONSOLE = 2;
-	//private static SystemInterface si;
+	private static final int JCURSES_CONSOLE = 0;
+	private static final int SWING_GFX = 1;
+	private static final int SWING_CONSOLE = 2;
+	// private static SystemInterface si;
 	private static UserInterface ui;
 	private static UISelector uiSelector;
-	
+
 	private static Game currentGame;
 	private static boolean createNew = true;
 	private static int mode;
-	
-	public static String getConfigurationVal(String key){
+
+	public static String getConfigurationVal(String key) {
 		return configuration.getProperty(key);
 	}
 
-	private static void init(){
-		if (createNew){		
-			System.out.println("CastlevaniaRL "+Game.getVersion());
+	private static void init() {
+		if (createNew) {
+			System.out.println("CastlevaniaRL " + Game.getVersion());
 			System.out.println("by slashie ~ 2005-2007, 2010, 2024");
 			System.out.println("Reading configuration");
-	    	readConfiguration();
+			readConfiguration();
 			GFXConfiguration gfx_configuration = null;
-            try {
-    			
-    			switch (mode){
+			try {
+
+				switch (mode) {
 				case SWING_GFX:
 					gfx_configuration = new GFXConfiguration();
 					gfx_configuration.LoadConfiguration(UIconfiguration);
@@ -124,7 +126,7 @@ public class Main {
 					System.out.println("Initializing Char Appearances");
 					initializeCAppearances();
 					break;
-    			}
+				}
 				System.out.println("Initializing Action Objects");
 				initializeActions();
 				initializeSelectors();
@@ -135,40 +137,40 @@ public class Main {
 				initializeNPCs();
 				initializeFeatures();
 				initializeSmartFeatures();
-				switch (mode){
-				case SWING_GFX:			
+				switch (mode) {
+				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
 					SwingSystemInterface si = new SwingSystemInterface(gfx_configuration);
-					System.out.println("Initializing Swing GFX User Interface");										
+					System.out.println("Initializing Swing GFX User Interface");
 					UserInterface.setSingleton(new GFXUserInterface(gfx_configuration));
 					GFXCuts.initializeSingleton();
 					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
 					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
-					//PlayerGenerator.thus.initSpecialPlayers();
+					// PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new GFXEffectFactory());
-					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects(gfx_configuration).getEffects());
+					((GFXEffectFactory) EffectFactory.getSingleton())
+							.setEffects(new GFXEffects(gfx_configuration).getEffects());
 					ui = UserInterface.getUI();
 					initializeUI(si);
 					break;
 				case JCURSES_CONSOLE:
 					System.out.println("Initializing JCurses System Interface");
 					ConsoleSystemInterface csi = null;
-					try{
+					try {
 						csi = new JCursesConsoleInterface();
+					} catch (ExceptionInInitializerError eiie) {
+						crash("Fatal Error Initializing JCurses", eiie);
+						eiie.printStackTrace();
+						System.exit(-1);
 					}
-		            catch (ExceptionInInitializerError eiie){
-		            	crash("Fatal Error Initializing JCurses", eiie);
-		            	eiie.printStackTrace();
-		                System.exit(-1);
-		            }
-		            System.out.println("Initializing Console User Interface");
+					System.out.println("Initializing Console User Interface");
 					UserInterface.setSingleton(new ConsoleUserInterface());
 					CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					//PlayerGenerator.thus.initSpecialPlayers();
+					// PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new CharEffectFactory());
-					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
+					((CharEffectFactory) EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
 					ui = UserInterface.getUI();
 					initializeUI(csi);
 					break;
@@ -181,63 +183,66 @@ public class Main {
 					CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					//PlayerGenerator.thus.initSpecialPlayers();
+					// PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new CharEffectFactory());
-					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
+					((CharEffectFactory) EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
 					ui = UserInterface.getUI();
 					initializeUI(csi);
 				}
-				
-            } catch (CRLException crle){
-            	crash("Error initializing", crle);
-            }
-            STMusicManagerNew.initManager();
-        	if (configuration.getProperty("enableSound") != null && configuration.getProperty("enableSound").equals("true")){ // Sound
-        		if (configuration.getProperty("enableMusic") == null || !configuration.getProperty("enableMusic").equals("true")){ // Music
-    	    		STMusicManagerNew.thus.setEnabled(false);
-    		    } else {
-    		    	System.out.println("Initializing Midi Sequencer");
-    	    		try {
-    	    			STMidiPlayer.sequencer = MidiSystem.getSequencer ();
-    	    			//STMidiPlayer.setVolume(0.1d);
-    	    			STMidiPlayer.sequencer.open();
-    	    			
-    	    		} catch(MidiUnavailableException mue) {
-    	            	Game.addReport("Midi device unavailable");
-    	            	System.out.println("Midi Device Unavailable");
-    	            	STMusicManagerNew.thus.setEnabled(false);
-    	            	return;
-    	            }
-    	    		System.out.println("Initializing Music Manager");
-    				
-    		    	
-    	    		Enumeration keys = configuration.keys();
-    	    	    while (keys.hasMoreElements()){
-    	    	    	String key = (String) keys.nextElement();
-    	    	    	if (key.startsWith("mus_")){
-    	    	    		String music = key.substring(4);
-    	    	    		STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
-    	    	    	}
-    	    	    }
-    	    	    STMusicManagerNew.thus.setEnabled(true);
-    		    }
-    	    	if (configuration.getProperty("enableSFX") == null || !configuration.getProperty("enableSFX").equals("true")){
-    		    	SFXManager.setEnabled(false);
-    		    } else {
-    		    	SFXManager.setEnabled(true);
-    		    }
-        	}
-			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW","THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
-			
+
+			} catch (CRLException crle) {
+				crash("Error initializing", crle);
+			}
+			STMusicManagerNew.initManager();
+			if (configuration.getProperty("enableSound") != null
+					&& configuration.getProperty("enableSound").equals("true")) { // Sound
+				if (configuration.getProperty("enableMusic") == null
+						|| !configuration.getProperty("enableMusic").equals("true")) { // Music
+					STMusicManagerNew.thus.setEnabled(false);
+				} else {
+					System.out.println("Initializing Midi Sequencer");
+					try {
+						STMidiPlayer.sequencer = MidiSystem.getSequencer();
+						// STMidiPlayer.setVolume(0.1d);
+						STMidiPlayer.sequencer.open();
+
+					} catch (MidiUnavailableException mue) {
+						Game.addReport("Midi device unavailable");
+						System.out.println("Midi Device Unavailable");
+						STMusicManagerNew.thus.setEnabled(false);
+						return;
+					}
+					System.out.println("Initializing Music Manager");
+
+					Enumeration<Object> keys = configuration.keys();
+					while (keys.hasMoreElements()) {
+						String key = (String) keys.nextElement();
+						if (key.startsWith("mus_")) {
+							String music = key.substring(4);
+							STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
+						}
+					}
+					STMusicManagerNew.thus.setEnabled(true);
+				}
+				if (configuration.getProperty("enableSFX") == null
+						|| !configuration.getProperty("enableSFX").equals("true")) {
+					SFXManager.setEnabled(false);
+				} else {
+					SFXManager.setEnabled(true);
+				}
+			}
+			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW", "THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
+
 			try {
 				GameVersion latestVersion = GameVersion.getLatestVersion();
-				if (latestVersion == null){
+				if (latestVersion == null) {
 					ui.showVersionDialog("Error checking for updates.", true);
 					System.err.println("null latest version");
-				} else if (latestVersion.equals(GameVersion.getCurrentVersion())){
+				} else if (latestVersion.equals(GameVersion.getCurrentVersion())) {
 					ui.showVersionDialog("You are using the latest available version", false);
 				} else {
-					ui.showVersionDialog("A newer version, "+latestVersion.getCode()+" from "+latestVersion.getFormattedDate()+" is available!", true);
+					ui.showVersionDialog("A newer version, " + latestVersion.getCode() + " from "
+							+ latestVersion.getFormattedDate() + " is available!", true);
 				}
 			} catch (HttpException ex) {
 				ui.showVersionDialog("Error checking for updates.", true);
@@ -247,39 +252,38 @@ public class Main {
 				ex.printStackTrace();
 			}
 			createNew = false;
-    	}
+		}
 	}
+
 	private static Properties configuration;
 	private static Properties UIconfiguration;
 	private static String uiFile;
-	
-	private static void readConfiguration(){
+
+	private static void readConfiguration() {
 		configuration = new Properties();
-	    try {
-	    	configuration.load(new FileInputStream("cvrl.cfg"));
-	    } catch (IOException e) {
-	    	System.out.println("Error loading configuration file, please confirm existence of cvrl.cfg");
-	    	System.exit(-1);
-	    }
-	    
-	    if (mode == SWING_GFX){
-		    UIconfiguration = new Properties();
-		    try {
-		    	UIconfiguration.load(new FileInputStream(uiFile));
-		    } catch (IOException e) {
-		    	System.out.println("Error loading configuration file, please confirm existence of "+uiFile);
-		    	System.exit(-1);
-		    }
-	    }
+		try {
+			configuration.load(new FileInputStream("cvrl.cfg"));
+		} catch (IOException e) {
+			System.out.println("Error loading configuration file, please confirm existence of cvrl.cfg");
+			System.exit(-1);
+		}
+
+		if (mode == SWING_GFX) {
+			UIconfiguration = new Properties();
+			try {
+				UIconfiguration.load(new FileInputStream(uiFile));
+			} catch (IOException e) {
+				System.out.println("Error loading configuration file, please confirm existence of " + uiFile);
+				System.exit(-1);
+			}
+		}
 
 	}
-	
-	
-				
-	private static void	title() {
+
+	private static void title() {
 		STMusicManagerNew.thus.playKey("TITLE");
 		int choice = Display.thus.showTitleScreen();
-		switch (choice){
+		switch (choice) {
 		case 0:
 			newGame();
 			break;
@@ -300,61 +304,60 @@ public class Main {
 			Display.thus.showHiscores(GameFiles.loadScores("arena.tbl"));
 			title();
 			break;
-		
+
 		case 6:
-			System.out.println("CastlevaniaRL v"+Game.getVersion()+", clean Exit");
+			System.out.println("CastlevaniaRL v" + Game.getVersion() + ", clean Exit");
 			System.out.println("Thank you for playing!");
 			System.exit(0);
 			break;
-		
+
 		}
-		
-			
+
 	}
-	
-	private static void prologue(){
-		if (currentGame != null){
+
+	private static void prologue() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
 		currentGame.setCanSave(false);
 		currentGame.setInterfaces(ui, uiSelector);
-		//si.cls();
+		// si.cls();
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.prologue();
 		title();
 	}
-	
-	private static void arena(){
-		if (currentGame != null){
+
+	private static void arena() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
 		currentGame.setCanSave(false);
 		currentGame.setInterfaces(ui, uiSelector);
 		setMonsterRecord(GameFiles.getMonsterRecord());
-		//si.cls();
+		// si.cls();
 		currentGame.arena();
 		title();
 	}
-	
-	private static void training(){
-		if (currentGame != null){
+
+	private static void training() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
 		currentGame.setCanSave(false);
 		currentGame.setInterfaces(ui, uiSelector);
-		//si.cls();
+		// si.cls();
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.training();
 		title();
 	}
-	
-	private static void loadGame(){
+
+	private static void loadGame() {
 		File saveDirectory = new File("savegame");
-		File[] saves = saveDirectory.listFiles(new SaveGameFilenameFilter() );
-		
+		File[] saves = saveDirectory.listFiles(new SaveGameFilenameFilter());
+
 		int index = Display.thus.showSavedGames(saves);
 		if (index == -1)
 			title();
@@ -362,14 +365,14 @@ public class Main {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saves[index]));
 			currentGame = (Game) ois.readObject();
 			ois.close();
-		} catch (IOException ioe){
- 
+		} catch (IOException ioe) {
+
 			ioe.printStackTrace();
-		} catch (ClassNotFoundException cnfe){
+		} catch (ClassNotFoundException cnfe) {
 			crash("Invalid savefile or wrong version", new CRLException("Invalid savefile or wrong version"));
 		}
 		currentGame.setInterfaces(ui, uiSelector);
-		if (currentGame.getPlayer().getLevel() == null){
+		if (currentGame.getPlayer().getLevel() == null) {
 			crash("Player wasnt loaded", new Exception("Player wasnt loaded"));
 		}
 		currentGame.setPlayer(currentGame.getPlayer());
@@ -377,12 +380,12 @@ public class Main {
 		uiSelector.setPlayer(currentGame.getPlayer());
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.resume();
-		
+
 		title();
 	}
-	
-	private static void newGame(){
-		if (currentGame != null){
+
+	private static void newGame() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
@@ -390,11 +393,11 @@ public class Main {
 		currentGame.setInterfaces(ui, uiSelector);
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.newGame();
-		
+
 		title();
 	}
 
-	private static void initializeUI(Object si){
+	private static void initializeUI(Object si) {
 		Action walkAction = new Walk();
 		Action jump = new Jump();
 		Action thrown = new Throw();
@@ -407,15 +410,15 @@ public class Main {
 		Action switchWeapons = new SwitchWeapons();
 		Action get = new Get();
 		Action drop = new Drop();
-		Action dive = new Dive(); 
-		
+		Action dive = new Dive();
+
 		UserAction[] userActions = null;
 		UserCommand[] userCommands = null;
 		Properties keyBindings = null;
 		try {
 			Properties keyConfig = new Properties();
 			keyConfig.load(new FileInputStream("keys.cfg"));
-			
+
 			keyBindings = new Properties();
 			keyBindings.put("WEAPON_KEY", readKeyString(keyConfig, "weapon"));
 			keyBindings.put("DONOTHING1_KEY", readKeyString(keyConfig, "doNothing"));
@@ -465,43 +468,41 @@ public class Main {
 			keyBindings.put("SHOW_MAP_KEY", readKeyString(keyConfig, "SHOWMAP"));
 			keyBindings.put("EXAMINE_LEVEL_MAP_KEY", readKeyString(keyConfig, "EXAMINELEVELMAP"));
 			keyBindings.put("SWITCH_MUSIC_KEY", readKeyString(keyConfig, "SWITCHMUSIC"));
-			
-			Display.thus.setKeyBindings(keyBindings);
-			
-			userActions = new UserAction[] {
-			        new UserAction(attack, i(keyBindings.getProperty("ATTACK1_KEY"))),
-			        new UserAction(attack, i(keyBindings.getProperty("ATTACK2_KEY"))),
-			        new UserAction(jump, i(keyBindings.getProperty("JUMP_KEY"))),
-			        new UserAction(thrown, i(keyBindings.getProperty("THROW_KEY"))),
-			        new UserAction(equip, i(keyBindings.getProperty("EQUIP_KEY"))),
-			        new UserAction(unequip, i(keyBindings.getProperty("UNEQUIP_KEY"))),
-	  		        new UserAction(reload, i(keyBindings.getProperty("RELOAD_KEY"))),
-			        new UserAction(use, i(keyBindings.getProperty("USE_KEY"))),
-			        new UserAction(get, i(keyBindings.getProperty("GET_KEY"))),
-			        new UserAction(drop, i(keyBindings.getProperty("DROP_KEY"))),
-			        new UserAction(dive, i(keyBindings.getProperty("DIVE_KEY"))),
-			        new UserAction(target, i(keyBindings.getProperty("TARGET_KEY"))),
-			        new UserAction(switchWeapons, i(keyBindings.getProperty("SWITCH_WEAPONS_KEY"))),
-			        new UserAction(get, i(keyBindings.getProperty("GET2_KEY"))),
-			};
 
-			userCommands = new UserCommand[]{
-				new UserCommand(CommandListener.PROMPTQUIT, i(keyBindings.getProperty("QUIT_KEY"))),
-				new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP1_KEY"))),
-				new UserCommand(CommandListener.LOOK, i(keyBindings.getProperty("LOOK_KEY"))),
-				new UserCommand(CommandListener.PROMPTSAVE, i(keyBindings.getProperty("PROMPT_SAVE_KEY"))),
-				new UserCommand(CommandListener.SHOWSKILLS, i(keyBindings.getProperty("SHOW_SKILLS_KEY"))),
-				new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP2_KEY"))),
-				new UserCommand(CommandListener.SHOWINVEN, i(keyBindings.getProperty("SHOW_INVENTORY_KEY"))),
-				new UserCommand(CommandListener.SHOWSTATS, i(keyBindings.getProperty("SHOW_STATS_KEY"))),
-				new UserCommand(CommandListener.CHARDUMP, i(keyBindings.getProperty("CHARDUMP_KEY"))),
-				new UserCommand(CommandListener.SHOWMESSAGEHISTORY, i(keyBindings.getProperty("SHOW_MESSAGE_HISTORY_KEY"))),
-				new UserCommand(CommandListener.SHOWMAP, i(keyBindings.getProperty("SHOW_MAP_KEY"))),
-				new UserCommand(CommandListener.EXAMINELEVELMAP, i(keyBindings.getProperty("EXAMINE_LEVEL_MAP_KEY"))),
-				new UserCommand(CommandListener.SWITCHMUSIC, i(keyBindings.getProperty("SWITCH_MUSIC_KEY"))),
-			};
-			
-			
+			Display.thus.setKeyBindings(keyBindings);
+
+			userActions = new UserAction[] { new UserAction(attack, i(keyBindings.getProperty("ATTACK1_KEY"))),
+					new UserAction(attack, i(keyBindings.getProperty("ATTACK2_KEY"))),
+					new UserAction(jump, i(keyBindings.getProperty("JUMP_KEY"))),
+					new UserAction(thrown, i(keyBindings.getProperty("THROW_KEY"))),
+					new UserAction(equip, i(keyBindings.getProperty("EQUIP_KEY"))),
+					new UserAction(unequip, i(keyBindings.getProperty("UNEQUIP_KEY"))),
+					new UserAction(reload, i(keyBindings.getProperty("RELOAD_KEY"))),
+					new UserAction(use, i(keyBindings.getProperty("USE_KEY"))),
+					new UserAction(get, i(keyBindings.getProperty("GET_KEY"))),
+					new UserAction(drop, i(keyBindings.getProperty("DROP_KEY"))),
+					new UserAction(dive, i(keyBindings.getProperty("DIVE_KEY"))),
+					new UserAction(target, i(keyBindings.getProperty("TARGET_KEY"))),
+					new UserAction(switchWeapons, i(keyBindings.getProperty("SWITCH_WEAPONS_KEY"))),
+					new UserAction(get, i(keyBindings.getProperty("GET2_KEY"))), };
+
+			userCommands = new UserCommand[] {
+					new UserCommand(CommandListener.PROMPTQUIT, i(keyBindings.getProperty("QUIT_KEY"))),
+					new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP1_KEY"))),
+					new UserCommand(CommandListener.LOOK, i(keyBindings.getProperty("LOOK_KEY"))),
+					new UserCommand(CommandListener.PROMPTSAVE, i(keyBindings.getProperty("PROMPT_SAVE_KEY"))),
+					new UserCommand(CommandListener.SHOWSKILLS, i(keyBindings.getProperty("SHOW_SKILLS_KEY"))),
+					new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP2_KEY"))),
+					new UserCommand(CommandListener.SHOWINVEN, i(keyBindings.getProperty("SHOW_INVENTORY_KEY"))),
+					new UserCommand(CommandListener.SHOWSTATS, i(keyBindings.getProperty("SHOW_STATS_KEY"))),
+					new UserCommand(CommandListener.CHARDUMP, i(keyBindings.getProperty("CHARDUMP_KEY"))),
+					new UserCommand(CommandListener.SHOWMESSAGEHISTORY,
+							i(keyBindings.getProperty("SHOW_MESSAGE_HISTORY_KEY"))),
+					new UserCommand(CommandListener.SHOWMAP, i(keyBindings.getProperty("SHOW_MAP_KEY"))),
+					new UserCommand(CommandListener.EXAMINELEVELMAP,
+							i(keyBindings.getProperty("EXAMINE_LEVEL_MAP_KEY"))),
+					new UserCommand(CommandListener.SWITCHMUSIC, i(keyBindings.getProperty("SWITCH_MUSIC_KEY"))), };
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("keys.cfg config file not found");
@@ -509,81 +510,80 @@ public class Main {
 			e.printStackTrace();
 			throw new RuntimeException("Problem reading keys.cfg config file");
 		}
-		
 
-		
-		switch (mode){
+		switch (mode) {
 		case SWING_GFX:
-			((GFXUserInterface)ui).init((SwingSystemInterface)si, userCommands, target);
+			((GFXUserInterface) ui).init((SwingSystemInterface) si, userCommands, target);
 			uiSelector = new GFXUISelector();
-			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, target, attack, (GFXUserInterface)ui, keyBindings);
+			((GFXUISelector) uiSelector).init((SwingSystemInterface) si, userActions, UIconfiguration, walkAction,
+					target, attack, (GFXUserInterface) ui, keyBindings);
 			break;
 		case JCURSES_CONSOLE:
-			((ConsoleUserInterface)ui).init((ConsoleSystemInterface)si, userCommands, target);
+			((ConsoleUserInterface) ui).init((ConsoleSystemInterface) si, userCommands, target);
 			uiSelector = new ConsoleUISelector();
-			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, target, attack, (ConsoleUserInterface)ui, keyBindings);
+			((ConsoleUISelector) uiSelector).init((ConsoleSystemInterface) si, userActions, walkAction, target, attack,
+					(ConsoleUserInterface) ui, keyBindings);
 			break;
 		case SWING_CONSOLE:
-			//((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions, userCommands, walkAction, target, attack);
+			// ((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions,
+			// userCommands, walkAction, target, attack);
 			break;
 		}
 	}
-	
+
 	private static int i(String s) {
 		return Integer.parseInt(s);
 	}
 
 	private static String readKeyString(Properties config, String keyName) {
-		return readKey(config, keyName)+"";
+		return readKey(config, keyName) + "";
 	}
 
-	
 	private static int readKey(Properties config, String keyName) {
 		String fieldName = config.getProperty(keyName).trim();
 		if (fieldName == null)
-			throw new RuntimeException("Invalid key.cfg file, property not found: "+keyName);
+			throw new RuntimeException("Invalid key.cfg file, property not found: " + keyName);
 		try {
 			Field field = CharKey.class.getField(fieldName);
 			return field.getInt(CharKey.class);
 		} catch (SecurityException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error reading field : "+fieldName);
+			throw new RuntimeException("Error reading field : " + fieldName);
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error reading field : "+fieldName);
+			throw new RuntimeException("Error reading field : " + fieldName);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error reading field : "+fieldName);
+			throw new RuntimeException("Error reading field : " + fieldName);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error reading field : "+fieldName);
+			throw new RuntimeException("Error reading field : " + fieldName);
 		}
 	}
 
-	public static void main(String args[]){
+	public static void main(String[] args) {
 		mode = SWING_GFX;
-		//mode = SWING_CONSOLE;
+		// mode = SWING_CONSOLE;
 		uiFile = "slash-barrett.ui";
-		if (args!= null && args.length > 0){
-			if (args[0].equalsIgnoreCase("sgfx")){
+		if (args != null && args.length > 0) {
+			if (args[0].equalsIgnoreCase("sgfx")) {
 				mode = SWING_GFX;
 				if (args.length > 1)
 					uiFile = args[1];
 				else
 					uiFile = "slash-barrett.ui";
-			}
-			else if (args[0].equalsIgnoreCase("jc"))
+			} else if (args[0].equalsIgnoreCase("jc"))
 				mode = JCURSES_CONSOLE;
 			else if (args[0].equalsIgnoreCase("sc"))
 				mode = SWING_CONSOLE;
 		}
-		
+
 		init();
 		System.out.println("Launching game");
 		try {
 			title();
-		} catch (Exception e){
-			Game.crash("Unrecoverable Exception [Press Space]",e);
+		} catch (Exception e) {
+			Game.crash("Unrecoverable Exception [Press Space]", e);
 			try {
 				System.in.read();
 			} catch (IOException e1) {
@@ -593,128 +593,108 @@ public class Main {
 		}
 	}
 
-	private static void initializeGAppearances(GFXConfiguration gfx_configuration){
+	private static void initializeGAppearances(GFXConfiguration gfx_configuration) {
 		Appearance[] definitions = new GFXAppearances(gfx_configuration).getAppearances();
-		for (int i=0; i<definitions.length; i++){
-			AppearanceFactory.getAppearanceFactory().addDefinition(definitions[i]);
-		}
+        for (Appearance definition : definitions) {
+            AppearanceFactory.getAppearanceFactory().addDefinition(definition);
+        }
 	}
-	
-	private static void initializeCAppearances(){
+
+	private static void initializeCAppearances() {
 		Appearance[] definitions = new CharAppearances().getAppearances();
-		for (int i=0; i<definitions.length; i++){
-			AppearanceFactory.getAppearanceFactory().addDefinition(definitions[i]);
-		}
+        for (Appearance definition : definitions) {
+            AppearanceFactory.getAppearanceFactory().addDefinition(definition);
+        }
 	}
-	
-	private static void initializeActions(){
+
+	private static void initializeActions() {
 		ActionFactory af = ActionFactory.getActionFactory();
-		Action[] definitions = new Action[]{
-				new Dash(),
-				new MonsterWalk(),
-				new Swim(),
-				new MonsterCharge(),
-				new MonsterMissile(),
-				new SummonMonster(),
-				new MummyStrangle(),
-				new MummyTeleport(),
-				new Teleport(),
-				new MandragoraScream()
-		};
-		for (int i = 0; i < definitions.length; i++)
-			af.addDefinition(definitions[i]);
+		Action[] definitions = new Action[] { new Dash(), new MonsterWalk(), new Swim(), new MonsterCharge(),
+				new MonsterMissile(), new SummonMonster(), new MummyStrangle(), new MummyTeleport(), new Teleport(),
+				new MandragoraScream() };
+        for (Action definition : definitions) af.addDefinition(definition);
 	}
-	
-	private static void initializeCells(){
+
+	private static void initializeCells() {
 		MapCellFactory.getMapCellFactory().init(Cells.getCellDefinitions(AppearanceFactory.getAppearanceFactory()));
 	}
 
-	private static void initializeFeatures(){
+	private static void initializeFeatures() {
 		FeatureFactory.getFactory().init(Features.getFeatureDefinitions(AppearanceFactory.getAppearanceFactory()));
 	}
 
-	private static void initializeSelectors(){
-		ActionSelector [] definitions = getSelectorDefinitions();
-		for (int i=0; i<definitions.length; i++){
-        	SelectorFactory.getSelectorFactory().addDefinition(definitions[i]);
-		}
+	private static void initializeSelectors() {
+		ActionSelector[] definitions = getSelectorDefinitions();
+        for (ActionSelector definition : definitions) {
+            SelectorFactory.getSelectorFactory().addDefinition(definition);
+        }
 	}
 
-	private static void initializeMonsters() throws CRLException{
-		
-		MonsterFactory.getFactory().init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv","data/monsters.exml"));
+	private static void initializeMonsters() throws CRLException {
+
+		MonsterFactory.getFactory()
+				.init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv", "data/monsters.exml"));
 	}
 
-	private static void initializeNPCs(){
+	private static void initializeNPCs() {
 		NPCDefinition[] definitions = NPCs.getNPCDefinitions();
 		NPCFactory npcf = NPCFactory.getFactory();
-		for (int i=0; i<definitions.length; i++){
-        	npcf.addDefinition(definitions[i]);
-		}
+        for (NPCDefinition definition : definitions) {
+            npcf.addDefinition(definition);
+        }
 	}
 
-	private static void initializeItems(){
+	private static void initializeItems() {
 		ItemFactory.getItemFactory().init(Items.getItemDefinitions());
 	}
 
-	private static void initializeSmartFeatures (){
+	private static void initializeSmartFeatures() {
 		SmartFeatureFactory.getFactory().init(SmartFeatures.getSmartFeatures(SelectorFactory.getSelectorFactory()));
 	}
 
-	private static ActionSelector [] getSelectorDefinitions(){
-		ActionSelector [] ret = new ActionSelector[]{
-				new WanderToPlayerAI(),
-				new UnderwaterAI(),
-				new RangedAI(),
-				new FlameAI(),
-				new CrossAI(),
-				new BlastCrystalAI(),
-				new CountDown(),
-				new VillagerAI(),
-				new PriestAI(),
-				new NullSelector(),
-				new BasicMonsterAI(),
-				new WildMorphAI()
-		};
+	private static ActionSelector[] getSelectorDefinitions() {
+		ActionSelector[] ret = new ActionSelector[] { new WanderToPlayerAI(), new UnderwaterAI(), new RangedAI(),
+				new FlameAI(), new CrossAI(), new BlastCrystalAI(), new CountDown(), new VillagerAI(), new PriestAI(),
+				new NullSelector(), new BasicMonsterAI(), new WildMorphAI() };
 		return ret;
 	}
 
-    public static void crash(String message, Throwable exception){
-    	System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
-        System.out.println("");
-        System.out.println("Unrecoverable error: "+message);
-        exception.printStackTrace();
-        if (currentGame != null){
-        	System.out.println("Trying to save game");
-        	GameFiles.saveGame(currentGame, currentGame.getPlayer());
-        }
-        System.exit(-1);
-    }
-    
-    private static Hashtable monsterRecord;
-    
-    public static MonsterRecord getMonsterRecordFor(String monsterID){
-		return (MonsterRecord) monsterRecord.get(monsterID);
+	public static void crash(String message, Throwable exception) {
+		System.out.println("CastlevaniaRL " + Game.getVersion() + ": Error");
+		System.out.println("");
+		System.out.println("Unrecoverable error: " + message);
+		exception.printStackTrace();
+		if (currentGame != null) {
+			System.out.println("Trying to save game");
+			GameFiles.saveGame(currentGame, currentGame.getPlayer());
+		}
+		System.exit(-1);
 	}
 
-	public static void setMonsterRecord(Hashtable monsterRecord) {
+	private static Map<String, MonsterRecord> monsterRecord;
+
+	public static MonsterRecord getMonsterRecordFor(String monsterID) {
+		return monsterRecord.get(monsterID);
+	}
+
+	public static void setMonsterRecord(Map<String, MonsterRecord> monsterRecord) {
 		Main.monsterRecord = monsterRecord;
 	}
 
-	public static Hashtable getMonsterRecord() {
+	public static Map<String, MonsterRecord> getMonsterRecord() {
 		return monsterRecord;
 	}
-    
+
 }
 
 class SaveGameFilenameFilter implements FilenameFilter {
 
 	public boolean accept(File arg0, String arg1) {
-		//if (arg0.getName().endsWith(".sav"))
+		// if (arg0.getName().endsWith(".sav"))
 		if (arg1.endsWith(".sav"))
 			return true;
 		else
 			return false;
 	}
-	
+
 }

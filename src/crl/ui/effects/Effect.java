@@ -1,8 +1,6 @@
 package crl.ui.effects;
 
 import sz.util.*;
-import crl.*;
-import crl.ui.*;
 
 public abstract class Effect {
 	private Position position;

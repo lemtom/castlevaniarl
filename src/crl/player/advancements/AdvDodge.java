@@ -31,6 +31,7 @@ public class AdvDodge extends Advancement{
 	public String[] bans = new String[]{
 	};
 	
+	@Override
 	public String[] getBans(){
 		return bans;
 	}

@@ -35,6 +35,7 @@ public class AdvRegen extends Advancement{
 		return "Regenerates health at fixed intervals";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

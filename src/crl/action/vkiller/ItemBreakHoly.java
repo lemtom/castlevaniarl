@@ -1,14 +1,9 @@
 package crl.action.vkiller;
 
-import sz.util.Debug;
-import sz.util.Line;
 import sz.util.Position;
 import sz.util.Util;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
-import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.VMonster;
@@ -24,6 +19,7 @@ public class ItemBreakHoly extends HeartAction{
 		return "Holy";
 	}
 	
+	@Override
 	public void execute(){
 		Player aPlayer = (Player) performer;
         Level aLevel = performer.getLevel();
@@ -39,7 +35,7 @@ public class ItemBreakHoly extends HeartAction{
 			if (monsters.elementAt(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.elementAt(i).getPosition(), performer.getPosition()) < 4){
 				StringBuffer buff = new StringBuffer();
 				if (monsters.elementAt(i).wasSeen()) {
-					buff.append("The "+monsters.elementAt(i).getDescription()+" is splashed with holy water!");
+					buff.append("The ").append(monsters.elementAt(i).getDescription()).append(" is splashed with holy water!");
 				}
 				monsters.elementAt(i).damage(buff, damage);
 				aLevel.addMessage(buff.toString());
@@ -68,7 +64,7 @@ public class ItemBreakHoly extends HeartAction{
 				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 				if (targetMonster != null){
 					StringBuffer buff = new StringBuffer();
-					buff.append("The "+monsters.elementAt(i).getDescription()+" is splashed with holy rain!");
+					buff.append("The ").append(monsters.elementAt(i).getDescription()).append(" is splashed with holy rain!");
 					targetMonster.damage(buff, damage);
 					aLevel.addMessage (buff.toString());
 		        	if (targetMonster.isDead()){
@@ -84,10 +80,13 @@ public class ItemBreakHoly extends HeartAction{
 		}
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return (25 / (p.getShotLevel()+1));
 	}
+
+	@Override
 	public String getSFX(){
 		return "wav/breakpot.wav";
 	}

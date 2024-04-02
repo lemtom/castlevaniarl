@@ -33,6 +33,7 @@ public class AdvBackflip extends Advancement{
 		"ADV_AIR_DASH", "ADV_WARP_DASH"
 	};
 	
+	@Override
 	public String[] getBans(){
 		return bans;
 	}

@@ -13,10 +13,12 @@ public class FinalSlash extends Action{
 		return "FINAL_SLASH";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
 
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to slash at?";
 	}
@@ -94,7 +96,7 @@ public class FinalSlash extends Action{
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You slash through the "+destinationFeature.getDescription());
+	       	message.append("You slash through the ").append(destinationFeature.getDescription());
 			aLevel.addMessage(message.toString());
         	return true;
 		}
@@ -103,7 +105,7 @@ public class FinalSlash extends Action{
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())
 			){
-				message.append("You slash thru the "+targetMonster.getDescription());
+				message.append("You slash thru the ").append(targetMonster.getDescription());
 				targetMonster.damageWithWeapon(message, 20+(int)(aPlayer.getWeaponAttack()*1.5));
 	        	if (targetMonster.isDead()){
 		        	message.append(", cutting it apart!");
@@ -115,6 +117,7 @@ public class FinalSlash extends Action{
 		return false;
 	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
         Level aLevel = performer.getLevel();

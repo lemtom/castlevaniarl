@@ -1,16 +1,7 @@
 package crl.action.vanquisher;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.feature.Feature;
-import crl.level.Cell;
-import crl.level.Level;
-import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class FlameSpell extends ProjectileSkill{
 	public int getDamage() {
@@ -45,6 +36,7 @@ public class FlameSpell extends ProjectileSkill{
 		return "flame";
 	}
 
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
@@ -57,6 +49,7 @@ public class FlameSpell extends ProjectileSkill{
 		return "FlameSpell";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);

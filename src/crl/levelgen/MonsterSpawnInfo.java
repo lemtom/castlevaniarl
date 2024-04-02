@@ -7,7 +7,7 @@ public class MonsterSpawnInfo implements Serializable {
 	private int spawnLocation;
 	private int frequency;
 
-	public final static int UNDERGROUND = 0,
+	public static final int UNDERGROUND = 0,
 		BORDER = 1,
 		WATER = 2;
 

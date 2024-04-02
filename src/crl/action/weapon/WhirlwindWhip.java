@@ -3,7 +3,6 @@ import sz.util.Position;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
-import crl.item.Item;
 import crl.item.ItemDefinition;
 import crl.level.Cell;
 import crl.level.Level;
@@ -47,7 +46,7 @@ public class WhirlwindWhip extends Action{
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You crush the "+destinationFeature.getDescription());
+	       	message.append("You crush the ").append(destinationFeature.getDescription());
 
 			Feature prize = destinationFeature.damage(aPlayer, attack);
 	       	if (prize != null){
@@ -65,7 +64,7 @@ public class WhirlwindWhip extends Action{
 				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
 				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight()-1)
 				){
-				message.append("You whip the "+targetMonster.getDescription());
+				message.append("You whip the ").append(targetMonster.getDescription());
 				targetMonster.damageWithWeapon(message, attack);
 	        	if (targetMonster.isDead()){
 		        	message.append(", destroying it!");
@@ -79,6 +78,7 @@ public class WhirlwindWhip extends Action{
 		return false;
 	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
         if (aPlayer.getHearts() < 5){

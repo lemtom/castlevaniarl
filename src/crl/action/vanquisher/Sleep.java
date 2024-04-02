@@ -2,17 +2,10 @@ package crl.action.vanquisher;
 
 import java.util.Vector;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Cell;
-import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class Sleep extends ProjectileSkill{
 	public int getDamage() {
@@ -47,6 +40,7 @@ public class Sleep extends ProjectileSkill{
 		return "sleep beam";
 	}
 
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
@@ -59,17 +53,19 @@ public class Sleep extends ProjectileSkill{
 		return "SpellSpell";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
-		Vector hitMonsters = getHitMonsters();
+		Vector<Monster> hitMonsters = getHitMonsters();
 		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = (Monster) hitMonsters.elementAt(i);
+			Monster targetMonster = hitMonsters.elementAt(i);
 			if (targetMonster.wasSeen())
 				targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ " is frozen!");
 			targetMonster.setCounter(Consts.C_MONSTER_SLEEP, 10);
 		}
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);

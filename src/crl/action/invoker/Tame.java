@@ -5,17 +5,18 @@ import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Consts;
-import crl.player.Player;
 
 public class Tame extends HeartAction{
 	public String getID(){
 		return "Tame";
 	}
 	
+	@Override
 	public String getPromptPosition() {
 		return "Who?";
 	}
 
+	@Override
 	public boolean needsPosition() {
 		return true;
 	}
@@ -24,6 +25,7 @@ public class Tame extends HeartAction{
 		return 5;
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Level x = performer.getLevel();
@@ -45,10 +47,11 @@ public class Tame extends HeartAction{
 		
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/clockbel.wav";
 	}
 	public double getTimeCostModifier() {
 		return 3;
 	}
-};
+}

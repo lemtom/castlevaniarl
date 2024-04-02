@@ -32,13 +32,13 @@ public class GFXAnimatedEffect extends GFXEffect{
 		if (!ui.insideViewPort(absolute))
 			return;
 		si.saveBuffer();
-		for (int j = 0; j<frames.length; j++){
-			ui.drawImageVP(
-				absolute.x * 32 + xoff,
-				absolute.y * 32 - 4 * height + yoff, frames[j]);
-			si.refresh();
-			animationPause();
-			si.restore();
-		}
+        for (Image frame : frames) {
+            ui.drawImageVP(
+                    absolute.x * 32 + xoff,
+                    absolute.y * 32 - 4 * height + yoff, frame);
+            si.refresh();
+            animationPause();
+            si.restore();
+        }
 	}
 }

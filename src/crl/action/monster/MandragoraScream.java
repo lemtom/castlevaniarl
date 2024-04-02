@@ -14,9 +14,9 @@ import crl.player.Damage;
 import crl.ui.effects.EffectFactory;
 
 public class MandragoraScream extends Action {
-	public final static int SCREAM_RANGE = 8;
-	public final static int SCREAM_DAMAGE = 20;
-	public final static String SCREAM_WAV = "wav/scream.wav";
+	public static final int SCREAM_RANGE = 8;
+	public static final int SCREAM_DAMAGE = 20;
+	public static final String SCREAM_WAV = "wav/scream.wav";
 
 	
 	@Override

@@ -13,10 +13,12 @@ public class InvokeTurtle extends SummonSkill{
 		return "S_TURTLE";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/turtleCry.wav";
 	}
 	
+	@Override
 	public int getHitBonus() {
 		return 2*getPlayer().getSoulPower();
 	}

@@ -8,9 +8,10 @@ public class SacredFist extends BeamProjectileSkill{
 		return "SacredFist";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 	
 	public int getDamage() {
@@ -53,11 +54,8 @@ public class SacredFist extends BeamProjectileSkill{
 	public String getSpellAttackDesc() {
 		return "holy blow";
 	}
-	
-	public boolean allowsSelfTarget() {
-		return false;
-	}
-	
+
+    @Override
 	public String plottedLocatedEffect() {
 		return "SFX_WHITE_HIT";
 	}

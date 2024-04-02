@@ -14,11 +14,13 @@ public class PowerBlow3 extends HeartAction{
 		return "PowerBlow2";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.1);
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;

@@ -1,33 +1,34 @@
 package crl.feature;
 
-import sz.util.*;
 import crl.actor.*;
 import crl.ui.*;
 
-public class SmartFeature extends Actor implements Cloneable{
+public class SmartFeature extends Actor implements Cloneable {
 	private boolean destroyable;
 	private int damageOnStep;
 	private transient Appearance appearance;
-	private String ID, description,appearanceID;
+	private String ID;
+	private String description;
+	private String appearanceID;
 	private int height;
-	
-	public void setHeight(int val){
+
+	public void setHeight(int val) {
 		height = val;
 	}
-	
-	public int getHeight(){
+
+	public int getHeight() {
 		return height;
 	}
 
 	private String effectOnStep;
 
-	public SmartFeature (String pID, String pDescription, Appearance pAppearance){
+	public SmartFeature(String pID, String pDescription, Appearance pAppearance) {
 		ID = pID;
 		description = pDescription;
 		appearance = pAppearance;
 		appearanceID = pAppearance.getID();
 	}
-	
+
 	public boolean isDestroyable() {
 		return destroyable;
 	}
@@ -44,25 +45,30 @@ public class SmartFeature extends Actor implements Cloneable{
 		damageOnStep = value;
 	}
 
-	public Object clone(){
-	//	try {
-			SmartFeature x = (SmartFeature) super.clone();
-			x.setSelector(selector.derive());
-			return x;
-/*		} catch (CloneNotSupportedException cnse){
-			Debug.doAssert(false, "failed class cast, Feature.clone()");*/
+	@Override
+	public Object clone() {
+		// try {
+		SmartFeature x = (SmartFeature) super.clone();
+		x.setSelector(selector.derive());
+		return x;
+		/*
+		 * } catch (CloneNotSupportedException cnse){ Debug.doAssert(false,
+		 * "failed class cast, Feature.clone()");
+		 */
 //		}                        */
 //		return null;
 	}
 
+	@Override
 	public Appearance getAppearance() {
-		if (appearance == null){
+		if (appearance == null) {
 			if (appearanceID != null)
 				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
 		}
 		return appearance;
 	}
 
+	@Override
 	public void setAppearance(Appearance value) {
 		appearance = value;
 	}
@@ -75,6 +81,7 @@ public class SmartFeature extends Actor implements Cloneable{
 		ID = value;
 	}
 
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -91,7 +98,7 @@ public class SmartFeature extends Actor implements Cloneable{
 		effectOnStep = value;
 	}
 
-	public boolean isVisible(){
+	public boolean isVisible() {
 		return !getAppearance().getID().equals("VOID");
 	}
 }

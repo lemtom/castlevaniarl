@@ -2,22 +2,20 @@ package sz.util;
 
 import java.util.*;
 
+import sz.csi.textcomponents.MenuItem;
+
 public class Util {
 	private static Random rand = new Random(System.currentTimeMillis());
 
 	public static int rand(int low, int hi){
 		//return (int)((Math.random() * (hi -low))+low);
 		//rand.setSeed(rand.nextLong());
-		int ret = (int)((rand.nextDouble() * (hi - low + 1))+low);
-		//Debug.say("low " +low+" hi "+hi+"="+ret);
-		return ret;
+		return (int)((rand.nextDouble() * (hi - low + 1))+low);
 	}
 
 	public static int greater(int a, int b){
-		if (a > b)
-			return a;
-		return b;
-	}
+        return java.lang.Math.max(a, b);
+    }
 
 	public static int abs(int a){
 		if (a > 0)
@@ -29,25 +27,25 @@ public class Util {
 		return Util.rand(1,100) <= p;
 	}
 
-	public static Vector page(Vector source, int elementsOnPage, int pageNumber){
+	public static Vector<MenuItem> page(Vector<MenuItem> source, int elementsOnPage, int pageNumber){
 		//System.out.println("elements on page"+elementsOnPage+" page Number"+pageNumber);
-		if (source.size() == 0)
+		if (source.isEmpty())
 			return source;
 		if ((pageNumber+1) * elementsOnPage > source.size() )
-			return new Vector(source.subList(pageNumber*elementsOnPage, source.size()));
+			return new Vector<MenuItem>(source.subList(pageNumber*elementsOnPage, source.size()));
 		else
-			return new Vector(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
+			return new Vector<MenuItem>(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
 	}
 
 	public static String randomElementOf(String [] array){
 		return array[rand(0, array.length -1)];
 	}
 	
-	public static Object randomElementOf(List collection){
+	public static Object randomElementOf(List<?> collection){
 		return collection.get(rand(0, collection.size() -1));
 	}
 	
-	public static Object randomElementOf(Vector array){
+	public static Object randomElementOf(Vector<?> array){
 		return array.elementAt(rand(0, array.size() -1));
 	}
 	

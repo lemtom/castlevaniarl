@@ -1,11 +1,8 @@
 package sz.util;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.DisplayMode;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -13,15 +10,8 @@ import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.CropImageFilter;
-import java.awt.image.FilteredImageSource;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageInputStreamImpl;
 
 public class ImageUtils {
 	public static  BufferedImage createImage (String filename) throws Exception {

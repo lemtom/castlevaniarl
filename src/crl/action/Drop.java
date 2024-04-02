@@ -8,10 +8,12 @@ public class Drop extends Action{
 		return "Drop";
 	}
 	
+	@Override
 	public boolean needsItem(){
 		return true;
     }
 
+    @Override
     public String getPromptItem(){
     	return "What do you want to drop?";
 	}

@@ -32,6 +32,7 @@ public class AdvImpactBlow3 extends Advancement{
 		return "Replaces power strike for a devasting power crash";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

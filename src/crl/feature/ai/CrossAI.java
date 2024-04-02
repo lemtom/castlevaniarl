@@ -1,7 +1,6 @@
 package crl.feature.ai;
 
 import crl.action.*;
-import crl.action.vkiller.Cross;
 import crl.ai.*;
 import crl.actor.*;
 import crl.feature.SmartFeature;

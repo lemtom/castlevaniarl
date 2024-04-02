@@ -3,18 +3,12 @@ package crl.levelgen.patterns;
 import crl.cuts.Unleasher;
 import crl.cuts.entrance.Entrance1;
 import crl.cuts.entrance.PreludeSound;
-import crl.cuts.prelude.Prelude1;
-import crl.cuts.prelude.Prelude2;
-import crl.cuts.prelude.Prelude3;
-import crl.cuts.prelude.Prelude4;
-import crl.cuts.prelude.Prelude5;
-import crl.levelgen.*;
 
-public class Garden extends StaticPattern{
-	public String getMapKey(){
+public class Garden extends StaticPattern {
+	public String getMapKey() {
 		return "ENTRANCE";
 	}
-	
+
 	public String getDescription() {
 		return "Castle Garden";
 	}
@@ -27,33 +21,32 @@ public class Garden extends StaticPattern{
 		return null;
 	}
 
-	public Garden () {
-		this.cellMap = new String [][]{{
-			"&&&&&&&&&&&&############################&&&&&##########CCC",
-			"&&&&&&#######,,,,,,,,,,,,,,,,,,,,,,,,,,#######,,,,dddd$CCC",
-			"&&&&###,,,,,,,,,,,,,,,,,1d,,,,,,,1,,,,,,dd,,,,,,,,,,dddCCC",
-			"&&&&#,,,,,,,,,,,,1,,,,,,,d,,,,,,,,,,,,ddd,,,,,,,,,,,dddCCC",
-			"&&&&#,,,,,,,,,,,,,,,,,,,,d,,,,,,,,,,,,,,,,,,S,,,,,,,dddCCC",
-			"&&###,,,,,,,S,,@,,,,,,,dd,g,,,,,,,,,,,,,g,,,,,,,,,W,,,dCCC",
-			",,#,,,,,,,,,,,,,,,,,,,,d,,,,,,,FFF,,,,,,,,,,,,,1,WOW,,dCCC",
-			",,#,,u,,,,,,,,,FFFF,,,,,,,,,,,,,,,,,,,,,FFFF,,,,,,W,,,,CCC",
-			"&,#,,,,FFF,,,,,,,,,,,,,,FFFF,,,,,,,,,ddd,,,,,,,u,,,,,,,CCC",
-			"&,#,,,,I,,,1,,,I,,,,,,I,,,,,,I,,,,,,I,u,,dd,I,,,,,,,,,dd.C",
-			".d|.............................1.........d..............C",
-			"T,........................................d.............XE",
-			"d.|...........dd........................................,C",
-			",,#,,,,I,,,,,d,I,,,,,,I,,,,,,I,,,,,,I,,,,,,,I,,,,,,ddd,,.C",
-			",,#,,,,FFF,,,,,,,,,,,,,,FFFF,,,,u,,,,,,,,,,,,,,1,,,,,ddCCC",
-			",,#,u,,,,,,,,,,FFFF,,,,,,,,,,,,,,,,,,,,,FFFF,,u,,,W,,,,CCC",
-			"&,#,,,,,,,,,,,,,,,,,@dd,,,,,,,,FFF,,,,,@,,,,,,,,,WOW,,,CCC",
-			"&&###,,,,1,,S,,,,,,ddd,,,,,,,,1,,,,,,,,,,,,d,,,,,,W,,,,CCC",
-			"&&&&#,,,,,,,,,,,,,,,,,,,,d,,,,,,,,,,,,d,d,,,,,,,,,,,dddCCC",
-			"&&&&#,,,,,,,,,,,,,,,,,,dd,,,,,m,,,,,,S,,,,,1,,,,,,,,,ddCCC",
-			"&&&&###,,,,,,,,,,d,,,,,,,,,,,ddd,,,,,,,,,,d,S,,,,,,,,,,CCC",
-			"&&&&&&#######,,,,dddd,,,,u,,,,,,,,,,,dd#######,,,,,,,,$CCC",
-			"&&&&&&&&&&&&############################&&&&&##########CCC"
-		}};
-		
+	public Garden() {
+		this.cellMap = new String[][] { { //
+				"&&&&&&&&&&&&############################&&&&&##########CCC", //
+				"&&&&&&#######,,,,,,,,,,,,,,,,,,,,,,,,,,#######,,,,dddd$CCC", //
+				"&&&&###,,,,,,,,,,,,,,,,,1d,,,,,,,1,,,,,,dd,,,,,,,,,,dddCCC", //
+				"&&&&#,,,,,,,,,,,,1,,,,,,,d,,,,,,,,,,,,ddd,,,,,,,,,,,dddCCC", //
+				"&&&&#,,,,,,,,,,,,,,,,,,,,d,,,,,,,,,,,,,,,,,,S,,,,,,,dddCCC", //
+				"&&###,,,,,,,S,,@,,,,,,,dd,g,,,,,,,,,,,,,g,,,,,,,,,W,,,dCCC", //
+				", //,#,,,,,,,,,,,,,,,,,,,,d,,,,,,,FFF,,,,,,,,,,,,,1,WOW,,dCCC", //
+				", //,#,,u,,,,,,,,,FFFF,,,,,,,,,,,,,,,,,,,,,FFFF,,,,,,W,,,,CCC", //
+				"&,#,,,,FFF,,,,,,,,,,,,,,FFFF,,,,,,,,,ddd,,,,,,,u,,,,,,,CCC", //
+				"&,#,,,,I,,,1,,,I,,,,,,I,,,,,,I,,,,,,I,u,,dd,I,,,,,,,,,dd.C", //
+				".d|.............................1.........d..............C", //
+				"T,........................................d.............XE", //
+				"d.|...........dd........................................,C", //
+				", //,#,,,,I,,,,,d,I,,,,,,I,,,,,,I,,,,,,I,,,,,,,I,,,,,,ddd,,.C", //
+				", //,#,,,,FFF,,,,,,,,,,,,,,FFFF,,,,u,,,,,,,,,,,,,,1,,,,,ddCCC", //
+				", //,#,u,,,,,,,,,,FFFF,,,,,,,,,,,,,,,,,,,,,FFFF,,u,,,W,,,,CCC", //
+				"&,#,,,,,,,,,,,,,,,,,@dd,,,,,,,,FFF,,,,,@,,,,,,,,,WOW,,,CCC", //
+				"&&###,,,,1,,S,,,,,,ddd,,,,,,,,1,,,,,,,,,,,,d,,,,,,W,,,,CCC", //
+				"&&&&#,,,,,,,,,,,,,,,,,,,,d,,,,,,,,,,,,d,d,,,,,,,,,,,dddCCC", //
+				"&&&&#,,,,,,,,,,,,,,,,,,dd,,,,,m,,,,,,S,,,,,1,,,,,,,,,ddCCC", //
+				"&&&&###,,,,,,,,,,d,,,,,,,,,,,ddd,,,,,,,,,,d,S,,,,,,,,,,CCC", //
+				"&&&&&&#######,,,,dddd,,,,u,,,,,,,,,,,dd#######,,,,,,,,$CCC", //
+				"&&&&&&&&&&&&############################&&&&&##########CCC" } };
+
 		charMap.put(",", "GARDEN_GRASS");
 		charMap.put("&", "FOREST_TREE");
 		charMap.put("1", "GARDEN_TREE");
@@ -76,14 +69,12 @@ public class Garden extends StaticPattern{
 		charMap.put("|", "GARDEN_DOOR");
 		charMap.put("m", "GARDEN_GRASS MERCHANT 1");
 		charMap.put("$", "GARDEN_GRASS FEATURE TREASURE_SPAWNER 10");
-		
-		unleashers = new Unleasher[]{
-				new PreludeSound(),
-				new Entrance1()
-		};
+
+		unleashers = new Unleasher[] { new PreludeSound(), new Entrance1() };
 	}
 
-	public boolean isHostageSafe(){
+	@Override
+	public boolean isHostageSafe() {
 		return true;
 	}
 

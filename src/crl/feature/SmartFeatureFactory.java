@@ -6,10 +6,10 @@ import sz.util.*;
 
 public class SmartFeatureFactory {
 	private static SmartFeatureFactory singleton = new SmartFeatureFactory();
-	private Hashtable definitions;
+	private Hashtable<String, SmartFeature> definitions;
 
 	public SmartFeature buildFeature (String id) {
-		SmartFeature x = (SmartFeature) definitions.get(id);
+		SmartFeature x = definitions.get(id);
 		if (x != null)
 			return (SmartFeature) x.clone();
 		Debug.byebye("SmartFeature "+id+" not found");
@@ -21,12 +21,11 @@ public class SmartFeatureFactory {
 	}
 	
 	public void init(SmartFeature[] defs) {
-		for (int i = 0; i < defs.length; i++)
-			definitions.put(defs[i].getID(), defs[i]);
+        for (SmartFeature def : defs) definitions.put(def.getID(), def);
 	}
 
 	public SmartFeatureFactory(){
-		definitions = new Hashtable(40);
+		definitions = new Hashtable<String, SmartFeature>(40);
 	}
 
 	public static SmartFeatureFactory getFactory(){

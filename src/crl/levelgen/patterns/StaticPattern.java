@@ -1,75 +1,81 @@
 package crl.levelgen.patterns;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import crl.cuts.Unleasher;
 import crl.levelgen.MonsterSpawnInfo;
 import crl.levelgen.StaticGenerator;
 
 public abstract class StaticPattern {
-	protected Hashtable charMap = new Hashtable();;
+	protected Hashtable<String, String> charMap = new Hashtable<String, String>();
 	protected String[][] cellMap;
-	protected Hashtable inhabitantsMap = new Hashtable();;
+	protected Hashtable<String, String> inhabitantsMap = new Hashtable<String, String>();
 	protected String[][] inhabitants;
-	protected MonsterSpawnInfo [] spawnInfo;
+	protected MonsterSpawnInfo[] spawnInfo;
 	protected Unleasher[] unleashers;
-	
-	public boolean isRutinary(){
+
+	public boolean isRutinary() {
 		return false;
 	}
-	
-	public Hashtable getCharMap(){
+
+	public Map<String, String> getCharMap() {
 		return charMap;
 	}
-	
-	public String[][] getCellMap(){
+
+	public String[][] getCellMap() {
 		return cellMap;
 	}
-	
-	public Hashtable getInhabitantsMap(){
+
+	public Map<String, String> getInhabitantsMap() {
 		return inhabitantsMap;
 	}
-	public String[][] getInhabitants(){
+
+	public String[][] getInhabitants() {
 		return inhabitants;
 	}
-	public MonsterSpawnInfo[] getDwellers(){
+
+	public MonsterSpawnInfo[] getDwellers() {
 		return null;
 	}
-	
+
 	public abstract String getDescription();
+
 	public abstract String getMusicKeyMorning();
+
 	public abstract String getMusicKeyNoon();
+
 	public abstract String getMapKey();
-	
+
 	public boolean isHaunted() {
 		return false;
 	}
-	
-	public String getBoss(){
+
+	public String getBoss() {
 		return null;
 	}
-	
-	public sz.util.Position getBossPosition(){
+
+	public sz.util.Position getBossPosition() {
 		return null;
 	}
-	
-	public MonsterSpawnInfo[] getSpawnInfo(){
+
+	public MonsterSpawnInfo[] getSpawnInfo() {
 		return spawnInfo;
 	}
-	
-	public boolean isHostageSafe(){
+
+	public boolean isHostageSafe() {
 		return false;
 	}
-	
-	public void setup(StaticGenerator gen){
+
+	public void setup(StaticGenerator gen) {
 		gen.reset();
 		gen.setCharMap(getCharMap());
 		gen.setLevel(getCellMap());
 		gen.setInhabitantsMap(getInhabitantsMap());
 		gen.setInhabitants(getInhabitants());
 	}
-	
-	public Unleasher[] getUnleashers(){
+
+	public Unleasher[] getUnleashers() {
 		return unleashers;
 	}
 }

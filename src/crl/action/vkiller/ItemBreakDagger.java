@@ -13,13 +13,15 @@ public class ItemBreakDagger extends ProjectileSkill{
 		return "Where?";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/dagger.wav";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 
 	public int getDamage() {
@@ -34,6 +36,7 @@ public class ItemBreakDagger extends ProjectileSkill{
 		return 100;
 	}
 	
+	@Override
 	public boolean showThrowMessage(){
 		return false;
 	}
@@ -84,6 +87,7 @@ public class ItemBreakDagger extends ProjectileSkill{
 			return 5;
 	}
 	
+	@Override
 	public void execute(){
 		getPlayer().reduceHearts(getHeartCost());
 		executing = true;

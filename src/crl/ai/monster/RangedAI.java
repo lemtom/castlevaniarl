@@ -36,16 +36,15 @@ public class RangedAI extends MonsterAI{
 			//Randomly decide if will approach the player or attack
 			if (rangedAttacks != null && Util.chance(80)){
 				//Try to attack the player
-				for (Iterator iter = rangedAttacks.iterator(); iter.hasNext();) {
-					RangedAttack element = (RangedAttack) iter.next();
-					if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())){
-						//Perform the attack
-						Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
-						ret.setDirection(directionToPlayer);
-						ret.setPosition(aMonster.getLevel().getPlayer().getPosition());
-						return ret;
-					}
-				}
+                for (RangedAttack element : rangedAttacks) {
+                    if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
+                        //Perform the attack
+                        Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+                        ret.setDirection(directionToPlayer);
+                        ret.setPosition(aMonster.getLevel().getPlayer().getPosition());
+                        return ret;
+                    }
+                }
 			}
 			// Couldnt attack the player, so walk to him
 			Action ret = new MonsterWalk();
@@ -59,7 +58,8 @@ public class RangedAI extends MonsterAI{
 		 return "RANGED_AI";
 	 }
 
-	 public ActionSelector derive(){
+		@Override
+		public ActionSelector derive(){
  		try {
 	 		return (ActionSelector) clone();
 	 	} catch (CloneNotSupportedException cnse){

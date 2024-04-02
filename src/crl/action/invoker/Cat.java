@@ -16,6 +16,7 @@ public class Cat extends ProjectileSkill{
 		return PATH_HOVER;
 	}
 	
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
@@ -48,10 +49,12 @@ public class Cat extends ProjectileSkill{
 		return "Cat";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/kitty.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.4);

@@ -1,10 +1,10 @@
 package crl.action;
 
-import crl.action.HeartAction;
 import crl.actor.Actor;
 import crl.player.Player;
 
 public abstract class MorphAction extends HeartAction{
+	@Override
 	public final void execute(){
 		super.execute();
         Player aPlayer = (Player)performer;
@@ -20,6 +20,7 @@ public abstract class MorphAction extends HeartAction{
 	public abstract int getMadChance();
 	public abstract int getMorphStrength();
 	
+	@Override
 	public boolean canPerform(Actor a) {
 		if (getPlayer(a).isSwimming()){
 			invalidationMessage = "You can't morph here";

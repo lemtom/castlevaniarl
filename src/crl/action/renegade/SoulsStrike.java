@@ -16,6 +16,7 @@ public class SoulsStrike extends HeartAction{
 		return 8;
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Level aLevel = performer.getLevel();
@@ -28,7 +29,7 @@ public class SoulsStrike extends HeartAction{
 			} else {
 				StringBuffer buff = new StringBuffer();
 				if (nearestMonster.wasSeen())
-					buff.append("The soul impacts the "+nearestMonster.getDescription()+"!");
+					buff.append("The soul impacts the ").append(nearestMonster.getDescription()).append("!");
 				nearestMonster.damage(buff, 10+aPlayer.getSoulPower()*2);
 				drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_SOULSSTRIKE", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
 				aLevel.addMessage(buff.toString());
@@ -36,6 +37,7 @@ public class SoulsStrike extends HeartAction{
 		}
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);

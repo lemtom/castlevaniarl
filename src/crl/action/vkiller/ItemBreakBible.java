@@ -3,14 +3,13 @@ package crl.action.vkiller;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
-public class ItemBreakBible extends BeamProjectileSkill{
-	
+public class ItemBreakBible extends BeamProjectileSkill {
+
 	public int getDamage() {
-		return 7 + 
-		getPlayer().getShotLevel() + 
-		getPlayer().getSoulPower()*2;
+		return 7 + getPlayer().getShotLevel() + getPlayer().getSoulPower() * 2;
 	}
-	
+
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
@@ -30,12 +29,8 @@ public class ItemBreakBible extends BeamProjectileSkill{
 	public String getSelfTargettedMessage() {
 		return "The fireball flies to the heavens";
 	}
-	
-	public boolean allowsSelfTarget() {
-		return false;
-	}
 
-	public String getSFXID() {
+    public String getSFXID() {
 		return "SFX_ITEMBREAKBIBLE";
 	}
 
@@ -51,22 +46,22 @@ public class ItemBreakBible extends BeamProjectileSkill{
 		return 2;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "ItemBreakBible";
 	}
-	
-	public String getSFX(){
+
+	@Override
+	public String getSFX() {
 		return "wav/fire.wav";
 	}
 
-	public int getCost(){
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.1);
+		return (int) (p.getCastCost() * 1.1);
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where?";
 	}
-	
-	
 }

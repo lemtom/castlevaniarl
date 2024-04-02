@@ -17,7 +17,7 @@ public class Cell implements Cloneable, java.io.Serializable{
 	private int keyCost;
 
 
-	public final static int DOOR = 0;
+	public static final int DOOR = 0;
 
 	public String getID(){
 		return ID;

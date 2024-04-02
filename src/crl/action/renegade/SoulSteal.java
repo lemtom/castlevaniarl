@@ -8,10 +8,10 @@ import crl.action.ProjectileSkill;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class SoulSteal extends ProjectileSkill{
-	
+public class SoulSteal extends ProjectileSkill {
+
 	public int getDamage() {
-		return 1+getPlayer().getSoulPower();
+		return 1 + getPlayer().getSoulPower();
 	}
 
 	public int getHit() {
@@ -29,8 +29,9 @@ public class SoulSteal extends ProjectileSkill{
 	public String getSelfTargettedMessage() {
 		return "";
 	}
-	
-	public boolean allowsSelfTarget(){
+
+	@Override
+	public boolean allowsSelfTarget() {
 		return false;
 	}
 
@@ -50,32 +51,35 @@ public class SoulSteal extends ProjectileSkill{
 		return 5;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "Soul Steal";
 	}
-	
-	public String getSFX(){
+
+	@Override
+	public String getSFX() {
 		return "wav/fire.wav";
 	}
 
-	public int getCost(){
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.1);
+		return (int) (p.getCastCost() * 1.1);
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to invoke the soul?";
 	}
-	
-	public void execute(){
+
+	@Override
+	public void execute() {
 		super.execute();
-		Vector monsters = getHitMonsters();
-		for (int i = 0; i < monsters.size(); i++){
-			Monster m = (Monster)monsters.elementAt(i);
-			//TODO: Make this relative to the monster's soul or something
-			if (Util.chance(70)){
-				getPlayer().getLevel().addMessage("You steal the "+m.getDescription()+" soul!");
-				getPlayer().recoverHitsP(5+getPlayer().getSoulPower());
+		Vector<Monster> monsters = getHitMonsters();
+		for (int i = 0; i < monsters.size(); i++) {
+			Monster m = monsters.elementAt(i);
+			// TODO: Make this relative to the monster's soul or something
+			if (Util.chance(70)) {
+				getPlayer().getLevel().addMessage("You steal the " + m.getDescription() + " soul!");
+				getPlayer().recoverHitsP(5 + getPlayer().getSoulPower());
 			}
 		}
 	}

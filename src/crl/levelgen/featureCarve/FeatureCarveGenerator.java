@@ -1,6 +1,7 @@
 package crl.levelgen.featureCarve;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import sz.util.Position;
 import sz.util.Util;
@@ -16,14 +17,14 @@ public class FeatureCarveGenerator extends LevelGenerator{
 	private boolean[][] mask;
 	private String[][] preLevelB;
 	private boolean[][] maskB;
-	private ArrayList hotspots = new ArrayList();
-	private ArrayList roomHotspots = new ArrayList();
+	private ArrayList<Position> hotspots = new ArrayList<Position>();
+	private ArrayList<Position> roomHotspots = new ArrayList<Position>();
 	private String solidCell;
 	private String corridor;
-	private ArrayList levelFeatures;
+	private List<Feature> levelFeatures;
 	private String backExit,nextExit;
 	
-	public void initialize(ArrayList levelFeatures, String solidCell, int xdim, int ydim, String corridor, String backExit, String nextExit){
+	public void initialize(List<Feature> levelFeatures, String solidCell, int xdim, int ydim, String corridor, String backExit, String nextExit){
 		preLevel = new String[xdim][ydim];
 		mask = new boolean[xdim][ydim];
 		preLevelB = new String[xdim][ydim];
@@ -59,7 +60,7 @@ public class FeatureCarveGenerator extends LevelGenerator{
 		boolean placed = false;
 		int i = 0;
 		go: while (!checked) {
-			ArrayList pendingFeatures = new ArrayList(levelFeatures);
+			ArrayList<Feature> pendingFeatures = new ArrayList<Feature>(levelFeatures);
 			hotspots.clear();
 			roomHotspots.clear();
 			//Fill the level with solid element

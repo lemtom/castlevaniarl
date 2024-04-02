@@ -2,9 +2,7 @@ package crl.action.vanquisher;
 
 import sz.util.Line;
 import sz.util.Position;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
@@ -20,14 +18,17 @@ public class Teleport extends HeartAction{
 		return 5;
 	}
 	
+	@Override
 	public boolean needsPosition(){
 		return true;
 	}
 
+	@Override
 	public String getPromptPosition(){
 		return "Where do you want to teleport?";
 	}
 
+	@Override
 	public void execute(){
 		super.execute();
 		Player player = (Player) performer;
@@ -63,11 +64,13 @@ public class Teleport extends HeartAction{
 		
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.4);
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/scrch.wav";
 	}

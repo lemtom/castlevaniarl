@@ -24,7 +24,7 @@ public class WanderToPlayerAI extends MonsterAI{
 		Monster aMonster = (Monster) who;
 		
 		if (aMonster.getEnemy() != null){
-			if (!aMonster.getLevel().getMonsters().contains((Monster)aMonster.getEnemy())){
+			if (!aMonster.getLevel().getMonsters().contains(aMonster.getEnemy())){
 				aMonster.setEnemy(null);
 			}
 		}
@@ -33,7 +33,7 @@ public class WanderToPlayerAI extends MonsterAI{
 			
 			int directionToMonster = -1;
 			if (aMonster.getEnemy() != null){
-				directionToMonster = aMonster.stareMonster((Monster)aMonster.getEnemy());
+				directionToMonster = aMonster.stareMonster(aMonster.getEnemy());
 			} else {
 				directionToMonster = aMonster.stareMonster();
 			}
@@ -89,7 +89,7 @@ public class WanderToPlayerAI extends MonsterAI{
 				if (rangedAttacks != null ){
 					//Try
 					for (int i = 0; i < rangedAttacks.size(); i++){
-						RangedAttack ra = (RangedAttack)rangedAttacks.elementAt(i);
+						RangedAttack ra = rangedAttacks.elementAt(i);
 						if (distanceToPlayer <= ra.getRange())
 							if (Util.chance(ra.getFrequency())){
 								Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
@@ -125,6 +125,7 @@ public class WanderToPlayerAI extends MonsterAI{
 		 return "WANDER";
 	 }
 
+     @Override
      public ActionSelector derive(){
     	 
  		try {

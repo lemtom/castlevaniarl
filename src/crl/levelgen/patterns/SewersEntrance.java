@@ -1,11 +1,10 @@
 package crl.levelgen.patterns;
 
-public class SewersEntrance extends StaticPattern
-{
-	public String getMapKey(){
+public class SewersEntrance extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
-	
+
 	public String getMusicKeyMorning() {
 		return "";
 	}
@@ -13,26 +12,20 @@ public class SewersEntrance extends StaticPattern
 	public String getMusicKeyNoon() {
 		return null;
 	}
-	
-	
 
-	public SewersEntrance () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"###.-S-.###",
-			"##...-...##",
-			"#...---...#",
-			"#..-----..#",
-			"#..--E--..#",
-			"#..-----..#",
-			"#...---...#",
-			"##.......##",
-			"###.....###",
-			"###########",
-           
-		}
-	};
+	public SewersEntrance() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"###.-S-.###", //
+				"##...-...##", //
+				"#...---...#", //
+				"#..-----..#", //
+				"#..--E--..#", //
+				"#..-----..#", //
+				"#...---...#", //
+				"##.......##", //
+				"###.....###", //
+				"###########" } };
 
 		charMap.put("#", "SEWERS_WALL");
 		charMap.put(".", "SEWERS_FLOOR");
@@ -41,7 +34,6 @@ public class SewersEntrance extends StaticPattern
 		charMap.put("E", "SEWERS_DOWN EXIT SEWERS0");
 	}
 
-	
 	public String getDescription() {
 		return "Petra Sewers";
 	}

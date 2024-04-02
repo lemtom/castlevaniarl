@@ -2,7 +2,6 @@ package crl.action.npc;
 
 import sz.util.Position;
 import crl.action.Action;
-import crl.feature.SmartFeature;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -12,6 +11,7 @@ public class PeaceWalk extends Action{
 		return "PeaceWalk";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}

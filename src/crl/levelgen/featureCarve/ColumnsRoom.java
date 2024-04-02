@@ -1,6 +1,6 @@
 package crl.levelgen.featureCarve;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import sz.util.Position;
 import sz.util.Util;
@@ -12,10 +12,11 @@ public class ColumnsRoom extends RoomFeature {
 		this.column = column;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean[][] mask, ArrayList hotspots) {
+	@Override
+	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean[][] mask, List<Position> hotspots) {
 		boolean ret = super.drawOverCanvas(canvas, where, direction, mask, hotspots);
 		int spacing= 0;
-		if (ret == true){
+		if (ret){
 			if (Util.chance(50)){
 				if (width % 2 == 0)
 					spacing = 3;

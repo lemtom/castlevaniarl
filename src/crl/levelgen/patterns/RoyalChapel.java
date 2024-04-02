@@ -2,106 +2,97 @@ package crl.levelgen.patterns;
 
 import crl.levelgen.MonsterSpawnInfo;
 
-public class RoyalChapel extends StaticPattern
-{
+public class RoyalChapel extends StaticPattern {
+	@Override
 	public MonsterSpawnInfo[] getDwellers() {
-		return new MonsterSpawnInfo[]{
-				new MonsterSpawnInfo("SKULL_LORD", MonsterSpawnInfo.UNDERGROUND, 60),
+		return new MonsterSpawnInfo[] { new MonsterSpawnInfo("SKULL_LORD", MonsterSpawnInfo.UNDERGROUND, 60),
 				new MonsterSpawnInfo("BONE_ARCHER", MonsterSpawnInfo.UNDERGROUND, 60),
 				new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 60),
 				new MonsterSpawnInfo("RULER_SWORD_LV1", MonsterSpawnInfo.UNDERGROUND, 20),
-				new MonsterSpawnInfo("BALLOON_POD", MonsterSpawnInfo.UNDERGROUND, 80),
-			};
+				new MonsterSpawnInfo("BALLOON_POD", MonsterSpawnInfo.UNDERGROUND, 80), };
 	}
 
-	public String getMapKey(){
+	public String getMapKey() {
 		return "CHAPEL";
 	}
 
-	public RoyalChapel () {
-		cellMap = new String [][]{
-		{
-			"    ######WWWWW###########WWWWWWW##########WWWW####################                   ",
-			"   ##..sssssssssss.....sssssssssssss....ssssssssss................###                 ",
-			"  ##................................................................###               ",
-			"  #.d..sssssssssss.....sssssssssssss....ssssssssss...d................#               ",
-			" ##...................................................................##              ",
-			" #.....+++++++++++.....+++++++++++++....++++++++++.....................#              ",
-			" #...                                                             .....#              ",
-			"##...                                                              ....#              ",
-			"#....                                                              ....##             ",
-			"#...b                                                               ....#             ",
-			"#...b                                                               ....#             ",
-			"#...b                                                                ...##            ",
-			"#...b                                                                b...#            ",
-			"#...b                                                                b...#            ",
-			"#...b                                                                b...#            ",
-			"#...b                                                                ....#            ",
-			"#...b                                                                b....            ",
-			"#...b                                                                b....            ",
-			"#...b                                                                b....            ",
-			"#.k.b                                                                b....            ",
-			"#...b                                                                b....            ",
-			"#...b                                                                ....#            ",
-			"#...b                                                                b...#            ",
-			"#...b                                                                b...#            ",
-			"#...b                                                                b...#            ",
-			"#...b                                                                ...##            ",
-			"#...b                                                               ....#             ",
-			"#...b                                                               ....#             ",
-			"#....                                                              ....##             ",
-			"##...                                                              ....#              ",
-			" #...                                                             .....#              ",
-			" #.....+++++++++++.....+++++++++++++....++++++++++.....................#              ",
-			" ##...................................................................##              ",
-			"  #.d..sssssssssss.....sssssssssssss....ssssssssss...d................#               ",
-			"  ##................................................................###               ",
-			"   ##..sssssssssss.....sssssssssssss....ssssssssss................###                 ",
-			"    ######WWWWW###########WWWWWWW##########WWWW####################                   "
-			
-					} , {
-			"...###############WWWW################WWWW#########################...................",
-			"...#................................................#.............###.................",
-			"..##................................................#...............###...............",
-			"..#.u...............................................#u................############....",
-			".##.................................................#.............#####hhhhhhhhhh##...",
-			".#################WWWW################WWWW#####################/###hhhhhhhhhhhhhhh##..",
-			".#...o..o..o.................o..o..o.................o..o..o.....#hhhhhhhhhhhhhhhhh##.",
-			"##...o.ooo.o.................o.ooo.o.................o.ooo.o.....bhhhhhhhhhhhhhhhhhh##",
-			"#................................................................bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s.1..s....s....s....s....s..........==hhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#................................................................bhhhhhhhhhhhhhhhhhhh#",
-			"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhhhh#",
-			"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhh..#",
-			"Scccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc..1.bhhhhhhhhhhhhhhhh=..E",
-			"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhh..#",
-			"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhhhh#",
-			"#................................................................bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s.1..s....s....s....s....s..........==hhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#",
-			"#................................................................bhhhhhhhhhhhhhhhhhhh#",
-			"##...o.ooo.o.................o.ooo.o.................o.ooo.o.....bhhhhhhhhhhhhhhhhhh##",
-			".#...o..o..o.................o..o..o.................o..o..o.....#hhhhhhhhhhhhhhhhh##.",
-			".#################WWWW################WWWW#####################/###hhhhhhhhhhhhhhh##..",
-			".##.................................................#.............#####hhhhhhhhhh##...",
-			"..#.u...............................................#u................############....",
-			"..##................................................#...............###...............",
-			"...#................................................#.............###.................",
-			"...##############WWWW#################WWWW#########################..................."
-
-			
-			
-		}
-	};
+	public RoyalChapel() {
+		cellMap = new String[][] { { //
+				"    ######WWWWW###########WWWWWWW##########WWWW####################                   ", //
+				"   ##..sssssssssss.....sssssssssssss....ssssssssss................###                 ", //
+				"  ##................................................................###               ", //
+				"  #.d..sssssssssss.....sssssssssssss....ssssssssss...d................#               ", //
+				" ##...................................................................##              ", //
+				" #.....+++++++++++.....+++++++++++++....++++++++++.....................#              ", //
+				" #...                                                             .....#              ", //
+				"##...                                                              ....#              ", //
+				"#....                                                              ....##             ", //
+				"#...b                                                               ....#             ", //
+				"#...b                                                               ....#             ", //
+				"#...b                                                                ...##            ", //
+				"#...b                                                                b...#            ", //
+				"#...b                                                                b...#            ", //
+				"#...b                                                                b...#            ", //
+				"#...b                                                                ....#            ", //
+				"#...b                                                                b....            ", //
+				"#...b                                                                b....            ", //
+				"#...b                                                                b....            ", //
+				"#.k.b                                                                b....            ", //
+				"#...b                                                                b....            ", //
+				"#...b                                                                ....#            ", //
+				"#...b                                                                b...#            ", //
+				"#...b                                                                b...#            ", //
+				"#...b                                                                b...#            ", //
+				"#...b                                                                ...##            ", //
+				"#...b                                                               ....#             ", //
+				"#...b                                                               ....#             ", //
+				"#....                                                              ....##             ", //
+				"##...                                                              ....#              ", //
+				" #...                                                             .....#              ", //
+				" #.....+++++++++++.....+++++++++++++....++++++++++.....................#              ", //
+				" ##...................................................................##              ", //
+				"  #.d..sssssssssss.....sssssssssssss....ssssssssss...d................#               ", //
+				"  ##................................................................###               ", //
+				"   ##..sssssssssss.....sssssssssssss....ssssssssss................###                 ", //
+				"    ######WWWWW###########WWWWWWW##########WWWW####################                   " },
+				{ //
+						"...###############WWWW################WWWW#########################...................", //
+						"...#................................................#.............###.................", //
+						"..##................................................#...............###...............", //
+						"..#.u...............................................#u................############....", //
+						".##.................................................#.............#####hhhhhhhhhh##...", //
+						".#################WWWW################WWWW#####################/###hhhhhhhhhhhhhhh##..", //
+						".#...o..o..o.................o..o..o.................o..o..o.....#hhhhhhhhhhhhhhhhh##.", //
+						"##...o.ooo.o.................o.ooo.o.................o.ooo.o.....bhhhhhhhhhhhhhhhhhh##", //
+						"#................................................................bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s.1..s....s....s....s....s..........==hhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#................................................................bhhhhhhhhhhhhhhhhhhh#", //
+						"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhhhh#", //
+						"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhh..#", //
+						"Scccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc..1.bhhhhhhhhhhhhhhhh=..E", //
+						"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhh..#", //
+						"#cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc....bhhhhhhhhhhhhhhhhhhh#", //
+						"#................................................................bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s.1..s....s....s....s....s..........==hhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#........s....s....s....s....s....s....s....s....s....s..........bhhhhhhhhhhhhhhhhhhh#", //
+						"#................................................................bhhhhhhhhhhhhhhhhhhh#", //
+						"##...o.ooo.o.................o.ooo.o.................o.ooo.o.....bhhhhhhhhhhhhhhhhhh##", //
+						".#...o..o..o.................o..o..o.................o..o..o.....#hhhhhhhhhhhhhhhhh##.", //
+						".#################WWWW################WWWW#####################/###hhhhhhhhhhhhhhh##..", //
+						".##.................................................#.............#####hhhhhhhhhh##...", //
+						"..#.u...............................................#u................############....", //
+						"..##................................................#...............###...............", //
+						"...#................................................#.............###.................", //
+						"...##############WWWW#################WWWW#########################..................." } };
 
 		charMap.put("#", "CHURCH_WALL");
 		charMap.put(".", "CHURCH_FLOOR");
@@ -120,13 +111,10 @@ public class RoyalChapel extends StaticPattern
 		charMap.put("1", "CHURCH_FLOOR MONSTER RULER_SWORD_LV1");
 		charMap.put("S", "CHURCH_FLOOR EXIT _BACK");
 		charMap.put("E", "CHURCH_FLOOR EOL MAGIC_DOOR COST 1");
-	
-		spawnInfo = new MonsterSpawnInfo []{
-			new MonsterSpawnInfo("SKULL_HEAD", MonsterSpawnInfo.BORDER, 1),
-		};
+
+		spawnInfo = new MonsterSpawnInfo[] { new MonsterSpawnInfo("SKULL_HEAD", MonsterSpawnInfo.BORDER, 1), };
 	}
 
-	
 	public String getDescription() {
 		return "Royal Chapel";
 	}
@@ -138,9 +126,10 @@ public class RoyalChapel extends StaticPattern
 	public String getMusicKeyNoon() {
 		return null;
 	}
-	
+
+	@Override
 	public boolean isRutinary() {
 		return true;
 	}
-	
+
 }

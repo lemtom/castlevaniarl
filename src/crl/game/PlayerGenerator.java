@@ -7,7 +7,6 @@ import sz.util.ScriptUtil;
 import sz.util.Util;
 import crl.item.ItemDefinition;
 import crl.item.ItemFactory;
-import crl.player.Consts;
 import crl.player.Player;
 import crl.ui.AppearanceFactory;
 
@@ -15,7 +14,7 @@ public abstract class PlayerGenerator {
 	public static PlayerGenerator thus;
 	public abstract Player generatePlayer();
 	
-	private Hashtable SPECIAL_PLAYERS = new Hashtable();
+	private Hashtable<String, Player> SPECIAL_PLAYERS = new Hashtable<String, Player>();
 	private void initSpecialPlayers(){
 		SPECIAL_PLAYERS.clear();
 		ItemFactory itf = ItemFactory.getItemFactory();
@@ -157,13 +156,13 @@ public abstract class PlayerGenerator {
 	}
 	public Player createSpecialPlayer(String playerID){
 		initSpecialPlayers();
-		return (Player) SPECIAL_PLAYERS.get(playerID);
+		return SPECIAL_PLAYERS.get(playerID);
 	}
 	
 	public Player getPlayer(String name, int sex, int choice){
 		Player player = new Player();
 		player.setSex(sex);
-		if (name.trim().equals("")){
+		if (name.trim().length() == 0){
 			if (sex == Player.MALE)
 				player.setName(Util.randomElementOf(MALE_NAMES));
 			else
@@ -555,7 +554,7 @@ public abstract class PlayerGenerator {
 	protected String [] FEMALE_NAMES = new String [] {"Eliann","Sonia", "Valentina", "Carrie", "Sypha", "Mina"};
 
 	protected String [] CLASS_DESCRIPTIONS  = new String []{
-        	"Heir of the Belmont fate, destined to confront the dark count or die "+"" +
+        	"Heir of the Belmont fate, destined to confront the dark count or die "+
         			"trying. Master in the use of the mystic vampire killer whip and the "+
         			"only able to use mystic weapons",
         	"A Vampire turned to the side of light, his will is to clean the world "+

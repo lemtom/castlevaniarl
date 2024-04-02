@@ -2,7 +2,6 @@ package crl.game;
 
 import java.util.Hashtable;
 
-import sz.midi.MidisLoader;
 import sz.midi.STMidiPlayer;
 //import sz.midi.STMidiPlayer;
 import sz.mp3.JLayerMP3Player;
@@ -10,7 +9,7 @@ import sz.mp3.JLayerMP3Player;
 public class STMusicManagerNew {
 	private Thread currentMidiThread;
 	private Thread currentMP3Thread;
-	private Hashtable musics = new Hashtable();
+	private Hashtable<String, String> musics = new Hashtable<String, String>();
 	private boolean enabled;
 	private String playing = "__nuthin";
 	
@@ -121,7 +120,7 @@ public class STMusicManagerNew {
 	}
 	
 	public void playForLevel (String levelType){
-		String bgMusic = (String) musics.get(levelType);
+		String bgMusic = musics.get(levelType);
 		if (bgMusic != null){
 			play(bgMusic);
 		} else {
@@ -130,7 +129,7 @@ public class STMusicManagerNew {
 	}
 	
 	public void playKey (String key){
-		String bgMusic = (String) musics.get(key);
+		String bgMusic = musics.get(key);
 		if (bgMusic != null){
 			play(bgMusic);
 		} else {
@@ -139,7 +138,7 @@ public class STMusicManagerNew {
 	}
 	
 	public void playKeyOnce (String key){
-		String bgMusic = (String) musics.get(key);
+		String bgMusic = musics.get(key);
 		if (bgMusic != null){
 			playOnce(bgMusic);
 		} else {
@@ -153,6 +152,6 @@ public class STMusicManagerNew {
 			play(niteMusic); 
 	}
 	
-	private final static String NITE_MUSIC = "NITE_MUSIC";*/
+	private static final String NITE_MUSIC = "NITE_MUSIC";*/
 }
 

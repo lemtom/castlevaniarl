@@ -18,6 +18,7 @@ public class MonsterWalk extends Action{
 		return "MonsterWalk";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
@@ -130,6 +131,7 @@ public class MonsterWalk extends Action{
 
 	}
 
+	@Override
 	public int getCost(){
 		Monster m = (Monster) performer;
 		if (m.getWalkCost() == 0){

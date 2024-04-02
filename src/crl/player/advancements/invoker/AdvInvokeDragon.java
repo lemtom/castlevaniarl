@@ -27,6 +27,7 @@ public class AdvInvokeDragon extends Advancement{
 			"ADV_TAME"
 		};
 		
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

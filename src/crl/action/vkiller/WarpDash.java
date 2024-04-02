@@ -2,9 +2,7 @@ package crl.action.vkiller;
 
 import sz.util.Line;
 import sz.util.Position;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
@@ -20,14 +18,17 @@ public class WarpDash extends HeartAction{
 		return "WarpDash";
 	}
 	
+	@Override
 	public boolean needsPosition(){
 		return true;
 	}
 
+	@Override
 	public String getPromptPosition(){
 		return "Where do you want to dash?";
 	}
 
+	@Override
 	public void execute(){
 		super.execute();
 		Player player = (Player) performer;
@@ -58,11 +59,13 @@ public class WarpDash extends HeartAction{
 		UserInterface.getUI().refresh();
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.4);
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/scrch.wav";
 	}

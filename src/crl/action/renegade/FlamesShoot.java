@@ -24,12 +24,8 @@ public class FlamesShoot extends BeamProjectileSkill{
 	public String getSelfTargettedMessage() {
 		return "The fireball flies to the heavens";
 	}
-	
-	public boolean allowsSelfTarget() {
-		return false;
-	}
 
-	public String getSFXID() {
+    public String getSFXID() {
 		return "SFX_FLAMESSHOOT";
 	}
 
@@ -49,10 +45,12 @@ public class FlamesShoot extends BeamProjectileSkill{
 		return "FlamesShoot";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/fire.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);

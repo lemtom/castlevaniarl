@@ -2,11 +2,10 @@ package crl.level;
 
 import java.util.*;
 import crl.game.*;
-import crl.item.ItemDefinition;
 
 public class MapCellFactory {
 	private static MapCellFactory singleton = new MapCellFactory();
-	private Hashtable definitions;
+	private Hashtable<String, Cell> definitions;
 
 
 
@@ -20,7 +19,7 @@ public class MapCellFactory {
     }
 
 	public Cell getMapCell (String id) throws CRLException{
-		Cell ret = (Cell) definitions.get(id);
+		Cell ret = definitions.get(id);
 		if (ret != null)
 			return ret;
 		throw new CRLException("MapCellID " +id +" not found");
@@ -31,12 +30,11 @@ public class MapCellFactory {
 	}
 
 	public MapCellFactory(){
-		definitions = new Hashtable(40);
+		definitions = new Hashtable<String, Cell>(40);
 	}
 
 	public void init(Cell[] defs) {
-		for (int i = 0; i < defs.length; i++)
-			definitions.put(defs[i].getID(), defs[i]);
+        for (Cell def : defs) definitions.put(def.getID(), def);
 	}
 
 }

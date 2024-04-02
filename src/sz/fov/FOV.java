@@ -4,7 +4,7 @@ import sz.util.*;
 
 /*
  * RECURSIVE SHADOWCASTING
- * Original Author: Björn Bergström
+ * Original Author: Bjï¿½rn Bergstrï¿½m
  * e-mail: dungeondweller@swipnet.se
  * 
  * Translated to Java: Santiago Zapata
@@ -16,9 +16,9 @@ import sz.util.*;
  *
  * 060322: Santiago Zapata - translated to Java
  * 
- * 020125: Björn Bergström - changed from float to double to remove compiler
+ * 020125: Bjï¿½rn Bergstrï¿½m - changed from float to double to remove compiler
  *         warnings
- * 020125: Björn Bergström - included a check to avoid orthogonal edges to be
+ * 020125: Bjï¿½rn Bergstrï¿½m - included a check to avoid orthogonal edges to be
  *         scanned more than once
  * 020125: Greg McIntyre - declared the nwL, neL etc in FOV::start outside the
  *         for loops
@@ -66,7 +66,7 @@ public class FOV {
 		// is the starting cell the leftmost cell in the octant?
 		// NO: call applyCell() to starting cell 
 		// YES: it has already been applied in FOV::start()
-		if(xStart != xCenter-(1*distance)){
+		if(xStart != xCenter-(distance)){
 			this.applyCell(map,xStart,yCheck);
 		}
 
@@ -125,7 +125,7 @@ public class FOV {
 			//
 			else{
 				if(prevBlocked){
-					startSlope=this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck,(double)yCheck);
+					startSlope=this.slope((double)xCenter+0.5,(double)yCenter+0.5, xCheck, yCheck);
 				}
 				prevBlocked=false;
 			}
@@ -225,7 +225,7 @@ public class FOV {
 			{
 				if(prevBlocked)
 				{
-					startSlope=this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck+0.9999999,(double)yCheck);
+					startSlope=this.slope(xCenter+0.5,yCenter+0.5,xCheck+0.9999999,yCheck);
 				}
 				prevBlocked=false;
 			}
@@ -261,7 +261,7 @@ public class FOV {
 		// is starting cell the topmost cell in the octant?
 		// NO: call applyCell() to starting cell 
 		// YES: it has already been applied in FOV::start()
-		if(yStart != yCenter-(1*distance))
+		if(yStart != yCenter-(distance))
 		{
 			this.applyCell(map,xCheck,yStart);
 		}
@@ -337,7 +337,7 @@ public class FOV {
 			{
 				if(prevBlocked)
 				{
-					startSlope=this.invSlope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck,(double)yCheck);
+					startSlope=this.invSlope((double)xCenter+0.5,(double)yCenter+0.5, xCheck, yCheck);
 				}
 				prevBlocked=false;
 			}
@@ -448,7 +448,7 @@ public class FOV {
 			{
 				if(prevBlocked)
 				{
-					startSlope=this.invSlope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck,(double)yCheck+0.99999);
+					startSlope=this.invSlope(xCenter+0.5,yCenter+0.5,xCheck,yCheck+0.99999);
 				}
 				prevBlocked=false;
 			}
@@ -525,7 +525,7 @@ public class FOV {
 			{
 				if(!prevBlocked)
 				{
-					this.scanSW2S(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck-0.00001,(double)yCheck));
+					this.scanSW2S(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck-0.00001, yCheck));
 				}
 				prevBlocked=true;
 			}
@@ -550,7 +550,7 @@ public class FOV {
 			{
 				if(prevBlocked)
 				{
-					startSlope=this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck,(double)yCheck+0.99999);
+					startSlope=this.slope((double)xCenter+0.5,(double)yCenter+0.5, xCheck,(double)yCheck+0.99999);
 				}
 				prevBlocked=false;
 			}
@@ -586,7 +586,7 @@ public class FOV {
 		// is starting cell the rightmost cell in the octant?
 		// NO: call applyCell() to starting cell 
 		// YES: it has already been applied in FOV::start()
-		if(xStart != xCenter+(1*distance))
+		if(xStart != xCenter+(distance))
 		{
 			this.applyCell(map,xStart,yCheck);
 		}
@@ -627,7 +627,7 @@ public class FOV {
 			{
 				if(!prevBlocked)
 				{
-					this.scanSE2S(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck+1,(double)yCheck));
+					this.scanSE2S(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.slope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck+1, yCheck));
 				}
 				prevBlocked=true;
 			}
@@ -734,7 +734,7 @@ public class FOV {
 			{
 				if(!prevBlocked)
 				{
-					this.scanNE2E(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.invSlope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck,(double)yCheck-0.00001));
+					this.scanNE2E(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.invSlope((double)xCenter+0.5,(double)yCenter+0.5, xCheck,(double)yCheck-0.00001));
 				}
 				prevBlocked=true;
 			}
@@ -764,7 +764,7 @@ public class FOV {
 			{
 				if(prevBlocked)
 				{
-					startSlope=this.invSlope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck+0.99999,(double)yCheck);
+					startSlope=this.invSlope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck+0.99999, yCheck);
 				}
 				prevBlocked=false;
 			}
@@ -799,7 +799,7 @@ public class FOV {
 		// is starting cell the bottommost cell in the octant?
 		// NO: call applyCell() to starting cell 
 		// YES: it has already been applied in FOV::start()
-		if(yStart != yCenter+(1*distance))
+		if(yStart != yCenter+(distance))
 		{
 			this.applyCell(map,xCheck,yStart);
 		}
@@ -845,7 +845,7 @@ public class FOV {
 			{
 				if(!prevBlocked)
 				{
-					this.scanSE2E(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.invSlope((double)xCenter+0.5,(double)yCenter+0.5,(double)xCheck,(double)yCheck+1));
+					this.scanSE2E(map,xCenter,yCenter,distance+1,maxRadius,startSlope,this.invSlope((double)xCenter+0.5,(double)yCenter+0.5, xCheck,(double)yCheck+1));
 				}
 				prevBlocked=true;
 			}

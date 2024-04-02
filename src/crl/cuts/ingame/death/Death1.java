@@ -1,6 +1,5 @@
 package crl.cuts.ingame.death;
 
-import crl.ai.SelectorFactory;
 import crl.cuts.Unleasher;
 import crl.game.Game;
 import crl.level.Level;

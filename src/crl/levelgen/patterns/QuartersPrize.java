@@ -1,8 +1,7 @@
 package crl.levelgen.patterns;
 
-public class QuartersPrize extends StaticPattern
-{
-	public String getMapKey(){
+public class QuartersPrize extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
 
@@ -14,25 +13,19 @@ public class QuartersPrize extends StaticPattern
 		return null;
 	}
 
-
-
-	public QuartersPrize () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"###.....###",
-			"##.......##",
-			"#..i.*.i..#",
-			"#.........#",
-			"#.........#",
-			"#.........#",
-			"#....S....#",
-			"##.......##",
-			"###.....###",
-			"###########",
-           
-		}
-	};
+	public QuartersPrize() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"###.....###", //
+				"##.......##", //
+				"#..i.*.i..#", //
+				"#.........#", //
+				"#.........#", //
+				"#.........#", //
+				"#....S....#", //
+				"##.......##", //
+				"###.....###", //
+				"###########" } };
 
 		charMap.put("#", "QUARTERS_WALL");
 		charMap.put(".", "QUARTERS_FLOOR");
@@ -41,7 +34,6 @@ public class QuartersPrize extends StaticPattern
 		charMap.put("S", "MARBLE_STAIRSDOWN_FAKE EXIT _BACK");
 	}
 
-	
 	public String getDescription() {
 		return "???";
 	}

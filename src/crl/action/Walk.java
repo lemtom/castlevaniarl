@@ -22,6 +22,7 @@ public class Walk extends Action{
 		return "Walk";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
@@ -94,13 +95,13 @@ public class Walk extends Action{
 								Actor aActor = aLevel.getActorAt(destinationPoint);
 								if (aActor != null && aActor.getStandingHeight() == aPlayer.getStandingHeight()){
 									if (aActor instanceof Merchant && !((Merchant)aActor).isHostile()){
-										aPlayer.informPlayerEvent(Player.EVT_MERCHANT, (Merchant) aActor);
+										aPlayer.informPlayerEvent(Player.EVT_MERCHANT, aActor);
 									} else {
 										if (aActor instanceof NPC && !((NPC)aActor).isHostile()) {
 											if (((NPC)aActor).getNPCID().equals("LARDA")){
-												aPlayer.informPlayerEvent(Player.EVT_INN, (NPC) aActor);
+												aPlayer.informPlayerEvent(Player.EVT_INN, aActor);
 											} else {
-												aPlayer.informPlayerEvent(Player.EVT_CHAT, (NPC) aActor);
+												aPlayer.informPlayerEvent(Player.EVT_CHAT, aActor);
 												if (((NPC) aActor).isPriest()){
 													if (!aPlayer.getFlag("HEALED_BY_" + ((NPC) aActor).getNPCID())) {
 														aPlayer.heal();
@@ -158,6 +159,7 @@ public class Walk extends Action{
        	Debug.exitMethod();
 	}
 
+	@Override
 	public int getCost(){
 		return aPlayer.getWalkCost();
 	}

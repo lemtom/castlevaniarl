@@ -5,11 +5,8 @@ import java.awt.Image;
 import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
 import crl.item.*;
-import crl.ui.*;
 import crl.ui.consoleUI.CharAppearance;
 import crl.ui.graphicsUI.GFXAppearance;
-
-import crl.*;
 
 public class Equipment implements MenuItem, GFXMenuItem{
 	private Item item;

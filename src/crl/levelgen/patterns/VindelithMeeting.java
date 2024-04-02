@@ -1,41 +1,35 @@
 package crl.levelgen.patterns;
 
 import crl.cuts.Unleasher;
-import crl.cuts.ingame.deathHall.*;
 import crl.cuts.ingame.vindelith1.Vindelith1;
 import crl.cuts.ingame.vindelith1.Vindelith2;
 
-public class VindelithMeeting extends StaticPattern
-{
-	public String getMapKey(){
+public class VindelithMeeting extends StaticPattern {
+	public String getMapKey() {
 		return "LAB";
 	}
 
-	public VindelithMeeting () {
-		cellMap = new String [][]{
-		{
-			"                                ",
-			"                                ",
-			"                                ",
-			"                                ",
-			"   ###+#######+#######+###      ",
-			"   #.....................#      ",
-			"   #.....................#      ",
-			"##+#.....................#      ",
-			"#........................###+###",
-			"S..............................E",
-			"#........................###+###",
-			"##+#.12..................#      ",
-			"   #.....................#      ",
-			"   #.....................#      ",
-			"   ###+#######+#######+###      ",
-			"                                ",
-			"                                ",
-			"                                ",
-			"                                ",
-
-		}
-	};
+	public VindelithMeeting() {
+		cellMap = new String[][] { { //
+				"                                ", //
+				"                                ", //
+				"                                ", //
+				"                                ", //
+				"   ###+#######+#######+###      ", //
+				"   #.....................#      ", //
+				"   #.....................#      ", //
+				"##+#.....................#      ", //
+				"#........................###+###", //
+				"S..............................E", //
+				"#........................###+###", //
+				"##+#.12..................#      ", //
+				"   #.....................#      ", //
+				"   #.....................#      ", //
+				"   ###+#######+#######+###      ", //
+				"                                ", //
+				"                                ", //
+				"                                ", //
+				"                                " } };
 
 		charMap.put(".", "RED_FLOOR");
 		charMap.put("S", "RED_FLOOR EXIT _BACK");
@@ -44,15 +38,10 @@ public class VindelithMeeting extends StaticPattern
 		charMap.put("+", "SMALL_WINDOW");
 		charMap.put("2", "RED_FLOOR NPC UNIDED_VINDELITH");
 		charMap.put("1", "RED_FLOOR NPC UNIDED_CLAW");
-		
-		unleashers = new Unleasher[] {
-			new Vindelith1(),
-			new Vindelith2(),
-		};
+
+		unleashers = new Unleasher[] { new Vindelith1(), new Vindelith2(), };
 	}
 
-	
-	
 	public String getDescription() {
 		return "Hall";
 	}
@@ -64,5 +53,5 @@ public class VindelithMeeting extends StaticPattern
 	public String getMusicKeyNoon() {
 		return null;
 	}
-	
+
 }

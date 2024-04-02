@@ -358,7 +358,7 @@ public class GFXEffects {
 		int effectsScale = this.configuration.effectsScale;
 		try {
 			BufferedImage[] ret = new BufferedImage[]{
-				ImageUtils.crearImagen(IMG_EFFECTS, 0 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
+				ImageUtils.crearImagen(IMG_EFFECTS, 0, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
 				ImageUtils.crearImagen(IMG_EFFECTS, 44 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
 				ImageUtils.crearImagen(IMG_EFFECTS, 88 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale)
 			};

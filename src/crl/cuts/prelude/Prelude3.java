@@ -1,7 +1,5 @@
 package crl.cuts.prelude;
 
-import sz.util.Position;
-import crl.action.ActionFactory;
 import crl.ai.monster.boss.DraculaAI;
 import crl.cuts.Unleasher;
 import crl.game.Game;

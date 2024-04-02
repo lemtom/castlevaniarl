@@ -2,7 +2,7 @@ package crl.data;
 
 import crl.item.*;
 public class Items {
-		private final static ItemDefinition [] defs = new ItemDefinition[]{
+		private static final ItemDefinition [] defs = new ItemDefinition[]{
 			new ItemDefinition ("ART_CARD_SOL","Card of Sol","ART_CARD_SOL",0,"A card with a golden sun",200,0,"",0,1,0,0,0," ",false,false,0,0,0,0,0,false,"","",2,"",false,0,"",true,true," "," ",-1,0),
 			new ItemDefinition ("ART_CARD_MOONS","Card of Moons","ART_CARD_MOONS",0,"A card with two silver moons",200,0,"",0,1,0,0,0," ",false,false,0,0,0,0,0,false,"","",2,"",false,0,"",true,true," "," ",-1,0),
 			new ItemDefinition ("ART_CARD_DEATH","Card of Death","ART_CARD_DEATH",0,"A faceless card",200,0,"",0,1,0,0,0," ",false,false,0,0,0,0,0,false,"","",2,"",false,0,"",true,true," "," ",-1,0),

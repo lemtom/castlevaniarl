@@ -21,9 +21,9 @@ public class SZCA {
 
 		for (int x = 0; x < WIDTH; x++){
 			for (int y = 0; y < HEIGHT; y++){
-				for (int i = 0; i <aRules.length; i++){
-					aRules[i].apply(x,y, aMatrix, wrap);
-				}
+                for (CARule aRule : aRules) {
+                    aRule.apply(x, y, aMatrix, wrap);
+                }
 			}
 		}
 		

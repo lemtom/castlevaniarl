@@ -58,6 +58,7 @@ public class MedusaAI extends MonsterAI{
 		 return "MEDUSA_AI";
 	 }
 
+	 @Override
 	 public ActionSelector derive(){
  		try {
 	 		return (ActionSelector) clone();

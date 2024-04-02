@@ -48,6 +48,7 @@ public class HomingBall extends ProjectileSkill{
 		return "HomingBall";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.2);

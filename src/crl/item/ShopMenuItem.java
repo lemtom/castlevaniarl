@@ -1,7 +1,6 @@
 package crl.item;
 
 import sz.csi.textcomponents.MenuItem;
-import crl.ui.*;
 import crl.ui.consoleUI.CharAppearance;
 
 //TODO: Delete this no longer used class

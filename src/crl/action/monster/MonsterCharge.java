@@ -21,6 +21,7 @@ public class MonsterCharge extends Action{
 		return "MONSTER_CHARGE";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
@@ -92,10 +93,12 @@ public class MonsterCharge extends Action{
 		
 	}
 
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to whip?";
 	}
 
+	@Override
 	public int getCost(){
 		Monster m = (Monster) performer;
 		if (m.getAttackCost() == 0){

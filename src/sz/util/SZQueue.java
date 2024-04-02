@@ -3,10 +3,10 @@ package sz.util;
 import java.util.*;
 
 public class SZQueue implements java.io.Serializable{
-	private Vector list;
+	private Vector<Object> list;
 
 	public SZQueue(){
-		list = new Vector(40);
+		list = new Vector<Object>(40);
  	}
 
  	public boolean contains (Object what){
@@ -14,15 +14,15 @@ public class SZQueue implements java.io.Serializable{
 	}
 
  	public SZQueue (int ini){
- 		list = new Vector(ini);
+ 		list = new Vector<Object>(ini);
 	}
 
-	public Vector getVector(){
+	public Vector<Object> getVector(){
 		return list;
 	}
 
  	public Object unqueue(){
- 		if (list.size() > 0){
+ 		if (!list.isEmpty()){
 	 		Object x = list.elementAt(0);
 	 		list.removeElementAt(0);
 	 		return x;

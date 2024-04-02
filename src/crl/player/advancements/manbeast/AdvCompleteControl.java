@@ -31,6 +31,7 @@ public class AdvCompleteControl extends FlagAdvancement{
 		return "Complete control when morphing";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

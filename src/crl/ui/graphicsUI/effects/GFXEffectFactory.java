@@ -10,9 +10,9 @@ public class GFXEffectFactory extends EffectFactory{
 	private Hashtable<String, Effect> effects = new Hashtable<String, Effect>();
 	
 	public void setEffects(Effect[] effectsA){
-		for (int i = 0; i < effectsA.length; i++){
-			effects.put(effectsA[i].getID(), effectsA[i]);
-		}
+        for (Effect effect : effectsA) {
+            effects.put(effect.getID(), effect);
+        }
 	}
 
 	public boolean isDirectedEffect(String ID) {

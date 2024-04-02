@@ -6,11 +6,9 @@ import crl.action.ProjectileSkill;
 import crl.game.SFXManager;
 import crl.player.Player;
 
-public class ItemBreakAxe extends ProjectileSkill{
+public class ItemBreakAxe extends ProjectileSkill {
 	public int getDamage() {
-		return 8 + 
-		getPlayer().getShotLevel() + 
-		getPlayer().getSoulPower();
+		return 8 + getPlayer().getShotLevel() + getPlayer().getSoulPower();
 	}
 
 	public int getHit() {
@@ -42,62 +40,66 @@ public class ItemBreakAxe extends ProjectileSkill{
 	}
 
 	private boolean executing = false;
+
 	public int getHeartCost() {
 		if (executing)
 			return 0;
 		else
 			return 5;
 	}
-	
-	
 
-	
-	public String getID(){
+	public String getID() {
 		return "Axe";
 	}
-	
-	public boolean needsPosition(){
+
+	@Override
+	public boolean needsPosition() {
 		return false;
 	}
-	
-	public int getCost(){
+
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel() + 1);
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to throw the Axe?";
 	}
-	
-	public String getSFX(){
+
+	@Override
+	public String getSFX() {
 		return "wav/misswipe.wav";
 	}
-	
+
+	@Override
 	public boolean showThrowMessage() {
 		return false;
 	}
-	public void execute(){
+
+	@Override
+	public void execute() {
 		getPlayer().reduceHearts(getHeartCost());
 		executing = true;
-		Position destinationPoint = Position.add(getPlayer().getPosition(), new Position(1,1));
+		Position destinationPoint = Position.add(getPlayer().getPosition(), new Position(1, 1));
 		setPosition(destinationPoint);
 		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(1,-1));
-		setPosition(destinationPoint);
-		SFXManager.play(getSFX());
-		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1,1));
+		destinationPoint = Position.add(getPlayer().getPosition(), new Position(1, -1));
 		setPosition(destinationPoint);
 		SFXManager.play(getSFX());
 		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1,-1));
+		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1, 1));
 		setPosition(destinationPoint);
 		SFXManager.play(getSFX());
 		super.execute();
-		for (int i = 0; i < 2; i++){
-			int xdif = 3-Util.rand(0,6);
-			int ydif = 3-Util.rand(0,6);
-			destinationPoint = Position.add(getPlayer().getPosition(), new Position(xdif,ydif));
+		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1, -1));
+		setPosition(destinationPoint);
+		SFXManager.play(getSFX());
+		super.execute();
+		for (int i = 0; i < 2; i++) {
+			int xdif = 3 - Util.rand(0, 6);
+			int ydif = 3 - Util.rand(0, 6);
+			destinationPoint = Position.add(getPlayer().getPosition(), new Position(xdif, ydif));
 			setPosition(destinationPoint);
 			SFXManager.play(getSFX());
 			super.execute();

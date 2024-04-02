@@ -12,7 +12,7 @@ import crl.level.Level;
 import crl.player.Player;
 
 public abstract class UISelector implements ActionSelector  {
-	protected Hashtable gameActions = new Hashtable();
+	protected Hashtable<Object, UserAction> gameActions = new Hashtable<Object, UserAction>();
 	
 	protected Action advance;
 	protected Action attack;
@@ -33,7 +33,7 @@ public abstract class UISelector implements ActionSelector  {
 	}
 	protected Action getRelatedAction(int keyCode){
     	Debug.enterMethod(this, "getRelatedAction", keyCode+"");
-    	UserAction ua = (UserAction) gameActions.get(keyCode+"");
+    	UserAction ua = gameActions.get(keyCode+"");
     	if (ua == null){
     		Debug.exitMethod("null");
     		return null;
@@ -56,9 +56,9 @@ public abstract class UISelector implements ActionSelector  {
 		this.advance = advance;
 		this.target = target;
 		this.attack = attack;
-		for (int i = 0; i < gameActions.length; i++){
-			this.gameActions.put(gameActions[i].getKeyCode()+"", gameActions[i]);
-		}
+        for (UserAction gameAction : gameActions) {
+            this.gameActions.put(gameAction.getKeyCode() + "", gameAction);
+        }
 		WEAPON_KEY = Integer.parseInt(keyBindings.getProperty("WEAPON_KEY"));
 		DONOTHING1_KEY = Integer.parseInt(keyBindings.getProperty("DONOTHING1_KEY"));
 		DONOTHING2_KEY = Integer.parseInt(keyBindings.getProperty("DONOTHING2_KEY"));

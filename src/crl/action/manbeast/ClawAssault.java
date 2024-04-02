@@ -2,9 +2,9 @@ package crl.action.manbeast;
 
 import crl.action.ProjectileSkill;
 
-public class ClawAssault extends ProjectileSkill{
+public class ClawAssault extends ProjectileSkill {
 	public int getDamage() {
-		return 15 + getPlayer().getPunchDamage()*2;
+		return 15 + getPlayer().getPunchDamage() * 2;
 	}
 
 	public int getHit() {
@@ -47,14 +47,17 @@ public class ClawAssault extends ProjectileSkill{
 		return "ClawAssault";
 	}
 
+	@Override
 	public boolean allowsSelfTarget() {
 		return false;
 	}
-	
+
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
-	
+
+	@Override
 	public void execute() {
 		super.execute();
 		getPlayer().setPosition(finalPoint);

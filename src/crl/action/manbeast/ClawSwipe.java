@@ -21,23 +21,28 @@ public class ClawSwipe extends HeartAction{
 		return "ClawSwipe";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
 
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to unleash your energy?";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/swaashll.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.2);
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;
@@ -98,7 +103,7 @@ public class ClawSwipe extends HeartAction{
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You crush the "+destinationFeature.getDescription());
+	       	message.append("You crush the ").append(destinationFeature.getDescription());
 
 			Feature prize = destinationFeature.damage(aPlayer, damage);
 	       	if (prize != null){
@@ -117,7 +122,7 @@ public class ClawSwipe extends HeartAction{
 				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight()-1)
 				){
         		if (targetMonster.wasSeen())
-        			message.append("You crush the "+targetMonster.getDescription());
+        			message.append("You crush the ").append(targetMonster.getDescription());
 				//targetMonster.damage(player.getWhipLevel());
 				targetMonster.damage(message, damage);
 	        	
@@ -128,6 +133,7 @@ public class ClawSwipe extends HeartAction{
 		return false;
 	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
         if (aPlayer.getHearts() < 3){

@@ -8,10 +8,12 @@ public class Unequip extends Action{
 		return "Unequip";
 	}
 	
+	@Override
 	public boolean needsEquipedItem(){
 		return true;
 	}
 
+	@Override
 	public String getPromptEquipedItem(){
 		return "What do you want to unequip?";
 	}
@@ -48,6 +50,7 @@ public class Unequip extends Action{
 		}
 	}
 	
+	@Override
 	public boolean canPerform(Actor a) {
 		boolean ret = ((Player)a).canCarry();
 		if (!ret){

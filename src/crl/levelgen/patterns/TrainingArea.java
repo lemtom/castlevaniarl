@@ -1,16 +1,15 @@
 package crl.levelgen.patterns;
 
 import crl.cuts.Unleasher;
-import crl.cuts.entrance.Entrance1;
 import crl.cuts.training.Training1;
 import crl.cuts.training.Training2;
 import crl.cuts.training.Training3ChrisDeath;
 
-public class TrainingArea extends StaticPattern{
-	public String getMapKey(){
+public class TrainingArea extends StaticPattern {
+	public String getMapKey() {
 		return "FOREST";
 	}
-	
+
 	public String getDescription() {
 		return "Christopher House";
 	}
@@ -23,69 +22,68 @@ public class TrainingArea extends StaticPattern{
 		return null;
 	}
 
-	public TrainingArea () {
-		this.cellMap = new String [][]{{
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb......bbbbbbbbbbbbbbbbbbbbbb",
-			"bb.......h.............rrr....bb..........bb...bbb...wwwwwwwwwwwww...bb",
-			"b..............dd......rrr....b............bbbbb.....wxxxxxxxxxxxw....b",
-			"b.....h........dd......rrr...bb...............b......wx!xx@xxxxxxw....b",
-			"b......................rrr..bb......b..sssss..b......wxxxxxxxxxxxw....b",
-			"b.........sssssss.s.....rrr.b.......b..ssss6..b...b..wwwwwwwww/www....b",
-			"b.....Bsssssssss........rr..b.......b.h.ss....b.......................b",
-			"b......sssssssbssss......rr.b.......b.h.......b................1......b",
-			"b......s..sssssssss.....rrr.b.......bb..rrrrrrbb..........h...h.......b",
-			"b..b....sssssBs.ss.....rrr.bb........b.rrrrrrrbbb......h....h........bb",
-			"b......................rr..b.....7..bbrrrrrrrrbbbb....................b",
-			"bb...B.......rrr.......rr..b..c.....bbbrrbbbbbbrrbb...................b",
-			".bb............rrr......rr.bb.......bbbbbbrrrrrr..bb.................bb",
-			"bbbb....B............rrrrr.bb.........bbrrrrrrr.5..bb...............bb.",
-			"b....9.....b..........rrr...bb.........bbrrrr.......bbbbb......2...bbbb",
-			"X...............rr...........bbb........b...............bb.......bbb...",
-			"b...............r.............dbbb......bbb...b......b...bbrrrrrbb.....",
-			"bbbb............r.............dddbb.......bb......b......b.......b.....",
-			"..b................S..........ddd.bb.......bb...........bb.......bb....",
-			"..b.....sssss..ssss............dd..b........bb..........b.........b....",
-			"..b....Sss.sssssssss....b......dd..b........b...........b.....3...b....",
-			".bb....ssssssssss.ss..ss.......dd..bb.......b...........b.........b....",
-			".b.....ssssssssbsss...ss......ddd.bb........bb..q......bb..b..b...bb...",
-			"bb.....ss..sssssssss..ss......ddd............b.........b..........b....",
-			"b...b..Sssssss.ssss...........ddd..8.........b.4.............b...bb....",
-			"bb............................dddd........bbbb...................b.....",
-			"bbb...........bbb.......bbb..bbddd.....bbbb..bb......bbbbb......bb.....",
-			".bbbbbbbbbbbbbb.bbbbbbbbb.bbbbbbbbbbbbbb......bbbbbbbb...bbbbbbbb......"
-		},{
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbb-----bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbb---bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbb---bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbb--bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb--bbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-------bbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbb-bbbbbbbbbbbbbb-------bbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbb---bbbbbbbbbbbbb----------bbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbb--bbbb-----bbbbbbbbbbbbbbb------bbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbb----------bbbbbbbbbbbbb-------bbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbb----bbbbbbbbbbbbbbb----bbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbb-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-			"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-		}
-		
+	public TrainingArea() {
+		this.cellMap = new String[][] { { //
+				"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb......bbbbbbbbbbbbbbbbbbbbbb", //
+				"bb.......h.............rrr....bb..........bb...bbb...wwwwwwwwwwwww...bb", //
+				"b..............dd......rrr....b............bbbbb.....wxxxxxxxxxxxw....b", //
+				"b.....h........dd......rrr...bb...............b......wx!xx@xxxxxxw....b", //
+				"b......................rrr..bb......b..sssss..b......wxxxxxxxxxxxw....b", //
+				"b.........sssssss.s.....rrr.b.......b..ssss6..b...b..wwwwwwwww/www....b", //
+				"b.....Bsssssssss........rr..b.......b.h.ss....b.......................b", //
+				"b......sssssssbssss......rr.b.......b.h.......b................1......b", //
+				"b......s..sssssssss.....rrr.b.......bb..rrrrrrbb..........h...h.......b", //
+				"b..b....sssssBs.ss.....rrr.bb........b.rrrrrrrbbb......h....h........bb", //
+				"b......................rr..b.....7..bbrrrrrrrrbbbb....................b", //
+				"bb...B.......rrr.......rr..b..c.....bbbrrbbbbbbrrbb...................b", //
+				".bb............rrr......rr.bb.......bbbbbbrrrrrr..bb.................bb", //
+				"bbbb....B............rrrrr.bb.........bbrrrrrrr.5..bb...............bb.", //
+				"b....9.....b..........rrr...bb.........bbrrrr.......bbbbb......2...bbbb", //
+				"X...............rr...........bbb........b...............bb.......bbb...", //
+				"b...............r.............dbbb......bbb...b......b...bbrrrrrbb.....", //
+				"bbbb............r.............dddbb.......bb......b......b.......b.....", //
+				"..b................S..........ddd.bb.......bb...........bb.......bb....", //
+				"..b.....sssss..ssss............dd..b........bb..........b.........b....", //
+				"..b....Sss.sssssssss....b......dd..b........b...........b.....3...b....", //
+				".bb....ssssssssss.ss..ss.......dd..bb.......b...........b.........b....", //
+				".b.....ssssssssbsss...ss......ddd.bb........bb..q......bb..b..b...bb...", //
+				"bb.....ss..sssssssss..ss......ddd............b.........b..........b....", //
+				"b...b..Sssssss.ssss...........ddd..8.........b.4.............b...bb....", //
+				"bb............................dddd........bbbb...................b.....", //
+				"bbb...........bbb.......bbb..bbddd.....bbbb..bb......bbbbb......bb.....", //
+				".bbbbbbbbbbbbbb.bbbbbbbbb.bbbbbbbbbbbbbb......bbbbbbbb...bbbbbbbb......" },
+				{ //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbb-----bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbb---bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbb---bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbb--bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb--bbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-------bbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbb-bbbbbbbbbbbbbb-------bbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbb---bbbbbbbbbbbbb----------bbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbb--bbbb-----bbbbbbbbbbbbbbb------bbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbb----------bbbbbbbbbbbbb-------bbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbb----bbbbbbbbbbbbbbb----bbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbb-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", //
+						"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+
 		};
-		
+
 		charMap.put(".", "FOREST_GRASS");
 		charMap.put("s", "FOREST_DIRT");
 		charMap.put("d", "FOREST_DIRT");
@@ -112,12 +110,8 @@ public class TrainingArea extends StaticPattern{
 		charMap.put("!", "HOUSE_FLOOR NPC CHRISTRAIN");
 		charMap.put("@", "HOUSE_FLOOR EXIT _START");
 		charMap.put("X", "FOREST_GRASS EXIT #END");
-		
-		unleashers = new Unleasher[]{
-			new Training1(), new Training2(), new Training3ChrisDeath()
-		};
-	}
 
-	
+		unleashers = new Unleasher[] { new Training1(), new Training2(), new Training3ChrisDeath() };
+	}
 
 }

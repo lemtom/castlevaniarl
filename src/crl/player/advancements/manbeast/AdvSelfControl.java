@@ -32,6 +32,7 @@ public class AdvSelfControl extends FlagAdvancement{
 		return "Halves risk of going out of control when morphing";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

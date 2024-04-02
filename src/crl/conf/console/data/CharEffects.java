@@ -1,11 +1,9 @@
 package crl.conf.console.data;
 
-import java.awt.Color;
 import java.util.Vector;
 
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
-import crl.action.monster.MandragoraScream;
 import crl.ui.consoleUI.effects.CharAnimatedMissileEffect;
 import crl.ui.consoleUI.effects.CharBeamMissileEffect;
 import crl.ui.consoleUI.effects.CharDirectionalMissileEffect;
@@ -16,8 +14,6 @@ import crl.ui.consoleUI.effects.CharIconMissileEffect;
 import crl.ui.consoleUI.effects.CharMeleeEffect;
 import crl.ui.consoleUI.effects.CharSequentialEffect;
 import crl.ui.consoleUI.effects.CharSplashEffect;
-import crl.ui.graphicsUI.effects.GFXCircleBlastEffect;
-import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
 public class CharEffects {
 	private CharEffect [] effects = new CharEffect[]{
@@ -80,7 +76,7 @@ public class CharEffects {
 		//En Attack.java : 116 "SFX_"+weaponDef.getID()
 		
 		//Sequential Effects
-		new CharSequentialEffect("SFX_BIBLE", SFX_BIBLE_STEPS, "?¿", ConsoleSystemInterface.CYAN, 10),
+		new CharSequentialEffect("SFX_BIBLE", SFX_BIBLE_STEPS, "?ï¿½", ConsoleSystemInterface.CYAN, 10),
 		
 		//Tile Effects
 		new CharIconMissileEffect("SFX_CAT",'c', ConsoleSystemInterface.GRAY, 55),
@@ -230,7 +226,7 @@ public class CharEffects {
 		return effects;
 	}
 
-	private final static Vector SFX_BIBLE_STEPS = new Vector(10);
+	private static final Vector SFX_BIBLE_STEPS = new Vector(10);
 
 	static {
 		SFX_BIBLE_STEPS.add(new Position(1,0));

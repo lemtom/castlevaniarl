@@ -4,8 +4,6 @@ import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
 import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
-import crl.action.*;
-import crl.*;
 
 public class CharSplashEffect extends CharEffect{
 	private String tiles;

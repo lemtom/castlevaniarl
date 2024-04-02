@@ -1,42 +1,31 @@
 package crl.levelgen.patterns;
 
-public class CaveFork extends StaticPattern
-{
-	public String getMapKey(){
+public class CaveFork extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
-	
-	
 
 	public String getMusicKeyMorning() {
 		return "";
 	}
 
-
-
 	public String getMusicKeyNoon() {
 		return null;
 	}
 
-
-
-	public CaveFork () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"###.....###",
-			"##.i.c.i.##",
-			"#.i.c-c.i.#",
-			"#..c-.-c..#",
-			"Scc-.*.-ccE",
-			"#..c-.-c..#",
-			"#.i.c-c.i.#",
-			"##.i.c.i.##",
-			"###.....###",
-			"#####1#####",
-           
-		}
-	};
+	public CaveFork() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"###.....###", //
+				"##.i.c.i.##", //
+				"#.i.c-c.i.#", //
+				"#..c-.-c..#", //
+				"Scc-.*.-ccE", //
+				"#..c-.-c..#", //
+				"#.i.c-c.i.#", //
+				"##.i.c.i.##", //
+				"###.....###", //
+				"#####1#####" } };
 
 		charMap.put("#", "CAVE_WALL");
 		charMap.put(".", "CAVE_FLOOR");
@@ -50,7 +39,6 @@ public class CaveFork extends StaticPattern
 		charMap.put("1", "CAVE_FLOOR EXIT WAREHOUSEX0");
 	}
 
-	
 	public String getDescription() {
 		return "???";
 	}

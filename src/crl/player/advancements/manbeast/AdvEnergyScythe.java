@@ -31,6 +31,7 @@ public class AdvEnergyScythe extends Advancement{
 		return "Builds up energy to perform a powerful blow";
 	}
 	
+	@Override
 	public String[] getBans() {
 		return bans;
 	}

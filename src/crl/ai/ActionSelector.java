@@ -4,9 +4,9 @@ import crl.action.Action;
 import crl.actor.Actor;
 
 public interface ActionSelector extends Cloneable, java.io.Serializable{
-	public Action selectAction(Actor who);
-	public String getID();
+	Action selectAction(Actor who);
+	String getID();
 
-	public ActionSelector derive();
+	ActionSelector derive();
 
 }

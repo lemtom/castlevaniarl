@@ -4,28 +4,31 @@ import crl.action.HeartAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class SoulSaint extends HeartAction{
+public class SoulSaint extends HeartAction {
 	public int getHeartCost() {
 		return 15;
 	}
-	
-	public String getID(){
+
+	public String getID() {
 		return "Soul Saint";
 	}
-	
-	public String getSFX(){
-		return null;
+
+	@Override
+	public String getSFX() {
+		return super.getSFX();
 	}
-	
-	public int getCost(){
+
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.1);
+		return (int) (p.getCastCost() * 1.1);
 	}
-	
-	public void execute(){
+
+	@Override
+	public void execute() {
 		super.execute();
-		Player aPlayer = (Player)performer;
-		aPlayer.setCounter(Consts.C_FIREBALL_WHIP, 50+3*aPlayer.getSoulPower());
+		Player aPlayer = (Player) performer;
+		aPlayer.setCounter(Consts.C_FIREBALL_WHIP, 50 + 3 * aPlayer.getSoulPower());
 		aPlayer.getLevel().addMessage("Your whip glows!");
 	}
 }

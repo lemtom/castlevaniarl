@@ -6,7 +6,7 @@ import crl.game.*;
 import crl.feature.*;
 
 public class TestLevelGenerator extends LevelGenerator {
-	public final static String [] descriptions = new String [] {
+	public static final String [] descriptions = new String [] {
     	"COURTYARDGRASS",
 		"COURTYARDDIRT",
 		"BRICKWALKWAY",

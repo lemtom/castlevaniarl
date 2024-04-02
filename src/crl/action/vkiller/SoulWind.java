@@ -14,6 +14,7 @@ public class SoulWind extends HeartAction{
 		return "Soul Wind";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
@@ -23,13 +24,15 @@ public class SoulWind extends HeartAction{
 		x.stopTime(20 + aPlayer.getShotLevel()*5+ 2*aPlayer.getSoulPower());
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/clockbel.wav";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 
 }

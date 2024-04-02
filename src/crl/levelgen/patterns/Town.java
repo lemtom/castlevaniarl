@@ -6,39 +6,37 @@ import crl.levelgen.*;
 import sz.util.*;
 
 public class Town {
-	public final static String [][] cellMap = new String [][]{{
-		"tttt~ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
-		"ttt~~tt.........ttt.......................9..........tt...........tttt",
-		"tt~~~d.tt.......++++++++++++++++++++++++...................a........tt",
-		"t.~~....e...5...+:::::::::.++....e......++++++++++++++++......d....ttt",
-		"t..~~.........6.+#######::+############:::++#######/####+.....dd..t..t",
-		"t~~~.....dd.....+#xxxxx#::+#xxxxxxxxxx##=#+.#xxxxxxxxxx#+..4ee..d...tt",
-		"tt~d...dd.......+###/###:#+#xxxxxxxxxx##=#++############+............t",
-		"tt~d........+++++++++++#=#+#######/####++++++++++++++++++............t",
-		"t~~......1...+::::::::++++++++++++++++++..+############.+++++++.....tt",
-		"t.~~...S....+=:###s########+..............+#vvvvvvvvv##+++++++++....tt",
-		"tdd~~.......+:#::::::#xxxx#+......2...t...+#vvv===::vv#+++++........tt",
-		"t.dd~~......+:#::::::#xDxx/+...t..~~......+#vvvvvv:p:v#++++++........t",
-		"tt.~~~~~~~..+:#::::::#xxxx#+7....~~....8..+/vvvvvv:::v#+++..+++++++++E",
-		"t..~~.....~.+:#############+......~......d+#vvv===::vv#.+++++.......tt",
-		"t..~~~....~.+:::::::::::::++......t.....d.+#vvvvvvvvv##.+++++........t",
-		"t...~~...~+++++++++++++++++++++++.....dd..+############.+++..........t",
-		"t..dd~~.~~...+:::::::::::==++++++++++++++++++++++++++++++...........tt",
-		"t...d~~~~....+#s##########+::::#######=#::+.########+.+............ttt",
-		"tt..~~.d.....+#:::#xxxxxx#+::::#xxxxx#=#::+.#xxxxxx###+....e.....d..tt",
-		"tt.~~~d......+#:::#xxxxxx#+::::#xxBxx#=#::+.#xxxxxxxx#+..........d..tt",
-		"t..~~d.......+#####xxxAxx#+::#=#xxxxx#::::+.#xxxxCxxx/....3.....d....t",
-		"t...~~d......+/xxx#xxxxxx#+::#=#xxxxx#::::.+#xxxxxxxx#+..........d...t",
-		"t...~~~......+##xx#xxxxx##+::#=##/##/#::::.+####xxxxx#+.....b........t",
-		"t..d~~.......++#####/####++++++++++++++++++++++#######+.............tt",
-		"t..d.~........++++++++++++...ee...............++++++++++.......c.....t",
-		"t.tt~~.t............dd................t....e.........t......t.......tt",
-		"tt~~~~.ttt...t...dddt..ttt.......tt..ttt...tt......tttt....ttt..tttttt",
-		"ttt~~~tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
-	}};
+	public static final String[][] cellMap = new String[][] { { //
+			"tttt~ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt", //
+			"ttt~~tt.........ttt.......................9..........tt...........tttt", //
+			"tt~~~d.tt.......++++++++++++++++++++++++...................a........tt", //
+			"t.~~....e...5...+:::::::::.++....e......++++++++++++++++......d....ttt", //
+			"t..~~.........6.+#######::+############:::++#######/####+.....dd..t..t", //
+			"t~~~.....dd.....+#xxxxx#::+#xxxxxxxxxx##=#+.#xxxxxxxxxx#+..4ee..d...tt", //
+			"tt~d...dd.......+###/###:#+#xxxxxxxxxx##=#++############+............t", //
+			"tt~d........+++++++++++#=#+#######/####++++++++++++++++++............t", //
+			"t~~......1...+::::::::++++++++++++++++++..+############.+++++++.....tt", //
+			"t.~~...S....+=:###s########+..............+#vvvvvvvvv##+++++++++....tt", //
+			"tdd~~.......+:#::::::#xxxx#+......2...t...+#vvv===::vv#+++++........tt", //
+			"t.dd~~......+:#::::::#xDxx/+...t..~~......+#vvvvvv:p:v#++++++........t", //
+			"tt.~~~~~~~..+:#::::::#xxxx#+7....~~....8..+/vvvvvv:::v#+++..+++++++++E", //
+			"t..~~.....~.+:#############+......~......d+#vvv===::vv#.+++++.......tt", //
+			"t..~~~....~.+:::::::::::::++......t.....d.+#vvvvvvvvv##.+++++........t", //
+			"t...~~...~+++++++++++++++++++++++.....dd..+############.+++..........t", //
+			"t..dd~~.~~...+:::::::::::==++++++++++++++++++++++++++++++...........tt", //
+			"t...d~~~~....+#s##########+::::#######=#::+.########+.+............ttt", //
+			"tt..~~.d.....+#:::#xxxxxx#+::::#xxxxx#=#::+.#xxxxxx###+....e.....d..tt", //
+			"tt.~~~d......+#:::#xxxxxx#+::::#xxBxx#=#::+.#xxxxxxxx#+..........d..tt", //
+			"t..~~d.......+#####xxxAxx#+::#=#xxxxx#::::+.#xxxxCxxx/....3.....d....t", //
+			"t...~~d......+/xxx#xxxxxx#+::#=#xxxxx#::::.+#xxxxxxxx#+..........d...t", //
+			"t...~~~......+##xx#xxxxx##+::#=##/##/#::::.+####xxxxx#+.....b........t", //
+			"t..d~~.......++#####/####++++++++++++++++++++++#######+.............tt", //
+			"t..d.~........++++++++++++...ee...............++++++++++.......c.....t", //
+			"t.tt~~.t............dd................t....e.........t......t.......tt", //
+			"tt~~~~.ttt...t...dddt..ttt.......tt..ttt...tt......tttt....ttt..tttttt", //
+			"ttt~~~tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt" } };
 
-
-	public final static Hashtable defaultCharMap = new Hashtable();
+	public static final Map<String, String> defaultCharMap = new Hashtable<String, String>();
 	static {
 		defaultCharMap.put(".", "TOWN_GRASS");
 		defaultCharMap.put("S", "TOWN_GRASS SOL");
@@ -75,13 +73,12 @@ public class Town {
 		defaultCharMap.put("e", "TOWN_GRASS NPC DOG");
 	}
 
-	public final static MonsterSpawnInfo [] spawnInfo = new MonsterSpawnInfo []{
-		new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 1),
-	};
+	public static final MonsterSpawnInfo[] spawnInfo = new MonsterSpawnInfo[] {
+			new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 1), };
 
-	public final static Position endPoint = new Position(69,11);
-	public final static Position startPoint = new Position(12,14);
-	//public final static Position startPoint = new Position(69,12);
-	//public final static Position playerPosition = new Position(50,11);
+	public static final Position endPoint = new Position(69, 11);
+	public static final Position startPoint = new Position(12, 14);
+	// public static final Position startPoint = new Position(69,12);
+	// public static final Position playerPosition = new Position(50,11);
 
 }

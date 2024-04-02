@@ -3,7 +3,6 @@ package crl.levelgen;
 import sz.util.*;
 
 import java.util.*;
-import crl.*;
 
 public class LevelFeature {
 	//private Vector subFeatures; //Class AssignedFeature
@@ -61,7 +60,7 @@ public class LevelFeature {
 		addLayout(new String[][] {value});
 	}
 
-	public final static String [] descriptions = new String [] {
+	public static final String [] descriptions = new String [] {
     	"COURTYARDGRASS",
 		"COURTYARDDIRT",
 		"BRICKWALKWAY",

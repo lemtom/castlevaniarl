@@ -1,9 +1,6 @@
 package crl.action;
 
-import crl.action.Action;
 import crl.actor.Actor;
-import crl.item.Item;
-import crl.item.ItemDefinition;
 import crl.player.Player;
 
 public abstract class HeartAction extends Action{
@@ -30,6 +27,7 @@ public abstract class HeartAction extends Action{
 		return (int)(p.getCastCost() * getTimeCostModifier());
 	}*/
 
+	@Override
 	public boolean canPerform(Actor a) {
 		Player p = getPlayer(a);
 		setPerformer(a);

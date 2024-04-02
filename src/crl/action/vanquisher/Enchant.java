@@ -12,6 +12,7 @@ public class Enchant extends HeartAction{
 		return "ENCHANT";
 	}
 	
+	@Override
 	public void execute() {
 		super.execute();
 		if (getPlayer().getWeapon() == null){

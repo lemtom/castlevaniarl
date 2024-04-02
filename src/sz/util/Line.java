@@ -1,5 +1,4 @@
 package sz.util;
-import sz.util.*;
 
 public class Line {
 	private boolean steep;
@@ -82,12 +81,12 @@ public class Line {
 		}
 		System.out.print("\n");
 		for (int y = 0; y < testM[0].length; y++){
-			for (int x = 0; x < testM.length; x++){
-				if (testM[x][y])
-					System.out.print("X");
-				else
-					System.out.print(".");
-			}
+            for (boolean[] booleans : testM) {
+                if (booleans[y])
+                    System.out.print("X");
+                else
+                    System.out.print(".");
+            }
 			System.out.print("\n");
 		}
 	}

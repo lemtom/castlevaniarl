@@ -1,7 +1,6 @@
 package sz.csi;
 
 import sz.csi.jcurses.JCursesConsoleInterface;
-import sz.csi.wswing.WSwingConsoleInterface;
 
 public class KornelExample {
 

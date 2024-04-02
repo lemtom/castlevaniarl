@@ -1,7 +1,6 @@
 package crl.level;
 
 import crl.action.*;
-import crl.ui.*;
 import crl.ui.effects.*;
 
 

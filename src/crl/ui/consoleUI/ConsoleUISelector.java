@@ -15,7 +15,6 @@ import crl.monster.Monster;
 import crl.npc.NPC;
 import crl.player.Player;
 import crl.ui.ActionCancelException;
-import crl.ui.CommandListener;
 import crl.ui.UISelector;
 import crl.ui.UserAction;
 

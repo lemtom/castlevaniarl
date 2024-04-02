@@ -2,7 +2,6 @@ package sz.csi.textcomponents;
 
 import java.io.Serializable;
 
-import crl.ui.Appearance;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
 

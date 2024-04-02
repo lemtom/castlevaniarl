@@ -2,10 +2,8 @@ package crl.cuts.villa;
 
 import sz.util.Position;
 import crl.ai.npc.VillagerAI;
-import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
 import crl.game.Game;
-import crl.item.ItemFactory;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.ui.Display;

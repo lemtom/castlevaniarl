@@ -2,7 +2,6 @@ package crl.action.renegade;
 
 import crl.action.Action;
 import crl.actor.Actor;
-import crl.level.Level;
 import crl.player.Damage;
 import crl.player.Player;
 
@@ -11,10 +10,12 @@ public class MinorJinx extends Action{
 		return "MINOR_JINX";
 	}
 	
-	public String getSFX(){
-		return null;
-	}
+	@Override
+	public String getSFX() {
+        return super.getSFX();
+    }
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);
@@ -27,6 +28,7 @@ public class MinorJinx extends Action{
 		aPlayer.selfDamage("You exchange vitality for power!! (+"+recover+")", Player.DAMAGE_JINX, new Damage(5, true));
 	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
         if (aPlayer.getHits() <= 5){

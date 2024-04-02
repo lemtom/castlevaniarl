@@ -21,7 +21,7 @@ import javax.sound.midi.*;
 
 public class MidiInfo
 {
-private final static String SOUND_DIR = "";
+private static final String SOUND_DIR = "";
 
 private String name, filename;
 private Sequence seq = null;

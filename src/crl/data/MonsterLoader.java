@@ -17,33 +17,26 @@ import crl.game.CRLException;
 import crl.monster.*;
 import crl.ui.AppearanceFactory;
 
-import java.text.ParseException;
 import java.util.*;
 import java.io.*;
 
 import org.xml.sax.AttributeList;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.DocumentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import sz.util.*;
 import sz.crypt.*;
 import uk.co.wilson.xml.MinML;
 
-
 public class MonsterLoader {
-	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException{
+	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException {
 		BufferedReader br = null;
 		try {
-			Vector vecMonsters = new Vector(10);
+			Vector<MonsterDefinition> vecMonsters = new Vector<MonsterDefinition>(10);
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
 			br = new BufferedReader(new InputStreamReader(encrypter.decrypt(new FileInputStream(monsterFile))));
 			String line = br.readLine();
 			line = br.readLine();
-			while (line != null){
+			while (line != null) {
 				String[] data = line.split(";");
 				MonsterDefinition def = new MonsterDefinition(data[0]);
 				def.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(data[1]));
@@ -64,190 +57,173 @@ public class MonsterLoader {
 				def.setEvadeChance(Integer.parseInt(data[16]));
 				def.setEvadeMessage(data[17]);
 				def.setAutorespawnCount(Integer.parseInt(data[18]));
-				
+
 				vecMonsters.add(def);
 				line = br.readLine();
 			}
-			return (MonsterDefinition[])vecMonsters.toArray(new MonsterDefinition[vecMonsters.size()]);
-		} catch (IOException ioe){
+			return vecMonsters.toArray(new MonsterDefinition[0]);
+		} catch (IOException ioe) {
 			throw new CRLException("Error while loading data from monster file");
 		} finally {
 			try {
 				br.close();
-			} catch (IOException ioe){
+			} catch (IOException ioe) {
 				throw new CRLException("Error while loading data from monster file");
 			}
 		}
 	}
-	
-	public static MonsterDefinition[] getMonsterDefinitions(String monsterDefFile, String monsterXMLAIFile) throws CRLException{
-		try{
+
+	public static MonsterDefinition[] getMonsterDefinitions(String monsterDefFile, String monsterXMLAIFile)
+			throws CRLException {
+		try {
 			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
-			Hashtable hashMonsters = new Hashtable();
-			for (int i = 0; i < monsters.length; i++){
-				hashMonsters.put(monsters[i].getID(), monsters[i]);
-			}
-			
-	        MonsterDocumentHandler handler = new MonsterDocumentHandler(hashMonsters);
-	        MinML parser = new MinML();
-	        DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-	        //parser.setContentHandler(handler);
-	        parser.setDocumentHandler(handler);
-	        parser.parse(new InputSource(encrypter.decrypt(new FileInputStream(monsterXMLAIFile))));
-	        return monsters;
-	        
-	        /* Print Some data to a CSV File, yeah I am evil
-	        BufferedWriter write = FileUtil.getWriter("monsterStats.csv");
-	        for (int i = 0; i < ret.length; i++){
-	        	write.write(ret[i].getID()+","+ret[i].getAppearance().getID()+","+ret[i].getDescription()+",,"+
-	        			ret[i].getWavOnHit()+","+ret[i].getBloodContent()+","+
-	        			ret[i].isUndead()+","+ret[i].isEthereal()+","+
-	        			ret[i].isCanSwim()+",false,"+ret[i].getScore()+","+
-	        			ret[i].getSightRange()+","+ret[i].getMaxHits()+","+
-	        			ret[i].getAttack()+","+ret[i].getWalkCost()+","+ret[i].getAttackCost()+","+
-	        			ret[i].getEvadeChance()+","+ret[i].getEvadeMessage()+","+ret[i].getAutorespawnCount()
-	        			);
-	        	write.write("\n");
-	        }
-	        write.close();*/
-	        // End Print Some data to a CSV File, yeah I am evil
-	        
-		} catch (IOException ioe){
+			Hashtable<String, MonsterDefinition> hashMonsters = new Hashtable<String, MonsterDefinition>();
+            for (MonsterDefinition monster : monsters) {
+                hashMonsters.put(monster.getID(), monster);
+            }
+
+			MonsterDocumentHandler handler = new MonsterDocumentHandler(hashMonsters);
+			MinML parser = new MinML();
+			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
+			// parser.setContentHandler(handler);
+			parser.setDocumentHandler(handler);
+			parser.parse(new InputSource(encrypter.decrypt(new FileInputStream(monsterXMLAIFile))));
+			return monsters;
+
+			/*
+			 * Print Some data to a CSV File, yeah I am evil BufferedWriter write =
+			 * FileUtil.getWriter("monsterStats.csv"); for (int i = 0; i < ret.length; i++){
+			 * write.write(ret[i].getID()+","+ret[i].getAppearance().getID()+","+ret[i].
+			 * getDescription()+",,"+ ret[i].getWavOnHit()+","+ret[i].getBloodContent()+","+
+			 * ret[i].isUndead()+","+ret[i].isEthereal()+","+
+			 * ret[i].isCanSwim()+",false,"+ret[i].getScore()+","+
+			 * ret[i].getSightRange()+","+ret[i].getMaxHits()+","+
+			 * ret[i].getAttack()+","+ret[i].getWalkCost()+","+ret[i].getAttackCost()+","+
+			 * ret[i].getEvadeChance()+","+ret[i].getEvadeMessage()+","+ret[i].
+			 * getAutorespawnCount() ); write.write("\n"); } write.close();
+			 */
+			// End Print Some data to a CSV File, yeah I am evil
+
+		} catch (IOException ioe) {
 			throw new CRLException("Error while loading data from monster file");
-		} catch (SAXException sax){
+		} catch (SAXException sax) {
 			sax.printStackTrace();
 			throw new CRLException("Error while loading data from monster file");
 		}
-    }
+	}
 
 }
 
+class MonsterDocumentHandler implements DocumentHandler {
+	private Hashtable<String, MonsterDefinition> hashMonsters;
 
+	MonsterDocumentHandler(Hashtable<String, MonsterDefinition> hashMonsters) {
+		this.hashMonsters = hashMonsters;
+	}
 
-class MonsterDocumentHandler implements DocumentHandler{
-    private Hashtable hashMonsters;
-    
-    MonsterDocumentHandler (Hashtable hashMonsters){
-    	this.hashMonsters = hashMonsters;
-    }
-   
-    private MonsterDefinition currentMD;
-    private ActionSelector currentSelector;
-    private Vector currentRangedAttacks;
-    
-    public void startDocument() throws org.xml.sax.SAXException {}
-    
-    public void startElement(String localName, AttributeList at) throws org.xml.sax.SAXException {
-        if (localName.equals("monster")){
-        	currentMD = (MonsterDefinition) hashMonsters.get(at.getValue("id"));
-        } else
-        if (localName.equals("sel_wander")){
-        	currentSelector = new WanderToPlayerAI();
-        } else
-        if (localName.equals("sel_underwater")){
-        	currentSelector = new UnderwaterAI();
-        }else
-    	if (localName.equals("sel_sickle")){
-        	currentSelector = new crl.action.monster.boss.SickleAI();
-        }else
-    	if (localName.equals("sel_death")){
-        	currentSelector = new DeathAI();
-        }else
-    	if (localName.equals("sel_dracula")){
-        	currentSelector = new DraculaAI();
-        }else
-    	if (localName.equals("sel_demondracula")){
-        	currentSelector = new DemonDraculaAI();
-        }else
-    	if (localName.equals("sel_medusa")){
-        	currentSelector = new MedusaAI();
-        }else
-    	if (localName.equals("sel_frank")){
-        	currentSelector = new FrankAI();
-        }else
-    	if (localName.equals("sel_stationary")){
-        	currentSelector = new StationaryAI();
-        }else
-    	if (localName.equals("sel_basic")){
-        	currentSelector = new BasicMonsterAI();
-        	if (at.getValue("stationary") != null)
-        		((BasicMonsterAI)currentSelector).setStationary(at.getValue("stationary").equals("true"));
-        	if (at.getValue("approachLimit") != null)
-        		((BasicMonsterAI)currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-        	if (at.getValue("waitPlayerRange") != null)
-        		((BasicMonsterAI)currentSelector).setWaitPlayerRange(inte(at.getValue("waitPlayerRange")));
-        	if (at.getValue("patrolRange") != null)
-        		((BasicMonsterAI)currentSelector).setPatrolRange(inte(at.getValue("patrolRange")));
-        }else
-        if (localName.equals("sel_ranged")){
-        	currentSelector = new RangedAI();
-        	((RangedAI)currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-        }else
-    	if (localName.equals("rangedAttacks")){
-    		currentRangedAttacks = new Vector(10);
-    	} else 
-		if (localName.equals("rangedAttack")){
+	private MonsterDefinition currentMD;
+	private ActionSelector currentSelector;
+	private Vector<RangedAttack> currentRangedAttacks;
+
+	public void startDocument() throws org.xml.sax.SAXException {
+	}
+
+	public void startElement(String localName, AttributeList at) throws org.xml.sax.SAXException {
+		if (localName.equals("monster")) {
+			currentMD = hashMonsters.get(at.getValue("id"));
+		} else if (localName.equals("sel_wander")) {
+			currentSelector = new WanderToPlayerAI();
+		} else if (localName.equals("sel_underwater")) {
+			currentSelector = new UnderwaterAI();
+		} else if (localName.equals("sel_sickle")) {
+			currentSelector = new crl.action.monster.boss.SickleAI();
+		} else if (localName.equals("sel_death")) {
+			currentSelector = new DeathAI();
+		} else if (localName.equals("sel_dracula")) {
+			currentSelector = new DraculaAI();
+		} else if (localName.equals("sel_demondracula")) {
+			currentSelector = new DemonDraculaAI();
+		} else if (localName.equals("sel_medusa")) {
+			currentSelector = new MedusaAI();
+		} else if (localName.equals("sel_frank")) {
+			currentSelector = new FrankAI();
+		} else if (localName.equals("sel_stationary")) {
+			currentSelector = new StationaryAI();
+		} else if (localName.equals("sel_basic")) {
+			currentSelector = new BasicMonsterAI();
+			if (at.getValue("stationary") != null)
+				((BasicMonsterAI) currentSelector).setStationary(at.getValue("stationary").equals("true"));
+			if (at.getValue("approachLimit") != null)
+				((BasicMonsterAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
+			if (at.getValue("waitPlayerRange") != null)
+				((BasicMonsterAI) currentSelector).setWaitPlayerRange(inte(at.getValue("waitPlayerRange")));
+			if (at.getValue("patrolRange") != null)
+				((BasicMonsterAI) currentSelector).setPatrolRange(inte(at.getValue("patrolRange")));
+		} else if (localName.equals("sel_ranged")) {
+			currentSelector = new RangedAI();
+			((RangedAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
+		} else if (localName.equals("rangedAttacks")) {
+			currentRangedAttacks = new Vector<RangedAttack>(10);
+		} else if (localName.equals("rangedAttack")) {
 			int damage = 0;
 			try {
-				damage = Integer.parseInt(at.getValue("damage")); 
-			} catch (NumberFormatException nfe){
-				
+				damage = Integer.parseInt(at.getValue("damage"));
+			} catch (NumberFormatException nfe) {
+
 			}
-				
-			RangedAttack ra = new RangedAttack(
-					at.getValue("id"),
-					at.getValue("type"),
-					at.getValue("status_effect"),
-					Integer.parseInt(at.getValue("range")), 
-					Integer.parseInt(at.getValue("frequency")),
-					at.getValue("message"),
-					at.getValue("effectType"),
-					at.getValue("effectID"),
-					damage
-					
-					//color
-					);
+
+			RangedAttack ra = new RangedAttack(at.getValue("id"), at.getValue("type"), at.getValue("status_effect"),
+					Integer.parseInt(at.getValue("range")), Integer.parseInt(at.getValue("frequency")),
+					at.getValue("message"), at.getValue("effectType"), at.getValue("effectID"), damage
+
+			// color
+			);
 			if (at.getValue("effectWav") != null)
 				ra.setEffectWav(at.getValue("effectWav"));
 			if (at.getValue("summonMonsterId") != null)
 				ra.setSummonMonsterId(at.getValue("summonMonsterId"));
 			if (at.getValue("charge") != null)
 				ra.setChargeCounter(inte(at.getValue("charge")));
-			
+
 			currentRangedAttacks.add(ra);
 		}
-    }
-    
-    public void endElement(String localName) throws org.xml.sax.SAXException {
-        if (localName.equals("rangedAttacks")){
-        	((MonsterAI)currentSelector).setRangedAttacks(currentRangedAttacks);
-        }
-        else
-        if (localName.equals("selector")){
-        	
-            currentMD.setDefaultSelector(currentSelector);
-        }
-        
-    }
-    
-    public void characters(char[] values, int param, int param2) throws org.xml.sax.SAXException {}
+	}
 
-    public void endDocument() throws org.xml.sax.SAXException {}
+	public void endElement(String localName) throws org.xml.sax.SAXException {
+		if (localName.equals("rangedAttacks")) {
+			((MonsterAI) currentSelector).setRangedAttacks(currentRangedAttacks);
+		} else if (localName.equals("selector")) {
 
-    public void endPrefixMapping(String str) throws org.xml.sax.SAXException {}
+			currentMD.setDefaultSelector(currentSelector);
+		}
 
-    public void ignorableWhitespace(char[] values, int param, int param2) throws org.xml.sax.SAXException {}
+	}
 
-    public void processingInstruction(String str, String str1) throws org.xml.sax.SAXException {}
+	public void characters(char[] values, int param, int param2) throws org.xml.sax.SAXException {
+	}
 
-    public void setDocumentLocator(org.xml.sax.Locator locator) {}
+	public void endDocument() throws org.xml.sax.SAXException {
+	}
 
-    public void skippedEntity(String str) throws org.xml.sax.SAXException {}
+	public void endPrefixMapping(String str) throws org.xml.sax.SAXException {
+	}
 
-    public void startPrefixMapping(String str, String str1) throws org.xml.sax.SAXException {}
-    
-    private int inte(String s){
-    	return Integer.parseInt(s);
-    }
+	public void ignorableWhitespace(char[] values, int param, int param2) throws org.xml.sax.SAXException {
+	}
+
+	public void processingInstruction(String str, String str1) throws org.xml.sax.SAXException {
+	}
+
+	public void setDocumentLocator(org.xml.sax.Locator locator) {
+	}
+
+	public void skippedEntity(String str) throws org.xml.sax.SAXException {
+	}
+
+	public void startPrefixMapping(String str, String str1) throws org.xml.sax.SAXException {
+	}
+
+	private int inte(String s) {
+		return Integer.parseInt(s);
+	}
 }
-	

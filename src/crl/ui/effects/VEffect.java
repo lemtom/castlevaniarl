@@ -3,22 +3,22 @@ package crl.ui.effects;
 import java.util.*;
 
 public class VEffect {
-   	Vector effects;
+   	Vector<Effect> effects;
 
 	public void addEffect(Effect what){
 		effects.add(what);
 	}
 
 	public Effect getEffect(int index){
-		return (Effect) effects.elementAt(index);
+		return effects.elementAt(index);
 	}
 
 	public VEffect(int size){
-		effects = new Vector(size);
+		effects = new Vector<Effect>(size);
 	}
 
 	public void erase(){
-		effects = new Vector(effects.capacity());
+		effects = new Vector<Effect>(effects.capacity());
 	}
 
 	public int size(){

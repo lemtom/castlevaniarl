@@ -1,17 +1,7 @@
 package crl.action.vanquisher;
 
-import java.util.Vector;
-
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Cell;
-import crl.level.Level;
-import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class LitSpell extends ProjectileSkill{
 	public int getDamage() {
@@ -46,11 +36,7 @@ public class LitSpell extends ProjectileSkill{
 		return "lighting bolt";
 	}
 
-	public boolean piercesThru() {
-		return false;
-	}
-
-	public int getHeartCost() {
+    public int getHeartCost() {
 		return 8;
 	}
 
@@ -58,6 +44,7 @@ public class LitSpell extends ProjectileSkill{
 		return "LitSpell";
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);

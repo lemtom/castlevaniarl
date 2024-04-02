@@ -3,7 +3,7 @@ package crl.data;
 import crl.npc.*;
 
 public class NPCs {
-		private final static NPCDefinition [] defs = new NPCDefinition[]{
+		private static final NPCDefinition [] defs = new NPCDefinition[]{
 			new NPCDefinition ("WOMAN0","Woman","WOMAN","VILLAGER", "First thing to do in this town is buy a White Crystal", 1,3,"Argh! You will pay for this!","Somebody, Help me!", false, false),
 			new NPCDefinition ("WOMAN1","Woman","WOMAN","VILLAGER", "To restore your life, shout in front of the church", 1,3, "You are evil!", "Don't hurt me, please!", false, false),
 			new NPCDefinition ("WOMAN2","Woman","WOMAN","VILLAGER", "Don't look into the Death Star, or you will die.", 1,3, "I will defend myself!", "Argh!!!", false, false),

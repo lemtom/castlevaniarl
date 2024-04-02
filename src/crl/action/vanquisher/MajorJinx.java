@@ -6,34 +6,33 @@ import crl.level.Level;
 import crl.player.Damage;
 import crl.player.Player;
 
-public class MajorJinx extends Action{
-	public String getID(){
+public class MajorJinx extends Action {
+	public String getID() {
 		return "MAJOR_JINX";
 	}
-	
-	public String getSFX(){
-		return null;
-	}
-	
-	public int getCost(){
+
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.1);
+		return (int) (p.getCastCost() * 1.1);
 	}
-	
-	public void execute(){
-		Player aPlayer = (Player)performer;
+
+	public void execute() {
+		Player aPlayer = (Player) performer;
 		int recover = 5 + aPlayer.getSoulPower() * 2;
 		aPlayer.addHearts(recover);
-		aPlayer.selfDamage("You exchange vitality for power!! (+"+recover+")", Player.DAMAGE_JINX, new Damage(5, true));
+		aPlayer.selfDamage("You exchange vitality for power!! (+" + recover + ")", Player.DAMAGE_JINX,
+				new Damage(5, true));
 	}
-	
-	public boolean canPerform(Actor a){
+
+	@Override
+	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
-        Level aLevel = performer.getLevel();
-        if (aPlayer.getHits() <= 5){
-            aLevel.addMessage("That would be suicidal!");
-            return false;
+		Level aLevel = performer.getLevel();
+		if (aPlayer.getHits() <= 5) {
+			aLevel.addMessage("That would be suicidal!");
+			return false;
 		}
-        return true;
+		return true;
 	}
 }

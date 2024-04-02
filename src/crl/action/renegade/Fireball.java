@@ -45,10 +45,12 @@ public class Fireball extends ProjectileSkill{
 		return "Fireball";
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/fire.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);

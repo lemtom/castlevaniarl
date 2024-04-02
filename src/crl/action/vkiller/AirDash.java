@@ -2,77 +2,79 @@ package crl.action.vkiller;
 
 import sz.util.Line;
 import sz.util.Position;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class AirDash extends HeartAction{
+public class AirDash extends HeartAction {
 	public int getHeartCost() {
 		return 5;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "AirDash";
 	}
-	
-	public boolean needsPosition(){
+
+	@Override
+	public boolean needsPosition() {
 		return true;
 	}
 
-	public String getPromptPosition(){
+	@Override
+	public String getPromptPosition() {
 		return "Where do you want to dash?";
 	}
 
-	private int getDamage(){
-		return 10 +
-		getPlayer().getAttack();
+	private int getDamage() {
+		return 10 + getPlayer().getAttack();
 	}
-	public void execute(){
+
+	@Override
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level aLevel = aPlayer.getLevel();
 		aLevel.addMessage("You jump and dash forward!");
-		if (targetPosition.equals(performer.getPosition())){
+		if (targetPosition.equals(performer.getPosition())) {
 			aLevel.addMessage("You fall back.");
-        	return;
-        }
-		
+			return;
+		}
+
 		int damage = getDamage();
 
 		boolean hit = false;
 		Line fireLine = new Line(performer.getPosition(), targetPosition);
-		
+
 		boolean curved = false;
 		int flyStart = 0, flyEnd = 0;
 		Position previousPoint = aPlayer.getPosition();
 		int projectileHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
-		for (int i=0; i<4; i++){
+		for (int i = 0; i < 4; i++) {
 			Position destinationPoint = fireLine.next();
-			if (aLevel.isSolid(destinationPoint)){
-				drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+			if (aLevel.isSolid(destinationPoint)) {
+				drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
+						"SFX_AIRDASH", i));
 				aPlayer.landOn(previousPoint);
 				return;
 			}
-			
+
 			String message = "";
-			
+
 			int destinationHeight = aLevel.getMapCell(destinationPoint).getHeight();
 
-			if (destinationHeight == projectileHeight){
+			if (destinationHeight == projectileHeight) {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-	        	if (destinationFeature != null && destinationFeature.isDestroyable()){
-		        	message = "You hit the "+destinationFeature.getDescription();
-		        	drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+				if (destinationFeature != null && destinationFeature.isDestroyable()) {
+					message = "You hit the " + destinationFeature.getDescription();
+					drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
+							targetPosition, "SFX_AIRDASH", i));
 					Feature prize = destinationFeature.damage(aPlayer, damage);
-		        	if (prize != null){
-			        	message += " and destroys it.";
+					if (prize != null) {
+						message += " and destroys it.";
 					}
 					aLevel.addMessage(message);
 					aPlayer.landOn(previousPoint);
@@ -80,51 +82,57 @@ public class AirDash extends HeartAction{
 				}
 			}
 			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-			
-			if (targetMonster != null){
-				//int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);
+
+			if (targetMonster != null) {
+				// int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
-				if (projectileHeight == monsterHeight){
-					if (targetMonster.tryMagicHit(aPlayer,damage, 100, targetMonster.wasSeen(), "dash", false, performer.getPosition())){
-						drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+				if (projectileHeight == monsterHeight) {
+					if (targetMonster.tryMagicHit(aPlayer, damage, 100, targetMonster.wasSeen(), "dash", false,
+							performer.getPosition())) {
+						drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+								targetPosition, "SFX_AIRDASH", i));
 						hit = true;
 						Position runner = new Position(destinationPoint);
-						outa: for (int ii = 0; ii < 2; ii++){
+						for (int ii = 0; ii < 2; ii++) {
 							Cell fly = aLevel.getMapCell(runner);
 							if (fly == null)
-								break outa;
-							if (!fly.isSolid()){
+								break;
+							if (!fly.isSolid()) {
 								targetMonster.setPosition(runner);
 							} else {
-								StringBuffer byff = new StringBuffer("You smash the "+targetMonster.getDescription()+" against the "+fly.getDescription()+"!");
+								StringBuffer byff = new StringBuffer("You smash the " + targetMonster.getDescription()
+										+ " against the " + fly.getDescription() + "!");
 								targetMonster.damage(byff, damage);
 								aLevel.addMessage(byff.toString());
 							}
-							//runner.add(varP);
+							// runner.add(varP);
 							runner = fireLine.next();
 						}
 						aPlayer.landOn(previousPoint);
 						return;
-					};
-				} else if (projectileHeight < monsterHeight) {
-					aLevel.addMessage("You dash under the "+targetMonster.getDescription());
+					}
+                } else if (projectileHeight < monsterHeight) {
+					aLevel.addMessage("You dash under the " + targetMonster.getDescription());
 				} else {
-					aLevel.addMessage("You dash over the "+targetMonster.getDescription());
+					aLevel.addMessage("You dash over the " + targetMonster.getDescription());
 				}
 			}
 			previousPoint = destinationPoint;
 		}
-		
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", 4));
+
+		drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition,
+				"SFX_AIRDASH", 4));
 		aPlayer.landOn(previousPoint);
 	}
 
-	public int getCost(){
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getWalkCost() * 1.4);
+		return (int) (p.getWalkCost() * 1.4);
 	}
-	
-	public String getSFX(){
+
+	@Override
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
 }

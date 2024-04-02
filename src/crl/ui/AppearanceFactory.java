@@ -5,7 +5,7 @@ import java.util.*;
 import sz.util.*;
 
 public class AppearanceFactory {
-	private Hashtable definitions;
+	private Hashtable<String, Appearance> definitions;
 	private static AppearanceFactory singleton = new AppearanceFactory();
 
 /*	public Cell buildMapCell (String id){
@@ -18,7 +18,7 @@ public class AppearanceFactory {
 	}
 
 	public Appearance getAppearance (String id){
-		Appearance ret = (Appearance) definitions.get(id);
+		Appearance ret = definitions.get(id);
 		Debug.doAssert(ret != null, "Couldnt find the appearance "+id);
 		return ret;
 	}
@@ -28,7 +28,7 @@ public class AppearanceFactory {
 	}
 
 	public AppearanceFactory(){
-		definitions = new Hashtable(40);
+		definitions = new Hashtable<String, Appearance>(40);
 	}
 
 }

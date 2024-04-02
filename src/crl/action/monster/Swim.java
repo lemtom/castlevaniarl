@@ -13,6 +13,7 @@ public class Swim extends Action{
 		return "Swim";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}

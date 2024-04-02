@@ -12,6 +12,7 @@ public class Stopwatch extends HeartAction{
 		return "Stopwatch";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
@@ -20,12 +21,14 @@ public class Stopwatch extends HeartAction{
 		x.stopTime(5 + aPlayer.getShotLevel()*2+ aPlayer.getSoulPower());
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/clockbel.wav";
 	}
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 
 	

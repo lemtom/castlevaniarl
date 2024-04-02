@@ -14,11 +14,13 @@ public class DivingSlide extends Action{
 		return "DivingSlide";
 	}
 	
+   	@Override
    	public boolean needsDirection(){
 		return true;
 
 	}
 
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to slide?";
 	}
@@ -76,7 +78,7 @@ public class DivingSlide extends Action{
 		StringBuffer message = new StringBuffer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 		if (destinationFeature != null && destinationFeature.isDestroyable()){
-			message.append("You slice the "+destinationFeature.getDescription());
+			message.append("You slice the ").append(destinationFeature.getDescription());
 			Feature prize = destinationFeature.damage(player, player.getWeapon().getAttack());
 			if (prize != null){
 		       	message.append(", and cut it apart!");
@@ -90,7 +92,7 @@ public class DivingSlide extends Action{
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())
 		){
-			message.append("You slice the "+targetMonster.getDescription());
+			message.append("You slice the ").append(targetMonster.getDescription());
 			targetMonster.damageWithWeapon(message, player.getWeaponAttack());
         	if (targetMonster.isDead()){
 	        	message.append(", and cut it apart!");
@@ -101,6 +103,7 @@ public class DivingSlide extends Action{
 		}
 	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
         Level aLevel = performer.getLevel();

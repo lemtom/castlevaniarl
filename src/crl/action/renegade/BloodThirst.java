@@ -13,10 +13,12 @@ public class BloodThirst extends HeartAction{
 		return 10;
 	}
 	
+	@Override
 	public String getSFX(){
 		return "wav/alu_dark.wav";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
         Player aPlayer = (Player)performer;

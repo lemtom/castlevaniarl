@@ -1,6 +1,5 @@
 package crl.feature.ai;
 
-import crl.*;
 import crl.action.*;
 import crl.ai.*;
 import crl.actor.*;

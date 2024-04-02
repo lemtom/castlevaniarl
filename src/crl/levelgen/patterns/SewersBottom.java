@@ -1,11 +1,10 @@
 package crl.levelgen.patterns;
 
-public class SewersBottom extends StaticPattern
-{
-	public String getMapKey(){
+public class SewersBottom extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
-	
+
 	public String getMusicKeyMorning() {
 		return "";
 	}
@@ -13,38 +12,32 @@ public class SewersBottom extends StaticPattern
 	public String getMusicKeyNoon() {
 		return null;
 	}
-	
-	
 
-	public SewersBottom () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"#####S#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"#####-#####",
-			"###.---.###",
-			"##...-...##",
-			"#...---...#",
-			"#..-----..#",
-			"#..--E--..#",
-			"#..-----..#",
-			"#...---...#",
-			"##.......##",
-			"###.....###",
-			"###########",
-           
-		}
-	};
+	public SewersBottom() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"#####S#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"#####-#####", //
+				"###.---.###", //
+				"##...-...##", //
+				"#...---...#", //
+				"#..-----..#", //
+				"#..--E--..#", //
+				"#..-----..#", //
+				"#...---...#", //
+				"##.......##", //
+				"###.....###", //
+				"###########" } };
 
 		charMap.put("#", "SEWERS_WALL");
 		charMap.put(".", "SEWERS_FLOOR");
@@ -53,7 +46,6 @@ public class SewersBottom extends StaticPattern
 		charMap.put("E", "WEIRD_MACHINE");
 	}
 
-	
 	public String getDescription() {
 		return "Belmonts' Secret";
 	}

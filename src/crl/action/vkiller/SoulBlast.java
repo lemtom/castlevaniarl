@@ -17,6 +17,7 @@ public class SoulBlast extends HeartAction{
 		return 20;
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
         Level aLevel = performer.getLevel();
@@ -30,7 +31,7 @@ public class SoulBlast extends HeartAction{
 			if (monsters.elementAt(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.elementAt(i).getPosition(), performer.getPosition()) < 5){
 				StringBuffer buff = new StringBuffer();
 				if (monsters.elementAt(i).wasSeen()) {
-					buff.append("The "+monsters.elementAt(i).getDescription()+" is hit by the holy blast!");
+					buff.append("The ").append(monsters.elementAt(i).getDescription()).append(" is hit by the holy blast!");
 				}
 				monsters.elementAt(i).damage(buff, damage);
 				aLevel.addMessage(buff.toString());
@@ -42,9 +43,10 @@ public class SoulBlast extends HeartAction{
 	public String getPromptoPosition(){
 		return "Where do you want to throw the vial?";
 	}
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 	
 }

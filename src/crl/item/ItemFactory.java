@@ -4,99 +4,95 @@ import java.util.*;
 
 import crl.game.Game;
 import crl.level.Level;
-import crl.monster.Monster;
-import crl.monster.MonsterDefinition;
 import crl.player.Player;
 import sz.util.*;
 
 public class ItemFactory {
 	private static ItemFactory singleton = new ItemFactory();
 
-	private Hashtable definitions = new Hashtable();
+	private Hashtable<String, ItemDefinition> definitions = new Hashtable<String, ItemDefinition>();
 
-	private Vector vDefinitions;
+	private Vector<ItemDefinition> vDefinitions;
 
-	private Vector weaponDefinitions = new Vector();
+	private Vector<ItemDefinition> weaponDefinitions = new Vector<ItemDefinition>();
 
-	private Vector armorDefinitions = new Vector();
+	private Vector<ItemDefinition> armorDefinitions = new Vector<ItemDefinition>();
 
-	private Vector generalItemsDefinitions = new Vector();
+	private Vector<ItemDefinition> generalItemsDefinitions = new Vector<ItemDefinition>();
 
 	public static ItemFactory getItemFactory() {
 		return singleton;
 	}
 
 	public void init(ItemDefinition[] defs) {
-		vDefinitions = new Vector();
-		for (int i = 0; i < defs.length; i++) {
-			definitions.put(defs[i].getID(), defs[i]);
-			vDefinitions.add(defs[i]);
-			switch (defs[i].getEquipCategory()) {
+		vDefinitions = new Vector<ItemDefinition>();
+		for (ItemDefinition def : defs) {
+			definitions.put(def.getID(), def);
+			vDefinitions.add(def);
+			switch (def.getEquipCategory()) {
 			case 0:
-				generalItemsDefinitions.add(defs[i]);
+				generalItemsDefinitions.add(def);
 				break;
 			case 1:
-				armorDefinitions.add(defs[i]);
+				armorDefinitions.add(def);
 				break;
 			case 2:
-				weaponDefinitions.add(defs[i]);
+				weaponDefinitions.add(def);
 				break;
 			case 4:
-				armorDefinitions.add(defs[i]);
+				armorDefinitions.add(def);
 				break;
 			}
 		}
 
 	}
 
-	public ItemDefinition getDefinition(String ID) {
-		ItemDefinition def = (ItemDefinition) definitions.get(ID);
+	public ItemDefinition getDefinition(String id) {
+		ItemDefinition def = definitions.get(id);
 		if (def == null)
-			Debug.doAssert(false, "Invalid Item ID " + ID);
+			Debug.doAssert(false, "Invalid Item ID " + id);
 		return def;
 	}
 
-	public Item createWeapon(String ID, String material) {
+	public Item createWeapon(String id, String material) {
 		Modifier modMaterial = null;
-		for (int i = 0; i < MOD_MATERIAL.length; i++) {
-			if (MOD_MATERIAL[i].getID().equals(material))
-				modMaterial = MOD_MATERIAL[i];
+		for (Modifier modifier : MOD_MATERIAL) {
+			if (modifier.getID().equals(material))
+				modMaterial = modifier;
 		}
-		ItemDefinition def = getDefinition(ID);
+		ItemDefinition def = getDefinition(id);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial()) {
-			Debug.doAssert(modMaterial != null, "Material " + material
-					+ " not found at create weapon");
+			Debug.doAssert(modMaterial != null, "Material " + material + " not found at create weapon");
 			item.addPreModifier(modMaterial);
 		}
 		return item;
 	}
 
-	public Item createShield(String ID, String material) {
+	public Item createShield(String id, String material) {
 		Modifier modMaterial = null;
-		for (int i = 0; i < MOD_ARMOR_MATERIAL.length; i++) {
-			if (MOD_ARMOR_MATERIAL[i].getID().equals(material))
-				modMaterial = MOD_ARMOR_MATERIAL[i];
+		for (Modifier modifier : MOD_ARMOR_MATERIAL) {
+			if (modifier.getID().equals(material))
+				modMaterial = modifier;
 		}
 
-		ItemDefinition def = getDefinition(ID);
+		ItemDefinition def = getDefinition(id);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial()) {
-			Debug.doAssert(modMaterial != null, "Material " + material
-					+ " not found at create shield");
+			Debug.doAssert(modMaterial != null, "Material " + material + " not found at create shield");
 			item.addPreModifier(modMaterial);
 		}
 		return item;
 	}
 
-	public Item createArmor(String ID, String material) {
+	public Item createArmor(String id, String material) {
 		Modifier modMaterial = null;
-		for (int i = 0; i < MOD_ARMOR_MATERIAL.length; i++) {
-			if (MOD_ARMOR_MATERIAL[i].getID().equals(material))
-				modMaterial = MOD_ARMOR_MATERIAL[i];
+		for (Modifier modifier : MOD_ARMOR_MATERIAL) {
+			if (modifier.getID().equals(material))
+				modMaterial = modifier;
 		}
 
-		ItemDefinition def = getDefinition(ID);
+		ItemDefinition def = getDefinition(id);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial()) {
 			item.addPreModifier(modMaterial);
@@ -104,29 +100,27 @@ public class ItemFactory {
 		return item;
 	}
 
-	public Item createItem(String ID) {
-		ItemDefinition def = (ItemDefinition) definitions.get(ID);
+	public Item createItem(String id) {
+		ItemDefinition def = definitions.get(id);
 		if (def == null)
-			Debug.doAssert(false, "Invalid Item ID " + ID);
+			Debug.doAssert(false, "Invalid Item ID " + id);
 		return new Item(def);
 	}
 
 	public Item createItemForLevel(Level level, Player player) {
 		/*
 		 * String[] itemIDs = level.getSpawnItemsIDs(); String itemID =
-		 * Util.randomElementOf(itemIDs); ItemDefinition def =
-		 * getDefinition(itemID);
+		 * Util.randomElementOf(itemIDs); ItemDefinition def = getDefinition(itemID);
 		 */
 		if (level.getLevelNumber() == -1)
 			return null;
 		int tries = 150;
 		int i = 0;
 		ItemDefinition def = null;
-		out: while (i < tries) {
+		while (i < tries) {
 			int pin = Util.rand(0, 100);
 			if (pin > 15)
-				def = (ItemDefinition) Util
-						.randomElementOf(generalItemsDefinitions);
+				def = (ItemDefinition) Util.randomElementOf(generalItemsDefinitions);
 			else if (pin > 5)
 				def = (ItemDefinition) Util.randomElementOf(weaponDefinitions);
 			else
@@ -162,7 +156,7 @@ public class ItemFactory {
 				if (def.isUnique()) {
 					Game.registerUniqueGenerated(def.getID());
 				}
-				break out;
+				break;
 			}
 
 			def = null;
@@ -199,48 +193,34 @@ public class ItemFactory {
 
 	}
 
-	public final static Modifier[] MOD_ARMOR_STRENGTH = new Modifier[] {
-			new Modifier("WEAKENED", "Weakened ", 10),
+	public static final Modifier[] MOD_ARMOR_STRENGTH = new Modifier[] { new Modifier("WEAKENED", "Weakened ", 10),
 			new Modifier("REINFORCED", "Reinforced ", 20), };
 
-	public final static Modifier[] MOD_ARMOR_MAGIC = new Modifier[] {
-			new Modifier("HOLY", "Holy ", 5),
-			new Modifier("SHIELDING", "Shielding ", 10),
-			new Modifier("DARK", "Dark ", 5), new Modifier("STAR", "Star ", 5), };
+	public static final Modifier[] MOD_ARMOR_MAGIC = new Modifier[] { new Modifier("HOLY", "Holy ", 5),
+			new Modifier("SHIELDING", "Shielding ", 10), new Modifier("DARK", "Dark ", 5),
+			new Modifier("STAR", "Star ", 5), };
 
-	public final static Modifier[] MOD_ARMOR_MATERIAL = new Modifier[] {
-			new Modifier("BRONZE", "Bronze ", 80),
-			new Modifier("STEEL", "Steel ", 10),
-			new Modifier("IRON", "Iron ", 5),
+	public static final Modifier[] MOD_ARMOR_MATERIAL = new Modifier[] { new Modifier("BRONZE", "Bronze ", 80),
+			new Modifier("STEEL", "Steel ", 10), new Modifier("IRON", "Iron ", 5),
 			new Modifier("SILVER", "Silver ", 2), };
 
-	public final static Modifier[] MOD_ARMOR_ADDITIONAL = new Modifier[] {
-			new Modifier("OFTHEMOON", " of the Moon", 5),
+	public static final Modifier[] MOD_ARMOR_ADDITIONAL = new Modifier[] { new Modifier("OFTHEMOON", " of the Moon", 5),
 			new Modifier("OFTHESUN", " of the Sun", 5), };
 
-	public final static Modifier[] MOD_STRENGTH = new Modifier[] {
-			new Modifier("WEAKENED", "Weakened ", 20),
-			new Modifier("REINFORCED", "Reinforced ", 20),
-			new Modifier("ENHANCED", "Enhanced ", 15),
+	public static final Modifier[] MOD_STRENGTH = new Modifier[] { new Modifier("WEAKENED", "Weakened ", 20),
+			new Modifier("REINFORCED", "Reinforced ", 20), new Modifier("ENHANCED", "Enhanced ", 15),
 			new Modifier("DEADLY", "Deadly ", 10), };
 
-	public final static Modifier[] MOD_MAGIC = new Modifier[] {
-			new Modifier("PULSATING", "Pulsating ", 5),
-			new Modifier("HOLY", "Holy ", 5),
-			new Modifier("SHIELDING", "Shielding ", 5),
+	public static final Modifier[] MOD_MAGIC = new Modifier[] { new Modifier("PULSATING", "Pulsating ", 5),
+			new Modifier("HOLY", "Holy ", 5), new Modifier("SHIELDING", "Shielding ", 5),
 			new Modifier("DARK", "Dark ", 5), new Modifier("STAR", "Star ", 5), };
 
-	public final static Modifier[] MOD_MATERIAL = new Modifier[] {
-			new Modifier("STEEL", "Steel ", 80),
-			new Modifier("WOODEN", "Wooden ", 5),
-			new Modifier("IRON", "Iron ", 5),
-			new Modifier("SILVER", "Silver ", 2),
-			new Modifier("OBSIDIAN", "Obsidian ", 2), };
+	public static final Modifier[] MOD_MATERIAL = new Modifier[] { new Modifier("STEEL", "Steel ", 80),
+			new Modifier("WOODEN", "Wooden ", 5), new Modifier("IRON", "Iron ", 5),
+			new Modifier("SILVER", "Silver ", 2), new Modifier("OBSIDIAN", "Obsidian ", 2), };
 
-	public final static Modifier[] MOD_ADDITIONAL = new Modifier[] {
-			new Modifier("OFHUNTING", " of Hunting", 2),
-			new Modifier("OFDESTRUCTION", " of Destruction", 2),
-			new Modifier("OFPUNISHMENT", " of Punishment", 2),
+	public static final Modifier[] MOD_ADDITIONAL = new Modifier[] { new Modifier("OFHUNTING", " of Hunting", 2),
+			new Modifier("OFDESTRUCTION", " of Destruction", 2), new Modifier("OFPUNISHMENT", " of Punishment", 2),
 			new Modifier("OFTHEMOON", "  of the Moon", 2), };
 
 	static {
@@ -377,8 +357,7 @@ public class ItemFactory {
 			weapon.addPostModifier(additional);
 	}
 
-	public Item createWeapon(Modifier strength, Modifier magic,
-			Modifier material, String baseID, Modifier additional) {
+	public Item createWeapon(Modifier strength, Modifier magic, Modifier material, String baseID, Modifier additional) {
 		Item weapon = createItem(baseID);
 		if (weapon != null)
 			weapon.addPreModifier(strength);
@@ -390,8 +369,7 @@ public class ItemFactory {
 		return weapon;
 	}
 
-	public Item createArmor(Modifier strength, Modifier magic,
-			Modifier material, String baseID, Modifier additional) {
+	public Item createArmor(Modifier strength, Modifier magic, Modifier material, String baseID, Modifier additional) {
 		Item weapon = createItem(baseID);
 		if (weapon != null)
 			weapon.addPreModifier(strength);

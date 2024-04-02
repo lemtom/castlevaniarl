@@ -2,7 +2,6 @@ package crl.action.monster;
 
 import sz.util.Position;
 import crl.action.Action;
-import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Damage;
@@ -13,6 +12,7 @@ public class Dash extends Action{
 		return "SLICE_DIVE";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
@@ -23,7 +23,7 @@ public class Dash extends Action{
         Position var = directionToVariation(targetDirection);
         Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
-        StringBuffer message = new StringBuffer("The "+aMonster.getDescription()+" dives to you!");
+		String message = "The " + aMonster.getDescription() + " dives to you!";
         //Cell currentCell = aLevel.getMapCell(performer.getPosition());
         Position destinationPoint = null;
         for (int i=0; i<5; i++){
@@ -39,9 +39,10 @@ public class Dash extends Action{
 			aMonster.setPosition(destinationPoint);
 			//currentCell = aLevel.getMapCell(destinationPoint);
 		}
-		aLevel.addMessage(message.toString());
+		aLevel.addMessage(message);
 	}
 
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to slice?";
 	}

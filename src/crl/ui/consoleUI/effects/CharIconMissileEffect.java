@@ -4,7 +4,6 @@ import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
-import crl.action.*;
 
 public class CharIconMissileEffect extends CharDirectedEffect {
 	private char missile;

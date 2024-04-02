@@ -3,11 +3,7 @@ package crl.level;
 import java.util.*;
 
 import sz.util.*;
-import crl.ui.effects.*;
 import crl.actor.*;
-import crl.player.*;
-
-import crl.monster.*;
 
 public class Dispatcher implements java.io.Serializable{
 	private SZPriorityQueue actors;
@@ -22,7 +18,7 @@ public class Dispatcher implements java.io.Serializable{
 		return actors.contains(what);
 	}
 
-	public Vector getActors(){
+	public Vector<PriorityEnqueable> getActors(){
 		return actors.getVector();
     }
 
@@ -51,7 +47,7 @@ public class Dispatcher implements java.io.Serializable{
 			actors.enqueue(what);
 	}
 
-    public void addActor(Actor what){
+    public void addActor(PriorityEnqueable what){
     	if (!actors.contains(what))
     		actors.enqueue(what);
 	}

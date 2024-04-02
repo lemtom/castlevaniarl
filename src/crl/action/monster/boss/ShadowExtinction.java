@@ -32,6 +32,7 @@ public class ShadowExtinction  extends Action{
 		}
 	}
 	
+	@Override
 	public int getCost(){
 		return 20;
 	}

@@ -19,6 +19,7 @@ public class Respawner extends Actor{
 		return prob;
 	}
 	
+	@Override
 	public String getDescription(){
 		return "Respawnie";
 	}

@@ -19,6 +19,7 @@ public class Hostage extends NPC {
 		rescuedMessage = Util.randomElementOf(HOSTAGE_TIPS);
 	}
 	
+	@Override
 	public String getTalkMessage(){
 		if (!rescued)
 			return super.getTalkMessage();

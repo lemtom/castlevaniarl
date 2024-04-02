@@ -40,7 +40,8 @@ public class FrankAI extends MonsterAI{
 		 return "FRANK_AI";
 	 }
 
-	 public ActionSelector derive(){
+		@Override
+		public ActionSelector derive(){
  		try {
 	 		return (ActionSelector) clone();
 	 	} catch (CloneNotSupportedException cnse){

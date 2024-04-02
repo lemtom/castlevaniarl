@@ -7,11 +7,9 @@ import crl.feature.SmartFeatureFactory;
 import crl.feature.ai.CrossAI;
 import crl.player.Player;
 
-public class Cross extends ProjectileSkill{
+public class Cross extends ProjectileSkill {
 	public int getDamage() {
-		return 5 + 
-			getPlayer().getShotLevel() + 
-			2* getPlayer().getSoulPower();
+		return 5 + getPlayer().getShotLevel() + 2 * getPlayer().getSoulPower();
 	}
 
 	public int getHit() {
@@ -46,49 +44,57 @@ public class Cross extends ProjectileSkill{
 		return 3;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "Cross";
 	}
-	
-	public void execute(){
+
+	@Override
+	public void execute() {
 		super.execute();
-		if (targetPosition.equals(performer.getPosition())){
-        	if (Util.chance(50)){
-        		performer.getLevel().addMessage("The cross falls heads! You catch the cross.");
-        	} else {
-        		performer.getLevel().addMessage("The cross falls tails! You catch the cross.");
-        	}
-        	return;
-        }
-		if (performer instanceof Player){
-        	SmartFeature cross = SmartFeatureFactory.getFactory().buildFeature("CROSS");
-			((CrossAI)cross.getSelector()).setTargetPosition(getPlayer().getPosition());
+		if (targetPosition.equals(performer.getPosition())) {
+			if (Util.chance(50)) {
+				performer.getLevel().addMessage("The cross falls heads! You catch the cross.");
+			} else {
+				performer.getLevel().addMessage("The cross falls tails! You catch the cross.");
+			}
+			return;
+		}
+		if (performer instanceof Player) {
+			SmartFeature cross = SmartFeatureFactory.getFactory().buildFeature("CROSS");
+			((CrossAI) cross.getSelector()).setTargetPosition(getPlayer().getPosition());
 			cross.setPosition(finalPoint);
 			getPlayer().getLevel().addSmartFeature(cross);
-    	} else {
-    		/*Effect crossEffect =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
-    		crossEffect.setPosition(performer.getLevel().getPlayer().getPosition());
-    		drawEffect(crossEffect);*/
-    	}
+		} else {
+			/*
+			 * Effect crossEffect
+			 * =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
+			 * targetPosition, "SFX_CROSS", i);
+			 * crossEffect.setPosition(performer.getLevel().getPlayer().getPosition());
+			 * drawEffect(crossEffect);
+			 */
+		}
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to throw the Cross?";
 	}
-	
-	public int getCost(){
-		if (performer instanceof Player){
+
+	@Override
+	public int getCost() {
+		if (performer instanceof Player) {
 			Player p = (Player) performer;
-			return (int)(25 / (p.getShotLevel()+1));
+			return 25 / (p.getShotLevel() + 1);
 		} else
 			return 40;
 	}
 
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
-	
-	public String getSFX(){
+
+	@Override
+	public String getSFX() {
 		return "wav/misswipe.wav";
 	}
 }

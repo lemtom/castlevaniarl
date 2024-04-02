@@ -48,7 +48,7 @@ public class WavPlayer implements Runnable{
 		   line.close();
 	   }
 	   catch (Exception e){
-		   Game.addReport("Error playing... "+e.toString());
+		   Game.addReport("Error playing... "+ e);
 	   }
    }
 }

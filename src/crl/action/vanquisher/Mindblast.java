@@ -1,12 +1,9 @@
 package crl.action.vanquisher;
 
 import sz.util.Position;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.monster.Monster;
-import crl.monster.VMonster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
@@ -18,6 +15,7 @@ public class Mindblast extends HeartAction{
 		return "Mindblast";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Level aLevel = performer.getLevel();
@@ -32,7 +30,7 @@ public class Mindblast extends HeartAction{
 				StringBuffer buff = new StringBuffer();
 				if (nearestMonster.wasSeen()){
 					drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_LIT_SPELL", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
-					buff.append("The "+nearestMonster.getDescription()+" mind is blasted!");
+					buff.append("The ").append(nearestMonster.getDescription()).append(" mind is blasted!");
 				}
 				nearestMonster.damage(buff, 25+aPlayer.getSoulPower()*2);
 				aLevel.addMessage(buff.toString());
@@ -41,6 +39,7 @@ public class Mindblast extends HeartAction{
 		}
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);

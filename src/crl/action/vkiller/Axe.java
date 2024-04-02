@@ -3,15 +3,14 @@ package crl.action.vkiller;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class Axe extends ProjectileSkill{
+public class Axe extends ProjectileSkill {
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
-	
+
 	public int getDamage() {
-		return 8 + 
-			getPlayer().getShotLevel() + 
-			getPlayer().getSoulPower();
+		return 8 + getPlayer().getShotLevel() + getPlayer().getSoulPower();
 	}
 
 	public int getHit() {
@@ -46,21 +45,23 @@ public class Axe extends ProjectileSkill{
 		return 1;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "Axe";
 	}
-	
-	public int getCost(){
+
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel() + 1);
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to throw the Axe?";
 	}
-	
-	public String getSFX(){
+
+	@Override
+	public String getSFX() {
 		return "wav/misswipe.wav";
 	}
-	
+
 }

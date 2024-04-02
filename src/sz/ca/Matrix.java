@@ -30,9 +30,7 @@ public class Matrix {
 	public void advance(){
 		/** All future values become current*/
 		for (int x = 0; x < values.length; x++){
-			for (int y = 0; y < values[0].length; y++){
-				values[x][y] = futureValues [x][y];
-			}
+            System.arraycopy(futureValues[x], 0, values[x], 0, values[0].length);
 		}
 	}
 

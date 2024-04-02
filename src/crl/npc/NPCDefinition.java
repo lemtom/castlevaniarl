@@ -1,6 +1,5 @@
 package crl.npc;
 
-import sz.csi.textcomponents.BasicListItem;
 import sz.csi.textcomponents.ListItem;
 import crl.ui.*;
 import crl.ai.*;

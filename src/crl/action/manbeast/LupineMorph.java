@@ -13,10 +13,12 @@ public class LupineMorph extends MorphAction{
 		return "LupineMorph";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/growll.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);

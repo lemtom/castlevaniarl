@@ -5,7 +5,6 @@ import sz.util.Position;
 import crl.feature.CountDown;
 import crl.feature.SmartFeature;
 import crl.feature.SmartFeatureFactory;
-import crl.item.ItemDefinition;
 import crl.level.Level;
 
 public class Throw extends Action{
@@ -13,14 +12,17 @@ public class Throw extends Action{
 		return "Throw";
 	}
 	
+	@Override
 	public boolean needsItem(){
 		return true;
     }
 
+    @Override
     public String getPromptItem(){
     	return "What do you want to throw?";
 	}
 
+	@Override
 	public boolean needsPosition(){
 		return true;
 	}
@@ -55,7 +57,7 @@ public class Throw extends Action{
 			//The feature falls to the infinity
 		}else {
 			String placedSmartFeature = targetItem.getPlacedSmartFeature();
-			if (!placedSmartFeature.equals("")){
+			if (placedSmartFeature.length() != 0){
 				SmartFeature feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
 				feature.setPosition(destinationPoint);
 				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());
@@ -87,10 +89,12 @@ public class Throw extends Action{
 
 	}
 
+	@Override
 	public String getPromptPosition(){
 		return "Where do you want to throw the "+targetItem.getDefinition().getDescription()+"?";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/rich_yah.wav";
 	}

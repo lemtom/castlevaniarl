@@ -78,7 +78,7 @@ public class GFXAnimatedMeleeEffect extends GFXDirectionalEffect{
 		
 	}
 
-	public GFXAnimatedMeleeEffect(String ID, BufferedImage[][] frames, Position vars[][], int delay, GFXConfiguration configuration){
+	public GFXAnimatedMeleeEffect(String ID, BufferedImage[][] frames, Position[][] vars, int delay, GFXConfiguration configuration){
 		super(ID, delay, configuration);
 		setMissile(frames);
 		variations = vars;

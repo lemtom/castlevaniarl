@@ -7,49 +7,54 @@ import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class Charm extends HeartAction{
-	public String getID(){
+public class Charm extends HeartAction {
+	public String getID() {
 		return "Charm";
 	}
-	
+
+	@Override
 	public String getPromptPosition() {
 		return "Who?";
 	}
 
+	@Override
 	public boolean needsPosition() {
 		return true;
 	}
-	
+
 	public int getHeartCost() {
 		return 5;
 	}
-	
-	public void execute(){
+
+	@Override
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level x = performer.getLevel();
 		Monster m = x.getMonsterAt(targetPosition);
-		int chance = 40+2*aPlayer.getSoulPower();
+		int chance = 40 + 2 * aPlayer.getSoulPower();
 		if (aPlayer.getFlag("SKILL_CONFIDENCE"))
-			chance+=20;
-		if (m == null){
+			chance += 20;
+		if (m == null) {
 			x.addMessage("Nothing happens.");
 		} else {
-			if (Util.chance(chance)){
-				x.addMessage("You manipulate the "+m.getDescription()+" soul!");
-				m.setCounter(Consts.C_MONSTER_CHARM, 50+aPlayer.getSoulPower()*5);
+			if (Util.chance(chance)) {
+				x.addMessage("You manipulate the " + m.getDescription() + " soul!");
+				m.setCounter(Consts.C_MONSTER_CHARM, 50 + aPlayer.getSoulPower() * 5);
 			} else {
-				x.addMessage("You tried to manipulate the "+m.getDescription()+" soul.");
+				x.addMessage("You tried to manipulate the " + m.getDescription() + " soul.");
 			}
-			
+
 		}
-		
+
 	}
 
-	public String getSFX(){
+	@Override
+	public String getSFX() {
 		return "wav/clockbel.wav";
 	}
+
 	public double getTimeCostModifier() {
 		return 3;
 	}
-};
+}

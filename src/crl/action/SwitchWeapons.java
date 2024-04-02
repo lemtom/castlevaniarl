@@ -5,6 +5,7 @@ import crl.item.Item;
 import crl.player.Player;
 
 public class SwitchWeapons extends Action{
+	@Override
 	public int getCost() {
 		return 25;
 	}
@@ -38,6 +39,7 @@ public class SwitchWeapons extends Action{
 		}
  	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		/*Player aPlayer = (Player) a;
 		Item secondary = aPlayer.getSecondaryWeapon();

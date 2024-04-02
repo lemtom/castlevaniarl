@@ -110,6 +110,7 @@ public class SwingConsolePanel extends JPanel{
     	//autoUpdate = false;
     }
     
+    @Override
     public void setFont(Font pFont){
     	f = pFont;
     }
@@ -141,7 +142,7 @@ public class SwingConsolePanel extends JPanel{
 
 	}
 
-
+	@Override
 	public void paintComponent(Graphics g){
 	//public void paint(Graphics g){
 

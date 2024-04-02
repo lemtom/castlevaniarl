@@ -16,6 +16,7 @@ public class TextInformBox extends TextComponent{
 	private StringBuffer[] lines;
 	private String curLine;
 	
+	@Override
 	public void setHeight(int value) {
 		super.setHeight(value);
 		lines = new StringBuffer[value];
@@ -31,24 +32,24 @@ public class TextInformBox extends TextComponent{
 	
 	public void addText(String text){
 		String [] tokens = text.split(" ");
-		for (int i = 0; i < tokens.length; i++){
-			int distance = width - curx;
-			if (cury>=height-1)
-				distance -= "[MORE]".length();
-			if (distance < tokens[i].length() + 1){
-				if (cury < height -1){
-					curx = 0;
-					cury++;
-				} else {
-					//i--;
-					lines[cury].append("[MORE]");
-					morePrompt();
-					clear();
-				}
-			}
-			lines[cury].append(tokens[i]+" ");
-			curx += tokens[i].length()+1;
-		}
+        for (String token : tokens) {
+            int distance = width - curx;
+            if (cury >= height - 1)
+                distance -= "[MORE]".length();
+            if (distance < token.length() + 1) {
+                if (cury < height - 1) {
+                    curx = 0;
+                    cury++;
+                } else {
+                    //i--;
+                    lines[cury].append("[MORE]");
+                    morePrompt();
+                    clear();
+                }
+            }
+            lines[cury].append(token).append(" ");
+            curx += token.length() + 1;
+        }
 	}
 	
 	public void setText(String text){

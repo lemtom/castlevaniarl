@@ -31,6 +31,7 @@ public class ShadowApocalypse extends Action{
 		}
 	}
 	
+	@Override
 	public int getCost(){
 		return 40;
 	}

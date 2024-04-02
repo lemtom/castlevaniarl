@@ -1,15 +1,6 @@
 package crl.action.weapon;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.feature.Feature;
-import crl.level.Level;
-import crl.monster.Monster;
-import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class EnergyBeam extends ProjectileSkill{
 	public int getDamage() {
@@ -56,6 +47,7 @@ public class EnergyBeam extends ProjectileSkill{
 		return "Where do you want to point the staff at?";
 	}
 
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}

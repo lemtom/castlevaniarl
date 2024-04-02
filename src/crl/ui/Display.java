@@ -4,18 +4,12 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Vector;
 
-import crl.player.GameSessionInfo;
 import crl.player.HiScore;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 import crl.monster.Monster;
 import crl.npc.*;
 import crl.game.Game;
-import crl.item.ItemDefinition;
-import crl.item.ItemFactory;
-import sz.csi.CharKey;
-import sz.csi.ConsoleSystemInterface;
-import sz.csi.textcomponents.TextBox;
 
 public abstract class Display {
 	public static Display thus;

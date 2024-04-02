@@ -1,46 +1,35 @@
 package crl.item;
 
 import java.util.Hashtable;
+import java.util.Map;
 
-import sz.csi.textcomponents.BasicListItem;
-import sz.csi.textcomponents.ListItem;
-import sz.csi.textcomponents.MenuItem;
 import crl.ui.*;
 
 public class ItemDefinition {
 	// Weapon Categories
-	
-	public final static String
-		CAT_UNARMED = "HAND_TO_HAND",
-		CAT_DAGGERS = "DAGGERS",
-		CAT_SWORDS = "SWORDS",
-		CAT_SPEARS = "SPEARS",
-		CAT_WHIPS = "WHIPS",
-		CAT_MACES = "MACES",
-		CAT_STAVES = "POLE_WEAPONS",
-		CAT_RINGS = "RINGS",
-		CAT_PROJECTILES = "THROWN",
-		CAT_BOWS = "BOWS",
-		CAT_PISTOLS = "MISSILE_CRAFT",
-		CAT_SHIELD = "SHIELD";
-	
-	public final static String[] CATS = new String[]{
-		ItemDefinition.CAT_UNARMED,
-		ItemDefinition.CAT_DAGGERS,
-		ItemDefinition.CAT_SWORDS,
-		ItemDefinition.CAT_SPEARS,
-		ItemDefinition.CAT_WHIPS,
-		ItemDefinition.CAT_MACES,
-		ItemDefinition.CAT_STAVES,
-		ItemDefinition.CAT_RINGS,
-		ItemDefinition.CAT_PROJECTILES,
-		ItemDefinition.CAT_BOWS,
-		ItemDefinition.CAT_PISTOLS,
-		ItemDefinition.CAT_SHIELD
-	};
-	
-	public static int EQUIP_ARMOR = 1, EQUIP_WEAPON = 2, EQUIP_SHIELD = 3; 
-	
+
+	public static final String CAT_UNARMED = "HAND_TO_HAND";
+	public static final String CAT_DAGGERS = "DAGGERS";
+	public static final String CAT_SWORDS = "SWORDS";
+	public static final String CAT_SPEARS = "SPEARS";
+	public static final String CAT_WHIPS = "WHIPS";
+	public static final String CAT_MACES = "MACES";
+	public static final String CAT_STAVES = "POLE_WEAPONS";
+	public static final String CAT_RINGS = "RINGS";
+	public static final String CAT_PROJECTILES = "THROWN";
+	public static final String CAT_BOWS = "BOWS";
+	public static final String CAT_PISTOLS = "MISSILE_CRAFT";
+	public static final String CAT_SHIELD = "SHIELD";
+
+	public static final String[] CATS = new String[] { ItemDefinition.CAT_UNARMED, ItemDefinition.CAT_DAGGERS,
+			ItemDefinition.CAT_SWORDS, ItemDefinition.CAT_SPEARS, ItemDefinition.CAT_WHIPS, ItemDefinition.CAT_MACES,
+			ItemDefinition.CAT_STAVES, ItemDefinition.CAT_RINGS, ItemDefinition.CAT_PROJECTILES,
+			ItemDefinition.CAT_BOWS, ItemDefinition.CAT_PISTOLS, ItemDefinition.CAT_SHIELD };
+
+	public static int EQUIP_ARMOR = 1;
+	public static int EQUIP_WEAPON = 2;
+	public static int EQUIP_SHIELD = 3;
+
 	public int getShopChance() {
 		return shopChance;
 	}
@@ -53,34 +42,30 @@ public class ItemDefinition {
 		return attackSound;
 	}
 
-	public static String getCategoryDescription(String catID){
-		return (String) HASH_DESCRIPTIONS.get(catID);
+	public static String getCategoryDescription(String catID) {
+		return HASH_DESCRIPTIONS.get(catID);
 	}
-	
-	public final static Hashtable HASH_DESCRIPTIONS = new Hashtable();
+
+	public static final Map<String, String> HASH_DESCRIPTIONS = new Hashtable<String, String>();
 	static {
-		HASH_DESCRIPTIONS.put(CAT_UNARMED,"hand to hand combat");
-		HASH_DESCRIPTIONS.put(CAT_DAGGERS,"daggers");
-		HASH_DESCRIPTIONS.put(CAT_SWORDS,"swords");
-		HASH_DESCRIPTIONS.put(CAT_SPEARS,"spears");
-		HASH_DESCRIPTIONS.put(CAT_WHIPS,"whips");
-		HASH_DESCRIPTIONS.put(CAT_STAVES,"pole weapons");
-		HASH_DESCRIPTIONS.put(CAT_RINGS,"rings");
-		HASH_DESCRIPTIONS.put(CAT_PISTOLS,"missile craft");
-		HASH_DESCRIPTIONS.put(CAT_PROJECTILES,"thrown weapons");
-		HASH_DESCRIPTIONS.put(CAT_BOWS,"bows");
-		HASH_DESCRIPTIONS.put(CAT_MACES,"maces");
-		HASH_DESCRIPTIONS.put(CAT_SHIELD,"shields");
-	};
+		HASH_DESCRIPTIONS.put(CAT_UNARMED, "hand to hand combat");
+		HASH_DESCRIPTIONS.put(CAT_DAGGERS, "daggers");
+		HASH_DESCRIPTIONS.put(CAT_SWORDS, "swords");
+		HASH_DESCRIPTIONS.put(CAT_SPEARS, "spears");
+		HASH_DESCRIPTIONS.put(CAT_WHIPS, "whips");
+		HASH_DESCRIPTIONS.put(CAT_STAVES, "pole weapons");
+		HASH_DESCRIPTIONS.put(CAT_RINGS, "rings");
+		HASH_DESCRIPTIONS.put(CAT_PISTOLS, "missile craft");
+		HASH_DESCRIPTIONS.put(CAT_PROJECTILES, "thrown weapons");
+		HASH_DESCRIPTIONS.put(CAT_BOWS, "bows");
+		HASH_DESCRIPTIONS.put(CAT_MACES, "maces");
+		HASH_DESCRIPTIONS.put(CAT_SHIELD, "shields");
+	}
 
-	//Shop Categories
-	public final static int
-		SHOP_CRAFTS = 1,
-		SHOP_MAGIC = 2,
-		SHOP_WEAPONS = 3,
-		SHOP_ARMOR = 4;
+    // Shop Categories
+	public static final int SHOP_CRAFTS = 1, SHOP_MAGIC = 2, SHOP_WEAPONS = 3, SHOP_ARMOR = 4;
 
-	//Attributes
+	// Attributes
 	private String ID;
 	private String description;
 	private int goldPrice;
@@ -93,16 +78,16 @@ public class ItemDefinition {
 	private int throwRange;
 	private Appearance appearance;
 	private String useMessage;
-	//private String throwMessage;
+	// private String throwMessage;
 	private int featureTurns;
 	private String placedSmartFeature;
-   	private int attack;
-   	private String attackSound;
+	private int attack;
+	private String attackSound;
 	private int range;
 	private int reloadTurns;
 	private boolean harmsUndead;
 	private boolean slicesThrough;
-	//private MenuItem shopMenuItem;
+	// private MenuItem shopMenuItem;
 	private String shopDescription;
 	private int rarity;
 	private int shopChance;
@@ -115,18 +100,18 @@ public class ItemDefinition {
 	private String menuDescription;
 	private boolean twoHanded;
 	private int coolness;
-	/*private ListItem sightListItem;
-	 * Debe ser calculado por la UI, y guardado en esta
+	/*
+	 * private ListItem sightListItem; Debe ser calculado por la UI, y guardado en
+	 * esta
 	 */
-	
+
 	private int verticalRange;
 	private int attackCost;
-	
+
 	private int reloadCostGold;
-	
+
 	private boolean unique;
 
-	
 	public boolean isUnique() {
 		return unique;
 	}
@@ -135,15 +120,13 @@ public class ItemDefinition {
 		return attackCost;
 	}
 
-
-	public ItemDefinition (String pID, String pDescription, String pAppearance, int pEquipCategory, 
-			String pMenuDescription, int pinLevel,
-			int pShopChance, String pShopDescription, int pGoldPrice, int pShopCategory,  
-			int pAttack, int pRange, int pReloadTurns, String pWeaponCategory, boolean pHarmsUndead, boolean pSlicesThrough,
-			int pDefense,  int pCoverage, int pVerticalRange, int attackCost, int pReloadGoldCost, boolean pTwoHanded,
-			String pEffectOnUse, String pEffectOnAcquire, int pThrowRange, String pPlacedSmartFeature, boolean pSingleUse,
-			int pFeatureTurns, String pUseMessage, boolean pUnique, boolean fixedMaterial, String pAttackSFX, String pAttackSound, int pCoolness, int pRarity 
-		 ){
+	public ItemDefinition(String pID, String pDescription, String pAppearance, int pEquipCategory,
+			String pMenuDescription, int pinLevel, int pShopChance, String pShopDescription, int pGoldPrice,
+			int pShopCategory, int pAttack, int pRange, int pReloadTurns, String pWeaponCategory, boolean pHarmsUndead,
+			boolean pSlicesThrough, int pDefense, int pCoverage, int pVerticalRange, int attackCost,
+			int pReloadGoldCost, boolean pTwoHanded, String pEffectOnUse, String pEffectOnAcquire, int pThrowRange,
+			String pPlacedSmartFeature, boolean pSingleUse, int pFeatureTurns, String pUseMessage, boolean pUnique,
+			boolean fixedMaterial, String pAttackSFX, String pAttackSound, int pCoolness, int pRarity) {
 		ID = pID;
 		rarity = pRarity;
 		coolness = pCoolness;
@@ -167,7 +150,7 @@ public class ItemDefinition {
 		useMessage = pUseMessage;
 		shopChance = pShopChance;
 		shopDescription = pShopDescription;
-		defense=pDefense;
+		defense = pDefense;
 		equipCategory = pEquipCategory;
 		attackSFX = pAttackSFX;
 		weaponCategory = pWeaponCategory;
@@ -175,18 +158,18 @@ public class ItemDefinition {
 		verticalRange = pVerticalRange;
 		this.attackCost = attackCost;
 		menuDescription = pMenuDescription;
-		//shopMenuItem = new ShopMenuItem(this);
+		// shopMenuItem = new ShopMenuItem(this);
 		setReloadCostGold(pReloadGoldCost);
 		unique = pUnique;
 		this.fixedMaterial = fixedMaterial;
 		this.pinLevel = pinLevel;
-		//sightListItem = new BasicListItem(appearance.getChar(), appearance.getColor(), description);
+		// sightListItem = new BasicListItem(appearance.getChar(),
+		// appearance.getColor(), description);
 	}
 
-
-	/*public MenuItem getShopMenuItem(){
-		return shopMenuItem;
-    }*/
+	/*
+	 * public MenuItem getShopMenuItem(){ return shopMenuItem; }
+	 */
 
 	public String getID() {
 		return ID;
@@ -224,9 +207,9 @@ public class ItemDefinition {
 		return useMessage;
 	}
 
-	/*public String getThrowMessage() {
-		return throwMessage;
-	}*/
+	/*
+	 * public String getThrowMessage() { return throwMessage; }
+	 */
 
 	public int getFeatureTurns() {
 		return featureTurns;
@@ -256,13 +239,11 @@ public class ItemDefinition {
 		return slicesThrough;
 	}
 
-	/*public String getMenuDescription(){
-		return getAttributesDescription();
-	}
-	
-	public Appearance getMenuAppearance(){
-	 	return getAppearance();
-	}*/
+	/*
+	 * public String getMenuDescription(){ return getAttributesDescription(); }
+	 * 
+	 * public Appearance getMenuAppearance(){ return getAppearance(); }
+	 */
 
 	public int getRarity() {
 		return rarity;
@@ -280,79 +261,68 @@ public class ItemDefinition {
 		return defense;
 	}
 
-
 	public int getShopCategory() {
 		return shopCategory;
 	}
-
 
 	public void setShopCategory(int shopCategory) {
 		this.shopCategory = shopCategory;
 	}
 
-
 	public String getWeaponCategory() {
 		return weaponCategory;
 	}
-
 
 	public void setWeaponCategory(String weaponCategory) {
 		this.weaponCategory = weaponCategory;
 	}
 
-	/*public ListItem getSightListItem(){
-		return sightListItem;
-	}
-	
-	public void setSightListItem(ListItem sightListItem) {
-		this.sightListItem = sightListItem;
-	}
-	*/
-	public String getShopDescription(){
+	/*
+	 * public ListItem getSightListItem(){ return sightListItem; }
+	 * 
+	 * public void setSightListItem(ListItem sightListItem) { this.sightListItem =
+	 * sightListItem; }
+	 */
+	public String getShopDescription() {
 		return shopDescription;
 	}
 
-	
-	public int getVerticalRange(){
+	public int getVerticalRange() {
 		return verticalRange;
 	}
-	
-	public String getAttributesDescription(){
+
+	public String getAttributesDescription() {
 		String base = getDescription();
 		if (getAttack() > 0 || getDefense() > 0 || getRange() > 1 || getVerticalRange() > 0)
-			base+= " (";
+			base += " (";
 		if (getAttack() > 0)
-			base+= "ATK:"+getAttack()+" ";
+			base += "ATK:" + getAttack() + " ";
 		if (getDefense() > 0)
-			base+= "DEF:"+getDefense()+" ";
+			base += "DEF:" + getDefense() + " ";
 		if (getRange() > 1 || getVerticalRange() > 0)
 			if (getVerticalRange() > 0)
-				base+= "RNG:"+getRange()+","+getVerticalRange();
+				base += "RNG:" + getRange() + "," + getVerticalRange();
 			else
-				base+= "RNG:"+getRange();
-		if (getReloadCostGold() > 0){
-			base += " RLD:"+getReloadCostGold();
+				base += "RNG:" + getRange();
+		if (getReloadCostGold() > 0) {
+			base += " RLD:" + getReloadCostGold();
 		}
 		if (getAttack() > 0 || getDefense() > 0 || getRange() > 1 || getVerticalRange() > 0)
-			base+= ")";
+			base += ")";
 		return base;
 	}
-
 
 	public String getMenuDescription() {
 		return menuDescription;
 	}
 
-
 	public void setMenuDescription(String menuDescription) {
 		this.menuDescription = menuDescription;
 	}
 
-
 	public int getReloadCostGold() {
 		return reloadCostGold;
 	}
-
 
 	public void setReloadCostGold(int reloadCostGold) {
 		this.reloadCostGold = reloadCostGold;

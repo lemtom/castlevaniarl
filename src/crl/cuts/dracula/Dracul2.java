@@ -1,12 +1,8 @@
 package crl.cuts.dracula;
 
 import sz.util.Position;
-import crl.action.ActionFactory;
-import crl.ai.monster.boss.DraculaAI;
-import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
 import crl.game.Game;
-import crl.game.PlayerGenerator;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;

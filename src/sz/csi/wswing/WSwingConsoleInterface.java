@@ -22,7 +22,8 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 	private StrokeInformer aStrokeInformer; // Object to which strokes are informed
 
     // Attributes
-	private int xpos, ypos; /** Current printing cursor position */
+	private int xpos;
+	private int ypos; /** Current printing cursor position */
 	private boolean autorefresh;
 
     // Static Attributes
@@ -145,7 +146,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 	}
 
 	public String input(int l){
-		String ret = "";
+		StringBuilder ret = new StringBuilder();
 		CharKey read = new CharKey(CharKey.NONE);
 		while (true){
 			while (read.code == CharKey.NONE)
@@ -155,16 +156,16 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 				continue;
 			}
 			if (read.code == CharKey.ENTER)
-				return ret;
+				return ret.toString();
 			if (read.code == CharKey.BACKSPACE){
-				if (ret.equals("")){
+				if (ret.length() == 0){
 					read.code = CharKey.NONE;
 					continue;
 				}
 				if (ret.length() > 1)
-					ret = ret.substring(0, ret.length() -1);
+					ret = new StringBuilder(ret.substring(0, ret.length() - 1));
 				else
-					ret = "";
+					ret = new StringBuilder();
                 caretPosition.x--;
 				print(caretPosition.x, caretPosition.y, " ");
 
@@ -176,7 +177,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 				}
 				String nuevo = read.toString();
 				print(caretPosition.x, caretPosition.y, nuevo);
-				ret +=nuevo;
+				ret.append(nuevo);
 				caretPosition.x++;
 			}
 			refresh();
@@ -201,7 +202,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		return ret;
 	}
 
-	private final static Color
+	private static final Color
 		DARKRED_COLOR = new Color(128,0,0),
 		DARKBLUE_COLOR = new Color(0,0, 200),
 		DARKGREEN_COLOR = new Color(0,128,0),
@@ -301,14 +302,13 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 			}
 		}
 
-		String x [] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		String[] x = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		boolean lucida = false, courier=false;
-    	for (int i = 0; i < x.length; i++)
-    		if (x[i].equals("Lucida Console"))
-    			lucida = true;
-    		else
-			if (x[i].equals("Courier New"))
-				courier = true;
+        for (String string : x)
+            if (string.equals("Lucida Console"))
+                lucida = true;
+            else if (string.equals("Courier New"))
+                courier = true;
     	if (courier)
 			return "Courier New";
     	else
@@ -319,13 +319,10 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 	}
 
 	private int defineFontSize(int scrHeight, int scrWidth){
-		int byHeight = (int)(scrHeight / ydim);
+		int byHeight = scrHeight / ydim;
 		int byWidth = (int)(scrWidth/ (xdim*0.8));
 
-		if (byHeight < byWidth)
-			return byHeight;
-		else
-			return byWidth;
+        return java.lang.Math.min(byHeight, byWidth);
 
 	}
 

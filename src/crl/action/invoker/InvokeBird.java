@@ -13,6 +13,7 @@ public class InvokeBird extends SummonSkill{
 		return "S_BIRD";
 	}
 	
+	@Override
 	public int getHitBonus() {
 		return 2*getPlayer().getSoulPower();
 	}

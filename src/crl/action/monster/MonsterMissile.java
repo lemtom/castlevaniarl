@@ -5,7 +5,6 @@ import sz.util.Line;
 import sz.util.Position;
 import crl.action.Action;
 import crl.game.SFXManager;
-import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Damage;
@@ -25,7 +24,7 @@ public class MonsterMissile extends Action{
 	public String getEffectWav(){
 		return effectWav;
 	}
-	public final static String TYPE_AXE = "AXE", TYPE_STRAIGHT = "STRAIGHT", TYPE_DIRECT = "DIRECT";
+	public static final String TYPE_AXE = "AXE", TYPE_STRAIGHT = "STRAIGHT", TYPE_DIRECT = "DIRECT";
 	
 	/*public void set(String pStatusEffect, int pRange, String pMessage, String pEffectType, String pEffectID){
 		range = pRange;
@@ -52,6 +51,7 @@ public class MonsterMissile extends Action{
 		return "MONSTER_MISSILE";
 	}
 	
+	@Override
 	public boolean needsPosition(){
 		return true;
 	}
@@ -81,7 +81,7 @@ public class MonsterMissile extends Action{
         for (int i=0; i<range; i++){
 			Position destinationPoint = line.next();
 			if (aPlayer.getPosition().equals(destinationPoint)){
-				int penalty = (int)(Position.distance(aMonster.getPosition(), aPlayer.getPosition())/4);
+				int penalty = Position.distance(aMonster.getPosition(), aPlayer.getPosition())/4;
 				int attack = aMonster.getAttack();
 				attack -= penalty;
 				if (attack < 1)
@@ -96,7 +96,7 @@ public class MonsterMissile extends Action{
 						hits = false;
 					}
 				} else if (type.equals(TYPE_AXE)){
-					if (i > (int)(range/4) && i < (int)(3*(range/4))){
+					if (i > (range/4) && i < (3*(range/4))){
 						//if (playerCell.getHeight() == monsterCell.getHeight()+2 || playerCell.getHeight() == monsterCell.getHeight()+3){
 						if (aMonster.getStandingHeight()+2 == aPlayer.getStandingHeight() || aMonster.getStandingHeight()+3 == aPlayer.getStandingHeight()){
 							hits = true;
@@ -134,9 +134,10 @@ public class MonsterMissile extends Action{
 		aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
 	}
 
-	public String getPromptPosition(){
-		return "";
-	}
+	@Override
+	public String getPromptPosition() {
+        return super.getPromptPosition();
+    }
 	
 	private int solveDirection(Position old, Position newP){
 		if (newP.x() == old.x()){
@@ -166,6 +167,7 @@ public class MonsterMissile extends Action{
 		}
 	}
 
+	@Override
 	public int getCost(){
 		Monster m = (Monster) performer;
 		if (m.getAttackCost() == 0){

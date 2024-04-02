@@ -1,7 +1,6 @@
 package crl.npc;
 
 import sz.csi.textcomponents.ListItem;
-import crl.actor.*;
 import crl.ai.*;
 import crl.ai.npc.VillagerAI;
 import crl.ui.*;
@@ -13,9 +12,9 @@ public class NPC extends Monster {
 	private String defID;
 	private ActionSelector selector;
 	
-//	private final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC", "NPC", "VOID", "NULL_SELECTOR", 0, 2, 0, 5, 0, false, false, true, false, 0, 0, 0, 0);
+//	private static final MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC", "NPC", "VOID", "NULL_SELECTOR", 0, 2, 0, 5, 0, false, false, true, false, 0, 0, 0, 0);
 	
-	public final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
+	public static final MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
 	static {
 		NPC_MONSTER_DEFINITION.setDescription("Innocent Being");
 		NPC_MONSTER_DEFINITION.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance("VOID"));
@@ -36,15 +35,18 @@ public class NPC extends Monster {
 		hits = def.getHits();
 	}
 	
+	@Override
 	public Appearance getAppearance(){
 		
 		return getNDefinition().getAppearance();
     }
 
+	@Override
 	public ActionSelector getSelector(){
 		return selector;
     }
 
+	@Override
 	public String getDescription(){
 		return getNDefinition().getDescription();
 	}
@@ -63,6 +65,7 @@ public class NPC extends Monster {
 			return talkMessage;
 	}
 
+	@Override
 	public void message(String mess){
 		try {
 			if (mess.equals("ATTACK_PLAYER"))
@@ -92,6 +95,7 @@ public class NPC extends Monster {
 		super.damage(buff, dam);
 	}
 
+	@Override
 	public int getAttack (){
 		return getNDefinition().getAttack();
 	}

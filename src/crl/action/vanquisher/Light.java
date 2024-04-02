@@ -1,7 +1,6 @@
 package crl.action.vanquisher;
 
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.player.Consts;
 import crl.player.Player;
@@ -15,15 +14,18 @@ public class Light extends HeartAction{
 		return 15;
 	}
 	
-	public String getSFX(){
-		return null;
-	}
+	@Override
+	public String getSFX() {
+        return super.getSFX();
+    }
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;

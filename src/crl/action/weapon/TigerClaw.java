@@ -14,10 +14,12 @@ public class TigerClaw extends Action{
 		return "TIGER_CLAW";
 	}
 	
+	@Override
 	public boolean needsDirection(){
 		return true;
 	}
 
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to jump at?";
 	}
@@ -94,7 +96,7 @@ public class TigerClaw extends Action{
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You slash through the "+destinationFeature.getDescription());
+	       	message.append("You slash through the ").append(destinationFeature.getDescription());
 			aLevel.addMessage(message.toString());
         	return true;
 		}
@@ -103,7 +105,7 @@ public class TigerClaw extends Action{
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())
 			){
-				message.append("You slash thru the "+targetMonster.getDescription());
+				message.append("You slash thru the ").append(targetMonster.getDescription());
 				targetMonster.damageWithWeapon(message, aLevel.getPlayer().getPunchDamage());
 	        	if (targetMonster.isDead()){
 		        	message.append(", cutting it apart!");
@@ -115,6 +117,7 @@ public class TigerClaw extends Action{
 		return false;
 	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
         Level aLevel = performer.getLevel();

@@ -27,7 +27,7 @@ public class PropertyFilters {
 		return Double.parseDouble(n);
 	}
 	
-	public static Font getFont(String fontName, String size) throws FontFormatException, FileNotFoundException, IOException{
+	public static Font getFont(String fontName, String size) throws FontFormatException, IOException{
 		return Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(fontName))).deriveFont(Font.PLAIN, inte(size));
 	}
 	

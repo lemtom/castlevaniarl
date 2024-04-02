@@ -1,9 +1,7 @@
 package crl.cuts.prelude;
 
 import sz.util.Position;
-import crl.ai.SelectorFactory;
 import crl.ai.monster.boss.DraculaAI;
-import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
 import crl.game.Game;
 import crl.game.STMusicManagerNew;

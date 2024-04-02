@@ -1,7 +1,5 @@
 package crl.levelgen;
 
-import java.util.Stack;
-
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
@@ -12,7 +10,7 @@ import crl.game.*;
 
 /**
  * Generates a level with building ruins
- * 
+ * <p>
  * The ruins are defined as a big space with empty
  * 'houses' inside.
  * 

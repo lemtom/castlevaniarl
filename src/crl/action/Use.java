@@ -6,8 +6,6 @@ import crl.actor.Actor;
 import crl.game.SFXManager;
 import crl.item.ItemDefinition;
 import crl.item.ItemFactory;
-import crl.monster.Monster;
-import crl.npc.Hostage;
 import crl.player.Consts;
 import crl.player.Damage;
 import crl.player.Player;
@@ -18,10 +16,12 @@ public class Use extends Action{
 		return "Use";
 	}
 	
+	@Override
 	public boolean needsItem(){
 		return true;
     }
 
+    @Override
     public String getPromptItem(){
     	return "What do you want to use?";
 	}
@@ -79,14 +79,14 @@ public class Use extends Action{
 			}
 		}
 		
-		if (effect[0].equals("")){
-			performer.getLevel().addMessage("You don\'t find a use for the "+targetItem.getDescription());
+		if (effect[0].length() == 0){
+			performer.getLevel().addMessage("You don't find a use for the " +targetItem.getDescription());
 			//aPlayer.addItem(targetItem);
 			return;
 		}                                
 		for (int cmd = 0; cmd < effect.length; cmd+=2){
 			String message = targetItem.getUseMessage();
-			if (message.equals(""))
+			if (message.length() == 0)
 				message = "You use the "+targetItem.getDescription();
 			if (effect[cmd].equals("DAYLIGHT")){
 				if (!aPlayer.getLevel().isDay()){
@@ -155,7 +155,7 @@ public class Use extends Action{
 			}else if (effect[cmd].equals("LIGHT")) {
 				aPlayer.setCounter("LIGHT", 200);
 			}
-			performer.getLevel().addMessage(message.toString());
+			performer.getLevel().addMessage(message);
 		}
 		if (def.isSingleUse())
 			aPlayer.reduceQuantityOf(targetItem);
@@ -167,7 +167,7 @@ public class Use extends Action{
 		performer.getLevel().addMessage("The page reads: \""+clues[level][Util.rand(0, clues.length-1)]+"\"");
 	}
 
-	private final static String [][] clues = new String[][]{
+	private static final String [][] clues = new String[][]{
 		{//Lv 0 clues
 		"They say stairs are the safest place if you dont want to be moved",
 		"The thorn bracelet exchanges pain for power",

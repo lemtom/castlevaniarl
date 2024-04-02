@@ -1,13 +1,6 @@
 package sz.csi.textcomponents;
 
-import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
-
-import java.util.*;
-
-import crl.ui.*;
-import crl.*;
 
 public class TextBox extends TextComponent{
 	private StringBuffer [] lines;
@@ -18,6 +11,7 @@ public class TextBox extends TextComponent{
 		lines = new StringBuffer[]{new StringBuffer("")};
 	}
 	
+	@Override
 	public void setHeight(int value){
 		super.setHeight(value);
 		if (hasBorder())
@@ -30,6 +24,7 @@ public class TextBox extends TextComponent{
 		}
 	}
 
+	@Override
 	public void setBorder(boolean value){
 		super.setBorder(value);
 		if (hasBorder()){
@@ -62,25 +57,25 @@ public class TextBox extends TextComponent{
 		String [] tokens = text.split(" ");
 		int curx = 0; 
 		int cury = 0;
-		out: 
-			for (int i = 0; i < tokens.length; i++){
-				int distance = inWidth - curx;
-				if (distance < tokens[i].length() + 1){
-					if (cury < inHeight -1){
-						curx = 0;
-						cury++;
-					} else {
-						break out;
-					}
-				}
-				if (tokens[i].equals("\n")){
-					curx = 0;
-					cury++;
-				}else {
-					lines[cury].append(tokens[i]+" ");
-					curx += tokens[i].length()+1;
-				}
-			}
+		out:
+        for (String token : tokens) {
+            int distance = inWidth - curx;
+            if (distance < token.length() + 1) {
+                if (cury < inHeight - 1) {
+                    curx = 0;
+                    cury++;
+                } else {
+                    break;
+                }
+            }
+            if (token.equals("\n")) {
+                curx = 0;
+                cury++;
+            } else {
+                lines[cury].append(token).append(" ");
+                curx += token.length() + 1;
+            }
+        }
 	}
 	
 	public void setTitle(String pTitle){

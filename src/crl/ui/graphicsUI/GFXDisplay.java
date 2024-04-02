@@ -315,9 +315,9 @@ public class GFXDisplay extends Display{
 		for (int i = 0; i < scores.length; i++){
 			si.print(7 + leftMargin,(9+i), scores[i].getName()+" ("+scores[i].getPlayerClass()+")", Color.WHITE);
 			si.print(18 + leftMargin,(9+i), ""+scores[i].getScore(), Color.GRAY);
-			si.print(25 + leftMargin,(9+i), ""+scores[i].getDate(), Color.GRAY);
-			si.print(36 + leftMargin,(9+i), ""+scores[i].getTurns(), Color.GRAY);
-			si.print(43 + leftMargin,(9+i), ""+scores[i].getDeathString()+" on level "+scores[i].getDeathLevel(), Color.GRAY);
+			si.print(25 + leftMargin,(9+i), scores[i].getDate(), Color.GRAY);
+			si.print(36 + leftMargin,(9+i), scores[i].getTurns(), Color.GRAY);
+			si.print(43 + leftMargin,(9+i), scores[i].getDeathString()+" on level "+scores[i].getDeathLevel(), Color.GRAY);
 
 		}
 		si.print(7 + leftMargin,20, "[space] to continue", GFXDisplay.COLOR_BOLD);
@@ -385,15 +385,15 @@ public class GFXDisplay extends Display{
 		si.drawImage(IMG_LEVEL_UP);
 		si.print(4,3, "You have gained a chance to pick an advancement!", GFXDisplay.COLOR_BOLD);
 		for (int i = 0; i < advancements.size(); i++){
-			si.print(3,4+i*2, ((char)('a'+i))+". "+((Advancement)advancements.elementAt(i)).getName(), GFXDisplay.COLOR_BOLD);
-			si.print(3,5+i*2, "   "+((Advancement)advancements.elementAt(i)).getDescription(), Color.WHITE);
+			si.print(3,4+i*2, ((char)('a'+i))+". "+ advancements.elementAt(i).getName(), GFXDisplay.COLOR_BOLD);
+			si.print(3,5+i*2, "   "+ advancements.elementAt(i).getDescription(), Color.WHITE);
 		}
 		si.refresh();
 		int choice = readAlphaToNumber(advancements.size());
 		si.restore();
 		si.refresh();
 		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(true);
-		return (Advancement)advancements.elementAt(choice);
+		return advancements.elementAt(choice);
 		
 		/*si.saveBuffer();
 		ItemDefinition[] defs = new ItemDefinition[soulIds.size()];
@@ -530,7 +530,7 @@ public class GFXDisplay extends Display{
 		si.drawImage(mapX,mapY, IMG_MAP);
 		si.printAtPixel(mapX + 130, mapY + 150, locationDescription, Color.BLACK);
 		if (locationKey != null){
-			Position location = (Position) locationKeys.get(locationKey);
+			Position location = locationKeys.get(locationKey);
 			if (location != null)
 				si.drawImage(location.x + mapX + 3, location.y + mapY + 3, IMG_MAPMARKER);
 		}

@@ -26,4 +26,13 @@ public class SimpleGFXMenuItem implements GFXMenuItem{
 		return value;
 	}
 
+	//Don't
+	public char getMenuChar() {
+		return 0;
+	}
+
+	public int getMenuColor() {
+		return 0;
+	}
+
 }

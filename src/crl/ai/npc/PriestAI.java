@@ -7,7 +7,8 @@ import crl.action.npc.PeaceWalk;
 import crl.actor.Actor;
 
 public class PriestAI extends VillagerAI {
-	 public Action selectAction(Actor who){
+	@Override
+	public Action selectAction(Actor who){
 	 	if (onDanger || attackPlayer)
 	 		return super.selectAction(who);
 	 	if (Position.flatDistance(who.getPosition(), who.getLevel().getPlayer().getPosition()) < 3)
@@ -24,6 +25,7 @@ public class PriestAI extends VillagerAI {
 		return null;
 	}
 
+	@Override
 	public String getID(){
 		 return "HEALPLAYER";
 	}

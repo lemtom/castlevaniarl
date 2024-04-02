@@ -61,8 +61,8 @@ public class GFXAppearance extends Appearance{
 	public Image getIconImage() {
 		if (iconImage != null) {
 			return iconImage;
-		};
-		return img;
+		}
+        return img;
 	}
 
 }

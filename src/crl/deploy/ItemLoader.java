@@ -15,14 +15,14 @@ public class ItemLoader {
 		BufferedReader br = FileUtil.getReader("items.csv");
 		bw.write("package crl.data;\n\nimport crl.item.*;\npublic class Items {\n");
 
-		bw.write("\t\tprivate final static ItemDefinition [] defs = new ItemDefinition[]{\n");
+		bw.write("\t\tprivate static final ItemDefinition [] defs = new ItemDefinition[]{\n");
 		String line = br.readLine();
 		line = br.readLine();
 		while (line != null){
 			String[] tokens = line.split(";");
 			bw.write("\t\t\tnew ItemDefinition (");
 			for (int i = 0; i < tokens.length; i++){
-				if (tokens[i].equals(""))
+				if (tokens[i].length() == 0)
 					bw.write("\"\"");
 				else
 					if (tokens[i].equals("true") || tokens[i].equals("false") || isNumber(tokens[i]))

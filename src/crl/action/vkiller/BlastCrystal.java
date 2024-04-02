@@ -1,8 +1,6 @@
 package crl.action.vkiller;
 
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.player.Player;
 
@@ -14,6 +12,7 @@ public class BlastCrystal extends HeartAction{
 		return "BLAST_CRYSTAL";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
@@ -22,8 +21,9 @@ public class BlastCrystal extends HeartAction{
 		aLevel.addSmartFeature("BLAST_CRYSTAL", performer.getPosition());
 	}
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
-		return (int)(25 / (p.getShotLevel()+1));
+		return 25 / (p.getShotLevel()+1);
 	}
 }

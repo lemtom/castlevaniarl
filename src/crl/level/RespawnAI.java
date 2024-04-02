@@ -1,6 +1,5 @@
 package crl.level;
 
-import crl.*;
 import crl.action.*;
 import sz.util.*;
 import crl.ai.*;

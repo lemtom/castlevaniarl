@@ -30,7 +30,7 @@ public class ForestLevelGenerator  extends LevelGenerator{
 		 * If 1 and less than 2 1 around, 0
 		 * If 0 and more than 7 0 around, 2
 		 * If 2 and more than 2 0 around, 0
-		 * 
+		 * <p>
 		 * Run for 5 turns
 		 */
 		

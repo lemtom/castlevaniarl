@@ -1,42 +1,31 @@
 package crl.levelgen.patterns;
 
-public class ReservoirTelepad extends StaticPattern
-{
-	public String getMapKey(){
+public class ReservoirTelepad extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
-	
-	
 
 	public String getMusicKeyMorning() {
 		return "";
 	}
 
-
-
 	public String getMusicKeyNoon() {
 		return null;
 	}
 
-
-
-	public ReservoirTelepad () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"###.....###",
-			"##.......##",
-			"#...c-c...#",
-			"#..c---c..#",
-			"E.c--*--c.S",
-			"#..c---c..#",
-			"#...c-c...#",
-			"##.......##",
-			"###.....###",
-			"###########",
-           
-		}
-	};
+	public ReservoirTelepad() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"###.....###", //
+				"##.......##", //
+				"#...c-c...#", //
+				"#..c---c..#", //
+				"E.c--*--c.S", //
+				"#..c---c..#", //
+				"#...c-c...#", //
+				"##.......##", //
+				"###.....###", //
+				"###########" } };
 
 		charMap.put("#", "CAVE_WALL");
 		charMap.put(".", "CAVE_WATER");
@@ -48,7 +37,6 @@ public class ReservoirTelepad extends StaticPattern
 		charMap.put("E", "CAVE_WATER EXIT _NEXT");
 	}
 
-	
 	public String getDescription() {
 		return "???";
 	}

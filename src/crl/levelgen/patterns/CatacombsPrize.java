@@ -1,8 +1,7 @@
 package crl.levelgen.patterns;
 
-public class CatacombsPrize extends StaticPattern
-{
-	public String getMapKey(){
+public class CatacombsPrize extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
 
@@ -14,23 +13,19 @@ public class CatacombsPrize extends StaticPattern
 		return null;
 	}
 
-	public CatacombsPrize () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"###.....###",
-			"##.......##",
-			"#....i....#",
-			"#.........#",
-			"S....*....#",
-			"#.........#",
-			"#....i....#",
-			"##.......##",
-			"###.....###",
-			"###########",
-           
-		}
-	};
+	public CatacombsPrize() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"###.....###", //
+				"##.......##", //
+				"#....i....#", //
+				"#.........#", //
+				"S....*....#", //
+				"#.........#", //
+				"#....i....#", //
+				"##.......##", //
+				"###.....###", //
+				"###########" } };
 
 		charMap.put("#", "CAVE_WALL");
 		charMap.put(".", "CAVE_FLOOR");
@@ -39,7 +34,6 @@ public class CatacombsPrize extends StaticPattern
 		charMap.put("S", "CAVE_FLOOR EXIT _BACK");
 	}
 
-	
 	public String getDescription() {
 		return "Humid Room";
 	}

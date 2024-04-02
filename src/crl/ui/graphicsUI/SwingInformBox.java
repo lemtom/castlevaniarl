@@ -15,10 +15,12 @@ public class SwingInformBox extends JTextArea{
 		} while (wait);
 	}
 	
+	@Override
 	public boolean isEditable(){
 		return false;
 	}
 	
+	@Override
 	public boolean isFocusable(){
 		return false;
 	}

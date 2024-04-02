@@ -4,7 +4,7 @@ import java.io.*;
 
 public class FileUtil {
 
-    public static int filasEnArchivo (String pArchivo) throws FileNotFoundException, IOException{
+    public static int filasEnArchivo (String pArchivo) throws IOException{
         Debug.enterMethod("", "FileUtil.filasEnArchivo", pArchivo);
         //Date starting = new Date();
         File vArchivo = new File(pArchivo);

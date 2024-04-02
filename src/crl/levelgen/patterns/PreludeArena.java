@@ -3,15 +3,13 @@ package crl.levelgen.patterns;
 import crl.cuts.Unleasher;
 import crl.cuts.arena.PreludeArena1;
 import crl.cuts.arena.PreludeArena2;
-import crl.cuts.entrance.Entrance1;
 import crl.levelgen.MonsterSpawnInfo;
 
-
-public class PreludeArena extends StaticPattern{
-	public String getMapKey(){
+public class PreludeArena extends StaticPattern {
+	public String getMapKey() {
 		return "ENTRANCE";
 	}
-	
+
 	public String getDescription() {
 		return "Castle Garden";
 	}
@@ -24,51 +22,49 @@ public class PreludeArena extends StaticPattern{
 		return null;
 	}
 
-	public PreludeArena () {
-		this.cellMap = new String [][]{{
-				"tttttttttttttXXXXXXXXXXXXXXXXX.......t.t..............XXCCCC",
-				"tttttXXXXXXXXX...............XXXXXX.tttXXXXXX.....ttt.X.CCCC",
-				"ttttXX......................#.###.XXXXXX....XXXXXXXXXXX.CCCC",
-				"tttXX........~~~~..........#.....#......................CCCC",
-				"ttXX............~...............#.....s..~.....#....#...CCCC",
-				"ttX.........#...~~........s..............~~~~...#..###..CCCC",
-				"ttX........##....~~.......S........g......~..........#..CCCC",
-				"t.X.......#.#.................h..t......~~~...S......#..CCCC",
-				"t.X....S..#.#...........g..........................g....CCCC",
-				"..X.......#.....g...#..........#................#.......CCCC",
-				"..X........##.......##.........##.............h.#..s....CCCC",
-				"..X.....s.#.#......#.#........##........#...............CCCC",
-				"..X.....g..##......................g....##......#.......CCCC",
-				"..X.......###..............#..........................S.CCCC",
-				"..X...h...###......S......##.........S....s.....#.......CCCC",
-				"..X.......###................ffff..........t....#......CCCCC",
-				"..X.fffff..ffff...ffffffff.......s..fff.........#.ffff.CCCCC",
-				".[[......i......i......i.......i...#.i.....ff====....i.CCCCC",
-				".[[................................#........==pp==........]]",
-				".[[==========================================paap=======..]]",
-				".[[=================@=======================paaaap======..]]",
-				".[[========================================paaccaap=====..]]",
-				".[[========================================paaccaap=====..]]",
-				".[[=========================================paaaap======..]]",
-				".[[==========================================paap=======..]]",
-				".[[.........................................==pp==........]]",
-				".[[......i......i......i.fff#..i.....i.......====....i.CCCCC",
-				"..Xfffff.........fffffff....##ffffff........fffffff....CCCCC",
-				"..X......ffffff...........###........ffff..h...........CCCCC",
-				"..X.....................t....h.....s................s...CCCC",
-				"..X.............................tt.......t......##......CCCC",
-				"..X.....g.......s..S...........t......S..........#....S.CCCC",
-				"..X...h............................g....................CCCC",
-				"..X.....S..#.........................~.........#...g~...CCCC",
-				"..X~~~~~~.###.........g..............~~.........#..~~...CCCC",
-				"..XX~~~~~~~~....................#.....~.s......#..~~....CCCC",
-				"...XX~~~~~~~~~....h...S..........#......S...............CCCC",
-				"...tXX~~~~~~~~~...............###.XXXXXX....XXXXXXXXXXX.CCCC",
-				"t.tttXXXXXXXXX...............XXXXXX.tttXXXXXX...tttt..X.CCCC",
-				"tttttttttttttXXXXXXXXXXXXXXXXX...................t..ttXXCCCC",
-		            }
-		        };
-	 
+	public PreludeArena() {
+		this.cellMap = new String[][] { { //
+				"tttttttttttttXXXXXXXXXXXXXXXXX.......t.t..............XXCCCC", //
+				"tttttXXXXXXXXX...............XXXXXX.tttXXXXXX.....ttt.X.CCCC", //
+				"ttttXX......................#.###.XXXXXX....XXXXXXXXXXX.CCCC", //
+				"tttXX........~~~~..........#.....#......................CCCC", //
+				"ttXX............~...............#.....s..~.....#....#...CCCC", //
+				"ttX.........#...~~........s..............~~~~...#..###..CCCC", //
+				"ttX........##....~~.......S........g......~..........#..CCCC", //
+				"t.X.......#.#.................h..t......~~~...S......#..CCCC", //
+				"t.X....S..#.#...........g..........................g....CCCC", //
+				"..X.......#.....g...#..........#................#.......CCCC", //
+				"..X........##.......##.........##.............h.#..s....CCCC", //
+				"..X.....s.#.#......#.#........##........#...............CCCC", //
+				"..X.....g..##......................g....##......#.......CCCC", //
+				"..X.......###..............#..........................S.CCCC", //
+				"..X...h...###......S......##.........S....s.....#.......CCCC", //
+				"..X.......###................ffff..........t....#......CCCCC", //
+				"..X.fffff..ffff...ffffffff.......s..fff.........#.ffff.CCCCC", //
+				".[[......i......i......i.......i...#.i.....ff====....i.CCCCC", //
+				".[[................................#........==pp==........]]", //
+				".[[==========================================paap=======..]]", //
+				".[[=================@=======================paaaap======..]]", //
+				".[[========================================paaccaap=====..]]", //
+				".[[========================================paaccaap=====..]]", //
+				".[[=========================================paaaap======..]]", //
+				".[[==========================================paap=======..]]", //
+				".[[.........................................==pp==........]]", //
+				".[[......i......i......i.fff#..i.....i.......====....i.CCCCC", //
+				"..Xfffff.........fffffff....##ffffff........fffffff....CCCCC", //
+				"..X......ffffff...........###........ffff..h...........CCCCC", //
+				"..X.....................t....h.....s................s...CCCC", //
+				"..X.............................tt.......t......##......CCCC", //
+				"..X.....g.......s..S...........t......S..........#....S.CCCC", //
+				"..X...h............................g....................CCCC", //
+				"..X.....S..#.........................~.........#...g~...CCCC", //
+				"..X~~~~~~.###.........g..............~~.........#..~~...CCCC", //
+				"..XX~~~~~~~~....................#.....~.s......#..~~....CCCC", //
+				"...XX~~~~~~~~~....h...S..........#......S...............CCCC", //
+				"...tXX~~~~~~~~~...............###.XXXXXX....XXXXXXXXXXX.CCCC", //
+				"t.tttXXXXXXXXX...............XXXXXX.tttXXXXXX...tttt..X.CCCC", //
+				"tttttttttttttXXXXXXXXXXXXXXXXX...................t..ttXXCCCC" } };
+
 		charMap.put(".", "GARDEN_GRASS");
 		charMap.put("#", "FOREST_DIRT");
 		charMap.put("=", "GARDEN_WALKWAY");
@@ -88,30 +84,22 @@ public class PreludeArena extends StaticPattern{
 		charMap.put("@", "GARDEN_WALKWAY EXIT _START");
 		charMap.put("S", "GARDEN_GRASS FEATURE CANDLE 60");
 		charMap.put("~", "MOSS_WATERWAY");
-		
-		unleashers = new Unleasher[]{
-			new PreludeArena1(),
-			new PreludeArena2()
-		};
-		
-		spawnInfo = new MonsterSpawnInfo []{
-			new MonsterSpawnInfo("BAT", MonsterSpawnInfo.BORDER, 100),
-			new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 100),
-			new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 100),
-			new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 100),
-		};
+
+		unleashers = new Unleasher[] { new PreludeArena1(), new PreludeArena2() };
+
+		spawnInfo = new MonsterSpawnInfo[] { new MonsterSpawnInfo("BAT", MonsterSpawnInfo.BORDER, 100),
+				new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 100),
+				new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 100),
+				new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 100), };
 	}
-	
-	
+
+	@Override
 	public MonsterSpawnInfo[] getDwellers() {
-		return new MonsterSpawnInfo[]{
-				new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 90),
+		return new MonsterSpawnInfo[] { new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 90),
 				new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 80),
 				new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 80),
 				new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.UNDERGROUND, 80),
-				new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
-			};
+				new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40), };
 	}
-
 
 }

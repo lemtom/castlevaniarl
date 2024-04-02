@@ -1,6 +1,5 @@
 package crl.action.renegade;
 
-import crl.action.HeartAction;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
@@ -14,10 +13,12 @@ public class MystMorph extends MorphAction{
 		return "BatMorph";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/swaashll.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);

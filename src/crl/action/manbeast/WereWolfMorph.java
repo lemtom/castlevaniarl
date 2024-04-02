@@ -13,10 +13,12 @@ public class WereWolfMorph extends MorphAction{
 		return "WereWolfMorph";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/howl.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);

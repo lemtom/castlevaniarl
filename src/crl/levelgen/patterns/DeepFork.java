@@ -1,8 +1,7 @@
 package crl.levelgen.patterns;
 
-public class DeepFork extends StaticPattern
-{
-	public String getMapKey(){
+public class DeepFork extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
 
@@ -14,23 +13,19 @@ public class DeepFork extends StaticPattern
 		return null;
 	}
 
-	public DeepFork () {
-		cellMap = new String [][]{
-		{
-			"#####S#####",
-			"###--.--###",
-			"##--.....##",
-			"#--......i#",
-			"#--c-.-c..#",
-			"1---.*.-.i#",
-			"#--c-.-c..#",
-			"#--......i#",
-			"##--...--##",
-			"###--.--###",
-			"###W#E#W###",
-           
-		}
-	};
+	public DeepFork() {
+		cellMap = new String[][] { { //
+				"#####S#####", //
+				"###--.--###", //
+				"##--.....##", //
+				"#--......i#", //
+				"#--c-.-c..#", //
+				"1---.*.-.i#", //
+				"#--c-.-c..#", //
+				"#--......i#", //
+				"##--...--##", //
+				"###--.--###", //
+				"###W#E#W###" } };
 
 		charMap.put("#", "CAVE_WALL");
 		charMap.put(".", "CAVE_FLOOR");
@@ -44,7 +39,6 @@ public class DeepFork extends StaticPattern
 		charMap.put("1", "CAVE_WATER EXIT RESERVOIR0");
 	}
 
-	
 	public String getDescription() {
 		return "???";
 	}

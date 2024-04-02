@@ -1,6 +1,5 @@
 package crl.conf.console.data;
 import sz.csi.ConsoleSystemInterface;
-import crl.level.Cell;
 import crl.ui.*;
 import crl.ui.consoleUI.CharAppearance;
 

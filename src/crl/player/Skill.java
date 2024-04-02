@@ -4,9 +4,6 @@ import java.awt.Image;
 
 import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
-import crl.ui.*;
-import crl.ui.consoleUI.CharAppearance;
-import crl.*;
 import crl.action.*;
 
 public class Skill implements MenuItem, GFXMenuItem{

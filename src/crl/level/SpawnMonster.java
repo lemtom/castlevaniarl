@@ -2,7 +2,6 @@ package crl.level;
 
 import sz.util.*;
 import crl.action.*;
-import crl.*;
 
 public class SpawnMonster extends Action{
 	private static SpawnMonster singleton = new SpawnMonster();

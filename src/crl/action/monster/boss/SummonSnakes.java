@@ -12,6 +12,7 @@ public class SummonSnakes extends Action{
 		return "SUMMON_SNAKES";
 	}
 	
+	@Override
 	public int getCost(){
 		return 30;
 	}

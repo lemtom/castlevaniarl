@@ -1,7 +1,6 @@
 package crl.ui.consoleUI.effects;
 
 import sz.csi.ConsoleSystemInterface;
-import sz.util.Position;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import crl.ui.effects.Effect;
 

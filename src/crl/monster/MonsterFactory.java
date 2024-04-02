@@ -9,21 +9,21 @@ import crl.ui.AppearanceFactory;
 import sz.util.*;
 
 public class MonsterFactory {
-	private final static MonsterFactory singleton = new MonsterFactory();
+	private static final MonsterFactory singleton = new MonsterFactory();
 
-	private Hashtable definitions;
-	private Vector vDefinitions = new Vector(50);
+	private Hashtable<String, MonsterDefinition> definitions;
+	private Vector<MonsterDefinition> vDefinitions = new Vector<MonsterDefinition>(50);
 
 	public static MonsterFactory getFactory(){
 		return singleton;
 	}
 
 	public Monster buildMonster (String id){
-		return new Monster((MonsterDefinition) definitions.get(id));
+		return new Monster(definitions.get(id));
 	}
 
 	public MonsterDefinition getDefinition (String id){
-		return (MonsterDefinition) definitions.get(id);
+		return definitions.get(id);
 	}
 
 	/*public void addDefinition(MonsterDefinition definition){
@@ -31,16 +31,16 @@ public class MonsterFactory {
 	}*/
 
 	public MonsterFactory(){
-		definitions = new Hashtable(40);
+		definitions = new Hashtable<String, MonsterDefinition>(40);
 	}
 	
 	public void init(MonsterDefinition[] defs) {
-		for (int i = 0; i < defs.length; i++){
-			defs[i].setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(defs[i].getID()));
-			definitions.put(defs[i].getID(), defs[i]);
-			vDefinitions.add(defs[i]);
-			
-		}
+        for (MonsterDefinition def : defs) {
+            def.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(def.getID()));
+            definitions.put(def.getID(), def);
+            vDefinitions.add(def);
+
+        }
 	}
 	
 	private int lastSpawnLocation;
@@ -56,15 +56,15 @@ public class MonsterFactory {
 			int rand = Util.rand(0, spawnIDs.length-1);
 			if (Util.chance(spawnIDs[rand].getFrequency())){
 				lastSpawnLocation = spawnIDs[rand].getSpawnLocation();
-				return new Monster((MonsterDefinition)definitions.get(spawnIDs[rand].getMonsterID()));
+				return new Monster(definitions.get(spawnIDs[rand].getMonsterID()));
 			}
 		}
 	}
 
 	public void printAppearances(){
-		Enumeration x = definitions.keys();
+		Enumeration<String> x = definitions.keys();
 		while (x.hasMoreElements()){
-			MonsterDefinition d = (MonsterDefinition) definitions.get(x.nextElement());
+			MonsterDefinition d = definitions.get(x.nextElement());
 			Debug.say("Monstero "+ d.getDescription()+" app "+d.getAppearance());
 		}
 	}

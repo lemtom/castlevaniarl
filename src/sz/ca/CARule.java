@@ -5,13 +5,13 @@ import sz.util.*;
 public class CARule{
 	/** Stores a rule of the form:
 	 *	if {baseCell} has {condType} {cellQuant} {cellParam} around, turn into {destinationCell}
-	 *
+	 * <p>
 	 * Example
 	 *  when 1 has morethan 4 2 around turn into 0
 	 */
 	private int baseCell, condType, cellQuant, cellParam, destinationCell;
 
-	public final static int
+	public static final int
 		HAS = 0,
 		MORE_THAN = 1,
 		LESS_THAN = 2;
@@ -79,7 +79,7 @@ public class CARule{
 				break;
 		}
 		return "When the cell status is " + baseCell + " and " +
-			comparation + "" + cellQuant + " cells of status " +
+			comparation + cellQuant + " cells of status " +
 			cellParam + " around, turn it into " + destinationCell;
 	}
 

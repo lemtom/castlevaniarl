@@ -4,7 +4,6 @@ import sz.util.Position;
 import crl.cuts.Unleasher;
 import crl.game.Game;
 import crl.level.Level;
-import crl.ui.Display;
 
 public class Training2 extends Unleasher {
 	public void unleash(Level level, Game game){

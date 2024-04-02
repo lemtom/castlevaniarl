@@ -8,7 +8,7 @@ public class CharAppearance extends Appearance {
 	private char character;
 	private int color;
 
-	public final static CharAppearance VOID = new CharAppearance("VOID", ' ', ConsoleSystemInterface.BLACK);
+	public static final CharAppearance VOID = new CharAppearance("VOID", ' ', ConsoleSystemInterface.BLACK);
 
 	public static CharAppearance getVoidAppearance(){
 		return VOID;

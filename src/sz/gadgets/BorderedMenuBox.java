@@ -1,6 +1,7 @@
 package sz.gadgets;
 
 import sz.csi.CharKey;
+import sz.csi.textcomponents.MenuItem;
 import sz.util.*;
 
 import java.awt.Color;
@@ -13,7 +14,7 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class BorderedMenuBox {
 	
-	private Vector items;
+	private Vector<MenuItem> items;
 	private String title = "";
 
 	//State Attributes
@@ -21,8 +22,8 @@ public class BorderedMenuBox {
 	private int pages;
 	
 	//Components
-	private int xpos, ypos, width, itemsPerPage;;
-	private SwingSystemInterface si;
+	private int xpos, ypos, width, itemsPerPage;
+    private SwingSystemInterface si;
 	private BufferedImage border1, border2, border3, border4, box;
 	/*UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT*/
 	public BorderedMenuBox(BufferedImage border1, BufferedImage border2,BufferedImage border3,BufferedImage border4, SwingSystemInterface g, Color backgroundColor, Color borderIn, Color borderOut, int inset, BufferedImage box){
@@ -51,7 +52,7 @@ public class BorderedMenuBox {
 	public void setItemsPerPage(int ipp){
 		itemsPerPage = ipp;
 	}
-	public void setMenuItems(Vector items){
+	public void setMenuItems(Vector<MenuItem> items){
 		this.items = items;
 	}
 
@@ -90,7 +91,7 @@ public class BorderedMenuBox {
 		si.getGraphics2D().drawImage(borders[3], realW -inset, realH - inset,null);*/
 		si.drawImage(realPosX,realPosY, border2);
 		si.drawImage(realPosX+realW-inset,realPosY, border1);
-		si.drawImage(realPosX+0, realPosY+realH - inset,border4);
+		si.drawImage(realPosX, realPosY+realH - inset,border4);
 		si.drawImage(realPosX+realW -inset, realPosY+realH - inset,border3);
 		
 		//pages = (int)(Math.floor((items.size()-1) / inHeight) +1);
@@ -98,7 +99,7 @@ public class BorderedMenuBox {
 		/*System.out.println("items.size() "+items.size());
 		System.out.println("inHeight "+inHeight);*/
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
-		Vector shownItems = Util.page(items, itemsPerPage, currentPage);
+		Vector<?> shownItems = Util.page(items, itemsPerPage, currentPage);
 		
 		int i = 0;
 		for (; i < shownItems.size(); i++){
@@ -119,7 +120,7 @@ public class BorderedMenuBox {
 				detail = detail.substring(0,width-4);
 			}
 			si.printAtPixel((xpos+6)*10, (ypos+1)*24 + i*gap, description, Color.WHITE);
-			if (detail != null && !detail.equals("")){
+			if (detail != null && detail.length() != 0){
 				si.printAtPixel((xpos+6)*10, (ypos+1)*24 + i*gap+18, detail, Color.WHITE);
 			}
 		}
@@ -142,7 +143,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector shownItems = Util.page(items, pageElements, currentPage);
+			Vector<?> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&
@@ -177,7 +178,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector shownItems = Util.page(items, pageElements, currentPage);
+			Vector<?> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&
@@ -216,10 +217,10 @@ public class BorderedMenuBox {
 	}
 	
 	protected boolean isOneOf(int value, int[] values){
-		for (int i = 0; i < values.length; i++){
-			if (value == values[i])
-				return true;
-		}
+        for (int j : values) {
+            if (value == j)
+                return true;
+        }
 		return false;
 	}
 }

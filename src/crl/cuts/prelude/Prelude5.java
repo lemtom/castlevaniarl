@@ -1,7 +1,5 @@
 package crl.cuts.prelude;
 
-import crl.action.ActionFactory;
-import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
 import crl.game.Game;
 import crl.level.Level;

@@ -10,7 +10,8 @@ public class RefreshActor extends Actor{
 	/*{
 	 singleton.setSelector(new DumbSelector());*/
 
-	public final static int REFRESHVIEWPORT = 1, NONE = 0;
+	public static final int REFRESHVIEWPORT = 1;
+	public static final int NONE = 0;
 
 	private int opCode;
 
@@ -31,6 +32,7 @@ public class RefreshActor extends Actor{
 		return singleton;
 	}
 
+	@Override
 	public void act(){
 		switch (opCode){
 		case REFRESHVIEWPORT:

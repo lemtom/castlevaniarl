@@ -44,7 +44,7 @@ public class GameVersion {
 		return sdf.format(date);
 	}
 
-	public static GameVersion getLatestVersion() throws HttpException, IOException
+	public static GameVersion getLatestVersion() throws IOException
 	{
 		String url = "http://slashie.net/cvrl/latestVersion.txt";
 		HttpClient client = new HttpClient();

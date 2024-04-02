@@ -13,10 +13,12 @@ public class WolfMorph2 extends MorphAction{
 		return "WolfMorph2";
 	}
 
+	@Override
 	public String getSFX(){
 		return "wav/swaashll.wav";
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);

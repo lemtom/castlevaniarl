@@ -6,6 +6,8 @@ import crl.player.Player;
 
 public class Reload extends Action{
 	private transient Item weapon;
+
+	@Override
 	public int getCost() {
 		if (weapon != null)
 			return 10 * weapon.getDefinition().getReloadCostGold();
@@ -35,6 +37,7 @@ public class Reload extends Action{
 			aPlayer.getLevel().addMessage("You can't reload yourself");
  	}
 	
+	@Override
 	public boolean canPerform(Actor a){
 		Player aPlayer = getPlayer(a);
 		Item weapon = aPlayer.getWeapon();

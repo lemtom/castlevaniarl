@@ -12,15 +12,18 @@ public class SoulIce extends HeartAction{
 		return "Soul Ice";
 	}
 	
-	public String getSFX(){
-		return null;
-	}
+	@Override
+	public String getSFX() {
+        return super.getSFX();
+    }
 	
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;

@@ -3,57 +3,51 @@ package crl.levelgen.patterns;
 import crl.cuts.Unleasher;
 import crl.cuts.ingame.clara1.Clara1;
 
-public class ClaraMeeting extends StaticPattern
-{
-	public String getMapKey(){
+public class ClaraMeeting extends StaticPattern {
+	public String getMapKey() {
 		return "RUINS";
 	}
 
-	public ClaraMeeting () {
-		cellMap = new String [][]{
-		{
-			"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-			"w                                 w",
-			"w        ww.www                   w",
-			"w        ....>.                   w",
-			"w        w....w   ..........      w",
-			"w        ......   . ........      w",
-			"w                 .......  ..     w",
-			"w                 .  ..>...w      w",
-			"w                 ......   w      w",
-			"w                 www....www      w",
-			"w                                 w",
-			"w                                 w",
-			"w w.....ww    ww.....             w",
-			"w ...  ...    w ... w             w",
-			"w w...  ..    ...   w             w",
-			"w ..>.. ....  .... ..             w",
-			"w ..ww...w    ww...ww             w",
-			"w                                 w",
-			"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-		},{
-			"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-			"w...1.............................w",
-			"S........www.ww...................w",
-			"w..2.....w...<w...................w",
-			"w.............w...wwww..wwww......w",
-			"w........www.ww...w........w......w",
-			"w.................w........w......w",
-			"w......................<..........w",
-			"w.................w........w......w",
-			"w.................wwwww..www......w",
-			"w.................................w",
-			"w.................................w",
-			"w.www.wwww....w...www.............w",
-			"w.w......w....w.....w.............w",
-			"w...................w.............w",
-			"w.w..<........w.....w.............w",
-			"w.ww.wwwww....wwwwwww.............E",
-			"w.................................w",
-			"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-
-		}
-	};
+	public ClaraMeeting() {
+		cellMap = new String[][] { { //
+				"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", //
+				"w                                 w", //
+				"w        ww.www                   w", //
+				"w        ....>.                   w", //
+				"w        w....w   ..........      w", //
+				"w        ......   . ........      w", //
+				"w                 .......  ..     w", //
+				"w                 .  ..>...w      w", //
+				"w                 ......   w      w", //
+				"w                 www....www      w", //
+				"w                                 w", //
+				"w                                 w", //
+				"w w.....ww    ww.....             w", //
+				"w ...  ...    w ... w             w", //
+				"w w...  ..    ...   w             w", //
+				"w ..>.. ....  .... ..             w", //
+				"w ..ww...w    ww...ww             w", //
+				"w                                 w", //
+				"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", //
+				}, { "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", //
+						"w...1.............................w", //
+						"S........www.ww...................w", //
+						"w..2.....w...<w...................w", //
+						"w.............w...wwww..wwww......w", //
+						"w........www.ww...w........w......w", //
+						"w.................w........w......w", //
+						"w......................<..........w", //
+						"w.................w........w......w", //
+						"w.................wwwww..www......w", //
+						"w.................................w", //
+						"w.................................w", //
+						"w.www.wwww....w...www.............w", //
+						"w.w......w....w.....w.............w", //
+						"w...................w.............w", //
+						"w.w..<........w.....w.............w", //
+						"w.ww.wwwww....wwwwwww.............E", //
+						"w.................................w", //
+						"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" } };
 
 		charMap.put(".", "RUINS_FLOOR");
 		charMap.put("S", "RUINS_FLOOR EXIT _BACK");
@@ -63,14 +57,10 @@ public class ClaraMeeting extends StaticPattern
 		charMap.put("w", "RUINS_WALL");
 		charMap.put("2", "RUINS_FLOOR NPC VINDELITH");
 		charMap.put("1", "RUINS_FLOOR NPC UNIDED_CLARA");
-		
-		unleashers = new Unleasher[] {
-			new Clara1(),
-		};
+
+		unleashers = new Unleasher[] { new Clara1(), };
 	}
 
-	
-	
 	public String getDescription() {
 		return "Hall";
 	}
@@ -82,5 +72,5 @@ public class ClaraMeeting extends StaticPattern
 	public String getMusicKeyNoon() {
 		return null;
 	}
-	
+
 }

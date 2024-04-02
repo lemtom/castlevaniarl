@@ -1,7 +1,7 @@
 package crl.player;
 
 public class Consts {
-		public final static String
+		public static final String
 		C_BLOOD_THIRST = "BLOODTHIRST",
 		C_WOLFMORPH = "WOLF_MORPH",
 		C_WOLFMORPH2 = "WOLF_MORPH2",

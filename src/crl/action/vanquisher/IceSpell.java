@@ -2,16 +2,9 @@ package crl.action.vanquisher;
 
 import java.util.Vector;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Cell;
-import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class IceSpell extends ProjectileSkill{
 	public int getDamage() {
@@ -46,6 +39,7 @@ public class IceSpell extends ProjectileSkill{
 		return "chilly wind";
 	}
 
+	@Override
 	public boolean piercesThru() {
 		return true;
 	}
@@ -58,11 +52,12 @@ public class IceSpell extends ProjectileSkill{
 		return "IceSpell";
 	}
 	
+	@Override
 	public void execute(){
 		super.execute();
-		Vector hitMonsters = getHitMonsters();
+		Vector<Monster> hitMonsters = getHitMonsters();
 		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = (Monster) hitMonsters.elementAt(i);
+			Monster targetMonster = hitMonsters.elementAt(i);
 			int friz = 10 +getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
 			if (friz > 0){
 				if (targetMonster.wasSeen())
@@ -75,6 +70,7 @@ public class IceSpell extends ProjectileSkill{
 		}
 	}
 
+	@Override
 	public int getCost(){
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);

@@ -1,8 +1,7 @@
 package crl.levelgen.patterns;
 
-public class ReservoirPrize extends StaticPattern
-{
-	public String getMapKey(){
+public class ReservoirPrize extends StaticPattern {
+	public String getMapKey() {
 		return null;
 	}
 
@@ -14,23 +13,19 @@ public class ReservoirPrize extends StaticPattern
 		return null;
 	}
 
-	public ReservoirPrize () {
-		cellMap = new String [][]{
-		{
-			"###########",
-			"###.....###",
-			"##.......##",
-			"#....i....#",
-			"#.........#",
-			"#....*....S",
-			"#.........#",
-			"#....i....#",
-			"##.......##",
-			"###.....###",
-			"###########",
-           
-		}
-	};
+	public ReservoirPrize() {
+		cellMap = new String[][] { { //
+				"###########", //
+				"###.....###", //
+				"##.......##", //
+				"#....i....#", //
+				"#.........#", //
+				"#....*....S", //
+				"#.........#", //
+				"#....i....#", //
+				"##.......##", //
+				"###.....###", //
+				"###########" } };
 
 		charMap.put("#", "CAVE_WALL");
 		charMap.put(".", "CAVE_WATER");
@@ -39,7 +34,6 @@ public class ReservoirPrize extends StaticPattern
 		charMap.put("S", "CAVE_WATER EXIT _BACK");
 	}
 
-	
 	public String getDescription() {
 		return "Humid Room";
 	}

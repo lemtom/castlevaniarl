@@ -1,6 +1,6 @@
 package crl.levelgen.featureCarve;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import crl.action.Action;
 
@@ -8,7 +8,8 @@ import sz.util.Position;
 import sz.util.Util;
 
 public class RoomFeature extends Feature {
-	protected int width, height;
+	protected int width;
+	protected int height;
 	private String floor;
 	protected Position start;
 	public RoomFeature(int width, int height, String floor) {
@@ -18,7 +19,7 @@ public class RoomFeature extends Feature {
 		this.floor = floor;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, ArrayList hotspots){
+	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, List<Position> hotspots){
 		int rndPin = 0;
 		switch (direction){
 		case Action.UP:

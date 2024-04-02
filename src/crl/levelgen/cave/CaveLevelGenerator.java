@@ -21,7 +21,7 @@ public class CaveLevelGenerator extends LevelGenerator{
 		 * Init (1) 30%
 		 * If 0 and more than 3 1 around, 1
 		 * If 1 and less than 2 1 around, 0
-		 * 
+		 * <p>
 		 * Run for 5 turns
 		 */
 		

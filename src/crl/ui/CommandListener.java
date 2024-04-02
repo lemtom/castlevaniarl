@@ -1,7 +1,7 @@
 package crl.ui;
 
 public interface CommandListener {
- 	public final static int
+ 	int
 		QUIT = 0,
 		SAVE = 1,
 		NONE = 2,
@@ -20,5 +20,5 @@ public interface CommandListener {
 		SWITCHMUSIC = 15,
 		EXAMINELEVELMAP = 16,
 		CHARDUMP = 17;
-	public void commandSelected(int pCommand);
+	void commandSelected(int pCommand);
 }

@@ -138,9 +138,9 @@ public class SwingSystemInterface implements Runnable{
 			GraphicsDevice gs = ge.getDefaultScreenDevice();
 			if (gs.isFullScreenSupported()){
 				DisplayMode[] modes = gs.getDisplayModes();
-				for (int i = 0; i < modes.length; i++) {
-					System.out.println(modes[i].getWidth() + "x" + modes[i].getHeight() );
-				}
+                for (DisplayMode mode : modes) {
+                    System.out.println(mode.getWidth() + "x" + mode.getHeight());
+                }
 				int screenWidth = 1024;
 				int screenHeight = 768;
 				DisplayMode displayMode = gs.getDisplayMode();
@@ -328,7 +328,7 @@ public class SwingSystemInterface implements Runnable{
 	
 	//public String input(int consXPrompt,int consYPrompt,String prompt,Color promptColor, int maxLength, Color textColor){
 	public String input(int xpos,int ypos, Color textColor, int maxLength){
-		String ret = "";
+		StringBuilder ret = new StringBuilder();
 		CharKey read = new CharKey(CharKey.NONE);
 		saveBuffer();
 		while (true){
@@ -340,14 +340,14 @@ public class SwingSystemInterface implements Runnable{
 			if (read.code == CharKey.ENTER)
 				break;
 			if (read.code == CharKey.BACKSPACE){
-				if (ret.equals("")){
+				if (ret.length() == 0){
 					read.code = CharKey.NONE;
 					continue;
 				}
 				if (ret.length() > 1)
-					ret = ret.substring(0, ret.length() -1);
+					ret = new StringBuilder(ret.substring(0, ret.length() - 1));
 				else
-					ret = "";
+					ret = new StringBuilder();
                 caretPosition.x--;
 				//print(caretPosition.x, caretPosition.y, " ");
             }
@@ -363,12 +363,12 @@ public class SwingSystemInterface implements Runnable{
 					
 				String nuevo = read.toString();
 				//print(caretPosition.x, caretPosition.y, nuevo, Color.WHITE);
-				ret +=nuevo;
+				ret.append(nuevo);
 				caretPosition.x++;
 			}
 			read.code = CharKey.NONE;
 		}
-		return ret;
+		return ret.toString();
 	}
 	
 	public void saveBuffer(){
@@ -484,7 +484,7 @@ class SwingInterfacePanel extends JPanel{
 	}
 	
 	public void print(int x, int y, String text, Color c, boolean centered) {
-		if (centered == true) {
+		if (centered) {
 			int width = fontMetrics.stringWidth(text);
 			x = x - (width / 2);
 		}		
@@ -519,6 +519,7 @@ class SwingInterfacePanel extends JPanel{
 		
 	}
 	
+	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		if (bufferImage != null){
@@ -526,6 +527,7 @@ class SwingInterfacePanel extends JPanel{
 		}
 	}
 
+	@Override
 	public Component add(Component comp) {
 		return super.add(comp);
 	}
