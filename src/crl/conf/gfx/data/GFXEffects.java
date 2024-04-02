@@ -3,7 +3,7 @@ package crl.conf.gfx.data;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.util.ImageUtils;
 import sz.util.Position;
@@ -21,7 +21,7 @@ import crl.ui.graphicsUI.effects.GFXSequentialEffect;
 import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
 public class GFXEffects {
-	private Vector<Position> SFX_BIBLE_STEPS = new Vector<>(10);
+	private ArrayList<Position> SFX_BIBLE_STEPS = new ArrayList<>(10);
 	private BufferedImage IMG_EFFECTS;
 	
 	private BufferedImage[][] CURVED_FRAMES;

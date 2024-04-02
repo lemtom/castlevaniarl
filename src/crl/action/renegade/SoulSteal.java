@@ -1,6 +1,6 @@
 package crl.action.renegade;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.util.Util;
 
@@ -73,9 +73,9 @@ public class SoulSteal extends ProjectileSkill {
 	@Override
 	public void execute() {
 		super.execute();
-		Vector<Monster> monsters = getHitMonsters();
+		ArrayList<Monster> monsters = getHitMonsters();
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster m = monsters.elementAt(i);
+			Monster m = monsters.get(i);
 			// TODO: Make this relative to the monster's soul or something
 			if (Util.chance(70)) {
 				getPlayer().getLevel().addMessage("You steal the " + m.getDescription() + " soul!");

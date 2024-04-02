@@ -32,12 +32,12 @@ public class ItemBreakHoly extends HeartAction{
 		VMonster monsters = aLevel.getMonsters();
 		for (int i = 0; i < monsters.size(); i++){
 			
-			if (monsters.elementAt(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.elementAt(i).getPosition(), performer.getPosition()) < 4){
+			if (monsters.get(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.get(i).getPosition(), performer.getPosition()) < 4){
 				StringBuffer buff = new StringBuffer();
-				if (monsters.elementAt(i).wasSeen()) {
-					buff.append("The ").append(monsters.elementAt(i).getDescription()).append(" is splashed with holy water!");
+				if (monsters.get(i).wasSeen()) {
+					buff.append("The ").append(monsters.get(i).getDescription()).append(" is splashed with holy water!");
 				}
-				monsters.elementAt(i).damage(buff, damage);
+				monsters.get(i).damage(buff, damage);
 				aLevel.addMessage(buff.toString());
 			}
 		}
@@ -64,7 +64,7 @@ public class ItemBreakHoly extends HeartAction{
 				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 				if (targetMonster != null){
 					StringBuffer buff = new StringBuffer();
-					buff.append("The ").append(monsters.elementAt(i).getDescription()).append(" is splashed with holy rain!");
+					buff.append("The ").append(monsters.get(i).getDescription()).append(" is splashed with holy rain!");
 					targetMonster.damage(buff, damage);
 					aLevel.addMessage (buff.toString());
 		        	if (targetMonster.isDead()){

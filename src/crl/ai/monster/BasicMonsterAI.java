@@ -236,7 +236,7 @@ public class BasicMonsterAI extends MonsterAI {
 	}
 
 	/**
-	 * Returns vectors adjacent to a general direction
+	 * Returns ArrayLists adjacent to a general direction
 	 * <p>
 	 * Example: If general direction is Left, will return Up-Left and Down-Left
 	 * <p>

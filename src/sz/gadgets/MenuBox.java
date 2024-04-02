@@ -14,7 +14,7 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class MenuBox {
 
-	private Vector<MenuItem> items;
+	private ArrayList<MenuItem> items;
 	private String title = "";
 
 	// State Attributes
@@ -46,7 +46,7 @@ public class MenuBox {
 		itemsPerPage = ipp;
 	}
 
-	public void setMenuItems(Vector<MenuItem> items) {
+	public void setMenuItems(ArrayList<MenuItem> items) {
 		this.items = items;
 	}
 
@@ -79,7 +79,7 @@ public class MenuBox {
 		 * System.out.println("inHeight "+inHeight);
 		 */
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
-		Vector<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
+		ArrayList<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
 
 		if (ordinal) {
 			xpos -= 2;
@@ -88,7 +88,7 @@ public class MenuBox {
 		int i = 0;
 		for (; i < shownItems.size(); i++) {
 
-			GFXMenuItem item = (GFXMenuItem) shownItems.elementAt(i);
+			GFXMenuItem item = (GFXMenuItem) shownItems.get(i);
 			if (!ordinal) {
 				si.printAtPixel(xpos * 10, (ypos + 1) * 24 + i * gap, ((char) (97 + i)) + ".", GFXDisplay.COLOR_BOLD);
 			}
@@ -131,7 +131,7 @@ public class MenuBox {
 		while (true) {
 
 			draw();
-			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE && key.code != CharKey.UARROW && key.code != CharKey.DARROW
 					&& key.code != CharKey.N8 && key.code != CharKey.N2
@@ -148,9 +148,9 @@ public class MenuBox {
 					currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
-				return shownItems.elementAt(key.code - CharKey.A);
+				return shownItems.get(key.code - CharKey.A);
 			else if (key.code >= CharKey.a && key.code <= CharKey.a + shownItems.size() - 1)
-				return shownItems.elementAt(key.code - CharKey.a);
+				return shownItems.get(key.code - CharKey.a);
 			si.restore();
 
 		}
@@ -159,7 +159,7 @@ public class MenuBox {
 	public Object getUnpagedSelection() {
 		int pageElements = itemsPerPage;
 		draw();
-		Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+		ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 		CharKey key = new CharKey(CharKey.NONE);
 		while (key.code != CharKey.SPACE && (key.code < CharKey.A || key.code > CharKey.A + pageElements - 1)
 				&& (key.code < CharKey.a || key.code > CharKey.a + pageElements - 1))
@@ -167,9 +167,9 @@ public class MenuBox {
 		if (key.code == CharKey.SPACE)
 			return null;
 		if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
-			return shownItems.elementAt(key.code - CharKey.A);
+			return shownItems.get(key.code - CharKey.A);
 		else if (key.code >= CharKey.a && key.code <= CharKey.a + shownItems.size() - 1)
-			return shownItems.elementAt(key.code - CharKey.a);
+			return shownItems.get(key.code - CharKey.a);
 		return null;
 
 	}

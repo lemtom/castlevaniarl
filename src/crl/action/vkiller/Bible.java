@@ -1,6 +1,6 @@
 package crl.action.vkiller;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.util.Position;
 import crl.action.HeartAction;
@@ -35,7 +35,7 @@ public class Bible extends HeartAction {
 
 		int damage = getDamage();
 		for (int i = 0; i < steps.size(); i++) {
-			Position destinationPoint = Position.add(performer.getPosition(), steps.elementAt(i));
+			Position destinationPoint = Position.add(performer.getPosition(), steps.get(i));
 			StringBuffer message = new StringBuffer();
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 			if (destinationFeature != null && destinationFeature.isDestroyable()) {
@@ -77,7 +77,7 @@ public class Bible extends HeartAction {
 		return "Where do you want to throw the Cross?";
 	}
 
-	private static final Vector<Position> steps = new Vector<>(10);
+	private static final ArrayList<Position> steps = new ArrayList<>(10);
 
 	static {
 		steps.add(new Position(1, 0));

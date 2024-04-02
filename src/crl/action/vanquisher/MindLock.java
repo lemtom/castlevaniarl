@@ -1,6 +1,6 @@
 package crl.action.vanquisher;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import crl.action.ProjectileSkill;
 import crl.monster.Monster;
@@ -61,9 +61,9 @@ public class MindLock extends ProjectileSkill{
 	@Override
 	public void execute(){
 		super.execute();
-		Vector<Monster> hitMonsters = getHitMonsters();
+		ArrayList<Monster> hitMonsters = getHitMonsters();
 		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = hitMonsters.elementAt(i);
+			Monster targetMonster = hitMonsters.get(i);
 			if (targetMonster.wasSeen())
 				targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ "'s mind is locked!");
 			targetMonster.setCounter(Consts.C_MONSTER_SLEEP, getPlayer().getSoulPower()*2+5);

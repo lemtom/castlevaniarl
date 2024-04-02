@@ -1,6 +1,6 @@
 package crl.levelgen.cave;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.ca.CARandomInitializer;
 import sz.ca.CARule;
@@ -120,7 +120,7 @@ public class BeginningLevelGenerator extends LevelGenerator {
 		return ret;
 	}
 
-	private Hashtable<String, String> charMap = new Hashtable<>();
+	private HashMap<String, String> charMap = new HashMap<>();
 
 	{
 		charMap.put("&", "FOREST_TREE");

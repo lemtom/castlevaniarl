@@ -1,6 +1,6 @@
 package crl.game;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.midi.STMidiPlayer;
 //import sz.midi.STMidiPlayer;
@@ -9,7 +9,7 @@ import sz.mp3.JLayerMP3Player;
 public class STMusicManagerNew {
 	private Thread currentMidiThread;
 	private Thread currentMP3Thread;
-	private Hashtable<String, String> musics = new Hashtable<>();
+	private HashMap<String, String> musics = new HashMap<>();
 	private boolean enabled;
 	private String playing = "__nuthin";
 	

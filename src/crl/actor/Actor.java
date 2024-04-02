@@ -1,6 +1,7 @@
 package crl.actor;
 
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import sz.util.Debug;
@@ -161,7 +162,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return getCounter(counterID) > 0;
 	}
 
-	private Hashtable<String, Boolean> hashFlags = new Hashtable<>();
+	private HashMap<String, Boolean> hashFlags = new HashMap<>();
 
 	public void setFlag(String flagID, boolean value) {
 		hashFlags.put(flagID, value);

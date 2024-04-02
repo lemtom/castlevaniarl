@@ -1,6 +1,6 @@
 package crl.cuts.mummies;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.util.Position;
 
@@ -55,7 +55,7 @@ public class Mummy1 extends Unleasher {
 		"---wwwwwwwwwwwwwwwwwwwwwwwwwwwwww---"
 	};
 	
-	private Hashtable<String, String> charMap = new Hashtable<>();
+	private HashMap<String, String> charMap = new HashMap<>();
 	{
 		charMap.put("o", "RUINS_COLUMN");
 		charMap.put(".", "RUINS_FLOOR");

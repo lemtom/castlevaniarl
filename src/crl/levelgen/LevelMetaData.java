@@ -1,16 +1,16 @@
 package crl.levelgen;
 
 import java.io.Serializable;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 public class LevelMetaData implements Serializable {
 	private String levelID;
 	private int levelNumber = -1;
-	private Vector<String> exits = new Vector<>();
-	private Hashtable<String, String> hexits = new Hashtable<>();
+	private ArrayList<String> exits = new ArrayList<>();
+	private HashMap<String, String> hexits = new HashMap<>();
 
-	public Vector<String> getExits() {
+	public ArrayList<String> getExits() {
 		return exits;
 	}
 
@@ -36,7 +36,7 @@ public class LevelMetaData implements Serializable {
 	}
 
 	public String getExit(int number) {
-		return exits.elementAt(number);
+		return exits.get(number);
 	}
 
 	public String getExit(String exitID) {

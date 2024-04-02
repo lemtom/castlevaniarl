@@ -1,6 +1,6 @@
 package crl.conf.console.data;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import crl.game.Game;
 import crl.ui.consoleUI.cuts.CharChat;
@@ -23,7 +23,7 @@ public class CharCuts {
 		thus = new CharCuts();
 	}
 
-	private Hashtable<String, CharChat> hashCuts = new Hashtable<>();
+	private HashMap<String, CharChat> hashCuts = new HashMap<>();
 	{
 		CharChat temp = null;
 		temp = new CharChat();

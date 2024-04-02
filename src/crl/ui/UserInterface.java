@@ -30,9 +30,9 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	};
 
 	// Status
-	protected Vector<ListItem> monstersOnSight = new Vector<>();
-	protected Vector<ListItem> featuresOnSight = new Vector<>();
-	protected Vector<ListItem> itemsOnSight = new Vector<>();
+	protected ArrayList<ListItem> monstersOnSight = new ArrayList<>();
+	protected ArrayList<ListItem> featuresOnSight = new ArrayList<>();
+	protected ArrayList<ListItem> itemsOnSight = new ArrayList<>();
 	protected Action actionSelectedByCommand;
 
 	// Components
@@ -85,7 +85,7 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 
 	public abstract void addMessage(Message message);
 
-	public abstract Vector<String> getMessageBuffer();
+	public abstract ArrayList<String> getMessageBuffer();
 
 	public void setPlayer(Player pPlayer) {
 		player = pPlayer;
@@ -121,7 +121,7 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	protected void informPlayerCommand(int command) {
 		Debug.enterMethod(this, "informPlayerCommand", command + "");
 		for (int i = 0; i < commandListeners.size(); i++) {
-			(commandListeners.elementAt(i)).commandSelected(command);
+			(commandListeners.get(i)).commandSelected(command);
 		}
 		Debug.exitMethod();
 	}
@@ -134,8 +134,8 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 		commandListeners.remove(pCl);
 	}
 
-	protected Hashtable<String, UserCommand> gameCommands = new Hashtable<>();
-	private Vector<CommandListener> commandListeners = new Vector<>(5); // Class CommandListener
+	protected HashMap<String, UserCommand> gameCommands = new HashMap<>();
+	private ArrayList<CommandListener> commandListeners = new ArrayList<>(5); // Class CommandListener
 
 	/**
 	 * Prompts for Yes or NO

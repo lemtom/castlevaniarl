@@ -3,10 +3,10 @@ package sz.util;
 import java.util.*;
 
 public class SZQueue implements java.io.Serializable{
-	private Vector<Object> list;
+	private ArrayList<Object> list;
 
 	public SZQueue(){
-		list = new Vector<>(40);
+		list = new ArrayList<>(40);
  	}
 
  	public boolean contains (Object what){
@@ -14,28 +14,28 @@ public class SZQueue implements java.io.Serializable{
 	}
 
  	public SZQueue (int ini){
- 		list = new Vector<>(ini);
+ 		list = new ArrayList<>(ini);
 	}
 
-	public Vector<Object> getVector(){
+	public List<Object> getArrayList(){
 		return list;
 	}
 
  	public Object unqueue(){
  		if (!list.isEmpty()){
-	 		Object x = list.elementAt(0);
-	 		list.removeElementAt(0);
+	 		Object x = list.get(0);
+	 		list.remove(0);
 	 		return x;
 		} else
 			return null;
 	}
 
 	public void enqueue(PriorityEnqueable what){
-		list.insertElementAt(what, list.size());
+		list.add(list.size(), what);
     }
 
     public void forceToFront(Object what){
-        list.insertElementAt(what, 0);
+        list.add(0, what);
     }
 
     public void forceToFront(Object what, Object objClass){
@@ -43,15 +43,15 @@ public class SZQueue implements java.io.Serializable{
     	Debug.say("forcing "+what.getClass()+" to front");
     	Debug.say("forcing "+objClass.getClass()+" to front");
     	Debug.say(what.getClass().equals(objClass.getClass())+"? ");
-    	Debug.say(list.elementAt(0).getClass()+"  0? ");
-    	Debug.say(list.elementAt(1).getClass()+" 1? ");
-    	Debug.say(list.elementAt(2).getClass()+" 2? ");*/
+    	Debug.say(list.get(0).getClass()+"  0? ");
+    	Debug.say(list.get(1).getClass()+" 1? ");
+    	Debug.say(list.get(2).getClass()+" 2? ");*/
 		//RUN TO THE LAST OCURRENCE OF OBJCLASS
 		for (int i = list.size() -1 ; i >= 0; i--)
-			//if (! list.elementAt(i).getClass().toString().equals(objClass.getClass().toString())){
-			if (list.elementAt(i).getClass().equals(objClass.getClass())){
+			//if (! list.get(i).getClass().toString().equals(objClass.getClass().toString())){
+			if (list.get(i).getClass().equals(objClass.getClass())){
 				if (i<list.size()-1){
-					list.insertElementAt(what,i+1);
+					list.add(i+1, what);
 					//Debug.say("inserted at " +(i+1));
 				}
 				else
@@ -73,6 +73,6 @@ public class SZQueue implements java.io.Serializable{
 	}
 	
 	public void removeAll(){
-		list.removeAllElements();
+		list.clear();
 	}
 }

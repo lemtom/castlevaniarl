@@ -9,7 +9,7 @@ public class VMonster implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -8389021604207397015L;
-	private Vector<Monster> monsters;
+	private ArrayList<Monster> monsters;
 
 	public void addMonster(Monster what){
 		monsters.add(what);
@@ -17,8 +17,8 @@ public class VMonster implements java.io.Serializable{
 		//mLocs.put(what.getPosition().toString(), what);
 	}
 
-	public Monster elementAt(int i){
-		return monsters.elementAt(i);
+	public Monster get(int i){
+		return monsters.get(i);
 	}
 	
 	public boolean contains(Monster who){
@@ -29,22 +29,22 @@ public class VMonster implements java.io.Serializable{
 		monsters.removeAll(c);
 	}
 
-	public Enumeration<Monster> elements(){
-		return monsters.elements();
-	}
+//	public Enumeration<Monster> elements(){
+//		return monsters.elements();
+//	}
 
 	public Monster getMonsterAt(Position p){
 		for (int i = 0; i < monsters.size(); i++)
-			if ((monsters.elementAt(i)).getPosition().equals(p))
-				return monsters.elementAt(i);
+			if ((monsters.get(i)).getPosition().equals(p))
+				return monsters.get(i);
 		return null;
 	}
 
 	public VMonster(int size){
-		monsters = new Vector<>(size);
+		monsters = new ArrayList<>(size);
 	}
 
-	public Vector<Monster> getVector(){
+	public List<Monster> getArrayList(){
 		return monsters;
 	}
 
@@ -57,7 +57,7 @@ public class VMonster implements java.io.Serializable{
 	}
 	
 	public void removeAll(){
-		monsters.removeAllElements();
+		monsters.clear();
 	}
 
 }

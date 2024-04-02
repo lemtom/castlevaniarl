@@ -20,7 +20,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -42,7 +42,7 @@ public class SwingSystemInterface implements Runnable{
 	private SwingInterfacePanel sip;
 	private StrokeNClickInformer aStrokeInformer;
 	private Position caretPosition = new Position(0,0);
-	private Hashtable<String, Image> images = new Hashtable<>();
+	private HashMap<String, Image> images = new HashMap<>();
 	
 	//private JTextArea invTextArea;
 	private JFrame frameMain;

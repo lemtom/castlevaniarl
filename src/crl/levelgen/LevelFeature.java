@@ -5,10 +5,10 @@ import sz.util.*;
 import java.util.*;
 
 public class LevelFeature {
-	// private Vector subFeatures; //Class AssignedFeature
+	// private ArrayList subFeatures; //Class AssignedFeature
 	private Dimension size;
 
-	private Vector<String[][]> layouts = new Vector<>(); // Class String[]
+	private ArrayList<String[][]> layouts = new ArrayList<>(); // Class String[]
 
 	/*
 	 * public void draw(Position where, Level canvas){ //Draw all its subfeatures in
@@ -21,7 +21,7 @@ public class LevelFeature {
 	// pick a layout and draw it into the level
 	/*
 	 * if (layouts.size() > 0){ int useLayout = Util.rand(0, layouts.size());
-	 * int[][] map = (int[][])layouts.elementAt(useLayout); Cell[][] cmap =
+	 * int[][] map = (int[][])layouts.get(useLayout); Cell[][] cmap =
 	 * canvas.getCells(); int xrun = where.x; int yrun = where.y; for (int x = 0; x
 	 * < map.length; x++) for (int y = 0; y < map[0].length; y++) try {
 	 * cmap[xrun+x][yrun+y] =
@@ -29,9 +29,9 @@ public class LevelFeature {
 	 * catch (CRLException crle){ Debug.byebye("Exception creating the level"+crle);
 	 * } } }
 	 * 
-	 * /* public Vector getSubFeatures() { return subFeatures; }
+	 * /* public ArrayList getSubFeatures() { return subFeatures; }
 	 * 
-	 * public void setSubFeatures(Vector value) { subFeatures = value; }
+	 * public void setSubFeatures(ArrayList value) { subFeatures = value; }
 	 */
 
 	public Dimension getSize() {
@@ -57,6 +57,6 @@ public class LevelFeature {
 
 	public String[][] getALayout() {
 
-		return layouts.elementAt(Util.rand(0, layouts.size() - 1));
+		return layouts.get(Util.rand(0, layouts.size() - 1));
 	}
 }

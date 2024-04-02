@@ -33,7 +33,7 @@ public class MonsterLoader {
 	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException {
 		BufferedReader br = null;
 		try {
-			Vector<MonsterDefinition> vecMonsters = new Vector<>(10);
+			ArrayList<MonsterDefinition> vecMonsters = new ArrayList<>(10);
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
 			br = new BufferedReader(new InputStreamReader(encrypter.decrypt(Files.newInputStream(Paths.get(monsterFile)))));
 			String line = br.readLine();
@@ -79,7 +79,7 @@ public class MonsterLoader {
 			throws CRLException {
 		try {
 			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
-			Hashtable<String, MonsterDefinition> hashMonsters = new Hashtable<>();
+			HashMap<String, MonsterDefinition> hashMonsters = new HashMap<>();
 			for (MonsterDefinition monster : monsters) {
 				hashMonsters.put(monster.getID(), monster);
 			}
@@ -117,15 +117,15 @@ public class MonsterLoader {
 }
 
 class MonsterDocumentHandler implements DocumentHandler {
-	private Hashtable<String, MonsterDefinition> hashMonsters;
+	private HashMap<String, MonsterDefinition> hashMonsters;
 
-	MonsterDocumentHandler(Hashtable<String, MonsterDefinition> hashMonsters) {
+	MonsterDocumentHandler(HashMap<String, MonsterDefinition> hashMonsters) {
 		this.hashMonsters = hashMonsters;
 	}
 
 	private MonsterDefinition currentMD;
 	private ActionSelector currentSelector;
-	private Vector<RangedAttack> currentRangedAttacks;
+	private ArrayList<RangedAttack> currentRangedAttacks;
 
 	public void startDocument() throws org.xml.sax.SAXException {
 	}
@@ -178,7 +178,7 @@ class MonsterDocumentHandler implements DocumentHandler {
                 ((RangedAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
                 break;
             case "rangedAttacks":
-                currentRangedAttacks = new Vector<>(10);
+                currentRangedAttacks = new ArrayList<>(10);
                 break;
             case "rangedAttack":
                 int damage = 0;

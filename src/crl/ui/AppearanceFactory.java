@@ -5,7 +5,7 @@ import java.util.*;
 import sz.util.*;
 
 public class AppearanceFactory {
-	private Hashtable<String, Appearance> definitions;
+	private HashMap<String, Appearance> definitions;
 	private static AppearanceFactory singleton = new AppearanceFactory();
 
 /*	public Cell buildMapCell (String id){
@@ -28,7 +28,7 @@ public class AppearanceFactory {
 	}
 
 	public AppearanceFactory(){
-		definitions = new Hashtable<>(40);
+		definitions = new HashMap<>(40);
 	}
 
 }

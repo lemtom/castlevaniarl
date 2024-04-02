@@ -47,7 +47,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 
-	private Hashtable /* BasicListItem */<String, BasicListItem> sightListItems = new Hashtable<>();
+	private HashMap /* BasicListItem */<String, BasicListItem> sightListItems = new HashMap<>();
 	// Relations
 
 	private transient ConsoleSystemInterface si;
@@ -83,10 +83,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				Vector<MenuItem> items = level.getItemsAt(browser);
+				ArrayList<MenuItem> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
-					item = (Item) items.elementAt(0);
+					item = (Item) items.get(0);
 				}
 				Actor actor = level.getActorAt(browser);
 				if (choosen != null)
@@ -144,7 +144,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		Debug.enterMethod(this, "launchMerchant", who);
 		si.saveBuffer();
 
-		Vector<MenuItem> merchandise = who.getMerchandiseFor(player);
+		ArrayList<MenuItem> merchandise = who.getMerchandiseFor(player);
 		if (merchandise == null || merchandise.isEmpty()) {
 			chat(who);
 			return;
@@ -287,9 +287,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		runner.x = player.getPosition().x - xrange;
 		runner.y = player.getPosition().y - yrange;
 
-		monstersOnSight.removeAllElements();
-		featuresOnSight.removeAllElements();
-		itemsOnSight.removeAllElements();
+		monstersOnSight.clear();
+		featuresOnSight.clear();
+		itemsOnSight.clear();
 
 		for (int x = 0; x < vcells.length; x++) {
 			for (int y = 0; y < vcells[0].length; y++) {
@@ -348,7 +348,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 						if (feat.isVisible()) {
 							BasicListItem li = sightListItems.get(feat.getID());
 							if (li == null) {
-								Debug.say("Adding " + feat.getID() + " to the hashtable");
+								Debug.say("Adding " + feat.getID() + " to the HashMap");
 								sightListItems.put(feat.getID(),
 										new BasicListItem(((CharAppearance) feat.getAppearance()).getChar(),
 												((CharAppearance) feat.getAppearance()).getColor(),
@@ -372,10 +372,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 						}
 					}
 
-					Vector<MenuItem> items = level.getItemsAt(runner);
+					ArrayList<MenuItem> items = level.getItemsAt(runner);
 					Item item = null;
 					if (items != null) {
-						item = (Item) items.elementAt(0);
+						item = (Item) items.get(0);
 					}
 					if (item != null) {
 						if (item.isVisible()) {
@@ -384,7 +384,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 									itemApp.getColor());
 							BasicListItem li = sightListItems.get(item.getDefinition().getID());
 							if (li == null) {
-								// Debug.say("Adding "+item.getDefinition().getID()+" to the hashtable");
+								// Debug.say("Adding "+item.getDefinition().getID()+" to the HashMap");
 								sightListItems.put(item.getDefinition().getID(),
 										new BasicListItem(((CharAppearance) item.getAppearance()).getChar(),
 												((CharAppearance) item.getAppearance()).getColor(),
@@ -403,7 +403,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 							li = sightListItems.get(monster.getDescription());
 							if (li == null) {
 								CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
-								Debug.say("Adding " + monster.getID() + " to the hashtable");
+								Debug.say("Adding " + monster.getID() + " to the HashMap");
 								sightListItems.put(monster.getDescription(), new BasicListItem(monsterApp.getChar(),
 										monsterApp.getColor(), monster.getDescription()));
 								li = sightListItems.get(monster.getDescription());
@@ -412,7 +412,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 							li = sightListItems.get(monster.getID());
 							if (li == null) {
 								CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
-								Debug.say("Adding " + monster.getID() + " to the hashtable");
+								Debug.say("Adding " + monster.getID() + " to the HashMap");
 								sightListItems.put(monster.getID(), new BasicListItem(monsterApp.getChar(),
 										monsterApp.getColor(), monster.getDescription()));
 								li = sightListItems.get(monster.getID());
@@ -460,7 +460,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			BasicListItem li = sightListItems.get(player.getHostage().getDescription());
 			if (li == null) {
 				CharAppearance hostageApp = (CharAppearance) player.getHostage().getAppearance();
-				Debug.say("Adding " + hostageApp.getID() + " to the hashtable");
+				Debug.say("Adding " + hostageApp.getID() + " to the HashMap");
 				sightListItems.put(player.getHostage().getDescription(), new BasicListItem(hostageApp.getChar(),
 						hostageApp.getColor(), player.getHostage().getDescription()));
 				li = sightListItems.get(player.getHostage().getDescription());
@@ -480,7 +480,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		showPersistantMessageBox = true;
 	}
 
-	private Vector<String> messageHistory = new Vector<>(20, 10);
+	private ArrayList<String> messageHistory = new ArrayList<>();
 
 	public void addMessage(Message message) {
 		Debug.enterMethod(this, "addMessage", message);
@@ -496,7 +496,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 		messageHistory.add(message.getText());
 		if (messageHistory.size() > 100)
-			messageHistory.removeElementAt(0);
+			messageHistory.remove(0);
 		messageBox.addText(message.getText());
 
 		messageBox.draw();
@@ -644,7 +644,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			return str + spaces(limit - str.length());
 	}
 
-	private Map<Object, String> hashSpaces = new Hashtable<>();
+	private Map<Object, String> hashSpaces = new HashMap<>();
 
 	private String spaces(int n) {
 		StringBuilder ret = new StringBuilder(hashSpaces.get(n + ""));
@@ -756,10 +756,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				Vector<MenuItem> items = level.getItemsAt(browser);
+				ArrayList<MenuItem> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
-					item = (Item) items.elementAt(0);
+					item = (Item) items.get(0);
 				}
 				Actor actor = level.getActorAt(browser);
 				si.restore();
@@ -834,7 +834,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Item pickEquipedItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickEquipedItem");
-		Vector<MenuItem> equipped = new Vector<>();
+		ArrayList<MenuItem> equipped = new ArrayList<>();
 		if (player.getArmor() != null)
 			equipped.add(player.getArmor());
 		if (player.getWeapon() != null)
@@ -863,7 +863,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Item pickItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickItem");
-		Vector<MenuItem> inventory = player.getInventory();
+		ArrayList<MenuItem> inventory = player.getInventory();
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setBounds(10, 3, 60, 18);
 		menuBox.setPromptSize(2);
@@ -885,11 +885,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Item pickUnderlyingItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickUnderlyingItem");
-		Vector<MenuItem> items = level.getItemsAt(player.getPosition());
+		ArrayList<MenuItem> items = level.getItemsAt(player.getPosition());
 		if (items == null)
 			return null;
 		if (items.size() == 1)
-			return (Item) items.elementAt(0);
+			return (Item) items.get(0);
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setBounds(10, 3, 60, 18);
 		menuBox.setPromptSize(2);
@@ -909,9 +909,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return item;
 	}
 
-	private Vector<MenuItem> pickMultiItems(String prompt) {
+	private ArrayList<MenuItem> pickMultiItems(String prompt) {
 		Equipment.eqMode = true;
-		Vector<MenuItem> inventory = player.getInventory();
+		ArrayList<MenuItem> inventory = player.getInventory();
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setBounds(25, 3, 40, 18);
 		menuBox.setPromptSize(2);
@@ -919,7 +919,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setPrompt(prompt);
 		menuBox.setForeColor(ConsoleSystemInterface.RED);
 		menuBox.setBorder(true);
-		Vector<MenuItem> ret = new Vector<>();
+		ArrayList<MenuItem> ret = new ArrayList<>();
 		MenuBox selectedBox = new MenuBox(si);
 		selectedBox.setBounds(5, 3, 20, 18);
 		selectedBox.setPromptSize(2);
@@ -945,11 +945,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return ret;
 	}
 
-	private Vector<MenuItem> pickSpirits() {
-		Vector<MenuItem> originalInventory = player.getInventory();
-		Vector<MenuItem> inventory = new Vector<>();
+	private ArrayList<MenuItem> pickSpirits() {
+		ArrayList<MenuItem> originalInventory = player.getInventory();
+		ArrayList<MenuItem> inventory = new ArrayList<>();
 		for (int i = 0; i < originalInventory.size(); i++) {
-			Equipment testEq = (Equipment) originalInventory.elementAt(i);
+			Equipment testEq = (Equipment) originalInventory.get(i);
 			if (testEq.getItem().getDefinition().getID().endsWith("_SPIRIT")) {
 				inventory.add(testEq);
 			}
@@ -963,7 +963,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setForeColor(ConsoleSystemInterface.RED);
 		menuBox.setBorder(true);
 
-		Vector<MenuItem> ret = new Vector<>();
+		ArrayList<MenuItem> ret = new ArrayList<>();
 		MenuBox selectedBox = new MenuBox(si);
 		selectedBox.setBounds(5, 3, 20, 18);
 		selectedBox.setPromptSize(2);
@@ -1093,7 +1093,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 	}
 
-	private Vector<MenuItem> vecItemUsageChoices = new Vector<>();
+	private ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
 	{
 		vecItemUsageChoices.add(new SimpleMenuItem('*', "(u)se", 1));
 		vecItemUsageChoices.add(new SimpleMenuItem('*', "(e)quip", 2));
@@ -1109,7 +1109,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	public Action showInventory() throws ActionCancelException {
 		Equipment.eqMode = true;
-		Vector<MenuItem> inventory = player.getInventory();
+		ArrayList<MenuItem> inventory = player.getInventory();
 		int xpos = 1;
 		int ypos = 0;
 		MenuBox menuBox = new MenuBox(si);
@@ -1217,16 +1217,16 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			} catch (AdditionalKeysSignal aks) {
 				switch (aks.getKeyCode()) {
 				case CharKey.u:
-					choice = (SimpleMenuItem) vecItemUsageChoices.elementAt(0);
+					choice = (SimpleMenuItem) vecItemUsageChoices.get(0);
 					break;
 				case CharKey.e:
-					choice = (SimpleMenuItem) vecItemUsageChoices.elementAt(1);
+					choice = (SimpleMenuItem) vecItemUsageChoices.get(1);
 					break;
 				case CharKey.d:
-					choice = (SimpleMenuItem) vecItemUsageChoices.elementAt(2);
+					choice = (SimpleMenuItem) vecItemUsageChoices.get(2);
 					break;
 				case CharKey.t:
-					choice = (SimpleMenuItem) vecItemUsageChoices.elementAt(3);
+					choice = (SimpleMenuItem) vecItemUsageChoices.get(3);
 					break;
 				}
 			}
@@ -1306,7 +1306,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		for (int i = 0; i < 22; i++) {
 			if (i >= messageHistory.size())
 				break;
-			si.print(1, i + 2, messageHistory.elementAt(messageHistory.size() - 1 - i), CharAppearance.RED);
+			si.print(1, i + 2, messageHistory.get(messageHistory.size() - 1 - i), CharAppearance.RED);
 		}
 
 		si.print(55, 24, "[ Space to Continue ]");
@@ -1333,10 +1333,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.print(1, 11, "Experience  " + player.getXp() + "/" + player.getNextXP());
 
 		/*
-		 * si.print(1,2, "Skills", ConsoleSystemInterface.RED); Vector skills =
+		 * si.print(1,2, "Skills", ConsoleSystemInterface.RED); ArrayList skills =
 		 * player.getAvailableSkills(); int cont = 0; for (int i = 0; i < skills.size();
 		 * i++){ if (i % 10 == 0) cont++; si.print((cont-1) * 25 + 1, 3 + i - ((cont-1)
-		 * * 10), ((Skill)skills.elementAt(i)).getMenuDescription()); }
+		 * * 10), ((Skill)skills.get(i)).getMenuDescription()); }
 		 */
 
 		si.print(1, 13, "Weapon Profficiences", ConsoleSystemInterface.RED);
@@ -1374,7 +1374,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	public Action showSkills() throws ActionCancelException {
 		Debug.enterMethod(this, "showSkills");
 		si.saveBuffer();
-		Vector<MenuItem> skills = player.getAvailableSkills();
+		ArrayList<MenuItem> skills = player.getAvailableSkills();
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setHeight(14);
 		menuBox.setWidth(33);
@@ -1414,7 +1414,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		showMessage("You gained a level!, [Press Space to continue]");
 		si.waitKey(CharKey.SPACE);
 		if (player.deservesAdvancement(player.getPlayerLevel())) {
-			Vector<Advancement> advancements = player.getAvailableAdvancements();
+			ArrayList<Advancement> advancements = player.getAvailableAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1422,7 +1422,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			}
 		}
 		if (player.deservesStatAdvancement(player.getPlayerLevel())) {
-			Vector<Advancement> advancements = player.getAvailableStatAdvancements();
+			ArrayList<Advancement> advancements = player.getAvailableStatAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1437,9 +1437,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 		/*
 		 * showMessage("You gained a level!, [Press Space to continue]");
-		 * si.waitKey(CharKey.SPACE); int soulOptions = 5; Vector soulIds =
+		 * si.waitKey(CharKey.SPACE); int soulOptions = 5; ArrayList soulIds =
 		 * getLevelUpSouls(); int playerChoice = Display.thus.showLevelUp(soulIds); Item
-		 * soul = ItemFactory.getItemFactory().createItem((String)soulIds.elementAt(
+		 * soul = ItemFactory.getItemFactory().createItem((String)soulIds.get(
 		 * playerChoice)); if (player.canCarry()){ player.addItem(soul); } else {
 		 * player.getLevel().addItem(player.getPosition(), soul); }
 		 * showMessage("You acquired a "+soul.getDescription());
@@ -1586,7 +1586,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		int minDist = 150;
 		int maxDist = 15;
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = monsters.elementAt(i);
+			Monster monster = monsters.get(i);
 			if (monster.getPosition().z() != level.getPlayer().getPosition().z())
 				continue;
 			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
@@ -1601,9 +1601,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			return null;
 	}
 
-	public Vector<String> getMessageBuffer() {
+	public ArrayList<String> getMessageBuffer() {
 		if (messageHistory.size() > 20)
-			return new Vector<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
+			return new ArrayList<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
 		else
 			return messageHistory;
 	}

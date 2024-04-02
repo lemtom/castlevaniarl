@@ -2,7 +2,7 @@ package crl.ui;
 
 import java.io.File;
 import java.util.Properties;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import crl.player.HiScore;
 import crl.player.Player;
@@ -24,7 +24,7 @@ public abstract class Display {
 
 	public abstract int showSavedGames(File[] saveFiles);
 	public abstract void showHostageRescue(Hostage h);
-	public abstract Advancement showLevelUp(Vector<Advancement> soulIds);
+	public abstract Advancement showLevelUp(ArrayList<Advancement> soulIds);
 	public abstract void showChat(String chatID, Game game);
 	public abstract void showScreen(Object screenID);
 	public abstract void showMap(String locationKey, String locationDescription);

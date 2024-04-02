@@ -4,7 +4,9 @@ import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+
 import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
 

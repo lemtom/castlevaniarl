@@ -12,7 +12,7 @@ public class MonsterFactory {
 	private static final MonsterFactory singleton = new MonsterFactory();
 
 	private Hashtable<String, MonsterDefinition> definitions;
-	private Vector<MonsterDefinition> vDefinitions = new Vector<>(50);
+	private ArrayList<MonsterDefinition> vDefinitions = new ArrayList<>(50);
 
 	public static MonsterFactory getFactory(){
 		return singleton;

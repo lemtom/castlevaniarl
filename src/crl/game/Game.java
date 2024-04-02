@@ -35,12 +35,12 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return canSave;
 	}
 
-	private Hashtable /* Level */<String, Level> storedLevels = new Hashtable<>();
+	private HashMap /* Level */<String, Level> storedLevels = new HashMap<>();
 	private boolean endGame;
 	private long turns;
 	private boolean isDay = true;
 	private int timeSwitch;
-	private Hashtable<String, LevelMetaData> levelMetadata = new Hashtable<>();
+	private HashMap<String, LevelMetaData> levelMetadata = new HashMap<>();
 	// private String[] levelPath;
 
 	public void commandSelected(int commandCode) {
@@ -266,8 +266,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	}
 
 	private void processLevelData(String[][] order, int startLevelNumber) {
-		Vector<Object> levels = new Vector<>(5);
-		Vector<String> numbered = new Vector<>(5);
+		ArrayList<Object> levels = new ArrayList<>(5);
+		ArrayList<String> numbered = new ArrayList<>(5);
 		int levelCount = startLevelNumber;
         for (String[] strings : order) {
             int n = Util.rand(3, 6);
@@ -380,7 +380,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		levelMetadata.put("VILLA", md);
 
 		// levelPath = (String[]) levels.toArray(new String[levels.size()]);
-		storedLevels = new Hashtable<>();
+		storedLevels = new HashMap<>();
 	}
 
 	private void resumeScreen() {
@@ -437,8 +437,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 					forwardTime();
 					VMonster monsters = player.getLevel().getMonsters();
 					for (int i = 0; i < monsters.size(); i++) {
-						if (monsters.elementAt(i) instanceof Merchant) {
-							((Merchant) monsters.elementAt(i)).refreshMerchandise(player);
+						if (monsters.get(i) instanceof Merchant) {
+							((Merchant) monsters.get(i)).refreshMerchandise(player);
 						}
 					}
 					player.setGold(player.getGold() - 200);
@@ -633,18 +633,18 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		System.exit(-1);
 	}
 
-	private static Vector<String> reports = new Vector<>(20);
+	private static ArrayList<String> reports = new ArrayList<>(20);
 
 	public static void addReport(String report) {
 		reports.add(report);
 	}
 
-	public static Vector<String> getReports() {
+	public static ArrayList<String> getReports() {
 		return reports;
 	}
 
-	private static Vector<String> uniqueRegister = new Vector<>();
-	private Vector<String> uniqueRegisterObjectCopy = new Vector<>();
+	private static ArrayList<String> uniqueRegister = new ArrayList<>();
+	private ArrayList<String> uniqueRegisterObjectCopy = new ArrayList<>();
 
 	public void syncUniqueRegister() {
 		uniqueRegister = uniqueRegisterObjectCopy;

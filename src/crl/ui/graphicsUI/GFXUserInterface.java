@@ -9,13 +9,10 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -72,7 +69,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	private boolean flipFacing;
-	private Vector<String> messageHistory = new Vector<>(10);
+	private ArrayList<String> messageHistory = new ArrayList<>(10);
 
 	// Relations
 
@@ -325,7 +322,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		for (int i = 0; i < 22; i++) {
 			if (i >= messageHistory.size())
 				break;
-			si.print(1, i + 2, messageHistory.elementAt(messageHistory.size() - 1 - i), Color.WHITE);
+			si.print(1, i + 2, messageHistory.get(messageHistory.size() - 1 - i), Color.WHITE);
 		}
 
 		si.print(55, 24, "[ Space to Continue ]", Color.WHITE);
@@ -353,10 +350,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				if (choosen != null)
 					cellHeight = choosen.getHeight();
 				Feature feat = level.getFeatureAt(browser);
-				Vector<MenuItem> items = level.getItemsAt(browser);
+				ArrayList<MenuItem> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
-					item = (Item) items.elementAt(0);
+					item = (Item) items.get(0);
 				}
 				lookedMonster = null;
 				Actor actor = level.getActorAt(browser);
@@ -416,7 +413,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Debug.enterMethod(this, "launchMerchant", who);
 		Equipment.eqMode = true;
 		Item.shopMode = true;
-		Vector<MenuItem> merchandise = who.getMerchandiseFor(player);
+		ArrayList<MenuItem> merchandise = who.getMerchandiseFor(player);
 		if (merchandise == null || merchandise.isEmpty()) {
 			chat(who);
 			Debug.exitMethod();
@@ -504,9 +501,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Position runner = new Position(player.getPosition().x - xrange, player.getPosition().y - yrange,
 				player.getPosition().z);
 
-		monstersOnSight.removeAllElements();
-		featuresOnSight.removeAllElements();
-		itemsOnSight.removeAllElements();
+		monstersOnSight.clear();
+		featuresOnSight.clear();
+		itemsOnSight.clear();
 
 		/*
 		 * for (int x = 0; x < vcells.length; x++){ for (int y=0; y<vcells[0].length;
@@ -611,10 +608,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 						}
 					}
 
-					Vector<MenuItem> items = level.getItemsAt(runner);
+					ArrayList<MenuItem> items = level.getItemsAt(runner);
 					Item item = null;
 					if (items != null) {
-						item = (Item) items.elementAt(0);
+						item = (Item) items.get(0);
 					}
 					if (item != null) {
 						if (item.isVisible()) {
@@ -714,7 +711,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		}
 		messageHistory.add(message.getText());
 		if (messageHistory.size() > 500)
-			messageHistory.removeElementAt(0);
+			messageHistory.remove(0);
 		messageBox.addText(message.getText());
 		dimMsg = 0;
 		Debug.exitMethod();
@@ -1065,7 +1062,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		int minDist = 150;
 		int maxDist = 15;
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = monsters.elementAt(i);
+			Monster monster = monsters.get(i);
 			if (monster.getPosition().z() != level.getPlayer().getPosition().z())
 				continue;
 			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
@@ -1127,12 +1124,12 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				Vector<MenuItem> items = level.getItemsAt(browser);
+				ArrayList<MenuItem> items = level.getItemsAt(browser);
 				if (choosen != null)
 					cellHeight = choosen.getHeight();
 				Item item = null;
 				if (items != null) {
-					item = (Item) items.elementAt(0);
+					item = (Item) items.get(0);
 				}
 				Actor actor = level.getActorAt(browser);
 				if (choosen != null)
@@ -1208,7 +1205,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	private Item pickEquipedItem(String prompt) throws ActionCancelException {
 		enterScreen();
 
-		Vector<MenuItem> equipped = new Vector<>();
+		ArrayList<MenuItem> equipped = new ArrayList<>();
 		if (player.getArmor() != null)
 			equipped.add(player.getArmor());
 		if (player.getWeapon() != null)
@@ -1250,7 +1247,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private Item pickItem(String prompt) throws ActionCancelException {
 		enterScreen();
-		Vector<MenuItem> inventory = player.getInventory();
+		ArrayList<MenuItem> inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
 		menuBox.setPosition(6, 4);
@@ -1276,9 +1273,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return equipment.getItem();
 	}
 
-	private Vector<MenuItem> pickMultiItems(String prompt) throws ActionCancelException {
+	private ArrayList<MenuItem> pickMultiItems(String prompt) throws ActionCancelException {
 		// Equipment.eqMode = true;
-		Vector<MenuItem> inventory = player.getInventory();
+		ArrayList<MenuItem> inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setBounds(25, 3, 40, 18);
 		// menuBox.setPromptSize(2);
@@ -1286,7 +1283,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		menuBox.setTitle(prompt);
 		// menuBox.setForeColor(ConsoleSystemInterface.RED);
 		// menuBox.setBorder(true);
-		Vector<MenuItem> ret = new Vector<>();
+		ArrayList<MenuItem> ret = new ArrayList<>();
 		BorderedMenuBox selectedBox = GetMenuBox();
 		selectedBox.setBounds(5, 3, 20, 18);
 		// selectedBox.setPromptSize(2);
@@ -1359,7 +1356,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	@Override
 	public void safeRefresh() {
-		SwingUtilities.invokeLater(() -> refresh());
+		SwingUtilities.invokeLater(this::refresh);
 	}
 
 	public void refresh() {
@@ -1411,11 +1408,11 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private Item pickUnderlyingItem(String prompt) throws ActionCancelException {
 		enterScreen();
-		Vector<MenuItem> items = level.getItemsAt(player.getPosition());
+		ArrayList<MenuItem> items = level.getItemsAt(player.getPosition());
 		if (items == null)
 			return null;
 		if (items.size() == 1)
-			return (Item) items.elementAt(0);
+			return (Item) items.get(0);
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
 		menuBox.setBounds(6, 4, 70, 12);
@@ -1439,7 +1436,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return item;
 	}
 
-	private Vector<MenuItem> vecItemUsageChoices = new Vector<>();
+	private ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
 	{
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[u]se", 1));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[e]quip", 2));
@@ -1456,7 +1453,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	public Action showInventory() throws ActionCancelException {
 		enterScreen();
 		Equipment.menuDetail = true;
-		Vector<MenuItem> inventory = player.getInventory();
+		ArrayList<MenuItem> inventory = player.getInventory();
 		int xpos = 1, ypos = 0;
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
@@ -1578,16 +1575,16 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			} catch (AdditionalKeysSignal aks) {
 				switch (aks.getKeyCode()) {
 				case CharKey.u:
-					choice = (SimpleGFXMenuItem) vecItemUsageChoices.elementAt(0);
+					choice = (SimpleGFXMenuItem) vecItemUsageChoices.get(0);
 					break;
 				case CharKey.e:
-					choice = (SimpleGFXMenuItem) vecItemUsageChoices.elementAt(1);
+					choice = (SimpleGFXMenuItem) vecItemUsageChoices.get(1);
 					break;
 				case CharKey.t:
-					choice = (SimpleGFXMenuItem) vecItemUsageChoices.elementAt(2);
+					choice = (SimpleGFXMenuItem) vecItemUsageChoices.get(2);
 					break;
 				case CharKey.d:
-					choice = (SimpleGFXMenuItem) vecItemUsageChoices.elementAt(3);
+					choice = (SimpleGFXMenuItem) vecItemUsageChoices.get(3);
 					break;
 				}
 			}
@@ -1701,10 +1698,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		si.print(1, 12, "Experience: " + player.getXp() + "/" + player.getNextXP(), Color.WHITE);
 
 		/*
-		 * si.print(1,2, "Skills", ConsoleSystemInterface.RED); Vector skills =
+		 * si.print(1,2, "Skills", ConsoleSystemInterface.RED); ArrayList skills =
 		 * player.getAvailableSkills(); int cont = 0; for (int i = 0; i < skills.size();
 		 * i++){ if (i % 10 == 0) cont++; si.print((cont-1) * 25 + 1, 3 + i - ((cont-1)
-		 * * 10), ((Skill)skills.elementAt(i)).getMenuDescription()); }
+		 * * 10), ((Skill)skills.get(i)).getMenuDescription()); }
 		 */
 
 		si.print(1, 14, "Weapon Profficiences", GFXDisplay.COLOR_BOLD);
@@ -1764,7 +1761,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Debug.enterMethod(this, "showSkills");
 		enterScreen();
 		si.saveBuffer();
-		Vector<MenuItem> skills = player.getAvailableSkills();
+		ArrayList<MenuItem> skills = player.getAvailableSkills();
 		BorderedMenuBox menuBox = GetMenuBox(true);
 		menuBox.setItemsPerPage(14);
 		menuBox.setWidth(48);
@@ -1808,7 +1805,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		si.waitKey(CharKey.SPACE);
 		enterScreen();
 		if (player.deservesAdvancement(player.getPlayerLevel())) {
-			Vector<Advancement> advancements = player.getAvailableAdvancements();
+			ArrayList<Advancement> advancements = player.getAvailableAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1816,7 +1813,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			}
 		}
 		if (player.deservesStatAdvancement(player.getPlayerLevel())) {
-			Vector<Advancement> advancements = player.getAvailableStatAdvancements();
+			ArrayList<Advancement> advancements = player.getAvailableStatAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1830,9 +1827,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		player.resetLastIncrements();
 
 		/*
-		 * int soulOptions = 5; Vector soulIds = getLevelUpSouls(); int playerChoice =
+		 * int soulOptions = 5; ArrayList soulIds = getLevelUpSouls(); int playerChoice =
 		 * Display.thus.showLevelUp(soulIds); Item soul =
-		 * ItemFactory.getItemFactory().createItem((String)soulIds.elementAt(
+		 * ItemFactory.getItemFactory().createItem((String)soulIds.get(
 		 * playerChoice)); if (player.canCarry()){ player.addItem(soul); } else {
 		 * player.getLevel().addItem(player.getPosition(), soul); }
 		 * showMessage("You acquired a "+soul.getDescription());
@@ -2141,10 +2138,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			this.prompt.setText(prompt);
 		}
 
-		public void setMerchandise(Vector<MenuItem> skills) {
-			((DefaultListModel<MenuItem>) lstMerchandise.getModel()).removeAllElements();
+		public void setMerchandise(ArrayList<MenuItem> skills) {
+			((DefaultListModel<MenuItem>) lstMerchandise.getModel()).clear();
 			for (int i = 0; i < skills.size(); i++) {
-				((DefaultListModel<MenuItem>) lstMerchandise.getModel()).addElement(skills.elementAt(i));
+				((DefaultListModel<MenuItem>) lstMerchandise.getModel()).addElement(skills.get(i));
 			}
 		}
 
@@ -2268,10 +2265,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 		private void doOk() {
 			if (activeThread != null) {
-				choice = new Vector<>();
+				choice = new ArrayList<>();
 				int[] indices = lstInventory.getSelectedIndices();
                 for (int index : indices) {
-                    choice.add(((Equipment) inventory.elementAt(index)).getItem());
+                    choice.add(((Equipment) inventory.get(index)).getItem());
                 }
 				activeThread.interrupt();
 			}
@@ -2284,10 +2281,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			}
 		}
 
-		private Vector<Item> choice;
-		private Vector<MenuItem> inventory;
+		private ArrayList<Item> choice;
+		private ArrayList<MenuItem> inventory;
 
-		public Vector<Item> getChoice() {
+		public ArrayList<Item> getChoice() {
 			return choice;
 		}
 
@@ -2295,11 +2292,11 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			lblPrompt.setText(prompt);
 		}
 
-		public void setItems(Vector<MenuItem> items) {
-			inventory = (Vector<MenuItem>) items.clone();
-			((DefaultListModel<MenuItem>) lstInventory.getModel()).removeAllElements();
+		public void setItems(ArrayList<MenuItem> items) {
+			inventory = (ArrayList<MenuItem>) items.clone();
+			((DefaultListModel<MenuItem>) lstInventory.getModel()).clear();
 			for (int i = 0; i < items.size(); i++) {
-				((DefaultListModel<MenuItem>) lstInventory.getModel()).addElement(items.elementAt(i));
+				((DefaultListModel<MenuItem>) lstInventory.getModel()).addElement(items.get(i));
 			}
 		}
 
@@ -2338,10 +2335,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		}
 	}
 
-	public Vector<String> getMessageBuffer() {
-		// return new Vector(messageHistory.subList(0,21));
+	public ArrayList<String> getMessageBuffer() {
+		// return new ArrayList(messageHistory.subList(0,21));
 		if (messageHistory.size() > 20)
-			return new Vector<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
+			return new ArrayList<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
 		else
 			return messageHistory;
 	}

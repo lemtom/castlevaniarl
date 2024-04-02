@@ -1,12 +1,12 @@
 package crl.ui.graphicsUI;
 
 import java.awt.Image;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class GFXChat {
-	private Vector<Image> portraits = new Vector<>(10);
-	private Vector<String> names  = new Vector<>(10);
-	private Vector<String> conversations = new Vector<>(10);
+	private ArrayList<Image> portraits = new ArrayList<>(10);
+	private ArrayList<String> names  = new ArrayList<>(10);
+	private ArrayList<String> conversations = new ArrayList<>(10);
 	
 	public void add(String name, String conversation, Image portrait){
 		names.add(name);
@@ -25,14 +25,14 @@ public class GFXChat {
 	}
 	
 	public Image getPortrait(int i){
-		return portraits.elementAt(i);
+		return portraits.get(i);
 	}
 	
 	public String getConversation(int i){
-		return conversations.elementAt(i);
+		return conversations.get(i);
 	}
 	
 	public String getName(int i){
-		return names.elementAt(i);
+		return names.get(i);
 	}
 }

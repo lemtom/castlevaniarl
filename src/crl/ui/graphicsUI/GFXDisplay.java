@@ -7,9 +7,9 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Properties;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JTextArea;
 
@@ -376,27 +376,27 @@ public class GFXDisplay extends Display{
 		showTextBox(text,30,40,300,300);
 	}
 	
-	public Advancement showLevelUp(Vector<Advancement> advancements){
+	public Advancement showLevelUp(ArrayList<Advancement> advancements){
 		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(false);
 		
 		si.saveBuffer();
 		si.drawImage(IMG_LEVEL_UP);
 		si.print(4,3, "You have gained a chance to pick an advancement!", GFXDisplay.COLOR_BOLD);
 		for (int i = 0; i < advancements.size(); i++){
-			si.print(3,4+i*2, ((char)('a'+i))+". "+ advancements.elementAt(i).getName(), GFXDisplay.COLOR_BOLD);
-			si.print(3,5+i*2, "   "+ advancements.elementAt(i).getDescription(), Color.WHITE);
+			si.print(3,4+i*2, ((char)('a'+i))+". "+ advancements.get(i).getName(), GFXDisplay.COLOR_BOLD);
+			si.print(3,5+i*2, "   "+ advancements.get(i).getDescription(), Color.WHITE);
 		}
 		si.refresh();
 		int choice = readAlphaToNumber(advancements.size());
 		si.restore();
 		si.refresh();
 		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(true);
-		return advancements.elementAt(choice);
+		return advancements.get(choice);
 		
 		/*si.saveBuffer();
 		ItemDefinition[] defs = new ItemDefinition[soulIds.size()];
 		for (int i = 0; i < defs.length; i++){
-			defs[i] = ItemFactory.getItemFactory().getDefinition((String)soulIds.elementAt(i));
+			defs[i] = ItemFactory.getItemFactory().getDefinition((String)soulIds.get(i));
 		}
 		si.drawImage(IMG_LEVEL_UP);
 		si.print(2,5,  "Please pick a spiritual memento", COLOR_BOLD);
@@ -501,9 +501,9 @@ public class GFXDisplay extends Display{
 		si.restore();
 	}
 
-	private Hashtable<String, Position> locationKeys;
+	private HashMap<String, Position> locationKeys;
 	{
-		locationKeys = new Hashtable<>();
+		locationKeys = new HashMap<>();
 		locationKeys.put("TOWN", new Position(130,206));
 		locationKeys.put("FOREST", new Position(201,206));
 		locationKeys.put("BRIDGE", new Position(273,206));

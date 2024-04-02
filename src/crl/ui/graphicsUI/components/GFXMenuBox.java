@@ -1,6 +1,6 @@
 package crl.ui.graphicsUI.components;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -8,7 +8,7 @@ import sz.csi.textcomponents.MenuItem;
 
 public class GFXMenuBox extends JPanel{
 
-	public void setMenuItems(Vector<MenuItem> items){
+	public void setMenuItems(ArrayList<MenuItem> items){
 		
 	}
 	

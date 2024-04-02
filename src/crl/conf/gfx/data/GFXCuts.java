@@ -1,7 +1,7 @@
 package crl.conf.gfx.data;
 
 import java.awt.image.BufferedImage;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.util.Debug;
 import sz.util.ImageUtils;
@@ -50,7 +50,7 @@ public class GFXCuts {
 		thus = new GFXCuts();
 	}
 
-	private Hashtable<String, GFXChat> hashCuts = new Hashtable<>();
+	private HashMap<String, GFXChat> hashCuts = new HashMap<>();
 	{
 		GFXChat temp = null;
 		temp = new GFXChat();

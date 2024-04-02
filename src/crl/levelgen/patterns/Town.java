@@ -36,7 +36,7 @@ public class Town {
 			"tt~~~~.ttt...t...dddt..ttt.......tt..ttt...tt......tttt....ttt..tttttt", //
 			"ttt~~~tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt" } };
 
-	public static final Map<String, String> defaultCharMap = new Hashtable<>();
+	public static final Map<String, String> defaultCharMap = new HashMap<>();
 	static {
 		defaultCharMap.put(".", "TOWN_GRASS");
 		defaultCharMap.put("S", "TOWN_GRASS SOL");

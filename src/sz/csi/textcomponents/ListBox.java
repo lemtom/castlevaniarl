@@ -6,18 +6,18 @@ import sz.csi.ConsoleSystemInterface;
 
 public class ListBox extends TextComponent {
 
-	public Vector<ListItem> itemsLista;
+	public ArrayList<ListItem> itemsLista;
 
 	public ListBox(ConsoleSystemInterface si) {
 		super(si);
-		itemsLista = new Vector<>(10);
+		itemsLista = new ArrayList<>(10);
 	}
 
 	public void draw() {
 		clearBox();
 		int length = (Math.min(itemsLista.size(), super.inHeight));
 		for (int i = 0; i < length; i++) {
-			ListItem item = itemsLista.elementAt(i);
+			ListItem item = itemsLista.get(i);
 			// Debug.say("Item app"+item);
 			si.print(inPosition.x, inPosition.y + i, item.getIndex(), item.getIndexColor());
 			if (item.getRow().length() > inWidth)
@@ -28,15 +28,15 @@ public class ListBox extends TextComponent {
 	}
 
 	public void clear() {
-		itemsLista.removeAllElements();
+		itemsLista.clear();
 	}
 
-	public void setElements(Vector<ListItem> elements) {
+	public void setElements(ArrayList<ListItem> elements) {
 		clear();
 		addElements(elements);
 	}
 
-	public void addElements(Vector<ListItem> elements) {
+	public void addElements(ArrayList<ListItem> elements) {
 		itemsLista.addAll(elements);
 	}
 

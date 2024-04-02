@@ -8,7 +8,7 @@ import crl.ui.consoleUI.AdditionalKeysSignal;
 
 public class MenuBox extends TextComponent {
 
-	private Vector<MenuItem> items;
+	private ArrayList<MenuItem> items;
 	private int promptSize;
 	private String title = "";
 
@@ -54,7 +54,7 @@ public class MenuBox extends TextComponent {
 		promptBox.setText(prompt);
 	}
 
-	public void setMenuItems(Vector<MenuItem> items) {
+	public void setMenuItems(ArrayList<MenuItem> items) {
 		this.items = items;
 	}
 
@@ -82,11 +82,11 @@ public class MenuBox extends TextComponent {
 		 * " PE "+pageElements+"CP"+currentPage+"pages"+pages); si.refresh();
 		 * si.waitKey(CharKey.SPACE);
 		 */
-		Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+		ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 
 		int i = 0;
 		for (; i < shownItems.size(); i++) {
-			MenuItem item = shownItems.elementAt(i);
+			MenuItem item = shownItems.get(i);
 			if (ordinal)
 				si.print(inPosition.x, inPosition.y + i + promptSize, ((char) (97 + i)) + ".");
 			si.print(inPosition.x + 2, inPosition.y + i + promptSize, item.getMenuChar(), item.getMenuColor());
@@ -109,7 +109,7 @@ public class MenuBox extends TextComponent {
 		while (true) {
 			clearBox();
 			draw();
-			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE && key.code != CharKey.UARROW && key.code != CharKey.DARROW
 					&& (key.code < CharKey.A || key.code > CharKey.A + pageElements - 1)
@@ -125,9 +125,9 @@ public class MenuBox extends TextComponent {
 					currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
-				return shownItems.elementAt(key.code - CharKey.A);
+				return shownItems.get(key.code - CharKey.A);
 			else if (key.code >= CharKey.a && key.code <= CharKey.a + shownItems.size() - 1)
-				return shownItems.elementAt(key.code - CharKey.a);
+				return shownItems.get(key.code - CharKey.a);
 
 		}
 	}
@@ -168,7 +168,7 @@ public class MenuBox extends TextComponent {
 		while (true) {
 			clearBox();
 			draw();
-			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE && key.code != CharKey.UARROW && key.code != CharKey.DARROW
 					&& (key.code < CharKey.A || key.code > CharKey.A + pageElements - 1)
@@ -184,9 +184,9 @@ public class MenuBox extends TextComponent {
 					currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
-				return shownItems.elementAt(key.code - CharKey.A);
+				return shownItems.get(key.code - CharKey.A);
 			else if (key.code >= CharKey.a && key.code <= CharKey.a + shownItems.size() - 1)
-				return shownItems.elementAt(key.code - CharKey.a);
+				return shownItems.get(key.code - CharKey.a);
 			if (isOneOf(key.code, keys))
 				throw new AdditionalKeysSignal(key.code);
 

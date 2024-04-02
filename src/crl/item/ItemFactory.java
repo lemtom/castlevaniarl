@@ -10,22 +10,22 @@ import sz.util.*;
 public class ItemFactory {
 	private static ItemFactory singleton = new ItemFactory();
 
-	private Hashtable<String, ItemDefinition> definitions = new Hashtable<>();
+	private HashMap<String, ItemDefinition> definitions = new HashMap<>();
 
-	private Vector<ItemDefinition> vDefinitions;
+	private ArrayList<ItemDefinition> vDefinitions;
 
-	private Vector<ItemDefinition> weaponDefinitions = new Vector<>();
+	private ArrayList<ItemDefinition> weaponDefinitions = new ArrayList<>();
 
-	private Vector<ItemDefinition> armorDefinitions = new Vector<>();
+	private ArrayList<ItemDefinition> armorDefinitions = new ArrayList<>();
 
-	private Vector<ItemDefinition> generalItemsDefinitions = new Vector<>();
+	private ArrayList<ItemDefinition> generalItemsDefinitions = new ArrayList<>();
 
 	public static ItemFactory getItemFactory() {
 		return singleton;
 	}
 
 	public void init(ItemDefinition[] defs) {
-		vDefinitions = new Vector<>();
+		vDefinitions = new ArrayList<>();
 		for (ItemDefinition def : defs) {
 			definitions.put(def.getID(), def);
 			vDefinitions.add(def);

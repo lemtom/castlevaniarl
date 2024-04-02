@@ -8,8 +8,8 @@ import sz.util.*;
 
 public class NPCFactory {
 	private static final NPCFactory singleton = new NPCFactory();
-	private Hashtable<String, NPCDefinition> definitions;
-	private Vector<String> hostages = new Vector<>();
+	private HashMap<String, NPCDefinition> definitions;
+	private ArrayList<String> hostages = new ArrayList<>();
 
 	public static NPCFactory getFactory(){
 		return singleton;
@@ -43,7 +43,7 @@ public class NPCFactory {
 	}
 
 	public NPCFactory(){
-		definitions = new Hashtable<>(40);
+		definitions = new HashMap<>(40);
 	}
 	
 	private static String [][] hostageArtifacts = new String[][]{

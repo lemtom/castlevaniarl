@@ -14,7 +14,7 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class BorderedMenuBox {
 	
-	private Vector<MenuItem> items;
+	private ArrayList<MenuItem> items;
 	private String title = "";
 
 	//State Attributes
@@ -52,7 +52,7 @@ public class BorderedMenuBox {
 	public void setItemsPerPage(int ipp){
 		itemsPerPage = ipp;
 	}
-	public void setMenuItems(Vector<MenuItem> items){
+	public void setMenuItems(ArrayList<MenuItem> items){
 		this.items = items;
 	}
 
@@ -99,12 +99,12 @@ public class BorderedMenuBox {
 		/*System.out.println("items.size() "+items.size());
 		System.out.println("inHeight "+inHeight);*/
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
-		Vector<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
+		ArrayList<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
 		
 		int i = 0;
 		for (; i < shownItems.size(); i++){
 			
-			GFXMenuItem item = (GFXMenuItem) shownItems.elementAt(i);
+			GFXMenuItem item = (GFXMenuItem) shownItems.get(i);
 			si.printAtPixel(xpos*10, (ypos+1)*24+i*gap, ((char) (97 + i))+"." , GFXDisplay.COLOR_BOLD);
 			if (box != null){
 				si.drawImage((xpos+2)*10+1, ypos*24+ i * gap + (int)(gap * 0.3D)-4, box);
@@ -143,7 +143,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&
@@ -164,10 +164,10 @@ public class BorderedMenuBox {
 					currentPage ++;
 			
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size()-1)
-				return shownItems.elementAt(key.code - CharKey.A);
+				return shownItems.get(key.code - CharKey.A);
 			else
 			if (key.code >= CharKey.a && key.code <= CharKey.a + shownItems.size()-1)
-				return shownItems.elementAt(key.code - CharKey.a);
+				return shownItems.get(key.code - CharKey.a);
 			si.restore();
 
 		}
@@ -178,7 +178,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&
@@ -200,10 +200,10 @@ public class BorderedMenuBox {
 					currentPage ++;
 			
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size()-1)
-				return shownItems.elementAt(key.code - CharKey.A);
+				return shownItems.get(key.code - CharKey.A);
 			else
 			if (key.code >= CharKey.a && key.code <= CharKey.a + shownItems.size()-1)
-				return shownItems.elementAt(key.code - CharKey.a);
+				return shownItems.get(key.code - CharKey.a);
 			if (isOneOf(key.code, keys))
 				throw new AdditionalKeysSignal(key.code);
 			si.restore();

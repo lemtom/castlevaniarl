@@ -1,6 +1,6 @@
 package crl.ui;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Properties;
 
 import sz.csi.CharKey;
@@ -12,7 +12,7 @@ import crl.level.Level;
 import crl.player.Player;
 
 public abstract class UISelector implements ActionSelector  {
-	protected Hashtable<Object, UserAction> gameActions = new Hashtable<>();
+	protected HashMap<Object, UserAction> gameActions = new HashMap<>();
 	
 	protected Action advance;
 	protected Action attack;

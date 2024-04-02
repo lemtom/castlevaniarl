@@ -1,6 +1,6 @@
 package crl.levelgen.patterns;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import crl.levelgen.*;
@@ -462,7 +462,7 @@ public class Moat {
 			"    22s....22222    ", //
 			"    22222222222222  " };
 
-	public static Map<String, String> defaultCharMap = new Hashtable<>();
+	public static Map<String, String> defaultCharMap = new HashMap<>();
 	static {
 		defaultCharMap.put("o", "MOSS_COLUMN");
 		defaultCharMap.put(".", "MOSS_FLOOR");

@@ -498,7 +498,7 @@ public class Monster extends Actor implements Cloneable {
 		Monster nearMonster = null;
 		int minDist = 150;
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = monsters.elementAt(i);
+			Monster monster = monsters.get(i);
 			int distance = Position.flatDistance(getPosition(), monster.getPosition());
 			if (monster != this && distance < minDist) {
 				minDist = distance;

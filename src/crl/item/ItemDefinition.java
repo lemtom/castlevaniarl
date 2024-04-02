@@ -1,6 +1,6 @@
 package crl.item;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import crl.ui.*;
@@ -46,7 +46,7 @@ public class ItemDefinition {
 		return HASH_DESCRIPTIONS.get(catID);
 	}
 
-	public static final Map<String, String> HASH_DESCRIPTIONS = new Hashtable<>();
+	public static final Map<String, String> HASH_DESCRIPTIONS = new HashMap<>();
 	static {
 		HASH_DESCRIPTIONS.put(CAT_UNARMED, "hand to hand combat");
 		HASH_DESCRIPTIONS.put(CAT_DAGGERS, "daggers");

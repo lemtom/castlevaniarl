@@ -1,6 +1,6 @@
 package crl.levelgen.patterns;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import crl.levelgen.*;
@@ -191,7 +191,7 @@ public class BatLair {
 
 	};
 
-	public static Map<String, String> defaultCharMap = new Hashtable<>();
+	public static Map<String, String> defaultCharMap = new HashMap<>();
 	static {
 		defaultCharMap.put("o", "MARBLE_COLUMN");
 		defaultCharMap.put(".", "MARBLE_FLOOR");

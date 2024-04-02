@@ -1,6 +1,6 @@
 package crl.action;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.csi.CharKey;
 import sz.csi.textcomponents.MenuItem;
@@ -19,7 +19,7 @@ public abstract class Action implements java.io.Serializable {
 	protected Item targetEquipedItem;
 	protected Item targetItem;
 	protected Position targetPosition;
-	protected Vector<MenuItem> targetMultiItems;
+	protected ArrayList<MenuItem> targetMultiItems;
 
 	public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, UPRIGHT = 4, UPLEFT = 5, DOWNRIGHT = 6, DOWNLEFT = 7,
 			SELF = 8;
@@ -57,7 +57,7 @@ public abstract class Action implements java.io.Serializable {
 		targetItem = what;
 	}
 
-	public void setMultiItems(Vector<MenuItem> what) {
+	public void setMultiItems(ArrayList<MenuItem> what) {
 		this.targetMultiItems = what;
 	}
 

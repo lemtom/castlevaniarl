@@ -1,14 +1,14 @@
 package crl.ai.monster;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.util.Debug;
 import crl.ai.ActionSelector;
 
 public abstract class MonsterAI implements ActionSelector, Cloneable {
-	protected Vector<RangedAttack> rangedAttacks;
+	protected ArrayList<RangedAttack> rangedAttacks;
 
-	public void setRangedAttacks(Vector<RangedAttack> pRangedAttacks) {
+	public void setRangedAttacks(ArrayList<RangedAttack> pRangedAttacks) {
 		rangedAttacks = pRangedAttacks;
 	}
 

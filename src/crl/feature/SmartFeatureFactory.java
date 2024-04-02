@@ -6,7 +6,7 @@ import sz.util.*;
 
 public class SmartFeatureFactory {
 	private static SmartFeatureFactory singleton = new SmartFeatureFactory();
-	private Hashtable<String, SmartFeature> definitions;
+	private HashMap<String, SmartFeature> definitions;
 
 	public SmartFeature buildFeature (String id) {
 		SmartFeature x = definitions.get(id);
@@ -25,7 +25,7 @@ public class SmartFeatureFactory {
 	}
 
 	public SmartFeatureFactory(){
-		definitions = new Hashtable<>(40);
+		definitions = new HashMap<>(40);
 	}
 
 	public static SmartFeatureFactory getFactory(){

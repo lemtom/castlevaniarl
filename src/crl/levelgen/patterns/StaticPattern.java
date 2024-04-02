@@ -1,6 +1,6 @@
 package crl.levelgen.patterns;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import crl.cuts.Unleasher;
@@ -8,9 +8,9 @@ import crl.levelgen.MonsterSpawnInfo;
 import crl.levelgen.StaticGenerator;
 
 public abstract class StaticPattern {
-	protected Hashtable<String, String> charMap = new Hashtable<>();
+	protected HashMap<String, String> charMap = new HashMap<>();
 	protected String[][] cellMap;
-	protected Hashtable<String, String> inhabitantsMap = new Hashtable<>();
+	protected HashMap<String, String> inhabitantsMap = new HashMap<>();
 	protected String[][] inhabitants;
 	protected MonsterSpawnInfo[] spawnInfo;
 	protected Unleasher[] unleashers;

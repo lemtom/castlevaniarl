@@ -3,10 +3,10 @@ package sz.util;
 import java.util.*;
 
 public class SZPriorityQueue implements java.io.Serializable {
-	private Vector<PriorityEnqueable> list;
+	private ArrayList<PriorityEnqueable> list;
 
 	public SZPriorityQueue() {
-		list = new Vector<>(40);
+		list = new ArrayList<>(40);
 	}
 
 	public boolean contains(Object what) {
@@ -14,21 +14,21 @@ public class SZPriorityQueue implements java.io.Serializable {
 	}
 
 	public SZPriorityQueue(int ini) {
-		list = new Vector<>(ini);
+		list = new ArrayList<>(ini);
 	}
 
-	public Vector<PriorityEnqueable> getVector() {
+	public ArrayList<PriorityEnqueable> getArrayList() {
 		return list;
 	}
 
 	public Object unqueue() {
 		if (!list.isEmpty()) {
-			PriorityEnqueable x = list.elementAt(0);
+			PriorityEnqueable x = list.get(0);
 			for (int i = 1; i < list.size(); i++) {
-				(list.elementAt(i)).reduceCost(x.getCost());
+				(list.get(i)).reduceCost(x.getCost());
 			}
 
-			list.removeElementAt(0);
+			list.remove(0);
 			return x;
 		} else
 			return null;
@@ -42,19 +42,19 @@ public class SZPriorityQueue implements java.io.Serializable {
 			return;
 		}
 		int i = 0;
-		while (i < list.size() && (list.elementAt(i)).getCost() <= what.getCost()) {
+		while (i < list.size() && (list.get(i)).getCost() <= what.getCost()) {
 			i++;
 		}
-		list.insertElementAt(what, i);
+		list.add(i, what);
 		/*
-		 * if (i == list.size()) list.insertElementAt(what, i); else
-		 * list.insertElementAt(what, i+1);
+		 * if (i == list.size()) list.insertget(what, i); else
+		 * list.insertget(what, i+1);
 		 */
 		// Debug.say("enqueued at "+i);
 	}
 
 	public void forceToFront(PriorityEnqueable what) {
-		list.insertElementAt(what, 0);
+		list.add(0, what);
 	}
 
 	public void forceToFront(PriorityEnqueable what, Object objClass) {
@@ -63,17 +63,17 @@ public class SZPriorityQueue implements java.io.Serializable {
 		 * Debug.say("forcing "+what.getClass()+" to front");
 		 * Debug.say("forcing "+objClass.getClass()+" to front");
 		 * Debug.say(what.getClass().equals(objClass.getClass())+"? ");
-		 * Debug.say(list.elementAt(0).getClass()+"  0? ");
-		 * Debug.say(list.elementAt(1).getClass()+" 1? ");
-		 * Debug.say(list.elementAt(2).getClass()+" 2? ");
+		 * Debug.say(list.get(0).getClass()+"  0? ");
+		 * Debug.say(list.get(1).getClass()+" 1? ");
+		 * Debug.say(list.get(2).getClass()+" 2? ");
 		 */
 		// RUN TO THE LAST OCURRENCE OF OBJCLASS
 		for (int i = list.size() - 1; i >= 0; i--)
 			// if (!
-			// list.elementAt(i).getClass().toString().equals(objClass.getClass().toString())){
-			if (list.elementAt(i).getClass().equals(objClass.getClass())) {
+			// list.get(i).getClass().toString().equals(objClass.getClass().toString())){
+			if (list.get(i).getClass().equals(objClass.getClass())) {
 				if (i < list.size() - 1) {
-					list.insertElementAt(what, i + 1);
+					list.add(i + 1, what);
 					// Debug.say("inserted at " +(i+1));
 				} else
 					list.add(what);
@@ -94,13 +94,13 @@ public class SZPriorityQueue implements java.io.Serializable {
 	}
 
 	public void removeAll() {
-		list.removeAllElements();
+		list.clear();
 	}
 
 	public void printStatus() {
 		Debug.say("Status of SZPriorityQueue " + this);
 		for (int i = 0; i < list.size(); i++) {
-			Debug.say(list.elementAt(i) + " " + (list.elementAt(i)).getCost());
+			Debug.say(list.get(i) + " " + (list.get(i)).getCost());
 		}
 	}
 }

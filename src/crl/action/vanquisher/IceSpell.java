@@ -1,6 +1,6 @@
 package crl.action.vanquisher;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import crl.action.ProjectileSkill;
 import crl.monster.Monster;
@@ -55,9 +55,9 @@ public class IceSpell extends ProjectileSkill{
 	@Override
 	public void execute(){
 		super.execute();
-		Vector<Monster> hitMonsters = getHitMonsters();
+		ArrayList<Monster> hitMonsters = getHitMonsters();
 		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = hitMonsters.elementAt(i);
+			Monster targetMonster = hitMonsters.get(i);
 			int friz = 10 +getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
 			if (friz > 0){
 				if (targetMonster.wasSeen())

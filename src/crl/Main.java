@@ -16,8 +16,6 @@ import java.util.Properties;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
-import org.apache.commons.httpclient.HttpException;
-
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.jcurses.JCursesConsoleInterface;

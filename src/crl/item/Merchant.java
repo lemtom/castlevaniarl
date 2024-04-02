@@ -43,7 +43,7 @@ public class Merchant extends NPC {
 		return merchantName;
 	}
 	
-	public Vector<MenuItem> getMerchandiseFor(Player player){
+	public ArrayList<MenuItem> getMerchandiseFor(Player player){
 		if (refreshTurns == -1 || player.getGameSessionInfo().getTurns() - refreshTurns > 1000)  {
 			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
 					merchandiseType == ItemDefinition.SHOP_WEAPONS ||
@@ -56,11 +56,11 @@ public class Merchant extends NPC {
 		return inventory;
 	}
 
-	//private Vector merchandises = new Vector();
-	private Vector<MenuItem> inventory;
+	//private ArrayList merchandises = new ArrayList();
+	private ArrayList<MenuItem> inventory;
 
 	/*private void refreshMerchandise(Player player){
-		merchandises = new Vector();
+		merchandises = new ArrayList();
 		ItemDefinition[] defs = Items.getItemDefinitions();
 		//int itemNumber = Util.rand(6,12);
 		int itemNumber = Util.rand(6,12);
@@ -89,8 +89,8 @@ public class Merchant extends NPC {
 					) 
 			return;
 		
-		inventory = new Vector<>();
-		Vector<String> vectorIDs = new Vector<>();
+		inventory = new ArrayList<>();
+		ArrayList<String> ArrayListIDs = new ArrayList<>();
 		ItemDefinition[] defs = Items.getItemDefinitions();
 		int itemNumber = Util.rand(6,12);
 		int items = 0;
@@ -104,11 +104,11 @@ public class Merchant extends NPC {
 				continue;
 			if (!Util.chance(def.getShopChance()))
 				continue;
-			if (vectorIDs.contains(def.getID()))
+			if (ArrayListIDs.contains(def.getID()))
 				continue;
 			items++;
 			Item item = new Item(def);
-			vectorIDs.add(def.getID());
+			ArrayListIDs.add(def.getID());
 			if (def.isUnique())
 				inventory.add(item);
 			else if (def.getAttack() > 0) {

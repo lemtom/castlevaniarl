@@ -5,7 +5,7 @@ import crl.game.*;
 
 public class MapCellFactory {
 	private static MapCellFactory singleton = new MapCellFactory();
-	private Hashtable<String, Cell> definitions;
+	private HashMap<String, Cell> definitions;
 
 
 
@@ -30,7 +30,7 @@ public class MapCellFactory {
 	}
 
 	public MapCellFactory(){
-		definitions = new Hashtable<>(40);
+		definitions = new HashMap<>(40);
 	}
 
 	public void init(Cell[] defs) {

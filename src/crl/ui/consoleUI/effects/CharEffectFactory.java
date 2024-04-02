@@ -1,6 +1,6 @@
 package crl.ui.consoleUI.effects;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.util.Position;
 import crl.game.Game;
@@ -8,7 +8,7 @@ import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 
 public class CharEffectFactory extends EffectFactory {
-	private Hashtable<String, Effect> effects = new Hashtable<>();
+	private HashMap<String, Effect> effects = new HashMap<>();
 
 	public void setEffects(Effect[] effectsA) {
         for (Effect effect : effectsA) {

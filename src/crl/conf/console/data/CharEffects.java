@@ -1,6 +1,6 @@
 package crl.conf.console.data;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
@@ -226,7 +226,7 @@ public class CharEffects {
 		return effects;
 	}
 
-	private static final Vector<Position> SFX_BIBLE_STEPS = new Vector<>(10);
+	private static final ArrayList<Position> SFX_BIBLE_STEPS = new ArrayList<>(10);
 
 	static {
 		SFX_BIBLE_STEPS.add(new Position(1,0));

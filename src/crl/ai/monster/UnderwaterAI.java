@@ -45,7 +45,7 @@ public class UnderwaterAI extends MonsterAI{
 				int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
 				//Try to attack
 				for (int i = 0; i < rangedAttacks.size(); i++){
-					RangedAttack ra = rangedAttacks.elementAt(i);
+					RangedAttack ra = rangedAttacks.get(i);
 					if (distanceToPlayer <= ra.getRange())
 						if (Util.chance(ra.getFrequency())){
 							Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());

@@ -1,6 +1,6 @@
 package crl.action;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.util.Line;
 import sz.util.Position;
@@ -49,9 +49,9 @@ public abstract class ProjectileSkill extends HeartAction {
 		return true;
 	}
 
-	private Vector<Monster> hitMonsters = new Vector<>(10);
+	private ArrayList<Monster> hitMonsters = new ArrayList<>(10);
 
-	public Vector<Monster> getHitMonsters() {
+	public ArrayList<Monster> getHitMonsters() {
 		return hitMonsters;
 	}
 

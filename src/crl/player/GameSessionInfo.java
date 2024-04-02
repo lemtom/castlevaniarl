@@ -15,7 +15,7 @@ public class GameSessionInfo implements Serializable {
 	private int deathLevel;
 	private String deathLevelDescription;
 
-	private Vector<String> history = new Vector<>();
+	private ArrayList<String> history = new ArrayList<>();
 
 	public void addHistoryItem(String desc) {
 		history.add(desc);
@@ -40,7 +40,7 @@ public class GameSessionInfo implements Serializable {
 	public static final int ENDLESS_PIT = 7;
 	public static final int POISONED_TO_DEATH = 8;
 
-	private Map<String, MonsterDeath> deathCount = new Hashtable<>();
+	private Map<String, MonsterDeath> deathCount = new HashMap<>();
 
 	public Player getPlayer() {
 		return player;
@@ -159,7 +159,7 @@ public class GameSessionInfo implements Serializable {
 		this.deathLevelDescription = deathLevelDescription;
 	}
 
-	public Vector<String> getHistory() {
+	public ArrayList<String> getHistory() {
 		return history;
 	}
 

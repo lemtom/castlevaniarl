@@ -1,7 +1,7 @@
 
 package crl.game;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.util.ScriptUtil;
 import sz.util.Util;
@@ -14,7 +14,7 @@ public abstract class PlayerGenerator {
 	public static PlayerGenerator thus;
 	public abstract Player generatePlayer();
 	
-	private Hashtable<String, Player> SPECIAL_PLAYERS = new Hashtable<>();
+	private HashMap<String, Player> SPECIAL_PLAYERS = new HashMap<>();
 	private void initSpecialPlayers(){
 		SPECIAL_PLAYERS.clear();
 		ItemFactory itf = ItemFactory.getItemFactory();

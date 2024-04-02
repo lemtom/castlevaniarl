@@ -7,7 +7,7 @@ import sz.util.*;
 public class FeatureFactory {
 	private static FeatureFactory singleton = new FeatureFactory();
 
-	private Hashtable<String, Feature> definitions;
+	private HashMap<String, Feature> definitions;
 
 	public Feature buildFeature(String id) {
 		Feature x = definitions.get(id);
@@ -34,7 +34,7 @@ public class FeatureFactory {
 	}
 
 	public FeatureFactory() {
-		definitions = new Hashtable<>(40);
+		definitions = new HashMap<>(40);
 	}
 
 	public static FeatureFactory getFactory() {

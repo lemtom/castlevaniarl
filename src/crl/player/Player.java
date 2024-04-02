@@ -77,9 +77,9 @@ public class Player extends Actor {
 	private int breathing = 25;
 	private int gold;
 	private int soulPower;
-	private Hashtable<String, Counter> weaponSkillsCounters = new Hashtable<>();
-	private Hashtable<String, Counter> weaponSkills = new Hashtable<>();
-	private Hashtable<String, String> customMessages = new Hashtable<>();
+	private HashMap<String, Counter> weaponSkillsCounters = new HashMap<>();
+	private HashMap<String, Counter> weaponSkills = new HashMap<>();
+	private HashMap<String, String> customMessages = new HashMap<>();
 	/*
 	 * private int[] weaponSkillsCounters = new int[13]; private int[] weaponSkills
 	 * = new int[13];
@@ -642,39 +642,39 @@ public class Player extends Actor {
 			return;
 		}
 		String[] effectOnAcquire = toAdd.getEffectOnAcquire().split(" ");
-        switch (effectOnAcquire[0]) {
-            case "KEYS":
-                addKeys(Integer.parseInt(effectOnAcquire[1]));
-                break;
-            case "HEARTMAX":
-                increaseHeartMax(Integer.parseInt(effectOnAcquire[1]));
-                break;
-            case "HITSMAX":
-                increaseHitsMax(Integer.parseInt(effectOnAcquire[1]));
-                break;
-            case "ENABLE":
-                switch (effectOnAcquire[1]) {
-                    case "LITSPELL":
-                        setFlag(Consts.C_SPELL_LIT, true);
-                        break;
-                    case "FLAMESPELL":
-                        setFlag(Consts.C_SPELL_FIRE, true);
-                        break;
-                    case "ICESPELL":
-                        setFlag(Consts.C_SPELL_ICE, true);
-                        break;
-                }
-                if (effectOnAcquire[1].equals("SILVERDAGGER")) {
-                    if (daggerLevel == 0)
-                        daggerLevel = 1;
-                } else if (effectOnAcquire[1].equals("GOLDDAGGER")) {
-                    daggerLevel = 2;
-                }
-                break;
-            case "CARRY":
-                setCarryMax(Integer.parseInt(effectOnAcquire[1]));
-                break;
-        }
+		switch (effectOnAcquire[0]) {
+		case "KEYS":
+			addKeys(Integer.parseInt(effectOnAcquire[1]));
+			break;
+		case "HEARTMAX":
+			increaseHeartMax(Integer.parseInt(effectOnAcquire[1]));
+			break;
+		case "HITSMAX":
+			increaseHitsMax(Integer.parseInt(effectOnAcquire[1]));
+			break;
+		case "ENABLE":
+			switch (effectOnAcquire[1]) {
+			case "LITSPELL":
+				setFlag(Consts.C_SPELL_LIT, true);
+				break;
+			case "FLAMESPELL":
+				setFlag(Consts.C_SPELL_FIRE, true);
+				break;
+			case "ICESPELL":
+				setFlag(Consts.C_SPELL_ICE, true);
+				break;
+			}
+			if (effectOnAcquire[1].equals("SILVERDAGGER")) {
+				if (daggerLevel == 0)
+					daggerLevel = 1;
+			} else if (effectOnAcquire[1].equals("GOLDDAGGER")) {
+				daggerLevel = 2;
+			}
+			break;
+		case "CARRY":
+			setCarryMax(Integer.parseInt(effectOnAcquire[1]));
+			break;
+		}
 
 		if (!effectOnAcquire[0].isEmpty() && toAdd.getDefinition().isSingleUse())
 			;
@@ -729,8 +729,8 @@ public class Player extends Actor {
 	 * inventory.remove(toRemove.getDefinition().getID()); }
 	 */
 
-	public Vector<MenuItem> getInventory() {
-		Vector<MenuItem> ret = new Vector<>();
+	public ArrayList<MenuItem> getInventory() {
+		ArrayList<MenuItem> ret = new ArrayList<>();
 		Enumeration<MenuItem> x = inventory.elements();
 		while (x.hasMoreElements())
 			ret.add(x.nextElement());
@@ -912,7 +912,7 @@ public class Player extends Actor {
 		}
 
 		for (int i = 0; i < counteredItems.size(); i++) {
-			Item item = (Item) counteredItems.elementAt(i);
+			Item item = (Item) counteredItems.get(i);
 			item.reduceCounters(this);
 			if (!item.hasCounters()) {
 				counteredItems.remove(item);
@@ -1125,10 +1125,10 @@ public class Player extends Actor {
 		if (destinationCell.isShallowWater()) {
 			level.addMessage("You swim in the " + destinationCell.getShortDescription() + "!");
 		}
-		Vector<MenuItem> destinationItems = level.getItemsAt(destinationPoint);
+		ArrayList<MenuItem> destinationItems = level.getItemsAt(destinationPoint);
 		if (destinationItems != null) {
 			if (destinationItems.size() == 1)
-				level.addMessage("There is a " + ((Item) destinationItems.elementAt(0)).getDescription() + " here");
+				level.addMessage("There is a " + ((Item) destinationItems.get(0)).getDescription() + " here");
 			else
 				level.addMessage("There are several items here");
 		}
@@ -1345,10 +1345,10 @@ public class Player extends Actor {
 
 		String message = "";
 
-		Vector<Monster> monsters = (Vector<Monster>) level.getMonsters().getVector().clone();
-		Vector<Monster> removables = new Vector<>();
+		ArrayList<Monster> monsters = new ArrayList<>(level.getMonsters().getArrayList());
+		ArrayList<Monster> removables = new ArrayList<>();
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = monsters.elementAt(i);
+			Monster monster = monsters.get(i);
 			if (Position.flatDistance(getPosition(), monster.getPosition()) < 16) {
 				if (monster instanceof NPC || monster instanceof Hostage) {
 
@@ -1650,10 +1650,10 @@ public class Player extends Actor {
 		}
 	}
 
-	private Vector<MenuItem> availableSkills = new Vector<>(10);
+	private ArrayList<MenuItem> availableSkills = new ArrayList<>(10);
 
-	public Vector<MenuItem> getAvailableSkills() {
-		availableSkills.removeAllElements();
+	public ArrayList<MenuItem> getAvailableSkills() {
+		availableSkills.clear();
 		if (getFlag("PASIVE_DODGE"))
 			availableSkills.add(skills.get("DODGE"));
 		if (getFlag("PASIVE_DODGE2"))
@@ -1857,7 +1857,7 @@ public class Player extends Actor {
 
 	}
 
-	private static final Hashtable<String, Skill> skills = new Hashtable<>();
+	private static final HashMap<String, Skill> skills = new HashMap<>();
 	static {
 		skills.put("DIVING_SLIDE", new Skill("Diving Slide", new DivingSlide(), 8));
 		skills.put("SPINNING_SLICE", new Skill("Spinning Slice", new SpinningSlice(), 8));
@@ -2247,7 +2247,7 @@ public class Player extends Actor {
 		Monster nearMonster = null;
 		int minDist = 150;
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = monsters.elementAt(i);
+			Monster monster = monsters.get(i);
 			if (monster instanceof NPC)
 				continue;
 			if (monster.getPosition().z != getPosition().z)
@@ -2462,9 +2462,9 @@ public class Player extends Actor {
 				} };
 	}
 
-    private Vector<Advancement> tmpAvailableAdvancements = new Vector<>();
+	private ArrayList<Advancement> tmpAvailableAdvancements = new ArrayList<>();
 
-	public Vector<Advancement> getAvailableAdvancements() {
+	public ArrayList<Advancement> getAvailableAdvancements() {
 		tmpAvailableAdvancements.clear();
 		out: for (int i = 0; i < ADVANCEMENTS[getPlayerClass()].length; i++) {
 			if (getFlag(ADVANCEMENTS[getPlayerClass()][i].getID())) {
@@ -2490,7 +2490,7 @@ public class Player extends Actor {
 		return tmpAvailableAdvancements;
 	}
 
-	public Vector<Advancement> getAvailableStatAdvancements() {
+	public ArrayList<Advancement> getAvailableStatAdvancements() {
 		tmpAvailableAdvancements.clear();
 		tmpAvailableAdvancements.addAll(Arrays.asList(STATADVANCEMENTS[getPlayerClass()]));
 		int rand = Util.rand(2, 3);
@@ -2685,7 +2685,7 @@ public class Player extends Actor {
 		this.bannedArmors = bannedArmors;
 	}
 
-	private Hashtable<String, Integer> lastIncrements = new Hashtable<>();
+	private HashMap<String, Integer> lastIncrements = new HashMap<>();
 
 	public void addLastIncrement(String key, int value) {
 		Integer current = lastIncrements.get(key);
@@ -2718,7 +2718,7 @@ public class Player extends Actor {
 		this.breathing = breathing;
 	}
 
-	private Vector<MenuItem> counteredItems = new Vector<>();
+	private ArrayList<MenuItem> counteredItems = new ArrayList<>();
 
 	public void addCounteredItem(Item i) {
 		counteredItems.add(i);

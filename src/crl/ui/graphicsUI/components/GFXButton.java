@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -19,7 +19,7 @@ public class GFXButton extends JPanel implements MouseListener {
 	private boolean habilitado = true;
 	private boolean hovering;
 
-	private Vector<ActionListener> objListeners = new Vector<>();
+	private ArrayList<ActionListener> objListeners = new ArrayList<>();
 
 	public GFXButton(GFXButton base) {
 		imgActivado = base.imgActivado;

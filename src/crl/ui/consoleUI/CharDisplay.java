@@ -1,8 +1,8 @@
 package crl.ui.consoleUI;
 
 import java.io.File;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 import crl.Main;
 import crl.player.GameSessionInfo;
@@ -477,24 +477,24 @@ public class CharDisplay extends Display {
 		si.waitKey(CharKey.SPACE);
 	}
 
-	public Advancement showLevelUp(Vector<Advancement> advancements) {
+	public Advancement showLevelUp(ArrayList<Advancement> advancements) {
 
 		si.saveBuffer();
 		si.cls();
 		si.print(1, 1, "You have gained a chance to pick an advancement!", ConsoleSystemInterface.BLUE);
 
 		for (int i = 0; i < advancements.size(); i++) {
-			si.print(1, 3 + i * 2, ((char) ('a' + i)) + ". " + (advancements.elementAt(i)).getName());
-			si.print(1, 4 + i * 2, (advancements.elementAt(i)).getDescription());
+			si.print(1, 3 + i * 2, ((char) ('a' + i)) + ". " + (advancements.get(i)).getName());
+			si.print(1, 4 + i * 2, (advancements.get(i)).getDescription());
 		}
 		si.refresh();
 		int choice = readAlphaToNumber(advancements.size());
 		si.restore();
-		return advancements.elementAt(choice);
+		return advancements.get(choice);
 		/*
 		 * ItemDefinition[] defs = new ItemDefinition[soulIds.size()]; for (int i = 0; i
 		 * < defs.length; i++){ defs[i] =
-		 * ItemFactory.getItemFactory().getDefinition((String)soulIds.elementAt(i)); }
+		 * ItemFactory.getItemFactory().getDefinition((String)soulIds.get(i)); }
 		 * si.cls(); printBars();
 		 * 
 		 * si.print(2,3, " - - Level Up - -", ConsoleSystemInterface.RED); si.print(2,5,
@@ -556,9 +556,9 @@ public class CharDisplay extends Display {
 		si.restore();
 	}
 
-	private Hashtable<String, Position> locationKeys;
+	private HashMap<String, Position> locationKeys;
 	{
-		locationKeys = new Hashtable<>();
+		locationKeys = new HashMap<>();
 		locationKeys.put("TOWN", new Position(15, 15));
 		locationKeys.put("FOREST", new Position(23, 15));
 		locationKeys.put("BRIDGE", new Position(30, 15));

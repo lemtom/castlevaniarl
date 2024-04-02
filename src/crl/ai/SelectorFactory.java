@@ -1,12 +1,12 @@
 package crl.ai;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import sz.util.Debug;
 
 public class SelectorFactory {
 	private static final SelectorFactory singleton = new SelectorFactory();
-	private Hashtable<String, ActionSelector> definitions;
+	private HashMap<String, ActionSelector> definitions;
 
 	/*
 	 * public ActionSelector buildSelector (String id){ Cell x = (Cell)
@@ -34,7 +34,7 @@ public class SelectorFactory {
 	}
 
 	public SelectorFactory() {
-		definitions = new Hashtable<>(40);
+		definitions = new HashMap<>(40);
 	}
 
 }

@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

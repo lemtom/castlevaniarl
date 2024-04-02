@@ -1,10 +1,10 @@
 package crl.ui.consoleUI.cuts;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class CharChat {
-	private Vector<String> conversations = new Vector<>(5);
-	private Vector<String> names = new Vector<>(5);
+	private ArrayList<String> conversations = new ArrayList<>(5);
+	private ArrayList<String> names = new ArrayList<>(5);
 	
 	public void add(String name, String conversation){
 		names.add(name);
@@ -16,11 +16,11 @@ public class CharChat {
 	}
 	
 	public String getConversation(int i){
-		return conversations.elementAt(i);
+		return conversations.get(i);
 	}
 	
 	public String getName(int i){
-		return names.elementAt(i);
+		return names.get(i);
 	}
 
 }

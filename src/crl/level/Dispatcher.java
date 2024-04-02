@@ -18,8 +18,8 @@ public class Dispatcher implements java.io.Serializable{
 		return actors.contains(what);
 	}
 
-	public Vector<PriorityEnqueable> getActors(){
-		return actors.getVector();
+	public ArrayList<PriorityEnqueable> getActors(){
+		return actors.getArrayList();
     }
 
 	public static int ixx = 0;

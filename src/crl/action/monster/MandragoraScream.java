@@ -1,6 +1,6 @@
 package crl.action.monster;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.util.Position;
 
@@ -34,9 +34,9 @@ public class MandragoraScream extends Action {
 			
 
 			VMonster monsters = performer.getLevel().getMonsters();
-			Vector<Monster> removables = new Vector<>();
+			ArrayList<Monster> removables = new ArrayList<>();
 			for (int i = 0; i < monsters.size(); i++){
-				Monster monster = monsters.elementAt(i);
+				Monster monster = monsters.get(i);
 				if (monster == performer)
 					continue;
 				if (Position.flatDistance(performer.getPosition(), monster.getPosition()) < SCREAM_RANGE){

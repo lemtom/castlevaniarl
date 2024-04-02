@@ -3,7 +3,6 @@ package crl.game;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -11,10 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import sz.csi.textcomponents.MenuItem;
 import sz.util.Debug;
@@ -143,9 +142,9 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe + " was able to use the following skills:");
 			fileWriter.newLine();
-			Vector<MenuItem> skills = player.getAvailableSkills();
+			ArrayList<MenuItem> skills = player.getAvailableSkills();
 			for (int i = 0; i < skills.size(); i++) {
-				fileWriter.write(skills.elementAt(i).getMenuDescription());
+				fileWriter.write(skills.get(i).getMenuDescription());
 				fileWriter.newLine();
 			}
 
@@ -190,9 +189,9 @@ public class GameFiles {
 			fileWriter.newLine();
 
 			fileWriter.newLine();
-			Vector<String> history = gsi.getHistory();
+			ArrayList<String> history = gsi.getHistory();
 			for (int i = 0; i < history.size(); i++) {
-				fileWriter.write(heshe + " " + history.elementAt(i));
+				fileWriter.write(heshe + " " + history.get(i));
 				fileWriter.newLine();
 			}
 			fileWriter.newLine();
@@ -237,7 +236,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 
-			Vector<MenuItem> inventory = player.getInventory();
+			ArrayList<MenuItem> inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");
 			fileWriter.newLine();
@@ -259,9 +258,9 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write("-- Last Messages --");
 			fileWriter.newLine();
-			Vector<String> messages = UserInterface.getUI().getMessageBuffer();
+			ArrayList<String> messages = UserInterface.getUI().getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++) {
-				fileWriter.write(messages.elementAt(j));
+				fileWriter.write(messages.get(j));
 				fileWriter.newLine();
 			}
 
@@ -347,9 +346,9 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe + " is able to use the following skills:");
 			fileWriter.newLine();
-			Vector<MenuItem> skills = player.getAvailableSkills();
+			ArrayList<MenuItem> skills = player.getAvailableSkills();
 			for (int i = 0; i < skills.size(); i++) {
-				fileWriter.write(skills.elementAt(i).getMenuDescription());
+				fileWriter.write(skills.get(i).getMenuDescription());
 				fileWriter.newLine();
 			}
 
@@ -394,9 +393,9 @@ public class GameFiles {
 			fileWriter.newLine();
 
 			fileWriter.newLine();
-			Vector<String> history = gsi.getHistory();
+			ArrayList<String> history = gsi.getHistory();
 			for (int i = 0; i < history.size(); i++) {
-				fileWriter.write(heshe + " " + history.elementAt(i));
+				fileWriter.write(heshe + " " + history.get(i));
 				fileWriter.newLine();
 			}
 			fileWriter.newLine();
@@ -442,7 +441,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 
-			Vector<MenuItem> inventory = player.getInventory();
+			ArrayList<MenuItem> inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");
 			fileWriter.newLine();
@@ -464,9 +463,9 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write("-- Latest Messages --");
 			fileWriter.newLine();
-			Vector<String> messages = UserInterface.getUI().getMessageBuffer();
+			ArrayList<String> messages = UserInterface.getUI().getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++) {
-				fileWriter.write(messages.elementAt(j));
+				fileWriter.write(messages.get(j));
 				fileWriter.newLine();
 			}
 
@@ -477,7 +476,7 @@ public class GameFiles {
 	}
 
 	public static Map<String, MonsterRecord> getMonsterRecord() {
-		Hashtable<String, MonsterRecord> ret = new Hashtable<>();
+		HashMap<String, MonsterRecord> ret = new HashMap<>();
 		try {
 			BufferedReader lectorArchivo = FileUtil.getReader("graveyard");
 			String line = lectorArchivo.readLine();
