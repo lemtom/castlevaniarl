@@ -106,7 +106,7 @@ public class MenuBox {
 				detail = detail.substring(0, width - 4);
 			}
 			si.printAtPixel((xpos + 6) * 10, (ypos + 1) * 24 + i * gap, description, Color.WHITE);
-			if (detail != null && detail.length() != 0) {
+			if (detail != null && !detail.isEmpty()) {
 				si.printAtPixel((xpos + 6) * 10, (ypos + 1) * 24 + i * gap + 18, detail, Color.WHITE);
 			}
 		}

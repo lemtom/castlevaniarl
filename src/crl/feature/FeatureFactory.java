@@ -34,7 +34,7 @@ public class FeatureFactory {
 	}
 
 	public FeatureFactory() {
-		definitions = new Hashtable<String, Feature>(40);
+		definitions = new Hashtable<>(40);
 	}
 
 	public static FeatureFactory getFactory() {

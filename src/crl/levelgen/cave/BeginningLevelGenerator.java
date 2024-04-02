@@ -120,7 +120,7 @@ public class BeginningLevelGenerator extends LevelGenerator {
 		return ret;
 	}
 
-	private Hashtable<String, String> charMap = new Hashtable<String, String>();
+	private Hashtable<String, String> charMap = new Hashtable<>();
 
 	{
 		charMap.put("&", "FOREST_TREE");

@@ -105,14 +105,11 @@ public class SerializableChecker extends ObjectOutputStream {
 
 			fieldMethod = ObjectStreamField.class.getDeclaredMethod("getField", null);
 			fieldMethod.setAccessible(true);
-		} catch (SecurityException e) {
-			available = false;
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (SecurityException | NoSuchMethodException e) {
 			available = false;
 			throw new RuntimeException(e);
 		}
-	}
+    }
 
 	/**
 	 * Gets whether we can execute the tests. If false, calling
@@ -128,7 +125,7 @@ public class SerializableChecker extends ObjectOutputStream {
 	}
 
 	/** object stack that with the trace path. */
-	private final LinkedList<TraceSlot> traceStack = new LinkedList<TraceSlot>();
+	private final LinkedList<TraceSlot> traceStack = new LinkedList<>();
 
 	/** set for checking circular references. */
 	private final HandleTable checked = new HandleTable(10, (float) 3.00);
@@ -137,7 +134,7 @@ public class SerializableChecker extends ObjectOutputStream {
 	private Object root;
 
 	/** cache for classes - writeObject methods. */
-	private Map<Object, Boolean> writeObjectMethodCache = new HashMap<Object, Boolean>();
+	private Map<Object, Boolean> writeObjectMethodCache = new HashMap<>();
 
 	/** current full field description. */
 	private StringBuffer fieldDescription;
@@ -161,7 +158,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			return;
 		}
 
-		Class<? extends Object> cls = obj.getClass();
+		Class<?> cls = obj.getClass();
 		traceStack.add(new TraceSlot(obj, fieldDescription));
 
 		if (!(obj instanceof Serializable)) {
@@ -171,13 +168,11 @@ public class SerializableChecker extends ObjectOutputStream {
 		final ObjectStreamClass desc;
 		try {
 			desc = (ObjectStreamClass) lookup.invoke(null, new Object[] { cls, Boolean.TRUE });
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 
-		if (cls.isPrimitive()) {
+        if (cls.isPrimitive()) {
 			// skip
 		} else if (cls.isArray()) {
 			checked.assign(obj);
@@ -284,24 +279,20 @@ public class SerializableChecker extends ObjectOutputStream {
 		int numFields;
 		try {
 			numFields = (Integer) getNumObjFields.invoke(desc, null);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 
-		if (numFields > 0) {
+        if (numFields > 0) {
 			ObjectStreamField[] fields = desc.getFields();
 			Object[] objVals = new Object[numFields];
 			int numPrimFields = fields.length - objVals.length;
 			try {
 				getObjFieldValues.invoke(desc, obj, objVals);
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			} catch (InvocationTargetException e) {
+			} catch (IllegalAccessException | InvocationTargetException e) {
 				throw new RuntimeException(e);
 			}
-			for (int i = 0; i < objVals.length; i++) {
+            for (int i = 0; i < objVals.length; i++) {
 				Object val = objVals[i];
 				if (val instanceof String || val instanceof Boolean || val instanceof Class) {
 					// filter out common cases
@@ -317,13 +308,11 @@ public class SerializableChecker extends ObjectOutputStream {
 				Field field;
 				try {
 					field = (Field) fieldMethod.invoke(fieldDesc, null);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e);
-				} catch (InvocationTargetException e) {
+				} catch (IllegalAccessException | InvocationTargetException e) {
 					throw new RuntimeException(e);
 				}
 
-				fieldDescription = new StringBuffer(field.toString());
+                fieldDescription = new StringBuffer(field.toString());
 				check(val);
 			}
 		}

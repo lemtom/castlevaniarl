@@ -34,7 +34,7 @@ public class SelectorFactory {
 	}
 
 	public SelectorFactory() {
-		definitions = new Hashtable<String, ActionSelector>(40);
+		definitions = new Hashtable<>(40);
 	}
 
 }

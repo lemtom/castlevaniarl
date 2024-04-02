@@ -22,7 +22,7 @@ public class ItemLoader {
 			String[] tokens = line.split(";");
 			bw.write("\t\t\tnew ItemDefinition (");
 			for (int i = 0; i < tokens.length; i++){
-				if (tokens[i].length() == 0)
+				if (tokens[i].isEmpty())
 					bw.write("\"\"");
 				else
 					if (tokens[i].equals("true") || tokens[i].equals("false") || isNumber(tokens[i]))

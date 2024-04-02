@@ -9,7 +9,7 @@ public class VFeatures implements Serializable{
    	Vector<Feature> features;
 	Hashtable<Position, Feature> mLocs;
 
-	private Vector<Feature> temp = new Vector<Feature>();
+	private Vector<Feature> temp = new Vector<>();
 	public void addFeature(Feature what){
 		features.add(what);
 		//mLocs.put(what, what.getPosition());
@@ -42,8 +42,8 @@ public class VFeatures implements Serializable{
 	}
 
 	public VFeatures(int size){
-		features = new Vector<Feature>(size);
-		mLocs = new Hashtable<Position, Feature>(size);
+		features = new Vector<>(size);
+		mLocs = new Hashtable<>(size);
 	}
 
 	public void removeFeature(Feature o){
@@ -53,7 +53,7 @@ public class VFeatures implements Serializable{
 		}
 	}
 	
-	private Vector<Feature> tempVector = new Vector<Feature>();
+	private Vector<Feature> tempVector = new Vector<>();
 	public Vector<Feature> getAllOf(String featureID){
 		tempVector.removeAllElements();
 		for (int i = 0; i < features.size(); i++){

@@ -32,9 +32,9 @@ public class Util {
 		if (source.isEmpty())
 			return source;
 		if ((pageNumber+1) * elementsOnPage > source.size() )
-			return new Vector<MenuItem>(source.subList(pageNumber*elementsOnPage, source.size()));
+			return new Vector<>(source.subList(pageNumber * elementsOnPage, source.size()));
 		else
-			return new Vector<MenuItem>(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
+			return new Vector<>(source.subList(pageNumber * elementsOnPage, (pageNumber + 1) * elementsOnPage));
 	}
 
 	public static String randomElementOf(String [] array){
@@ -54,11 +54,6 @@ public class Util {
 	}
 	
 	public static int sign(int n){
-		if (n > 0)
-			return 1;
-		else if (n<0)
-			return -1;
-		else
-			return 0;
+		return Integer.compare(n, 0);
 	}
 }

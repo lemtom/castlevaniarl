@@ -82,10 +82,8 @@ public class GFXDisplay extends Display{
 			FNT_PROLOGUE = PropertyFilters.getFont(p.getProperty("FNT_PROLOGUE"), p.getProperty("FNT_PROLOGUE_SIZE"));
 			FNT_DIALOGUEIN  = FNT_TEXT;
 			FNT_MONO = PropertyFilters.getFont(p.getProperty("FNT_MONO"), p.getProperty("FNT_MONO_SIZE"));
-		} catch (FontFormatException ffe){
+		} catch (FontFormatException | IOException ffe){
 			Game.crash("Error loading the font", ffe);
-		} catch (IOException ioe){
-			Game.crash("Error loading the font", ioe);
 		} catch (Exception e){
 			Game.crash("Error loading images", e);
 		}
@@ -505,7 +503,7 @@ public class GFXDisplay extends Display{
 
 	private Hashtable<String, Position> locationKeys;
 	{
-		locationKeys = new Hashtable<String, Position>();
+		locationKeys = new Hashtable<>();
 		locationKeys.put("TOWN", new Position(130,206));
 		locationKeys.put("FOREST", new Position(201,206));
 		locationKeys.put("BRIDGE", new Position(273,206));

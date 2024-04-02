@@ -12,7 +12,7 @@ public class PatternGenerator extends LevelGenerator {
 	private static PatternGenerator singleton = new PatternGenerator();
 
 	private Map<String, String> charMap;
-	private Vector<AssignedFeature> assignedFeatures = new Vector<AssignedFeature>();
+	private Vector<AssignedFeature> assignedFeatures = new Vector<>();
 	private LevelFeature baseFeature;
 	private boolean hasBoss;
 
@@ -82,45 +82,52 @@ public class PatternGenerator extends LevelGenerator {
 							Debug.byebye("Exception creating the level " + crle);
 						}
 					if (cmds.length > 1) {
-						if (cmds[1].equals("FEATURE")) {
-							if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
-								Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
-								vFeature.setPosition(x + where.x, y + where.y, where.z + z);
-								if (cmds.length > 4) {
-									// Debug.say("Hi... i will set the cost");
-									if (cmds[4].equals("COST")) {
-										// Debug.say("Hi... i did it to "+vFeature);
-										vFeature.setKeyCost(Integer.parseInt(cmds[5]));
-									}
-								}
-								level.addFeature(vFeature);
-							}
+                        switch (cmds[1]) {
+                            case "FEATURE":
+                                if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
+                                    Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+                                    vFeature.setPosition(x + where.x, y + where.y, where.z + z);
+                                    if (cmds.length > 4) {
+                                        // Debug.say("Hi... i will set the cost");
+                                        if (cmds[4].equals("COST")) {
+                                            // Debug.say("Hi... i did it to "+vFeature);
+                                            vFeature.setKeyCost(Integer.parseInt(cmds[5]));
+                                        }
+                                    }
+                                    level.addFeature(vFeature);
+                                }
 
-						} else if (cmds[1].equals("COST")) {
-							canvas[where.z + z][x + where.x][y + where.y].setKeyCost(Integer.parseInt(cmds[2]));
-						} else if (cmds[1].equals("REMOVE_FEATURE")) {
-							level.destroyFeature(
-									level.getFeatureAt(new Position(where.x + x, where.y + y, where.z + z)));
+                                break;
+                            case "COST":
+                                canvas[where.z + z][x + where.x][y + where.y].setKeyCost(Integer.parseInt(cmds[2]));
+                                break;
+                            case "REMOVE_FEATURE":
+                                level.destroyFeature(
+                                        level.getFeatureAt(new Position(where.x + x, where.y + y, where.z + z)));
 
-						} else if (cmds[1].equals("MONSTER")) {
-							Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
-							toAdd.setPosition(x + where.x, y + where.y, z + where.z);
-							level.addMonster(toAdd);
-						} else if (cmds[1].equals("EXIT")) {
-							level.addExit(new Position(x + where.x, y + where.y, z + where.z), cmds[2]);
-						} else if (cmds[1].equals("EOL")) {
-							level.addExit(new Position(x + where.x, y + where.y, z + where.z), "_NEXT");
-							endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
-							endFeature.setPosition(x + where.x, y + where.y, where.z + z);
-							if (cmds.length > 3) {
-								// Debug.say("Hi... i will set the cost");
-								if (cmds[3].equals("COST")) {
-									// Debug.say("Hi... i did it to "+vFeature);
-									endFeature.setKeyCost(Integer.parseInt(cmds[4]));
-								}
-							}
-							level.addFeature(endFeature);
-						}
+                                break;
+                            case "MONSTER":
+                                Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
+                                toAdd.setPosition(x + where.x, y + where.y, z + where.z);
+                                level.addMonster(toAdd);
+                                break;
+                            case "EXIT":
+                                level.addExit(new Position(x + where.x, y + where.y, z + where.z), cmds[2]);
+                                break;
+                            case "EOL":
+                                level.addExit(new Position(x + where.x, y + where.y, z + where.z), "_NEXT");
+                                endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+                                endFeature.setPosition(x + where.x, y + where.y, where.z + z);
+                                if (cmds.length > 3) {
+                                    // Debug.say("Hi... i will set the cost");
+                                    if (cmds[3].equals("COST")) {
+                                        // Debug.say("Hi... i did it to "+vFeature);
+                                        endFeature.setKeyCost(Integer.parseInt(cmds[4]));
+                                    }
+                                }
+                                level.addFeature(endFeature);
+                                break;
+                        }
 					}
 				}
 			}

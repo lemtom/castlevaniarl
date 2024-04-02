@@ -14,7 +14,7 @@ public abstract class PlayerGenerator {
 	public static PlayerGenerator thus;
 	public abstract Player generatePlayer();
 	
-	private Hashtable<String, Player> SPECIAL_PLAYERS = new Hashtable<String, Player>();
+	private Hashtable<String, Player> SPECIAL_PLAYERS = new Hashtable<>();
 	private void initSpecialPlayers(){
 		SPECIAL_PLAYERS.clear();
 		ItemFactory itf = ItemFactory.getItemFactory();
@@ -162,7 +162,7 @@ public abstract class PlayerGenerator {
 	public Player getPlayer(String name, int sex, int choice){
 		Player player = new Player();
 		player.setSex(sex);
-		if (name.trim().length() == 0){
+		if (name.trim().isEmpty()){
 			if (sex == Player.MALE)
 				player.setName(Util.randomElementOf(MALE_NAMES));
 			else

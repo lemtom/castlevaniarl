@@ -4,9 +4,9 @@ import java.awt.Image;
 import java.util.Vector;
 
 public class GFXChat {
-	private Vector<Image> portraits = new Vector<Image>(10);
-	private Vector<String> names  = new Vector<String>(10);
-	private Vector<String> conversations = new Vector<String>(10);
+	private Vector<Image> portraits = new Vector<>(10);
+	private Vector<String> names  = new Vector<>(10);
+	private Vector<String> conversations = new Vector<>(10);
 	
 	public void add(String name, String conversation, Image portrait){
 		names.add(name);

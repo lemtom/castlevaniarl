@@ -143,7 +143,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	public void message(String mess) {
 	}
 
-	protected Hashtable<String, Integer> hashCounters = new Hashtable<String, Integer>();
+	protected Hashtable<String, Integer> hashCounters = new Hashtable<>();
 
 	public void setCounter(String counterID, int turns) {
 		hashCounters.put(counterID, turns);
@@ -161,7 +161,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return getCounter(counterID) > 0;
 	}
 
-	private Hashtable<String, Boolean> hashFlags = new Hashtable<String, Boolean>();
+	private Hashtable<String, Boolean> hashFlags = new Hashtable<>();
 
 	public void setFlag(String flagID, boolean value) {
 		hashFlags.put(flagID, value);

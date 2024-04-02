@@ -13,7 +13,7 @@ public class Circle {
 	}
 
 	public List<Position> getPoints() {
-		ArrayList<Position> ret = new ArrayList<Position>();
+		ArrayList<Position> ret = new ArrayList<>();
 		int d = 3 - (2 * radius);
 		Position runner = new Position(0, radius);
 		Position zero = new Position(0, 0);

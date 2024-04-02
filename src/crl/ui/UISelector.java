@@ -12,7 +12,7 @@ import crl.level.Level;
 import crl.player.Player;
 
 public abstract class UISelector implements ActionSelector  {
-	protected Hashtable<Object, UserAction> gameActions = new Hashtable<Object, UserAction>();
+	protected Hashtable<Object, UserAction> gameActions = new Hashtable<>();
 	
 	protected Action advance;
 	protected Action attack;

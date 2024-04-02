@@ -2,7 +2,11 @@ package sz.crypt;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
 import javax.crypto.*;
@@ -34,11 +38,8 @@ public class DESEncrypter {
 			             // Create the ciphers
 			ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
 			dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
-    	} catch (java.security.InvalidAlgorithmParameterException e) {
-        } catch (java.security.spec.InvalidKeySpecException e) {
-        } catch (javax.crypto.NoSuchPaddingException e) {
-        } catch (java.security.NoSuchAlgorithmException e) {
-        } catch (java.security.InvalidKeyException e) {
+    	} catch (InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException |
+                 NoSuchPaddingException | InvalidKeySpecException e) {
         }
     }
 

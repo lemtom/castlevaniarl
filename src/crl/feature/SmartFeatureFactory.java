@@ -25,7 +25,7 @@ public class SmartFeatureFactory {
 	}
 
 	public SmartFeatureFactory(){
-		definitions = new Hashtable<String, SmartFeature>(40);
+		definitions = new Hashtable<>(40);
 	}
 
 	public static SmartFeatureFactory getFactory(){

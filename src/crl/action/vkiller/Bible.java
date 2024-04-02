@@ -77,7 +77,7 @@ public class Bible extends HeartAction {
 		return "Where do you want to throw the Cross?";
 	}
 
-	private static final Vector<Position> steps = new Vector<Position>(10);
+	private static final Vector<Position> steps = new Vector<>(10);
 
 	static {
 		steps.add(new Position(1, 0));

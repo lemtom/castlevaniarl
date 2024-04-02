@@ -57,7 +57,7 @@ public class Throw extends Action{
 			//The feature falls to the infinity
 		}else {
 			String placedSmartFeature = targetItem.getPlacedSmartFeature();
-			if (placedSmartFeature.length() != 0){
+			if (!placedSmartFeature.isEmpty()){
 				SmartFeature feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
 				feature.setPosition(destinationPoint);
 				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());

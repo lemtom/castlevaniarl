@@ -28,7 +28,7 @@ public class AppearanceFactory {
 	}
 
 	public AppearanceFactory(){
-		definitions = new Hashtable<String, Appearance>(40);
+		definitions = new Hashtable<>(40);
 	}
 
 }

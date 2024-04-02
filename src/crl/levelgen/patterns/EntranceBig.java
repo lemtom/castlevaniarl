@@ -285,7 +285,7 @@ public class EntranceBig {
 			"               22222222#", //
 			"                      $#" };
 
-	public static Map<String, String> defaultCharMap = new Hashtable<String, String>();
+	public static Map<String, String> defaultCharMap = new Hashtable<>();
 	static {
 		defaultCharMap.put("o", "MARBLE_COLUMN");
 		defaultCharMap.put(".", "MARBLE_FLOOR");

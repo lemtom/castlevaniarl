@@ -46,7 +46,7 @@ public class FusionSpirits extends Action {
                 secondaryDs = element.getDescription();
             }
         }
-		if (principal.length() == 0 || secondary.length() == 0) {
+		if (principal.isEmpty() || secondary.isEmpty()) {
 			performer.getLevel().addMessage("That fusion won't work");
 			return;
 		}
@@ -54,40 +54,56 @@ public class FusionSpirits extends Action {
 		performer.getLevel().addMessage("You try to fusion " + principalDs + " with " + secondaryDs + "...");
 		aPlayer.addHistoricEvent("Fusioned " + principalDs + " with " + secondaryDs);
 
-		if (principal.equals("VENUS_SPIRIT")) {
-			if (secondary.equals("URANUS_SPIRIT")) {
-				aPlayer.reduceCastCost(5);
-				performer.getLevel().addMessage("Your spellcasting ability increases!");
-			} else if (secondary.equals("NEPTUNE_SPIRIT")) {
-				aPlayer.increaseHeartMax(7);
-				performer.getLevel().addMessage("You are able to hold more hearts!");
-			} else if (secondary.equals("JUPITER_SPIRIT")) {
-				aPlayer.increaseSoulPower(1);
-				performer.getLevel().addMessage("Your soul power increases!");
-			}
-		} else if (principal.equals("MERCURY_SPIRIT")) {
-			if (secondary.equals("URANUS_SPIRIT")) {
-				aPlayer.reduceWalkCost(5);
-				performer.getLevel().addMessage("You feel quicker!");
-			} else if (secondary.equals("NEPTUNE_SPIRIT")) {
-				aPlayer.increaseCarryMax(5);
-				performer.getLevel().addMessage("You feel able to carry more!");
-			} else if (secondary.equals("JUPITER_SPIRIT")) {
-				aPlayer.increaseEvadeChance(5);
-				performer.getLevel().addMessage("You feel more nimble!");
-			}
-		} else if (principal.equals("MARS_SPIRIT")) {
-			if (secondary.equals("URANUS_SPIRIT")) {
-				aPlayer.reduceAttackCost(5);
-				performer.getLevel().addMessage("You feel more able on combat!");
-			} else if (secondary.equals("NEPTUNE_SPIRIT")) {
-				aPlayer.increaseHitsMax(3);
-				performer.getLevel().addMessage("You feel hardy!");
-			} else if (secondary.equals("JUPITER_SPIRIT")) {
-				aPlayer.increaseAttack(1);
-				performer.getLevel().addMessage("You feel stronger!");
-			}
-		}
+        switch (principal) {
+            case "VENUS_SPIRIT":
+                switch (secondary) {
+                    case "URANUS_SPIRIT":
+                        aPlayer.reduceCastCost(5);
+                        performer.getLevel().addMessage("Your spellcasting ability increases!");
+                        break;
+                    case "NEPTUNE_SPIRIT":
+                        aPlayer.increaseHeartMax(7);
+                        performer.getLevel().addMessage("You are able to hold more hearts!");
+                        break;
+                    case "JUPITER_SPIRIT":
+                        aPlayer.increaseSoulPower(1);
+                        performer.getLevel().addMessage("Your soul power increases!");
+                        break;
+                }
+                break;
+            case "MERCURY_SPIRIT":
+                switch (secondary) {
+                    case "URANUS_SPIRIT":
+                        aPlayer.reduceWalkCost(5);
+                        performer.getLevel().addMessage("You feel quicker!");
+                        break;
+                    case "NEPTUNE_SPIRIT":
+                        aPlayer.increaseCarryMax(5);
+                        performer.getLevel().addMessage("You feel able to carry more!");
+                        break;
+                    case "JUPITER_SPIRIT":
+                        aPlayer.increaseEvadeChance(5);
+                        performer.getLevel().addMessage("You feel more nimble!");
+                        break;
+                }
+                break;
+            case "MARS_SPIRIT":
+                switch (secondary) {
+                    case "URANUS_SPIRIT":
+                        aPlayer.reduceAttackCost(5);
+                        performer.getLevel().addMessage("You feel more able on combat!");
+                        break;
+                    case "NEPTUNE_SPIRIT":
+                        aPlayer.increaseHitsMax(3);
+                        performer.getLevel().addMessage("You feel hardy!");
+                        break;
+                    case "JUPITER_SPIRIT":
+                        aPlayer.increaseAttack(1);
+                        performer.getLevel().addMessage("You feel stronger!");
+                        break;
+                }
+                break;
+        }
 
         for (MenuItem targetMultiItem : targetMultiItems) {
             Item element = (Item) targetMultiItem;

@@ -35,12 +35,12 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return canSave;
 	}
 
-	private Hashtable /* Level */<String, Level> storedLevels = new Hashtable<String, Level>();
+	private Hashtable /* Level */<String, Level> storedLevels = new Hashtable<>();
 	private boolean endGame;
 	private long turns;
 	private boolean isDay = true;
 	private int timeSwitch;
-	private Hashtable<String, LevelMetaData> levelMetadata = new Hashtable<String, LevelMetaData>();
+	private Hashtable<String, LevelMetaData> levelMetadata = new Hashtable<>();
 	// private String[] levelPath;
 
 	public void commandSelected(int commandCode) {
@@ -68,11 +68,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 				player.darken();
 				player.see();
 				if (!player.justJumped()) {
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							ui.refresh();
-						}
-					});
+					SwingUtilities.invokeLater(() -> ui.refresh());
 				}
 				player.getGameSessionInfo().increaseTurns();
 				player.checkDeath();
@@ -270,8 +266,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	}
 
 	private void processLevelData(String[][] order, int startLevelNumber) {
-		Vector<Object> levels = new Vector<Object>(5);
-		Vector<String> numbered = new Vector<String>(5);
+		Vector<Object> levels = new Vector<>(5);
+		Vector<String> numbered = new Vector<>(5);
 		int levelCount = startLevelNumber;
         for (String[] strings : order) {
             int n = Util.rand(3, 6);
@@ -384,7 +380,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		levelMetadata.put("VILLA", md);
 
 		// levelPath = (String[]) levels.toArray(new String[levels.size()]);
-		storedLevels = new Hashtable<String, Level>();
+		storedLevels = new Hashtable<>();
 	}
 
 	private void resumeScreen() {
@@ -509,10 +505,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			if (currentLevel.getBoss() != null && !currentLevel.getBoss().isDead())
 				return false;
 			formerLevelID = currentLevel.getID();
-			Level storedLevel = storedLevels.get(formerLevelID);
-			if (storedLevel == null) {
-				storedLevels.put(formerLevelID, currentLevel);
-			}
+            storedLevels.computeIfAbsent(formerLevelID, k -> currentLevel);
 		} else {
 			formerLevelID = "_BACK";
 		}
@@ -640,7 +633,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		System.exit(-1);
 	}
 
-	private static Vector<String> reports = new Vector<String>(20);
+	private static Vector<String> reports = new Vector<>(20);
 
 	public static void addReport(String report) {
 		reports.add(report);
@@ -650,8 +643,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return reports;
 	}
 
-	private static Vector<String> uniqueRegister = new Vector<String>();
-	private Vector<String> uniqueRegisterObjectCopy = new Vector<String>();
+	private static Vector<String> uniqueRegister = new Vector<>();
+	private Vector<String> uniqueRegisterObjectCopy = new Vector<>();
 
 	public void syncUniqueRegister() {
 		uniqueRegister = uniqueRegisterObjectCopy;

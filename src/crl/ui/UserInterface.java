@@ -30,9 +30,9 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	};
 
 	// Status
-	protected Vector<ListItem> monstersOnSight = new Vector<ListItem>();
-	protected Vector<ListItem> featuresOnSight = new Vector<ListItem>();
-	protected Vector<ListItem> itemsOnSight = new Vector<ListItem>();
+	protected Vector<ListItem> monstersOnSight = new Vector<>();
+	protected Vector<ListItem> featuresOnSight = new Vector<>();
+	protected Vector<ListItem> itemsOnSight = new Vector<>();
 	protected Action actionSelectedByCommand;
 
 	// Components
@@ -134,8 +134,8 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 		commandListeners.remove(pCl);
 	}
 
-	protected Hashtable<String, UserCommand> gameCommands = new Hashtable<String, UserCommand>();
-	private Vector<CommandListener> commandListeners = new Vector<CommandListener>(5); // Class CommandListener
+	protected Hashtable<String, UserCommand> gameCommands = new Hashtable<>();
+	private Vector<CommandListener> commandListeners = new Vector<>(5); // Class CommandListener
 
 	/**
 	 * Prompts for Yes or NO

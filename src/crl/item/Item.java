@@ -19,8 +19,8 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	private String defID;
 	// Status
 	private int remainingTurnsToReload;
-	private ArrayList<Modifier> premodifiers = new ArrayList<Modifier>(10);
-	private ArrayList<Modifier> postmodifiers = new ArrayList<Modifier>(10);
+	private ArrayList<Modifier> premodifiers = new ArrayList<>(10);
+	private ArrayList<Modifier> postmodifiers = new ArrayList<>(10);
 	public static boolean shopMode = false;
 
 	public Item(ItemDefinition itemDef) {
@@ -318,7 +318,7 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 		return getDefinition().getWeaponCategory();
 	}
 
-	protected Hashtable<String, Integer> hashCounters = new Hashtable<String, Integer>();
+	protected Hashtable<String, Integer> hashCounters = new Hashtable<>();
 
 	public void setCounter(String counterID, int turns) {
 		hashCounters.put(counterID, turns);

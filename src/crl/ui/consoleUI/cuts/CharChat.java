@@ -3,8 +3,8 @@ package crl.ui.consoleUI.cuts;
 import java.util.Vector;
 
 public class CharChat {
-	private Vector<String> conversations = new Vector<String>(5);
-	private Vector<String> names = new Vector<String>(5);
+	private Vector<String> conversations = new Vector<>(5);
+	private Vector<String> names = new Vector<>(5);
 	
 	public void add(String name, String conversation){
 		names.add(name);

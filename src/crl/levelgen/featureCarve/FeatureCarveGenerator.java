@@ -17,8 +17,8 @@ public class FeatureCarveGenerator extends LevelGenerator{
 	private boolean[][] mask;
 	private String[][] preLevelB;
 	private boolean[][] maskB;
-	private ArrayList<Position> hotspots = new ArrayList<Position>();
-	private ArrayList<Position> roomHotspots = new ArrayList<Position>();
+	private ArrayList<Position> hotspots = new ArrayList<>();
+	private ArrayList<Position> roomHotspots = new ArrayList<>();
 	private String solidCell;
 	private String corridor;
 	private List<Feature> levelFeatures;
@@ -60,7 +60,7 @@ public class FeatureCarveGenerator extends LevelGenerator{
 		boolean placed = false;
 		int i = 0;
 		go: while (!checked) {
-			ArrayList<Feature> pendingFeatures = new ArrayList<Feature>(levelFeatures);
+			ArrayList<Feature> pendingFeatures = new ArrayList<>(levelFeatures);
 			hotspots.clear();
 			roomHotspots.clear();
 			//Fill the level with solid element

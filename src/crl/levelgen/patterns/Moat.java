@@ -462,7 +462,7 @@ public class Moat {
 			"    22s....22222    ", //
 			"    22222222222222  " };
 
-	public static Map<String, String> defaultCharMap = new Hashtable<String, String>();
+	public static Map<String, String> defaultCharMap = new Hashtable<>();
 	static {
 		defaultCharMap.put("o", "MOSS_COLUMN");
 		defaultCharMap.put(".", "MOSS_FLOOR");

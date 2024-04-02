@@ -10,7 +10,7 @@ public class ListBox extends TextComponent {
 
 	public ListBox(ConsoleSystemInterface si) {
 		super(si);
-		itemsLista = new Vector<ListItem>(10);
+		itemsLista = new Vector<>(10);
 	}
 
 	public void draw() {

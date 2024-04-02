@@ -49,7 +49,7 @@ public abstract class ProjectileSkill extends HeartAction {
 		return true;
 	}
 
-	private Vector<Monster> hitMonsters = new Vector<Monster>(10);
+	private Vector<Monster> hitMonsters = new Vector<>(10);
 
 	public Vector<Monster> getHitMonsters() {
 		return hitMonsters;

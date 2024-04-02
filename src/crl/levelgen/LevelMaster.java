@@ -675,7 +675,7 @@ public class LevelMaster {
 		int rooms = Util.rand(12, 15);
 		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
-		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<crl.levelgen.featureCarve.Feature>();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String wall = "QUARTERS_WALL";
 		String floor = "QUARTERS_FLOOR";
 		String column = "MARBLE_COLUMN";
@@ -708,7 +708,7 @@ public class LevelMaster {
 		int rooms = Util.rand(12, 15);
 		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
-		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<crl.levelgen.featureCarve.Feature>();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String floor = "DUNGEON_FLOOR";
 		String candle = "F_DUNGEON_FLOOR CANDLE";
 		String column = "DUNGEON_WALL";
@@ -734,7 +734,7 @@ public class LevelMaster {
 		int rooms = Util.rand(12, 15);
 		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
-		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<crl.levelgen.featureCarve.Feature>();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String wall = "TOWER_WALL";
 		String floor = "TOWER_FLOOR";
 		String candle = "F_TOWER_FLOOR CANDLE";
@@ -762,7 +762,7 @@ public class LevelMaster {
 		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
 
-		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<crl.levelgen.featureCarve.Feature>();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String floor = "WAREHOUSE_FLOOR";
 		String column = "WAREHOUSE_WALL";
 		String candle = "F_WAREHOUSE_FLOOR CANDLE";
@@ -790,7 +790,7 @@ public class LevelMaster {
 		int rooms = Util.rand(4, 6);
 		crl.levelgen.featureCarve.Feature room = null;
 
-		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<crl.levelgen.featureCarve.Feature>();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String floor = "SEWERS_FLOOR";
 		String column = "SEWERS_WALL";
 
@@ -813,7 +813,7 @@ public class LevelMaster {
 		int rooms = Util.rand(4, 6);
 		crl.levelgen.featureCarve.Feature room = null;
 
-		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<crl.levelgen.featureCarve.Feature>();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String floor = "SEWERS_FLOOR_WATER";
 		String column = "SEWERS_WALL_WATER";
 

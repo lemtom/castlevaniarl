@@ -12,7 +12,7 @@ public class MonsterFactory {
 	private static final MonsterFactory singleton = new MonsterFactory();
 
 	private Hashtable<String, MonsterDefinition> definitions;
-	private Vector<MonsterDefinition> vDefinitions = new Vector<MonsterDefinition>(50);
+	private Vector<MonsterDefinition> vDefinitions = new Vector<>(50);
 
 	public static MonsterFactory getFactory(){
 		return singleton;
@@ -31,7 +31,7 @@ public class MonsterFactory {
 	}*/
 
 	public MonsterFactory(){
-		definitions = new Hashtable<String, MonsterDefinition>(40);
+		definitions = new Hashtable<>(40);
 	}
 	
 	public void init(MonsterDefinition[] defs) {

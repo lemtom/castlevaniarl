@@ -7,8 +7,8 @@ import java.util.Vector;
 public class LevelMetaData implements Serializable {
 	private String levelID;
 	private int levelNumber = -1;
-	private Vector<String> exits = new Vector<String>();
-	private Hashtable<String, String> hexits = new Hashtable<String, String>();
+	private Vector<String> exits = new Vector<>();
+	private Hashtable<String, String> hexits = new Hashtable<>();
 
 	public Vector<String> getExits() {
 		return exits;

@@ -43,12 +43,12 @@ public class MidisLoader implements MetaEventListener {
 	private SoundsWatcher watcher = null;
 
 	public MidisLoader() {
-		midisMap = new HashMap<String, MidiInfo>();
+		midisMap = new HashMap<>();
 		initSequencer();
 	}
 
 	public MidisLoader(String soundsFnm) {
-		midisMap = new HashMap<String, MidiInfo>();
+		midisMap = new HashMap<>();
 		initSequencer();
 		loadSoundsFile(soundsFnm);
 	}
@@ -99,7 +99,7 @@ public class MidisLoader implements MetaEventListener {
 			StringTokenizer tokens;
 			String line, name, fnm;
 			while ((line = br.readLine()) != null) {
-				if (line.length() == 0) // blank line
+				if (line.isEmpty()) // blank line
 					continue;
 				if (line.startsWith("//")) // comment
 					continue;

@@ -30,7 +30,7 @@ public class Level implements FOVMap, Serializable {
 	private boolean[][][] remembered;
 	private VMonster monsters;
 	private VFeatures features;
-	private Hashtable<String, SmartFeature> smartFeatures = new Hashtable<String, SmartFeature>();
+	private Hashtable<String, SmartFeature> smartFeatures = new Hashtable<>();
 	private Player player;
 	private SZQueue messagesneffects;
 	private Dispatcher dispatcher;
@@ -43,18 +43,18 @@ public class Level implements FOVMap, Serializable {
 	private MonsterSpawnInfo[] inhabitants;
 	private MonsterSpawnInfo[] dwellersInfo;
 
-	private Hashtable<String, Object> bloods = new Hashtable<String, Object>();
-	private Hashtable<String, Counter> frosts = new Hashtable<String, Counter>();
-	private Hashtable<String, Vector<MenuItem>> items = new Hashtable<String, Vector<MenuItem>>();
-	private Hashtable<String, Position> exits = new Hashtable<String, Position>();
-	private Hashtable<String, String> exitPositions = new Hashtable<String, String>();
+	private Hashtable<String, Object> bloods = new Hashtable<>();
+	private Hashtable<String, Counter> frosts = new Hashtable<>();
+	private Hashtable<String, Vector<MenuItem>> items = new Hashtable<>();
+	private Hashtable<String, Position> exits = new Hashtable<>();
+	private Hashtable<String, String> exitPositions = new Hashtable<>();
 
-	private Hashtable<String, Counter> hashCounters = new Hashtable<String, Counter>();
+	private Hashtable<String, Counter> hashCounters = new Hashtable<>();
 
 	private String mapLocationKey;
 
-	private Vector<Feature> doomedFeatures = new Vector<Feature>();
-	private Vector<Feature> lightSources = new Vector<Feature>();
+	private Vector<Feature> doomedFeatures = new Vector<>();
+	private Vector<Feature> lightSources = new Vector<>();
 
 	public void addExit(Position where, String levelID) {
 		exits.put(levelID, where);
@@ -70,12 +70,8 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void addItem(Position where, Item what) {
-		Vector<MenuItem> stack = items.get(where.toString());
-		if (stack == null) {
-			stack = new Vector<MenuItem>(5);
-			items.put(where.toString(), stack);
-		}
-		stack.add(what);
+        Vector<MenuItem> stack = items.computeIfAbsent(where.toString(), k -> new Vector<>(5));
+        stack.add(what);
 	}
 
 	public void removeItemFrom(Item what, Position where) {
@@ -844,7 +840,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void savePop() {
-		tempActors = new Vector<PriorityEnqueable>(dispatcher.getActors());
+		tempActors = new Vector<>(dispatcher.getActors());
 	}
 
 	public void loadPop() {
@@ -965,7 +961,7 @@ public class Level implements FOVMap, Serializable {
 		return null;
 	}
 
-	private Hashtable<String, Boolean> hashFlags = new Hashtable<String, Boolean>();
+	private Hashtable<String, Boolean> hashFlags = new Hashtable<>();
 
 	public void setFlag(String flagID, boolean value) {
 		hashFlags.remove(flagID);
@@ -1025,7 +1021,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public boolean hasNoonMusic() {
-		return musicKeyNoon != null && musicKeyNoon.length() != 0;
+		return musicKeyNoon != null && !musicKeyNoon.isEmpty();
 	}
 
 	public String getID() {

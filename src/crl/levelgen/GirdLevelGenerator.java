@@ -129,7 +129,7 @@ public class GirdLevelGenerator extends LevelGenerator {
 
 	private boolean connected() {
 		Debug.enterMethod(this, "connected");
-		Stack<Position> stack = new Stack<Position>();
+		Stack<Position> stack = new Stack<>();
 		Position now = new Position(0, startIndex);
 		Position end = new Position(visitedRooms.length - 1, endIndex);
 		if (!horizontal) {

@@ -13,7 +13,7 @@ public class SFXManager {
 	public static synchronized void play(String fileName){
 		if (!enabled)
 			return;
-		if (fileName.length() == 0)
+		if (fileName.isEmpty())
 			return;
 		if (currentThread != null)
 			currentThread.interrupt();

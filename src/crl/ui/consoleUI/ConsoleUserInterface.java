@@ -47,7 +47,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 
-	private Hashtable /* BasicListItem */<String, BasicListItem> sightListItems = new Hashtable<String, BasicListItem>();
+	private Hashtable /* BasicListItem */<String, BasicListItem> sightListItems = new Hashtable<>();
 	// Relations
 
 	private transient ConsoleSystemInterface si;
@@ -480,7 +480,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		showPersistantMessageBox = true;
 	}
 
-	private Vector<String> messageHistory = new Vector<String>(20, 10);
+	private Vector<String> messageHistory = new Vector<>(20, 10);
 
 	public void addMessage(Message message) {
 		Debug.enterMethod(this, "addMessage", message);
@@ -644,7 +644,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			return str + spaces(limit - str.length());
 	}
 
-	private Map<Object, String> hashSpaces = new Hashtable<Object, String>();
+	private Map<Object, String> hashSpaces = new Hashtable<>();
 
 	private String spaces(int n) {
 		StringBuilder ret = new StringBuilder(hashSpaces.get(n + ""));
@@ -834,7 +834,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Item pickEquipedItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickEquipedItem");
-		Vector<MenuItem> equipped = new Vector<MenuItem>();
+		Vector<MenuItem> equipped = new Vector<>();
 		if (player.getArmor() != null)
 			equipped.add(player.getArmor());
 		if (player.getWeapon() != null)
@@ -919,7 +919,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setPrompt(prompt);
 		menuBox.setForeColor(ConsoleSystemInterface.RED);
 		menuBox.setBorder(true);
-		Vector<MenuItem> ret = new Vector<MenuItem>();
+		Vector<MenuItem> ret = new Vector<>();
 		MenuBox selectedBox = new MenuBox(si);
 		selectedBox.setBounds(5, 3, 20, 18);
 		selectedBox.setPromptSize(2);
@@ -947,7 +947,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Vector<MenuItem> pickSpirits() {
 		Vector<MenuItem> originalInventory = player.getInventory();
-		Vector<MenuItem> inventory = new Vector<MenuItem>();
+		Vector<MenuItem> inventory = new Vector<>();
 		for (int i = 0; i < originalInventory.size(); i++) {
 			Equipment testEq = (Equipment) originalInventory.elementAt(i);
 			if (testEq.getItem().getDefinition().getID().endsWith("_SPIRIT")) {
@@ -963,7 +963,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setForeColor(ConsoleSystemInterface.RED);
 		menuBox.setBorder(true);
 
-		Vector<MenuItem> ret = new Vector<MenuItem>();
+		Vector<MenuItem> ret = new Vector<>();
 		MenuBox selectedBox = new MenuBox(si);
 		selectedBox.setBounds(5, 3, 20, 18);
 		selectedBox.setPromptSize(2);
@@ -1093,7 +1093,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 	}
 
-	private Vector<MenuItem> vecItemUsageChoices = new Vector<MenuItem>();
+	private Vector<MenuItem> vecItemUsageChoices = new Vector<>();
 	{
 		vecItemUsageChoices.add(new SimpleMenuItem('*', "(u)se", 1));
 		vecItemUsageChoices.add(new SimpleMenuItem('*', "(e)quip", 2));
@@ -1603,7 +1603,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	public Vector<String> getMessageBuffer() {
 		if (messageHistory.size() > 20)
-			return new Vector<String>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
+			return new Vector<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
 		else
 			return messageHistory;
 	}

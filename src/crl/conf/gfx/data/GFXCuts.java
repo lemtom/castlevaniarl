@@ -50,7 +50,7 @@ public class GFXCuts {
 		thus = new GFXCuts();
 	}
 
-	private Hashtable<String, GFXChat> hashCuts = new Hashtable<String, GFXChat>();
+	private Hashtable<String, GFXChat> hashCuts = new Hashtable<>();
 	{
 		GFXChat temp = null;
 		temp = new GFXChat();

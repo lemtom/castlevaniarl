@@ -41,7 +41,7 @@ public class VMonster implements java.io.Serializable{
 	}
 
 	public VMonster(int size){
-		monsters = new Vector<Monster>(size);
+		monsters = new Vector<>(size);
 	}
 
 	public Vector<Monster> getVector(){

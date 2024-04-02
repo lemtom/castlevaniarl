@@ -6,7 +6,7 @@ public class SZQueue implements java.io.Serializable{
 	private Vector<Object> list;
 
 	public SZQueue(){
-		list = new Vector<Object>(40);
+		list = new Vector<>(40);
  	}
 
  	public boolean contains (Object what){
@@ -14,7 +14,7 @@ public class SZQueue implements java.io.Serializable{
 	}
 
  	public SZQueue (int ini){
- 		list = new Vector<Object>(ini);
+ 		list = new Vector<>(ini);
 	}
 
 	public Vector<Object> getVector(){

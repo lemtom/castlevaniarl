@@ -558,7 +558,7 @@ public class CharDisplay extends Display {
 
 	private Hashtable<String, Position> locationKeys;
 	{
-		locationKeys = new Hashtable<String, Position>();
+		locationKeys = new Hashtable<>();
 		locationKeys.put("TOWN", new Position(15, 15));
 		locationKeys.put("FOREST", new Position(23, 15));
 		locationKeys.put("BRIDGE", new Position(30, 15));

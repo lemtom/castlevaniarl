@@ -46,7 +46,7 @@ public class ItemDefinition {
 		return HASH_DESCRIPTIONS.get(catID);
 	}
 
-	public static final Map<String, String> HASH_DESCRIPTIONS = new Hashtable<String, String>();
+	public static final Map<String, String> HASH_DESCRIPTIONS = new Hashtable<>();
 	static {
 		HASH_DESCRIPTIONS.put(CAT_UNARMED, "hand to hand combat");
 		HASH_DESCRIPTIONS.put(CAT_DAGGERS, "daggers");

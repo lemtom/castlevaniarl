@@ -7,6 +7,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -244,9 +246,6 @@ public class Main {
 					ui.showVersionDialog("A newer version, " + latestVersion.getCode() + " from "
 							+ latestVersion.getFormattedDate() + " is available!", true);
 				}
-			} catch (HttpException ex) {
-				ui.showVersionDialog("Error checking for updates.", true);
-				ex.printStackTrace();
 			} catch (IOException ex) {
 				ui.showVersionDialog("Error checking for updates.", true);
 				ex.printStackTrace();
@@ -262,7 +261,7 @@ public class Main {
 	private static void readConfiguration() {
 		configuration = new Properties();
 		try {
-			configuration.load(new FileInputStream("cvrl.cfg"));
+			configuration.load(Files.newInputStream(Paths.get("cvrl.cfg")));
 		} catch (IOException e) {
 			System.out.println("Error loading configuration file, please confirm existence of cvrl.cfg");
 			System.exit(-1);
@@ -271,7 +270,7 @@ public class Main {
 		if (mode == SWING_GFX) {
 			UIconfiguration = new Properties();
 			try {
-				UIconfiguration.load(new FileInputStream(uiFile));
+				UIconfiguration.load(Files.newInputStream(Paths.get(uiFile)));
 			} catch (IOException e) {
 				System.out.println("Error loading configuration file, please confirm existence of " + uiFile);
 				System.exit(-1);
@@ -362,7 +361,7 @@ public class Main {
 		if (index == -1)
 			title();
 		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saves[index]));
+			ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(saves[index].toPath()));
 			currentGame = (Game) ois.readObject();
 			ois.close();
 		} catch (IOException ioe) {
@@ -546,20 +545,11 @@ public class Main {
 		try {
 			Field field = CharKey.class.getField(fieldName);
 			return field.getInt(CharKey.class);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error reading field : " + fieldName);
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error reading field : " + fieldName);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error reading field : " + fieldName);
-		} catch (IllegalAccessException e) {
+		} catch (SecurityException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Error reading field : " + fieldName);
 		}
-	}
+    }
 
 	public static void main(String[] args) {
 		mode = SWING_GFX;

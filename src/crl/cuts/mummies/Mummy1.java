@@ -55,7 +55,7 @@ public class Mummy1 extends Unleasher {
 		"---wwwwwwwwwwwwwwwwwwwwwwwwwwwwww---"
 	};
 	
-	private Hashtable<String, String> charMap = new Hashtable<String, String>();
+	private Hashtable<String, String> charMap = new Hashtable<>();
 	{
 		charMap.put("o", "RUINS_COLUMN");
 		charMap.put(".", "RUINS_FLOOR");

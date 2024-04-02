@@ -14,11 +14,11 @@ public class VEffect {
 	}
 
 	public VEffect(int size){
-		effects = new Vector<Effect>(size);
+		effects = new Vector<>(size);
 	}
 
 	public void erase(){
-		effects = new Vector<Effect>(effects.capacity());
+		effects = new Vector<>(effects.capacity());
 	}
 
 	public int size(){

@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class PropertyFilters {
 	public static Color getColor(String rgba){
@@ -26,7 +28,7 @@ public class PropertyFilters {
 	}
 	
 	public static Font getFont(String fontName, String size) throws FontFormatException, IOException{
-		return Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontName)).deriveFont(Font.PLAIN, inte(size));
+		return Font.createFont(Font.TRUETYPE_FONT, Files.newInputStream(Paths.get(fontName))).deriveFont(Font.PLAIN, inte(size));
 	}
 	
 	public static BufferedImage getImage(String fileName, String bounds) throws Exception{

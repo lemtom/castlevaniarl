@@ -8,7 +8,7 @@ public class LevelFeature {
 	// private Vector subFeatures; //Class AssignedFeature
 	private Dimension size;
 
-	private Vector<String[][]> layouts = new Vector<String[][]>(); // Class String[]
+	private Vector<String[][]> layouts = new Vector<>(); // Class String[]
 
 	/*
 	 * public void draw(Position where, Level canvas){ //Draw all its subfeatures in

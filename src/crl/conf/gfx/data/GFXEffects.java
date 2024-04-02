@@ -21,7 +21,7 @@ import crl.ui.graphicsUI.effects.GFXSequentialEffect;
 import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
 public class GFXEffects {
-	private Vector<Position> SFX_BIBLE_STEPS = new Vector<Position>(10);
+	private Vector<Position> SFX_BIBLE_STEPS = new Vector<>(10);
 	private BufferedImage IMG_EFFECTS;
 	
 	private BufferedImage[][] CURVED_FRAMES;

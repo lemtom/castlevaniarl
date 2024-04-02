@@ -135,7 +135,7 @@ public class CharKey {
 	public static final int CTRL = 127;
 
 	public int code;
-	public static final Map<String, String> mirrors = new Hashtable<String, String>(20);
+	public static final Map<String, String> mirrors = new Hashtable<>(20);
 
 	static {
 		mirrors.put("" + OPENSHARPBRACETS, "[");

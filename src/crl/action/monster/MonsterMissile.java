@@ -67,14 +67,19 @@ public class MonsterMissile extends Action{
         if (effectWav != null){
         	SFXManager.play(effectWav);
         }
-        if (effectType.equals("beam")){
-        	drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID,range));        
-        }else if (effectType.equals("melee")) {
-        	drawEffect(EffectFactory.getSingleton().createDirectionalEffect(aMonster.getPosition(), targetDirection, range, effectID));
-        }else if (effectType.equals("missile")){
-        	drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
-        }else if (effectType.equals("directionalmissile")){
-        	drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID , range));
+        switch (effectType) {
+            case "beam":
+                drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
+                break;
+            case "melee":
+                drawEffect(EffectFactory.getSingleton().createDirectionalEffect(aMonster.getPosition(), targetDirection, range, effectID));
+                break;
+            case "missile":
+                drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
+                break;
+            case "directionalmissile":
+                drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
+                break;
         }
         Line line = new Line(aMonster.getPosition(), targetPosition);
         boolean hits = false;
@@ -86,45 +91,53 @@ public class MonsterMissile extends Action{
 				attack -= penalty;
 				if (attack < 1)
 					attack = 1;
-				if (type.equals(TYPE_DIRECT)){
-					hits = true;
-				} else if (type.equals(TYPE_STRAIGHT)){
-					//if (monsterCell.getHeight() == playerCell.getHeight()){
-					if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()){
-						hits = true;
-					} else {
-						hits = false;
-					}
-				} else if (type.equals(TYPE_AXE)){
-					if (i > (range/4) && i < (3*(range/4))){
-						//if (playerCell.getHeight() == monsterCell.getHeight()+2 || playerCell.getHeight() == monsterCell.getHeight()+3){
-						if (aMonster.getStandingHeight()+2 == aPlayer.getStandingHeight() || aMonster.getStandingHeight()+3 == aPlayer.getStandingHeight()){
-							hits = true;
-						} else {
-							hits = false;
-						}
-					} else {
-						if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()){
-							hits = true;
-						} else {
-							hits = false;
-						}
-					}
-				}
+                switch (type) {
+                    case TYPE_DIRECT:
+                        hits = true;
+                        break;
+                    case TYPE_STRAIGHT:
+                        //if (monsterCell.getHeight() == playerCell.getHeight()){
+                        if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()) {
+                            hits = true;
+                        } else {
+                            hits = false;
+                        }
+                        break;
+                    case TYPE_AXE:
+                        if (i > (range / 4) && i < (3 * (range / 4))) {
+                            //if (playerCell.getHeight() == monsterCell.getHeight()+2 || playerCell.getHeight() == monsterCell.getHeight()+3){
+                            if (aMonster.getStandingHeight() + 2 == aPlayer.getStandingHeight() || aMonster.getStandingHeight() + 3 == aPlayer.getStandingHeight()) {
+                                hits = true;
+                            } else {
+                                hits = false;
+                            }
+                        } else {
+                            if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()) {
+                                hits = true;
+                            } else {
+                                hits = false;
+                            }
+                        }
+                        break;
+                }
 				if (hits){
 					aLevel.addBlood(destinationPoint, 1);
 					if (aPlayer.damage("The "+aMonster.getDescription()+ " hits you!", aMonster, new Damage((damage==0?aMonster.getAttack():damage), false))) {
 						if (statusEffect != null){
-							if (statusEffect.equals(Player.STATUS_STUN)){
-								aLevel.addMessage("You are stunned!");
-								aPlayer.setStun(8);
-							} else if (statusEffect.equals(Player.STATUS_POISON)){
-								aLevel.addMessage("Your blood is poisoned!");
-								aPlayer.setPoison(15);
-							} else if (statusEffect.equals(Player.STATUS_PETRIFY)){
-								aLevel.addMessage("Your skin petrifies!");
-								aPlayer.setPetrify(10);
-							}
+                            switch (statusEffect) {
+                                case Player.STATUS_STUN:
+                                    aLevel.addMessage("You are stunned!");
+                                    aPlayer.setStun(8);
+                                    break;
+                                case Player.STATUS_POISON:
+                                    aLevel.addMessage("Your blood is poisoned!");
+                                    aPlayer.setPoison(15);
+                                    break;
+                                case Player.STATUS_PETRIFY:
+                                    aLevel.addMessage("Your skin petrifies!");
+                                    aPlayer.setPetrify(10);
+                                    break;
+                            }
 						}
 					}
 				}

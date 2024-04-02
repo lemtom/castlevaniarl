@@ -6,7 +6,7 @@ public class SZPriorityQueue implements java.io.Serializable {
 	private Vector<PriorityEnqueable> list;
 
 	public SZPriorityQueue() {
-		list = new Vector<PriorityEnqueable>(40);
+		list = new Vector<>(40);
 	}
 
 	public boolean contains(Object what) {
@@ -14,7 +14,7 @@ public class SZPriorityQueue implements java.io.Serializable {
 	}
 
 	public SZPriorityQueue(int ini) {
-		list = new Vector<PriorityEnqueable>(ini);
+		list = new Vector<>(ini);
 	}
 
 	public Vector<PriorityEnqueable> getVector() {

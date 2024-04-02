@@ -30,7 +30,7 @@ public class MapCellFactory {
 	}
 
 	public MapCellFactory(){
-		definitions = new Hashtable<String, Cell>(40);
+		definitions = new Hashtable<>(40);
 	}
 
 	public void init(Cell[] defs) {

@@ -8,9 +8,9 @@ import crl.levelgen.MonsterSpawnInfo;
 import crl.levelgen.StaticGenerator;
 
 public abstract class StaticPattern {
-	protected Hashtable<String, String> charMap = new Hashtable<String, String>();
+	protected Hashtable<String, String> charMap = new Hashtable<>();
 	protected String[][] cellMap;
-	protected Hashtable<String, String> inhabitantsMap = new Hashtable<String, String>();
+	protected Hashtable<String, String> inhabitantsMap = new Hashtable<>();
 	protected String[][] inhabitants;
 	protected MonsterSpawnInfo[] spawnInfo;
 	protected Unleasher[] unleashers;

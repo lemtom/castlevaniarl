@@ -17,6 +17,8 @@ import crl.game.CRLException;
 import crl.monster.*;
 import crl.ui.AppearanceFactory;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -31,9 +33,9 @@ public class MonsterLoader {
 	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException {
 		BufferedReader br = null;
 		try {
-			Vector<MonsterDefinition> vecMonsters = new Vector<MonsterDefinition>(10);
+			Vector<MonsterDefinition> vecMonsters = new Vector<>(10);
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-			br = new BufferedReader(new InputStreamReader(encrypter.decrypt(new FileInputStream(monsterFile))));
+			br = new BufferedReader(new InputStreamReader(encrypter.decrypt(Files.newInputStream(Paths.get(monsterFile)))));
 			String line = br.readLine();
 			line = br.readLine();
 			while (line != null) {
@@ -77,7 +79,7 @@ public class MonsterLoader {
 			throws CRLException {
 		try {
 			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
-			Hashtable<String, MonsterDefinition> hashMonsters = new Hashtable<String, MonsterDefinition>();
+			Hashtable<String, MonsterDefinition> hashMonsters = new Hashtable<>();
 			for (MonsterDefinition monster : monsters) {
 				hashMonsters.put(monster.getID(), monster);
 			}
@@ -87,7 +89,7 @@ public class MonsterLoader {
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
 			// parser.setContentHandler(handler);
 			parser.setDocumentHandler(handler);
-			parser.parse(new InputSource(encrypter.decrypt(new FileInputStream(monsterXMLAIFile))));
+			parser.parse(new InputSource(encrypter.decrypt(Files.newInputStream(Paths.get(monsterXMLAIFile)))));
 			return monsters;
 
 			/*
@@ -129,64 +131,79 @@ class MonsterDocumentHandler implements DocumentHandler {
 	}
 
 	public void startElement(String localName, AttributeList at) throws org.xml.sax.SAXException {
-		if (localName.equals("monster")) {
-			currentMD = hashMonsters.get(at.getValue("id"));
-		} else if (localName.equals("sel_wander")) {
-			currentSelector = new WanderToPlayerAI();
-		} else if (localName.equals("sel_underwater")) {
-			currentSelector = new UnderwaterAI();
-		} else if (localName.equals("sel_sickle")) {
-			currentSelector = new crl.action.monster.boss.SickleAI();
-		} else if (localName.equals("sel_death")) {
-			currentSelector = new DeathAI();
-		} else if (localName.equals("sel_dracula")) {
-			currentSelector = new DraculaAI();
-		} else if (localName.equals("sel_demondracula")) {
-			currentSelector = new DemonDraculaAI();
-		} else if (localName.equals("sel_medusa")) {
-			currentSelector = new MedusaAI();
-		} else if (localName.equals("sel_frank")) {
-			currentSelector = new FrankAI();
-		} else if (localName.equals("sel_stationary")) {
-			currentSelector = new StationaryAI();
-		} else if (localName.equals("sel_basic")) {
-			currentSelector = new BasicMonsterAI();
-			if (at.getValue("stationary") != null)
-				((BasicMonsterAI) currentSelector).setStationary(at.getValue("stationary").equals("true"));
-			if (at.getValue("approachLimit") != null)
-				((BasicMonsterAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-			if (at.getValue("waitPlayerRange") != null)
-				((BasicMonsterAI) currentSelector).setWaitPlayerRange(inte(at.getValue("waitPlayerRange")));
-			if (at.getValue("patrolRange") != null)
-				((BasicMonsterAI) currentSelector).setPatrolRange(inte(at.getValue("patrolRange")));
-		} else if (localName.equals("sel_ranged")) {
-			currentSelector = new RangedAI();
-			((RangedAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-		} else if (localName.equals("rangedAttacks")) {
-			currentRangedAttacks = new Vector<RangedAttack>(10);
-		} else if (localName.equals("rangedAttack")) {
-			int damage = 0;
-			try {
-				damage = Integer.parseInt(at.getValue("damage"));
-			} catch (NumberFormatException nfe) {
+        switch (localName) {
+            case "monster":
+                currentMD = hashMonsters.get(at.getValue("id"));
+                break;
+            case "sel_wander":
+                currentSelector = new WanderToPlayerAI();
+                break;
+            case "sel_underwater":
+                currentSelector = new UnderwaterAI();
+                break;
+            case "sel_sickle":
+                currentSelector = new crl.action.monster.boss.SickleAI();
+                break;
+            case "sel_death":
+                currentSelector = new DeathAI();
+                break;
+            case "sel_dracula":
+                currentSelector = new DraculaAI();
+                break;
+            case "sel_demondracula":
+                currentSelector = new DemonDraculaAI();
+                break;
+            case "sel_medusa":
+                currentSelector = new MedusaAI();
+                break;
+            case "sel_frank":
+                currentSelector = new FrankAI();
+                break;
+            case "sel_stationary":
+                currentSelector = new StationaryAI();
+                break;
+            case "sel_basic":
+                currentSelector = new BasicMonsterAI();
+                if (at.getValue("stationary") != null)
+                    ((BasicMonsterAI) currentSelector).setStationary(at.getValue("stationary").equals("true"));
+                if (at.getValue("approachLimit") != null)
+                    ((BasicMonsterAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
+                if (at.getValue("waitPlayerRange") != null)
+                    ((BasicMonsterAI) currentSelector).setWaitPlayerRange(inte(at.getValue("waitPlayerRange")));
+                if (at.getValue("patrolRange") != null)
+                    ((BasicMonsterAI) currentSelector).setPatrolRange(inte(at.getValue("patrolRange")));
+                break;
+            case "sel_ranged":
+                currentSelector = new RangedAI();
+                ((RangedAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
+                break;
+            case "rangedAttacks":
+                currentRangedAttacks = new Vector<>(10);
+                break;
+            case "rangedAttack":
+                int damage = 0;
+                try {
+                    damage = Integer.parseInt(at.getValue("damage"));
+                } catch (NumberFormatException nfe) {
 
-			}
+                }
 
-			RangedAttack ra = new RangedAttack(at.getValue("id"), at.getValue("type"), at.getValue("status_effect"),
-					Integer.parseInt(at.getValue("range")), Integer.parseInt(at.getValue("frequency")),
-					at.getValue("message"), at.getValue("effectType"), at.getValue("effectID"), damage
+                RangedAttack ra = new RangedAttack(at.getValue("id"), at.getValue("type"), at.getValue("status_effect"),
+                        Integer.parseInt(at.getValue("range")), Integer.parseInt(at.getValue("frequency")),
+                        at.getValue("message"), at.getValue("effectType"), at.getValue("effectID"), damage
 
-			// color
-			);
-			if (at.getValue("effectWav") != null)
-				ra.setEffectWav(at.getValue("effectWav"));
-			if (at.getValue("summonMonsterId") != null)
-				ra.setSummonMonsterId(at.getValue("summonMonsterId"));
-			if (at.getValue("charge") != null)
-				ra.setChargeCounter(inte(at.getValue("charge")));
+                        // color
+                );
+                if (at.getValue("effectWav") != null)
+                    ra.setEffectWav(at.getValue("effectWav"));
+                if (at.getValue("summonMonsterId") != null)
+                    ra.setSummonMonsterId(at.getValue("summonMonsterId"));
+                if (at.getValue("charge") != null)
+                    ra.setChargeCounter(inte(at.getValue("charge")));
 
-			currentRangedAttacks.add(ra);
-		}
+                currentRangedAttacks.add(ra);
+                break;
+        }
 	}
 
 	public void endElement(String localName) throws org.xml.sax.SAXException {

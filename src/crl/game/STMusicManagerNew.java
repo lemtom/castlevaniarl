@@ -9,7 +9,7 @@ import sz.mp3.JLayerMP3Player;
 public class STMusicManagerNew {
 	private Thread currentMidiThread;
 	private Thread currentMP3Thread;
-	private Hashtable<String, String> musics = new Hashtable<String, String>();
+	private Hashtable<String, String> musics = new Hashtable<>();
 	private boolean enabled;
 	private String playing = "__nuthin";
 	

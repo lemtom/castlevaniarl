@@ -42,7 +42,7 @@ public class SwingSystemInterface implements Runnable{
 	private SwingInterfacePanel sip;
 	private StrokeNClickInformer aStrokeInformer;
 	private Position caretPosition = new Position(0,0);
-	private Hashtable<String, Image> images = new Hashtable<String, Image>();
+	private Hashtable<String, Image> images = new Hashtable<>();
 	
 	//private JTextArea invTextArea;
 	private JFrame frameMain;

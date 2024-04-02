@@ -34,7 +34,7 @@ public class MandragoraScream extends Action {
 			
 
 			VMonster monsters = performer.getLevel().getMonsters();
-			Vector<Monster> removables = new Vector<Monster>();
+			Vector<Monster> removables = new Vector<>();
 			for (int i = 0; i < monsters.size(); i++){
 				Monster monster = monsters.elementAt(i);
 				if (monster == performer)

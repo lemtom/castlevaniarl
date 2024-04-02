@@ -89,8 +89,8 @@ public class Merchant extends NPC {
 					) 
 			return;
 		
-		inventory = new Vector<MenuItem>();
-		Vector<String> vectorIDs = new Vector<String>();
+		inventory = new Vector<>();
+		Vector<String> vectorIDs = new Vector<>();
 		ItemDefinition[] defs = Items.getItemDefinitions();
 		int itemNumber = Util.rand(6,12);
 		int items = 0;

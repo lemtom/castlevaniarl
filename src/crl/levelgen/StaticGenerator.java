@@ -47,55 +47,65 @@ public class StaticGenerator {
 				if (!cmds[0].equals("NOTHING"))
 					cmap[where.z][where.x + x][where.y + y] = MapCellFactory.getMapCellFactory().getMapCell(cmds[0]);
 				if (cmds.length > 1) {
-					if (cmds[1].equals("FEATURE")) {
-						if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
-							Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
-							vFeature.setPosition(where.x + x, where.y + y, where.z);
-							if (cmds.length > 4) {
-								if (cmds[4].equals("COST")) {
-									vFeature.setKeyCost(Integer.parseInt(cmds[5]));
-								}
-							}
-							l.addFeature(vFeature);
-						}
-					} else if (cmds[1].equals("ITEM")) {
-						Item vItem = ItemFactory.getItemFactory().createItem(cmds[2]);
-						if (vItem != null)
-							l.addItem(new Position(where.x + x, where.y + y, where.z), vItem);
-					} else if (cmds[1].equals("MONSTER")) {
-						Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
-						toAdd.setPosition(where.x + x, where.y + y, where.z);
-						l.addMonster(toAdd);
-					} else if (cmds[1].equals("EXIT")) {
-						l.addExit(new Position(where.x + x, where.y + y, where.z), cmds[2]);
-					} else if (cmds[1].equals("EXIT_FEATURE")) {
-						l.addExit(new Position(where.x + x, where.y + y, where.z), cmds[2]);
-						Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[3]);
-						vFeature.setPosition(where.x + x, where.y + y, where.z);
-						if (cmds.length > 4) {
-							if (cmds[5].equals("COST")) {
-								vFeature.setKeyCost(Integer.parseInt(cmds[6]));
-							}
-						}
-						l.addFeature(vFeature);
-					} else if (cmds[1].equals("EOL")) {
-						l.addExit(new Position(where.x + x, where.y + y, where.z), "_NEXT");
-						Feature endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
-						endFeature.setPosition(where.x + x, where.y + y, where.z);
-						if (cmds.length > 3) {
-							// Debug.say("Hi... i will set the cost");
-							if (cmds[3].equals("COST")) {
-								// Debug.say("Hi... i did it to "+vFeature);
-								endFeature.setKeyCost(Integer.parseInt(cmds[4]));
-							}
-						}
-						l.addFeature(endFeature);
-					} else if (cmds[1].equals("NPC")) {
-						NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
-						toAdd.setPosition(where.x + x, where.y + y, where.z);
-						toAdd.setLevel(l);
-						l.addActor(toAdd);
-					}
+                    switch (cmds[1]) {
+                        case "FEATURE":
+                            if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
+                                Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+                                vFeature.setPosition(where.x + x, where.y + y, where.z);
+                                if (cmds.length > 4) {
+                                    if (cmds[4].equals("COST")) {
+                                        vFeature.setKeyCost(Integer.parseInt(cmds[5]));
+                                    }
+                                }
+                                l.addFeature(vFeature);
+                            }
+                            break;
+                        case "ITEM":
+                            Item vItem = ItemFactory.getItemFactory().createItem(cmds[2]);
+                            if (vItem != null)
+                                l.addItem(new Position(where.x + x, where.y + y, where.z), vItem);
+                            break;
+                        case "MONSTER": {
+                            Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
+                            toAdd.setPosition(where.x + x, where.y + y, where.z);
+                            l.addMonster(toAdd);
+                            break;
+                        }
+                        case "EXIT":
+                            l.addExit(new Position(where.x + x, where.y + y, where.z), cmds[2]);
+                            break;
+                        case "EXIT_FEATURE":
+                            l.addExit(new Position(where.x + x, where.y + y, where.z), cmds[2]);
+                            Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[3]);
+                            vFeature.setPosition(where.x + x, where.y + y, where.z);
+                            if (cmds.length > 4) {
+                                if (cmds[5].equals("COST")) {
+                                    vFeature.setKeyCost(Integer.parseInt(cmds[6]));
+                                }
+                            }
+                            l.addFeature(vFeature);
+                            break;
+                        case "EOL":
+                            l.addExit(new Position(where.x + x, where.y + y, where.z), "_NEXT");
+                            Feature endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+                            endFeature.setPosition(where.x + x, where.y + y, where.z);
+                            if (cmds.length > 3) {
+                                // Debug.say("Hi... i will set the cost");
+                                if (cmds[3].equals("COST")) {
+                                    // Debug.say("Hi... i did it to "+vFeature);
+                                    endFeature.setKeyCost(Integer.parseInt(cmds[4]));
+                                }
+                            }
+                            l.addFeature(endFeature);
+                            break;
+                        case "NPC": {
+                            NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
+                            toAdd.setPosition(where.x + x, where.y + y, where.z);
+                            toAdd.setLevel(l);
+                            l.addActor(toAdd);
+                            break;
+                        }
+                    }
 
 				}
 
@@ -134,62 +144,77 @@ public class StaticGenerator {
 						cmap[z][x][y] = MapCellFactory.getMapCellFactory().getMapCell(cmds[0]);
 
 					if (cmds.length > 1) {
-						if (cmds[1].equals("FEATURE")) {
-							if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
-								Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
-								vFeature.setPosition(x, y, z);
-								if (cmds.length > 4) {
-									if (cmds[4].equals("COST")) {
-										vFeature.setKeyCost(Integer.parseInt(cmds[5]));
-									}
-								}
-								ret.addFeature(vFeature, false);
-							}
-						} else if (cmds[1].equals("ITEM")) {
-							Item vItem = ItemFactory.getItemFactory().createItem(cmds[2]);
-							ret.addItem(new Position(x, y, z), vItem);
-						} else if (cmds[1].equals("WEAPON")) {
-							Item vItem = ItemFactory.getItemFactory().createWeapon(cmds[2], cmds[3]);
-							ret.addItem(new Position(x, y, z), vItem);
-						} else if (cmds[1].equals("MONSTER")) {
-							Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
-							toAdd.setPosition(x, y, z);
-							ret.addMonster(toAdd);
-						} else if (cmds[1].equals("NPC")) {
-							NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
-							toAdd.setPosition(x, y, z);
-							toAdd.setLevel(ret);
-							ret.addActor(toAdd);
-						} else if (cmds[1].equals("MERCHANT")) {
-							NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[2]));
-							toAdd.setLevel(ret);
-							toAdd.setPosition(x, y, z);
-							ret.addActor(toAdd);
-						} else if (cmds[1].equals("EXIT")) {
-							ret.addExit(new Position(x, y, z), cmds[2]);
-						} else if (cmds[1].equals("EXIT_FEATURE")) {
-							ret.addExit(new Position(x, y, z), cmds[2]);
-							Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[3]);
-							vFeature.setPosition(x, y, z);
-							if (cmds.length > 4) {
-								if (cmds[5].equals("COST")) {
-									vFeature.setKeyCost(Integer.parseInt(cmds[6]));
-								}
-							}
-							ret.addFeature(vFeature);
-						} else if (cmds[1].equals("EOL")) {
-							ret.addExit(new Position(x, y, z), "_NEXT");
-							Feature endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
-							endFeature.setPosition(x, y, z);
-							if (cmds.length > 3) {
-								// Debug.say("Hi... i will set the cost");
-								if (cmds[3].equals("COST")) {
-									// Debug.say("Hi... i did it to "+vFeature);
-									endFeature.setKeyCost(Integer.parseInt(cmds[4]));
-								}
-							}
-							ret.addFeature(endFeature);
-						}
+                        switch (cmds[1]) {
+                            case "FEATURE":
+                                if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
+                                    Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+                                    vFeature.setPosition(x, y, z);
+                                    if (cmds.length > 4) {
+                                        if (cmds[4].equals("COST")) {
+                                            vFeature.setKeyCost(Integer.parseInt(cmds[5]));
+                                        }
+                                    }
+                                    ret.addFeature(vFeature, false);
+                                }
+                                break;
+                            case "ITEM": {
+                                Item vItem = ItemFactory.getItemFactory().createItem(cmds[2]);
+                                ret.addItem(new Position(x, y, z), vItem);
+                                break;
+                            }
+                            case "WEAPON": {
+                                Item vItem = ItemFactory.getItemFactory().createWeapon(cmds[2], cmds[3]);
+                                ret.addItem(new Position(x, y, z), vItem);
+                                break;
+                            }
+                            case "MONSTER": {
+                                Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
+                                toAdd.setPosition(x, y, z);
+                                ret.addMonster(toAdd);
+                                break;
+                            }
+                            case "NPC": {
+                                NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
+                                toAdd.setPosition(x, y, z);
+                                toAdd.setLevel(ret);
+                                ret.addActor(toAdd);
+                                break;
+                            }
+                            case "MERCHANT": {
+                                NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[2]));
+                                toAdd.setLevel(ret);
+                                toAdd.setPosition(x, y, z);
+                                ret.addActor(toAdd);
+                                break;
+                            }
+                            case "EXIT":
+                                ret.addExit(new Position(x, y, z), cmds[2]);
+                                break;
+                            case "EXIT_FEATURE":
+                                ret.addExit(new Position(x, y, z), cmds[2]);
+                                Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[3]);
+                                vFeature.setPosition(x, y, z);
+                                if (cmds.length > 4) {
+                                    if (cmds[5].equals("COST")) {
+                                        vFeature.setKeyCost(Integer.parseInt(cmds[6]));
+                                    }
+                                }
+                                ret.addFeature(vFeature);
+                                break;
+                            case "EOL":
+                                ret.addExit(new Position(x, y, z), "_NEXT");
+                                Feature endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+                                endFeature.setPosition(x, y, z);
+                                if (cmds.length > 3) {
+                                    // Debug.say("Hi... i will set the cost");
+                                    if (cmds[3].equals("COST")) {
+                                        // Debug.say("Hi... i did it to "+vFeature);
+                                        endFeature.setKeyCost(Integer.parseInt(cmds[4]));
+                                    }
+                                }
+                                ret.addFeature(endFeature);
+                                break;
+                        }
 					}
 
 				}
@@ -202,20 +227,27 @@ public class StaticGenerator {
 						if (inhabitantsMap.get(inhabitants[z][y].charAt(x) + "") == null)
 							continue;
 						String[] cmds = inhabitantsMap.get(inhabitants[z][y].charAt(x) + "").split(" ");
-						if (cmds[0].equals("MONSTER")) {
-							Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[1]);
-							toAdd.setPosition(x, y, z);
-							ret.addMonster(toAdd);
-						} else if (cmds[0].equals("NPC")) {
-							NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[1]);
-							toAdd.setPosition(x, y, z);
-							toAdd.setLevel(ret);
-							ret.addActor(toAdd);
-						} else if (cmds[0].equals("MERCHANT")) {
-							NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[1]));
-							toAdd.setPosition(x, y, z);
-							ret.addActor(toAdd);
-						}
+                        switch (cmds[0]) {
+                            case "MONSTER": {
+                                Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[1]);
+                                toAdd.setPosition(x, y, z);
+                                ret.addMonster(toAdd);
+                                break;
+                            }
+                            case "NPC": {
+                                NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[1]);
+                                toAdd.setPosition(x, y, z);
+                                toAdd.setLevel(ret);
+                                ret.addActor(toAdd);
+                                break;
+                            }
+                            case "MERCHANT": {
+                                NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[1]));
+                                toAdd.setPosition(x, y, z);
+                                ret.addActor(toAdd);
+                                break;
+                            }
+                        }
 					}
 		}
 

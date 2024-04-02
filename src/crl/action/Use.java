@@ -79,82 +79,86 @@ public class Use extends Action{
 			}
 		}
 		
-		if (effect[0].length() == 0){
+		if (effect[0].isEmpty()){
 			performer.getLevel().addMessage("You don't find a use for the " +targetItem.getDescription());
 			//aPlayer.addItem(targetItem);
 			return;
 		}                                
 		for (int cmd = 0; cmd < effect.length; cmd+=2){
 			String message = targetItem.getUseMessage();
-			if (message.length() == 0)
+			if (message.isEmpty())
 				message = "You use the "+targetItem.getDescription();
-			if (effect[cmd].equals("DAYLIGHT")){
-				if (!aPlayer.getLevel().isDay()){
-					aPlayer.getLevel().addMessage("The card fizzles in a blast of light!");
-					aPlayer.informPlayerEvent(Player.EVT_FORWARDTIME);
-				} else {
-					aPlayer.getLevel().addMessage("Nothing happens.");
-				}
-			}
-			else
-			if (effect[cmd].equals("MOONLIGHT")){
-				if (aPlayer.getLevel().isDay()){
-					aPlayer.getLevel().addMessage("The card fizzles in a puff of smoke!");
-					aPlayer.informPlayerEvent(Player.EVT_FORWARDTIME);
-				} else {
-					aPlayer.getLevel().addMessage("Nothing happens.");
-				}
-			}
-			else
-			if (effect[cmd].equals("INCREASE_DEFENSE"))
-				aPlayer.increaseDefense(Integer.parseInt(effect[cmd+1]));
-			else
-			if (effect[cmd].equals("INVINCIBILITY"))
-				aPlayer.setInvincible(Integer.parseInt(effect[cmd+1]));
-			else
-			if (effect[cmd].equals("ENERGY_FIELD"))
-				aPlayer.setEnergyField(Integer.parseInt(effect[cmd+1]));
-			else
-			if (effect[cmd].equals("READ_CLUE"))
-				readClue(Integer.parseInt(effect[cmd+1]));
-			else
+            switch (effect[cmd]) {
+                case "DAYLIGHT":
+                    if (!aPlayer.getLevel().isDay()) {
+                        aPlayer.getLevel().addMessage("The card fizzles in a blast of light!");
+                        aPlayer.informPlayerEvent(Player.EVT_FORWARDTIME);
+                    } else {
+                        aPlayer.getLevel().addMessage("Nothing happens.");
+                    }
+                    break;
+                case "MOONLIGHT":
+                    if (aPlayer.getLevel().isDay()) {
+                        aPlayer.getLevel().addMessage("The card fizzles in a puff of smoke!");
+                        aPlayer.informPlayerEvent(Player.EVT_FORWARDTIME);
+                    } else {
+                        aPlayer.getLevel().addMessage("Nothing happens.");
+                    }
+                    break;
+                case "INCREASE_DEFENSE":
+                    aPlayer.increaseDefense(Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "INVINCIBILITY":
+                    aPlayer.setInvincible(Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "ENERGY_FIELD":
+                    aPlayer.setEnergyField(Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "READ_CLUE":
+                    readClue(Integer.parseInt(effect[cmd + 1]));
+                    break;
 			/*if (effect[cmd].equals("LIGHT"))
 				aPlayer.setCounter("LIGHT",Integer.parseInt(effect[cmd+1]));
 			else*/
-			if (effect[cmd].equals("INCREASE_JUMPING"))
-				aPlayer.increaseJumping(Integer.parseInt(effect[cmd+1]));
-			else
-			if (effect[cmd].equals("SETWHIP")) {
-				if (effect[cmd+1].equals("LIT"))
-					aPlayer.setLitWhip();
-				else if (effect[cmd+1].equals("FLAME"))
-					aPlayer.setFireWhip();
-				else if (effect[cmd+1].equals("THORN"))
-					aPlayer.setThornWhip();
-			}
-			else
-			if (effect[cmd].equals("HEAL")){
-				if (effect[cmd+1].equals("NP"))
-					aPlayer.heal();
-				else
-					aPlayer.recoverHits(Integer.parseInt(effect[cmd+1]));
-			}
-			else
-			if (effect[cmd].equals("FIREBALL"))
-				//aPlayer.setFireballWhip(Integer.parseInt(effect[cmd+1]));
-				aPlayer.setCounter(Consts.C_FIREBALL_WHIP, Integer.parseInt(effect[cmd+1]));
-			else
-			if (effect[cmd].equals("RECOVER"))
-				aPlayer.recoverHits(Integer.parseInt(effect[cmd+1]));
-			else
-			if (effect[cmd].equals("DAMAGE")) {
-				if (aPlayer.isInvincible())
-					aPlayer.getLevel().addMessage("The damage is repelled!");
-				else
-					aPlayer.selfDamage(message, Player.DAMAGE_USING_ITEM, new Damage(Integer.parseInt(effect[cmd+1]), false));
-			}else if (effect[cmd].equals("LIGHT")) {
-				aPlayer.setCounter("LIGHT", 200);
-			}
+                case "INCREASE_JUMPING":
+                    aPlayer.increaseJumping(Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "SETWHIP":
+                    switch (effect[cmd + 1]) {
+                        case "LIT":
+                            aPlayer.setLitWhip();
+                            break;
+                        case "FLAME":
+                            aPlayer.setFireWhip();
+                            break;
+                        case "THORN":
+                            aPlayer.setThornWhip();
+                            break;
+                    }
+                    break;
+                case "HEAL":
+                    if (effect[cmd + 1].equals("NP"))
+                        aPlayer.heal();
+                    else
+                        aPlayer.recoverHits(Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "FIREBALL":
+                    //aPlayer.setFireballWhip(Integer.parseInt(effect[cmd+1]));
+                    aPlayer.setCounter(Consts.C_FIREBALL_WHIP, Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "RECOVER":
+                    aPlayer.recoverHits(Integer.parseInt(effect[cmd + 1]));
+                    break;
+                case "DAMAGE":
+                    if (aPlayer.isInvincible())
+                        aPlayer.getLevel().addMessage("The damage is repelled!");
+                    else
+                        aPlayer.selfDamage(message, Player.DAMAGE_USING_ITEM, new Damage(Integer.parseInt(effect[cmd + 1]), false));
+                    break;
+                case "LIGHT":
+                    aPlayer.setCounter("LIGHT", 200);
+                    break;
+            }
 			performer.getLevel().addMessage(message);
 		}
 		if (def.isSingleUse())

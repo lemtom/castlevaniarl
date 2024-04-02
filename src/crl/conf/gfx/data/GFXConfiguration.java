@@ -83,13 +83,11 @@ public class GFXConfiguration {
 			this.messageBoxFont = PropertyFilters.getFont(p.getProperty("FNT_MESSAGEBOX"),p.getProperty("FNT_MESSAGEBOX_SIZE"));
 			this.persistantMessageBoxFont = PropertyFilters.getFont(p.getProperty("FNT_PERSISTANTMESSAGEBOX"),p.getProperty("FNT_PERSISTANTMESSAGEBOX_SIZE"));
 			
-		} catch (FontFormatException ffe){
+		} catch (FontFormatException | IOException ffe){
 			Game.crash("Error loading the font", ffe);
-		} catch (IOException ioe){
-			Game.crash("Error loading the font", ioe);
 		}
-		
-		/*-- Load UI Images */
+
+        /*-- Load UI Images */
 		try {
 			this.statusScreenBackground = ImageUtils.createImage(p.getProperty("IMG_STATUSSCR_BGROUND"));
 			this.UserInterfaceBackgroundImage = ImageUtils.createImage(p.getProperty("IMG_INTERFACE"));

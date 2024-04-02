@@ -23,7 +23,7 @@ public class CharCuts {
 		thus = new CharCuts();
 	}
 
-	private Hashtable<String, CharChat> hashCuts = new Hashtable<String, CharChat>();
+	private Hashtable<String, CharChat> hashCuts = new Hashtable<>();
 	{
 		CharChat temp = null;
 		temp = new CharChat();

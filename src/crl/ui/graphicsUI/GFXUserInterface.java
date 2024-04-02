@@ -17,6 +17,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import javax.swing.*;
@@ -70,7 +72,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	private boolean flipFacing;
-	private Vector<String> messageHistory = new Vector<String>(10);
+	private Vector<String> messageHistory = new Vector<>(10);
 
 	// Relations
 
@@ -894,15 +896,13 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 		/*-- Load Fonts */
 		try {
-			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("res/v5easter.ttf"))
+			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, Files.newInputStream(Paths.get("res/v5easter.ttf")))
 					.deriveFont(Font.PLAIN, 15);
-		} catch (FontFormatException ffe) {
+		} catch (FontFormatException | IOException ffe) {
 			Game.crash("Error loading the font", ffe);
-		} catch (IOException ioe) {
-			Game.crash("Error loading the font", ioe);
 		}
 
-		/*-- Load UI Images */
+        /*-- Load UI Images */
 		try {
 			BufferedImage userInterfaceTileset = this.configuration.getImageConfiguration().getUserInterfaceTileset();
 			BufferedImage viewportUserInterfaceTileset = this.configuration.getImageConfiguration()
@@ -1208,7 +1208,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	private Item pickEquipedItem(String prompt) throws ActionCancelException {
 		enterScreen();
 
-		Vector<MenuItem> equipped = new Vector<MenuItem>();
+		Vector<MenuItem> equipped = new Vector<>();
 		if (player.getArmor() != null)
 			equipped.add(player.getArmor());
 		if (player.getWeapon() != null)
@@ -1286,7 +1286,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		menuBox.setTitle(prompt);
 		// menuBox.setForeColor(ConsoleSystemInterface.RED);
 		// menuBox.setBorder(true);
-		Vector<MenuItem> ret = new Vector<MenuItem>();
+		Vector<MenuItem> ret = new Vector<>();
 		BorderedMenuBox selectedBox = GetMenuBox();
 		selectedBox.setBounds(5, 3, 20, 18);
 		// selectedBox.setPromptSize(2);
@@ -1359,11 +1359,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	@Override
 	public void safeRefresh() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				refresh();
-			}
-		});
+		SwingUtilities.invokeLater(() -> refresh());
 	}
 
 	public void refresh() {
@@ -1443,7 +1439,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return item;
 	}
 
-	private Vector<MenuItem> vecItemUsageChoices = new Vector<MenuItem>();
+	private Vector<MenuItem> vecItemUsageChoices = new Vector<>();
 	{
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[u]se", 1));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[e]quip", 2));
@@ -1975,7 +1971,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				Color IN_COLOR, int borderWidth, int borderHeight) {
 			super(UPRIGHT, UPLEFT, DOWNRIGHT, DOWNLEFT, OUT_COLOR, IN_COLOR, borderWidth, borderHeight);
 
-			lstMerchandise = new JList<MenuItem>(new DefaultListModel<MenuItem>());
+			lstMerchandise = new JList<>(new DefaultListModel<>());
 			btnBuy = new GFXButton(IMG_BUY_BTN);
 			btnExit = new GFXButton(IMG_EXIT_BTN);
 			btnYes = new GFXButton(IMG_YES_BTN);
@@ -2088,29 +2084,13 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 			setBackground(Color.BLACK);
 
-			btnYes.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					doYes();
-				}
-			});
+			btnYes.addActionListener(arg0 -> doYes());
 
-			btnNo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					doNo();
-				}
-			});
+			btnNo.addActionListener(arg0 -> doNo());
 
-			btnBuy.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					doBuy();
-				}
-			});
+			btnBuy.addActionListener(arg0 -> doBuy());
 
-			btnExit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					doExit();
-				}
-			});
+			btnExit.addActionListener(arg0 -> doExit());
 
 		}
 
@@ -2230,7 +2210,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				Color IN_COLOR, int borderWidth, int borderHeight) {
 			super(UPRIGHT, UPLEFT, DOWNRIGHT, DOWNLEFT, OUT_COLOR, IN_COLOR, borderWidth, borderHeight);
 
-			lstInventory = new JList<MenuItem>(new DefaultListModel<MenuItem>());
+			lstInventory = new JList<>(new DefaultListModel<>());
 			lstInventory.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			btnExit = new GFXButton(IMG_EXIT_BTN);
 			btnOk = new GFXButton(IMG_OK_BTN);
@@ -2258,17 +2238,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 			setBackground(Color.BLACK);
 
-			btnExit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					doExit();
-				}
-			});
-			btnOk.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent arg0) {
-					doOk();
-				}
-			});
+			btnExit.addActionListener(arg0 -> doExit());
+			btnOk.addActionListener(arg0 -> doOk());
 			lstInventory.addKeyListener(new KeyListener() {
 
 				public void keyPressed(KeyEvent e) {
@@ -2297,7 +2268,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 		private void doOk() {
 			if (activeThread != null) {
-				choice = new Vector<Item>();
+				choice = new Vector<>();
 				int[] indices = lstInventory.getSelectedIndices();
                 for (int index : indices) {
                     choice.add(((Equipment) inventory.elementAt(index)).getItem());
@@ -2370,7 +2341,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	public Vector<String> getMessageBuffer() {
 		// return new Vector(messageHistory.subList(0,21));
 		if (messageHistory.size() > 20)
-			return new Vector<String>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
+			return new Vector<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
 		else
 			return messageHistory;
 	}
@@ -2387,11 +2358,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			btnOk = new GFXButton(IMG_OK_BTN);
 			setLayout(new BorderLayout());
 			add(btnOk, BorderLayout.SOUTH);
-			btnOk.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					doOk();
-				}
-			});
+			btnOk.addActionListener(arg0 -> doOk());
 
 			addKeyListener(new KeyAdapter() {
 				@Override

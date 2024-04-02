@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
@@ -297,7 +299,7 @@ public class GameFiles {
 			sc.writeObject(g);
 			sc.close();
 
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filename));
+			ObjectOutputStream os = new ObjectOutputStream(Files.newOutputStream(Paths.get(filename)));
 			os.writeObject(g);
 			os.close();
 		} catch (IOException ioe) {
@@ -475,7 +477,7 @@ public class GameFiles {
 	}
 
 	public static Map<String, MonsterRecord> getMonsterRecord() {
-		Hashtable<String, MonsterRecord> ret = new Hashtable<String, MonsterRecord>();
+		Hashtable<String, MonsterRecord> ret = new Hashtable<>();
 		try {
 			BufferedReader lectorArchivo = FileUtil.getReader("graveyard");
 			String line = lectorArchivo.readLine();
