@@ -99,7 +99,7 @@ public class BorderedMenuBox {
 		/*System.out.println("items.size() "+items.size());
 		System.out.println("inHeight "+inHeight);*/
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
-		Vector<?> shownItems = Util.page(items, itemsPerPage, currentPage);
+		Vector<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
 		
 		int i = 0;
 		for (; i < shownItems.size(); i++){
@@ -143,7 +143,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector<?> shownItems = Util.page(items, pageElements, currentPage);
+			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&
@@ -178,7 +178,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector<?> shownItems = Util.page(items, pageElements, currentPage);
+			Vector<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&

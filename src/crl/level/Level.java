@@ -93,7 +93,7 @@ public class Level implements FOVMap, Serializable {
 
 	public void addFrost(Position where, int frostness) {
 		if (getFrostAt(where) != 0)
-			frosts.remove(where); //TODO Check, this seems weird
+			frosts.remove(where); // TODO Check, this seems weird
 		frosts.put(where.toString(), new Counter(frostness));
 	}
 
@@ -101,7 +101,7 @@ public class Level implements FOVMap, Serializable {
 		if (Main.getConfigurationVal("blood").equals("false"))
 			return;
 		if (getBloodAt(where) != null)
-			bloods.remove(where); //TODO Check, this seems weird
+			bloods.remove(where); // TODO Check, this seems weird
 		if (!isValidCoordinate(where))
 			return;
 		if (getMapCell(where) == null || getMapCell(where).isSolid())
@@ -197,7 +197,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public Actor getActorAt(Position x) {
-		Vector<?> actors = dispatcher.getActors();
+		Vector<PriorityEnqueable> actors = dispatcher.getActors();
 		for (int i = 0; i < actors.size(); i++) {
 			Actor a = (Actor) actors.elementAt(i);
 			/*
@@ -521,13 +521,13 @@ public class Level implements FOVMap, Serializable {
 					if (!isWalkable(spawnPosition) || getMapCell(spawnPosition).isWater()
 							|| getMapCell(spawnPosition).isShallowWater()) {
 						tries++;
-                    } else {
+					} else {
 						break;
 					}
 				} else if (random.getSpawnLocation() == MonsterSpawnInfo.WATER) {
 					if (!getMapCell(spawnPosition).isWater() && !getMapCell(spawnPosition).isShallowWater()) {
 						tries++;
-                    } else {
+					} else {
 						break;
 					}
 				}
@@ -740,7 +740,7 @@ public class Level implements FOVMap, Serializable {
 	 */
 
 	public void signal(Position center, int range, String message) {
-		Vector<?> actors = dispatcher.getActors();
+		Vector<PriorityEnqueable> actors = dispatcher.getActors();
 		for (int i = 0; i < actors.size(); i++) {
 			if (Position.flatDistance(center, ((Actor) actors.elementAt(i)).getPosition()) <= range)
 				((Actor) actors.elementAt(i)).message(message);
@@ -754,9 +754,9 @@ public class Level implements FOVMap, Serializable {
 
 	public void anihilate() {
 		smartFeatures.clear();
-		Vector<?> mounds = features.getAllOf("MOUND");
+		Vector<Feature> mounds = features.getAllOf("MOUND");
 		for (int i = 0; i < mounds.size(); i++)
-			features.removeFeature((Feature) mounds.elementAt(i));
+			features.removeFeature(mounds.elementAt(i));
 		monsters.removeAll();
 		dispatcher.removeAll();
 		dispatcher.addActor(player);
@@ -993,16 +993,16 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void checkUnleashers(Game game) {
-        for (Unleasher unleasher : unleashers) {
-            if (unleasher.enabled())
-                unleasher.unleash(this, game);
-        }
+		for (Unleasher unleasher : unleashers) {
+			if (unleasher.enabled())
+				unleasher.unleash(this, game);
+		}
 	}
 
 	public void disableTriggers() {
-        for (Unleasher unleasher : unleashers) {
-            unleasher.disable();
-        }
+		for (Unleasher unleasher : unleashers) {
+			unleasher.disable();
+		}
 	}
 
 	private String musicKeyMorning;

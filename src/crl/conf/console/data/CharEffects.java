@@ -226,7 +226,7 @@ public class CharEffects {
 		return effects;
 	}
 
-	private static final Vector SFX_BIBLE_STEPS = new Vector(10);
+	private static final Vector<Position> SFX_BIBLE_STEPS = new Vector<Position>(10);
 
 	static {
 		SFX_BIBLE_STEPS.add(new Position(1,0));
