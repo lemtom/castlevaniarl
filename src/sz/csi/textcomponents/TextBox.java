@@ -8,7 +8,7 @@ public class TextBox extends TextComponent{
 	
 	public TextBox(ConsoleSystemInterface si){
 		super(si);
-		lines = new StringBuffer[]{new StringBuffer("")};
+		lines = new StringBuffer[]{new StringBuffer()};
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class TextBox extends TextComponent{
 		lines = new StringBuffer[value];
 		
 		for (int i = 0; i < value; i++){
-			lines[i] = new StringBuffer("");
+			lines[i] = new StringBuffer();
 		}
 	}
 
@@ -34,7 +34,7 @@ public class TextBox extends TextComponent{
 		}
 		
 		for (int i = 0; i < lines.length; i++){
-			lines[i] = new StringBuffer("");
+			lines[i] = new StringBuffer();
 		}
 	}
 		
@@ -57,7 +57,6 @@ public class TextBox extends TextComponent{
 		String [] tokens = text.split(" ");
 		int curx = 0; 
 		int cury = 0;
-		out:
         for (String token : tokens) {
             int distance = inWidth - curx;
             if (distance < token.length() + 1) {
@@ -84,7 +83,7 @@ public class TextBox extends TextComponent{
 
 	public void clear (){
 		for (int i = 0; i < lines.length; i++)
-			lines[i] = new StringBuffer("");
+			lines[i] = new StringBuffer();
 	}
 
 }

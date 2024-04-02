@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class PropertyFilters {
@@ -28,7 +27,7 @@ public class PropertyFilters {
 	}
 	
 	public static Font getFont(String fontName, String size) throws FontFormatException, IOException{
-		return Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(fontName))).deriveFont(Font.PLAIN, inte(size));
+		return Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontName)).deriveFont(Font.PLAIN, inte(size));
 	}
 	
 	public static BufferedImage getImage(String fileName, String bounds) throws Exception{

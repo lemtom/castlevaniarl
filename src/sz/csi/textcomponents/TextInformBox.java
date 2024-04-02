@@ -21,7 +21,7 @@ public class TextInformBox extends TextComponent{
 		super.setHeight(value);
 		lines = new StringBuffer[value];
 		for (int i = 0; i < lines.length; i++)
-			lines[i] = new StringBuffer("");
+			lines[i] = new StringBuffer();
 	}
 	
 	public void draw() {
@@ -60,7 +60,7 @@ public class TextInformBox extends TextComponent{
 	
 	public void clear(){
 		for (int i = 0; i < lines.length; i++)
-			lines[i] = new StringBuffer("");
+			lines[i] = new StringBuffer();
 		for (int i = 0; i < height; i++)
 			si.print(position.x, position.y+i, spaces);
 		curx=0;

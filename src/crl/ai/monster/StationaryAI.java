@@ -1,7 +1,5 @@
 package crl.ai.monster;
 
-import java.util.Iterator;
-
 import sz.util.Position;
 import sz.util.Util;
 import crl.action.Action;

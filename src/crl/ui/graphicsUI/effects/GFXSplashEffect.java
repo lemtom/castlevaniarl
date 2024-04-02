@@ -39,23 +39,20 @@ public class GFXSplashEffect extends GFXEffect{
 		int d = 3 - (2 * radius);
 		Position runner = new Position(0, radius);
 		Position zero = new Position(0,0);
-		while (true) {
-			if (Position.flatDistance(zero, runner) <= radius)
-				drawCirclePixels(ui, si, p, runner.x,runner.y, tile,height);
-			if (d < 0)
-				d = d + (4*runner.x)+6;
-			else {
-				
-				
-				
-				//d = d + 4 * (x-y) + 10;
-				d = d + 4 * (runner.x-runner.y) +10;
-				runner.y --;
-			}
-			runner.x++;
-			if (runner.y == 0)
-				break;
-		}
+        do {
+            if (Position.flatDistance(zero, runner) <= radius)
+                drawCirclePixels(ui, si, p, runner.x, runner.y, tile, height);
+            if (d < 0)
+                d = d + (4 * runner.x) + 6;
+            else {
+
+
+                //d = d + 4 * (x-y) + 10;
+                d = d + 4 * (runner.x - runner.y) + 10;
+                runner.y--;
+            }
+            runner.x++;
+        } while (runner.y != 0);
 		
 	}
 

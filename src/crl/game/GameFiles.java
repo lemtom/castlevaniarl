@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
@@ -25,7 +24,6 @@ import crl.player.GameSessionInfo;
 import crl.player.HiScore;
 import crl.player.MonsterDeath;
 import crl.player.Player;
-import crl.player.Skill;
 import crl.ui.UserInterface;
 
 public class GameFiles {

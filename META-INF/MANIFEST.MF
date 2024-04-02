@@ -2,4 +2,3 @@ Manifest-Version: 1.0
 Created-By: (Slash)
 Main-Class: crl.Main
 Class-Path: lib/jcurses-x.jar
-

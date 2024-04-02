@@ -895,7 +895,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 		/*-- Load Fonts */
 		try {
-			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/v5easter.ttf")))
+			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("res/v5easter.ttf"))
 					.deriveFont(Font.PLAIN, 15);
 		} catch (FontFormatException ffe) {
 			Game.crash("Error loading the font", ffe);

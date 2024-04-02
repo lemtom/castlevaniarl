@@ -1,7 +1,5 @@
 package crl.action;
 
-import java.util.Iterator;
-
 import crl.item.Item;
 import crl.player.Player;
 import sz.csi.textcomponents.MenuItem;

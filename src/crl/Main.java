@@ -469,7 +469,7 @@ public class Main {
 			keyBindings.put("EXAMINE_LEVEL_MAP_KEY", readKeyString(keyConfig, "EXAMINELEVELMAP"));
 			keyBindings.put("SWITCH_MUSIC_KEY", readKeyString(keyConfig, "SWITCHMUSIC"));
 
-			Display.thus.setKeyBindings(keyBindings);
+			Display.setKeyBindings(keyBindings);
 
 			userActions = new UserAction[] { new UserAction(attack, i(keyBindings.getProperty("ATTACK1_KEY"))),
 					new UserAction(attack, i(keyBindings.getProperty("ATTACK2_KEY"))),
@@ -661,7 +661,7 @@ public class Main {
 
 	public static void crash(String message, Throwable exception) {
 		System.out.println("CastlevaniaRL " + Game.getVersion() + ": Error");
-		System.out.println("");
+		System.out.println();
 		System.out.println("Unrecoverable error: " + message);
 		exception.printStackTrace();
 		if (currentGame != null) {

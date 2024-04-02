@@ -131,8 +131,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 								drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint,
 										getSFXID(), i));
 								deadLines[hits] = true;
-								continue;
-							}
+                            }
 
 						}
                     } else if (projectileHeight < monsterHeight) {

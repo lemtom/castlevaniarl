@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 

@@ -37,78 +37,75 @@ public class STMidiPlayer implements Runnable {
 
 	public synchronized void run() {
 		boolean leave = false;
-		while (true) {
-			if (currentInstruction == INS_DIE) {
-				break;
-			}
-			if (currentInstruction == INS_STOP) {
-				currentMidiFile = "__noneYet";
-			}
-			if (currentMidiFile.equals("__noneYet")) {
-				try {
-					this.wait();
-				} catch (InterruptedException ie) {
-					continue;
-				}
-			}
-			File midiFile = new File(currentMidiFile);
-			if (currentInstruction == INS_LOAD) {
-				if (!midiFile.exists() || midiFile.isDirectory() || !midiFile.canRead()) {
-					Game.addReport("Invalid Midi file: " + currentMidiFile);
-					try {
-						this.wait();
-					} catch (InterruptedException ie) {
-						continue;
-					}
-				}
-				loop = true;
-			}
-			if (currentInstruction == INS_LOAD_ONCE) {
-				if (!midiFile.exists() || midiFile.isDirectory() || !midiFile.canRead()) {
-					Game.addReport("Invalid Midi file: " + currentMidiFile);
-					try {
-						this.wait();
-					} catch (InterruptedException ie) {
-						continue;
-					}
-				}
-				loop = false;
-			}
+        while (currentInstruction != INS_DIE) {
+            if (currentInstruction == INS_STOP) {
+                currentMidiFile = "__noneYet";
+            }
+            if (currentMidiFile.equals("__noneYet")) {
+                try {
+                    this.wait();
+                } catch (InterruptedException ie) {
+                    continue;
+                }
+            }
+            File midiFile = new File(currentMidiFile);
+            if (currentInstruction == INS_LOAD) {
+                if (!midiFile.exists() || midiFile.isDirectory() || !midiFile.canRead()) {
+                    Game.addReport("Invalid Midi file: " + currentMidiFile);
+                    try {
+                        this.wait();
+                    } catch (InterruptedException ie) {
+                        continue;
+                    }
+                }
+                loop = true;
+            }
+            if (currentInstruction == INS_LOAD_ONCE) {
+                if (!midiFile.exists() || midiFile.isDirectory() || !midiFile.canRead()) {
+                    Game.addReport("Invalid Midi file: " + currentMidiFile);
+                    try {
+                        this.wait();
+                    } catch (InterruptedException ie) {
+                        continue;
+                    }
+                }
+                loop = false;
+            }
 
-			leave = false;
-			while (!leave) {
-				try {
-					sequencer.setSequence(MidiSystem.getSequence(midiFile));
-					sequencer.start();
-					while (true) {
-						if (sequencer.isRunning()) {
-							try {
-								Thread.sleep(1000); // Check every second
-							} catch (InterruptedException ignore) {
-								leave = true;
-								break;
-							}
-						} else {
-							break;
-						}
-					}
-					// Close the MidiDevice & free resources
-					sequencer.stop();
-					if (!loop) {
-						try {
-							this.wait();
-						} catch (InterruptedException ie) {
-							leave = true;
-						}
-					}
-				} catch (InvalidMidiDataException imde) {
-					Game.addReport("Invalid Midi data for " + currentMidiFile);
-				} catch (IOException ioe) {
-					Game.addReport("I/O Error for " + currentMidiFile);
-					ioe.printStackTrace();
-				}
-			}
-		}
+            leave = false;
+            while (!leave) {
+                try {
+                    sequencer.setSequence(MidiSystem.getSequence(midiFile));
+                    sequencer.start();
+                    while (true) {
+                        if (sequencer.isRunning()) {
+                            try {
+                                Thread.sleep(1000); // Check every second
+                            } catch (InterruptedException ignore) {
+                                leave = true;
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    // Close the MidiDevice & free resources
+                    sequencer.stop();
+                    if (!loop) {
+                        try {
+                            this.wait();
+                        } catch (InterruptedException ie) {
+                            leave = true;
+                        }
+                    }
+                } catch (InvalidMidiDataException imde) {
+                    Game.addReport("Invalid Midi data for " + currentMidiFile);
+                } catch (IOException ioe) {
+                    Game.addReport("I/O Error for " + currentMidiFile);
+                    ioe.printStackTrace();
+                }
+            }
+        }
 		sequencer.close();
 	}
 

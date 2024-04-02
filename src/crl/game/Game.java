@@ -626,7 +626,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 
 	public static void crash(String message, Throwable exception) {
 		System.out.println("CastlevaniaRL " + Game.getVersion() + ": Error");
-		System.out.println("");
+		System.out.println();
 		System.out.println("Unrecoverable error: " + message);
 		System.out.println(exception.getMessage());
 		exception.printStackTrace();
@@ -635,7 +635,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 
 	public static void crash(String message) {
 		System.out.println("CastlevaniaRL " + Game.getVersion() + ": Error");
-		System.out.println("");
+		System.out.println();
 		System.out.println("Unrecoverable error: " + message);
 		System.exit(-1);
 	}

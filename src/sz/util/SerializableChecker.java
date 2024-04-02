@@ -32,7 +32,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -91,7 +90,7 @@ public class SerializableChecker extends ObjectOutputStream {
 
 	static {
 		try {
-			lookup = ObjectStreamClass.class.getDeclaredMethod("lookup", new Class[] { Class.class, Boolean.TYPE });
+			lookup = ObjectStreamClass.class.getDeclaredMethod("lookup", Class.class, Boolean.TYPE);
 			lookup.setAccessible(true);
 
 			getClassDataLayoutMethod = ObjectStreamClass.class.getDeclaredMethod("getClassDataLayout", null);
@@ -101,7 +100,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			getNumObjFields.setAccessible(true);
 
 			getObjFieldValues = ObjectStreamClass.class.getDeclaredMethod("getObjFieldValues",
-					new Class[] { Object.class, Object[].class });
+                    Object.class, Object[].class);
 			getObjFieldValues.setAccessible(true);
 
 			fieldMethod = ObjectStreamField.class.getDeclaredMethod("getField", null);
@@ -217,7 +216,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			} else {
 				try {
 					writeObjectMethod = cls.getDeclaredMethod("writeObject",
-							new Class[] { java.io.ObjectOutputStream.class });
+                            ObjectOutputStream.class);
 				} catch (SecurityException e) {
 					// we can't access/ set accessible to true
 					writeObjectMethodCache.put(cls, Boolean.FALSE);
@@ -296,7 +295,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			Object[] objVals = new Object[numFields];
 			int numPrimFields = fields.length - objVals.length;
 			try {
-				getObjFieldValues.invoke(desc, new Object[] { obj, objVals });
+				getObjFieldValues.invoke(desc, obj, objVals);
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (InvocationTargetException e) {
@@ -336,7 +335,7 @@ public class SerializableChecker extends ObjectOutputStream {
 	 * @param type the type that couldn't be serialized
 	 * @return A very pretty dump
 	 */
-	private final String toPrettyPrintedStack(Class<?> type) {
+	private String toPrettyPrintedStack(Class<?> type) {
 		StringBuilder result = new StringBuilder();
 		StringBuilder spaces = new StringBuilder();
 		result.append("Unable to serialize class: ");

@@ -15,7 +15,7 @@ public class ListBox extends TextComponent {
 
 	public void draw() {
 		clearBox();
-		int length = (itemsLista.size() < super.inHeight ? itemsLista.size() : super.inHeight);
+		int length = (Math.min(itemsLista.size(), super.inHeight));
 		for (int i = 0; i < length; i++) {
 			ListItem item = itemsLista.elementAt(i);
 			// Debug.say("Item app"+item);
