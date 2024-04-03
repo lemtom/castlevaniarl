@@ -3,7 +3,8 @@ package crl.player.advancements.stats;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvVenus extends Advancement{
+public class AdvVenus extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Venus Spirit";
 	}

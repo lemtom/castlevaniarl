@@ -2,7 +2,8 @@ package crl.player.advancements.manbeast;
 
 import crl.player.advancements.FlagAdvancement;
 
-public class AdvDemonMorph extends FlagAdvancement{
+public class AdvDemonMorph extends FlagAdvancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Demonic Morph";
 	}

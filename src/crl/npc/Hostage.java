@@ -1,9 +1,10 @@
 package crl.npc;
 
 import crl.item.Item;
-import sz.util.*;
+import sz.util.Util;
 
 public class Hostage extends NPC {
+	private static final long serialVersionUID = 1L;
 	private int reward;
 	private Item itemReward;
 	private String hostrinchLevel;

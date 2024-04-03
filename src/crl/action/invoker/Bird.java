@@ -7,6 +7,7 @@ import crl.level.Level;
 import crl.player.Player;
 
 public class Bird extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Bird";
 	}

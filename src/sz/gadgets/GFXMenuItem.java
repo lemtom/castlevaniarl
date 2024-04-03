@@ -1,8 +1,8 @@
 package sz.gadgets;
 
-import java.awt.Image;
-
 import sz.csi.textcomponents.MenuItem;
+
+import java.awt.*;
 
 public interface GFXMenuItem extends MenuItem{
 	Image getMenuImage();

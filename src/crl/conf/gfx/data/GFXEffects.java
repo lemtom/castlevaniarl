@@ -1,24 +1,14 @@
 package crl.conf.gfx.data;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import sz.util.ImageUtils;
-import sz.util.Position;
 import crl.action.monster.MandragoraScream;
 import crl.game.Game;
-import crl.ui.graphicsUI.effects.GFXAnimatedEffect;
-import crl.ui.graphicsUI.effects.GFXAnimatedMeleeEffect;
-import crl.ui.graphicsUI.effects.GFXAnimatedMissileEffect;
-import crl.ui.graphicsUI.effects.GFXBeamEffect;
-import crl.ui.graphicsUI.effects.GFXCircleBlastEffect;
-import crl.ui.graphicsUI.effects.GFXDirectionalMissileEffect;
-import crl.ui.graphicsUI.effects.GFXEffect;
-import crl.ui.graphicsUI.effects.GFXFlashEffect;
-import crl.ui.graphicsUI.effects.GFXSequentialEffect;
-import crl.ui.graphicsUI.effects.GFXSplashEffect;
+import crl.ui.graphicsUI.effects.*;
+import sz.util.ImageUtils;
+import sz.util.Position;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class GFXEffects {
 	private ArrayList<Position> SFX_BIBLE_STEPS = new ArrayList<>(10);

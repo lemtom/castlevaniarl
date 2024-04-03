@@ -3,9 +3,11 @@ package crl.action.invoker;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class Cat extends ProjectileSkill{
+public class Cat extends ProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	public int getDamage() {
-		return 10+getPlayer().getSoulPower()*2;
+		return 10 + getPlayer().getSoulPower() * 2;
 	}
 
 	public int getHit() {
@@ -15,7 +17,7 @@ public class Cat extends ProjectileSkill{
 	public int getPathType() {
 		return PATH_HOVER;
 	}
-	
+
 	@Override
 	public boolean piercesThru() {
 		return true;
@@ -44,23 +46,23 @@ public class Cat extends ProjectileSkill{
 	public int getHeartCost() {
 		return 3;
 	}
-	
-	public String getID(){
+
+	public String getID() {
 		return "Cat";
 	}
-	
+
 	@Override
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/kitty.wav";
 	}
 
 	@Override
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.4);
+		return (int) (p.getCastCost() * 1.4);
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to invoke the kitty?";
 	}
 }

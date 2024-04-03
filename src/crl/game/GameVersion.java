@@ -9,11 +9,10 @@ import java.util.TimeZone;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-
 public class GameVersion {
 	private static final GameVersion currentVersion = new GameVersion("0.8.2", 2024, 2, 25);
-	
-	public static GameVersion getCurrentVersion(){
+
+	public static GameVersion getCurrentVersion() {
 		return currentVersion;
 	}
 
@@ -25,8 +24,7 @@ public class GameVersion {
 	}
 
 	@Override
-	public boolean equals(Object arg0)
-	{
+	public boolean equals(Object arg0) {
 		return ((GameVersion) arg0).getCode().equals(code);
 	}
 
@@ -39,13 +37,12 @@ public class GameVersion {
 
 	private DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
-	public String getFormattedDate(){
+	public String getFormattedDate() {
 		return sdf.format(date);
 	}
 
-	public static GameVersion getLatestVersion() throws IOException
-	{
-		String url = "http://slashie.net/cvrl/latestVersion.txt";
+	public static GameVersion getLatestVersion() throws IOException {
+		String url = "https://slashie.net/cvrl/latestVersion.txt";
 		HttpClient client = new HttpClient();
 		GetMethod latestVersion = new GetMethod(url);
 		client.executeMethod(latestVersion);
@@ -53,9 +50,9 @@ public class GameVersion {
 		String[] info = str.split(",");
 		latestVersion.releaseConnection();
 		try {
-			return new GameVersion(info[0], Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]));
-		}
-		catch (NumberFormatException e) {
+			return new GameVersion(info[0], Integer.parseInt(info[1]), Integer.parseInt(info[2]),
+					Integer.parseInt(info[3]));
+		} catch (NumberFormatException e) {
 			System.out.println("Invalid content for latest version URL: " + str);
 			return null;
 		}

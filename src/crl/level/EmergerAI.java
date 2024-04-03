@@ -5,6 +5,7 @@ import crl.ai.*;
 import crl.actor.*;
 
 public class EmergerAI implements ActionSelector {
+private static final long serialVersionUID = 1L;
 	private int counter;
 
 	public String getID(){
@@ -18,10 +19,7 @@ public class EmergerAI implements ActionSelector {
 			who.die();
 			return EmergeMonster.getAction();
     	}
-    	//if (Util.chance(20))
-		 	//return PreemergeEffects.getAction();
-		 	//return null;
-		return null;
+        return null;
 	}
 
 	 public ActionSelector derive(){

@@ -88,30 +88,9 @@ public class TestLevelGenerator extends LevelGenerator {
 
 		Level ret = new Level();
 		ret.setCells(cmap);
-		//ret.setDispatcher(dispa);
-		//ret.setMOF(mof);
-		//ret.respawn();
-			   /*
-		for (int i = 0; i <10; i++){
-			Monster bat = mof.buildMonster("SKELETON");
-
-			bat.setPosition(i+5,i+5);
-			ret.addMonster(bat);
-			//dispa.addActor(bat);
-		}
 
 
-
-		for (int i = 0; i <10; i++){
-			Monster bat = mof.buildMonster("PANTHER");
-
-			bat.setPosition(i+7,10);
-			ret.addMonster(bat);
-			//dispa.addActor(bat);
-		}    */
-
-
-		Feature c1 = ff.buildFeature("CANDLE");
+        Feature c1 = ff.buildFeature("CANDLE");
 		c1.setPosition(9,17,0);
 		ret.addFeature(c1);
 
@@ -154,40 +133,7 @@ public class TestLevelGenerator extends LevelGenerator {
 		c1.setPosition(55,20,0);
 		ret.addFeature(c1);
 
-		/*for (int i=0; i<5; i++){
-			String monst = "";
-			switch (Util.rand(0,4)){
-				case 0:
-					monst = "BAT";
-					break;
-				case 1:
-					monst = "SKELETON";
-					break;
-				case 2:
-					monst = "ZOMBIE";
-					break;
-				case 3:
-					monst = "PANTHER";
-					break;
-				case 4:
-					monst = "MERMAN";
-					break;
-			}
-			Monster bat = mof.buildMonster(monst);
-			bat.setPosition(Util.rand(5,60), Util.rand(5,30));
-			ret.addMonster(bat);
-		}
-
-		for (int i = 0; i <5; i++){
-			Monster bat = mof.buildMonster("MERMAN");
-
-			bat.setPosition(7,35);
-			ret.addMonster(bat);
-		}
-
-		  */
-
-		c1 = ff.buildFeature("DAGGERCANDLE");
+        c1 = ff.buildFeature("DAGGERCANDLE");
 		c1.setPosition(5,5,0);
 		ret.addFeature(c1);
 

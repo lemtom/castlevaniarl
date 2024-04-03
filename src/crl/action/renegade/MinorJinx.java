@@ -5,15 +5,11 @@ import crl.actor.Actor;
 import crl.player.Damage;
 import crl.player.Player;
 
-public class MinorJinx extends Action{
+public class MinorJinx extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "MINOR_JINX";
 	}
-	
-	@Override
-	public String getSFX() {
-        return super.getSFX();
-    }
 	
 	@Override
 	public int getCost(){

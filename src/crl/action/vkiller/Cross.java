@@ -8,6 +8,8 @@ import crl.feature.ai.CrossAI;
 import crl.player.Player;
 
 public class Cross extends ProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	public int getDamage() {
 		return 5 + getPlayer().getShotLevel() + 2 * getPlayer().getSoulPower();
 	}
@@ -64,14 +66,6 @@ public class Cross extends ProjectileSkill {
 			((CrossAI) cross.getSelector()).setTargetPosition(getPlayer().getPosition());
 			cross.setPosition(finalPoint);
 			getPlayer().getLevel().addSmartFeature(cross);
-		} else {
-			/*
-			 * Effect crossEffect
-			 * =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
-			 * targetPosition, "SFX_CROSS", i);
-			 * crossEffect.setPosition(performer.getLevel().getPlayer().getPosition());
-			 * drawEffect(crossEffect);
-			 */
 		}
 	}
 

@@ -1,10 +1,12 @@
 package crl.ui.consoleUI;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.ArrayList;
-
 import crl.Main;
+import crl.conf.console.data.CharCuts;
+import crl.game.Game;
+import crl.game.MonsterRecord;
+import crl.game.STMusicManagerNew;
+import crl.monster.Monster;
+import crl.npc.Hostage;
 import crl.player.GameSessionInfo;
 import crl.player.HiScore;
 import crl.player.Player;
@@ -12,17 +14,15 @@ import crl.player.advancements.Advancement;
 import crl.ui.Display;
 import crl.ui.UserInterface;
 import crl.ui.consoleUI.cuts.CharChat;
-import crl.monster.Monster;
-import crl.npc.*;
-import crl.conf.console.data.CharCuts;
-import crl.game.Game;
-import crl.game.MonsterRecord;
-import crl.game.STMusicManagerNew;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
 import sz.util.Position;
 import sz.util.ScriptUtil;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 
 public class CharDisplay extends Display {
 	private ConsoleSystemInterface si;
@@ -155,6 +155,7 @@ public class CharDisplay extends Display {
 		GameSessionInfo gsi = player.getGameSessionInfo();
 		si.cls();
 		printBars();
+
 		String heshe = (player.getSex() == Player.MALE ? "He" : "She");
 
 		si.print(2, 3, "The chronicles of " + player.getName(), ConsoleSystemInterface.RED);
@@ -187,8 +188,8 @@ public class CharDisplay extends Display {
 	public void showEndgame(Player player) {
 		si.cls();
 		printBars();
-		String heshe = (player.getSex() == Player.MALE ? "he" : "she");
-		String hisher = (player.getSex() == Player.MALE ? "his" : "her");
+
+		String heshe = player.getSex() == Player.MALE ? "he" : "she";
 
 		si.print(2, 3, "                           ", ConsoleSystemInterface.RED);
 
@@ -477,7 +478,7 @@ public class CharDisplay extends Display {
 		si.waitKey(CharKey.SPACE);
 	}
 
-	public Advancement showLevelUp(ArrayList<Advancement> advancements) {
+	public Advancement showLevelUp(List<Advancement> advancements) {
 
 		si.saveBuffer();
 		si.cls();
@@ -485,7 +486,7 @@ public class CharDisplay extends Display {
 
 		for (int i = 0; i < advancements.size(); i++) {
 			si.print(1, 3 + i * 2, ((char) ('a' + i)) + ". " + (advancements.get(i)).getName());
-			si.print(1, 4 + i * 2, (advancements.get(i)).getDescription());
+			si.print(1, 4 + i * 2, advancements.get(i).getDescription());
 		}
 		si.refresh();
 		int choice = readAlphaToNumber(advancements.size());

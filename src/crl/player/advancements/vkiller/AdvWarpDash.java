@@ -4,6 +4,7 @@ import crl.player.Player;
 import crl.player.advancements.Advancement;
 
 public class AdvWarpDash extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName() {
 		return "Warp Dash";
 	}

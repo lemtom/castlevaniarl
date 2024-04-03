@@ -5,7 +5,8 @@ import crl.level.Level;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class PowerBlow extends HeartAction{
+public class PowerBlow extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 3;
 	}

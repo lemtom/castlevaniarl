@@ -1,5 +1,6 @@
 package crl.game;
 
+import java.io.Serializable;
 import java.util.*;
 
 import javax.swing.SwingUtilities;
@@ -17,7 +18,9 @@ import crl.player.*;
 import sz.fov.FOV;
 import sz.util.*;
 
-public class Game implements CommandListener, PlayerEventListener, java.io.Serializable {
+public class Game implements CommandListener, PlayerEventListener, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	// Configuration
 	private transient UserInterface ui;
 	private transient UISelector uiSelector;
@@ -208,9 +211,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		ui.addCommandListener(this);
 		ui.setGameOver(false);
 		player.setPlayerEventListener(this);
-		// generatePrologueLevelPath();
-		// Display.thus.showIntro(player);
-		LevelMetaData md = new LevelMetaData();
+        LevelMetaData md = new LevelMetaData();
 		md.setLevelID("TRAINING");
 		levelMetadata.put("TRAINING", md);
 
@@ -598,9 +599,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
 		}
 
-		// STMusicManager.thus.playForLevel(levelNumber, levelPath[levelNumber],
-		// currentLevel.isDay());
-		ui.levelChange();
+        ui.levelChange();
 
 	}
 
@@ -639,7 +638,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		reports.add(report);
 	}
 
-	public static ArrayList<String> getReports() {
+	public static List<String> getReports() {
 		return reports;
 	}
 

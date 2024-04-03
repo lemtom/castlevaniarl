@@ -3,7 +3,8 @@ package crl.player.advancements.manbeast;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvRegen extends Advancement{
+public class AdvRegen extends Advancement {
+private static final long serialVersionUID = 1L;
 	public void advance(Player p) {
 		p.setFlag("HEALTH_REGENERATION", true);
 		p.setFlag(getID(), true);

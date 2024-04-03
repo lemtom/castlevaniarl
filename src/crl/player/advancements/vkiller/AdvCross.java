@@ -3,7 +3,8 @@ package crl.player.advancements.vkiller;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvCross extends Advancement{
+public class AdvCross extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Holy Cross";
 	}

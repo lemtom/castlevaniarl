@@ -6,6 +6,7 @@ import crl.game.SFXManager;
 import crl.level.Level;
 
 public class Intro2 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		if (level.getFlag("INTRO1") && level.getCounter("COUNTBACK_INTRO_1").isOver()) {

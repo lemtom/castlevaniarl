@@ -1,19 +1,14 @@
 package crl.ui;
 
-import java.util.*;
+import sz.util.Debug;
 
-import sz.util.*;
+import java.util.HashMap;
 
 public class AppearanceFactory {
 	private HashMap<String, Appearance> definitions;
 	private static AppearanceFactory singleton = new AppearanceFactory();
 
-/*	public Cell buildMapCell (String id){
-		Cell x = (Cell) definitions.get(id);
-		return x.clone();
-	}   */
-
-	public static AppearanceFactory getAppearanceFactory(){
+    public static AppearanceFactory getAppearanceFactory(){
 		return singleton;
 	}
 

@@ -1,8 +1,10 @@
 package sz.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SZPriorityQueue implements java.io.Serializable {
+	private static final long serialVersionUID = 1L;
 	private ArrayList<PriorityEnqueable> list;
 
 	public SZPriorityQueue() {
@@ -17,7 +19,7 @@ public class SZPriorityQueue implements java.io.Serializable {
 		list = new ArrayList<>(ini);
 	}
 
-	public ArrayList<PriorityEnqueable> getArrayList() {
+	public List<PriorityEnqueable> getArrayList() {
 		return list;
 	}
 
@@ -47,8 +49,8 @@ public class SZPriorityQueue implements java.io.Serializable {
 		}
 		list.add(i, what);
 		/*
-		 * if (i == list.size()) list.insertget(what, i); else
-		 * list.insertget(what, i+1);
+		 * if (i == list.size()) list.insertget(what, i); else list.insertget(what,
+		 * i+1);
 		 */
 		// Debug.say("enqueued at "+i);
 	}
@@ -99,8 +101,8 @@ public class SZPriorityQueue implements java.io.Serializable {
 
 	public void printStatus() {
 		Debug.say("Status of SZPriorityQueue " + this);
-		for (int i = 0; i < list.size(); i++) {
-			Debug.say(list.get(i) + " " + (list.get(i)).getCost());
-		}
+        for (PriorityEnqueable priorityEnqueable : list) {
+            Debug.say(priorityEnqueable + " " + priorityEnqueable.getCost());
+        }
 	}
 }

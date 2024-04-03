@@ -6,6 +6,7 @@ import crl.level.Level;
 import crl.ui.Display;
 
 public class Intro1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		Display.thus.showChat("INTRO_1", game);

@@ -73,34 +73,7 @@ public class RoomFeature extends Feature {
 				
 			}
 		}
-		
-		/*
-		for (int i = 0; i < doors; i++){
-			Position doorPosition = new Position(0,0);
-			if (Util.chance(50)){
-				//Horizontal
-				doorPosition.x = Util.rand(start.x+1, start.x + width-2);
-				if (Util.chance(50)){
-					doorPosition.y = start.y;
-				} else {
-					doorPosition.y = start.y + height-1;
-				}
-				mask[doorPosition.x+1][doorPosition.y] = false;
-				mask[doorPosition.x-1][doorPosition.y] = false;
-			} else {
-				doorPosition.y = Util.rand(start.y+1, start.y + height-2);
-				if (Util.chance(50)){
-					doorPosition.x = start.x;
-				} else {
-					doorPosition.x = start.x + width-1;
-				}
-				mask[doorPosition.x][doorPosition.y-1] = false;
-				mask[doorPosition.x][doorPosition.y+1] = false;
-			}
-			canvas[doorPosition.x][doorPosition.y] = door;
-			mask[doorPosition.x][doorPosition.y] = false;
-			hotspots.add(doorPosition);
-		}*/
-		return true;
+
+        return true;
 	}
 }

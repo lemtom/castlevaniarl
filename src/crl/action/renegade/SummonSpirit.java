@@ -3,9 +3,11 @@ package crl.action.renegade;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class SummonSpirit extends ProjectileSkill{
+public class SummonSpirit extends ProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	public int getDamage() {
-		return 10+getPlayer().getSoulPower()*2;
+		return 10 + getPlayer().getSoulPower() * 2;
 	}
 
 	public int getHit() {
@@ -44,18 +46,18 @@ public class SummonSpirit extends ProjectileSkill{
 		return 4;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "SummonSpirit";
 	}
-	
+
 	@Override
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
-	
+
 	@Override
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.6);
+		return (int) (p.getCastCost() * 1.6);
 	}
 }

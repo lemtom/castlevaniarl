@@ -6,6 +6,7 @@ import crl.level.Level;
 import crl.ui.Display;
 
 public class Death2 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		if (level.getFlag("DEATH_LEVEL")&& level.getCounter("COUNTBACK_DEATH").isOver()){

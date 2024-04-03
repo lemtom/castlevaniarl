@@ -11,6 +11,7 @@ import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
 public class Dragon extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 8;
 	}
@@ -109,12 +110,10 @@ public class Dragon extends HeartAction {
 	}
 
 	private boolean hit(Position destinationPoint, int damage) {
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
-		// UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o',
-		// Appearance.GREEN, 150));
-		UserInterface.getUI()
+        UserInterface.getUI()
 				.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_DRAGONFIRE"));
 		// aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);

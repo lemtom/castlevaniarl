@@ -1,9 +1,10 @@
 package crl.ui;
 
-import crl.action.*;
+import crl.action.Action;
 
+/** Links an Action with a KeyCode with which it is triggered */
 public class UserAction implements java.io.Serializable {
-	/** Links an Action with a KeyCode with which it is triggered*/
+	private static final long serialVersionUID = 1L;
 	private int keyCode;
 	private Action action;
 
@@ -12,10 +13,10 @@ public class UserAction implements java.io.Serializable {
 	}
 
 	public void setKeyCode(int value) {
-		/*if (value<0 || value > 115)
-			keyCode = 0;
-		else*/
-			keyCode = value;
+		/*
+		 * if (value<0 || value > 115) keyCode = 0; else
+		 */
+		keyCode = value;
 	}
 
 	public Action getAction() {
@@ -26,7 +27,7 @@ public class UserAction implements java.io.Serializable {
 		action = value;
 	}
 
-	public UserAction(Action action, int key){
+	public UserAction(Action action, int key) {
 		setKeyCode(key);
 		setAction(action);
 	}

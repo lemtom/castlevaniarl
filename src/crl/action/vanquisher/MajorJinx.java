@@ -7,6 +7,7 @@ import crl.player.Damage;
 import crl.player.Player;
 
 public class MajorJinx extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "MAJOR_JINX";
 	}

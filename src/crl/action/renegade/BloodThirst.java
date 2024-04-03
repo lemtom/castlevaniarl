@@ -4,7 +4,8 @@ import crl.action.HeartAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class BloodThirst extends HeartAction{
+public class BloodThirst extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "BloodThirst";
 	}

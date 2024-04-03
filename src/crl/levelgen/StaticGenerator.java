@@ -251,9 +251,7 @@ public class StaticGenerator {
 					}
 		}
 
-		// ret.setCells(cmap);
-		// ret.setPositions(startPosition, endPosition);
-		/*
+        /*
 		 * if (!hasBoss){ int keysOnLevel = placeKeys(ret); if (endFeature != null)
 		 * endFeature.setKeyCost(keysOnLevel); } else if (endFeature != null)
 		 * endFeature.setKeyCost(1);

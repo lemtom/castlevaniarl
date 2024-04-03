@@ -5,7 +5,8 @@ import crl.level.Level;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class Turtle extends HeartAction{
+public class Turtle extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 5;
 	}

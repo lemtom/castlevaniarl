@@ -1,9 +1,9 @@
 package crl.ui.consoleUI.effects;
 
-import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
+import crl.action.Action;
 import crl.ui.consoleUI.ConsoleUserInterface;
-import crl.action.*;
+import sz.csi.ConsoleSystemInterface;
+import sz.util.Position;
 
 public class CharMeleeEffect extends CharDirectionalEffect{
 	

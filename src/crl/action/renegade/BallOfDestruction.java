@@ -11,6 +11,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class BallOfDestruction extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "BallOfDestruction";
 	}
@@ -84,9 +85,7 @@ public class BallOfDestruction extends Action {
 				break;
 		}
 		if (i == 20)
-			// drawEffect(new MissileEffect(new Position(aPlayer.getPosition()), "*~",
-			// Appearance.RED, targetDirection,20, true, false));
-			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition()), "SFX_RENEGADE_BOD", 20));
 		// -----
 		i = 0;
@@ -96,9 +95,7 @@ public class BallOfDestruction extends Action {
 				break;
 		}
 		if (i == 20)
-			// drawEffect(new MissileEffect(new Position(aPlayer.getPosition()), "*~",
-			// Appearance.RED, otherDir1,20, true, false));
-			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition(), otherDir1), "SFX_RENEGADE_BOD", 20));
 		// -----
 		i = 0;
@@ -108,9 +105,7 @@ public class BallOfDestruction extends Action {
 				break;
 		}
 		if (i == 20)
-			// drawEffect(new MissileEffect(new Position(aPlayer.getPosition()), "*~",
-			// Appearance.RED, otherDir2,20, true, false));
-			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition(), otherDir2), "SFX_RENEGADE_BOD", 20));
 
 	}
@@ -122,16 +117,14 @@ public class BallOfDestruction extends Action {
 	}
 
 	private boolean hit(Position destinationPoint, int i) {
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
 
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 		if (destinationFeature != null && destinationFeature.isDestroyable()) {
 			message.append("The fireball hits the ").append(destinationFeature.getDescription());
-			// drawEffect(new MissileEffect(new Position(aPlayer.getPosition()), "*~",
-			// Appearance.RED, targetDirection,i, true, false));
-			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition()), "SFX_RENEGADE_BOD", i));
 			Feature prize = destinationFeature.damage(aPlayer, 1);
 			if (prize != null) {
@@ -151,9 +144,7 @@ public class BallOfDestruction extends Action {
 				message.append("The fireball burns the ").append(targetMonster.getDescription());
 			// targetMonster.damage(player.getWhipLevel());
 			targetMonster.damage(message, 1 + aPlayer.getSoulPower() * 2);
-			// drawEffect(new MissileEffect(new Position(aPlayer.getPosition()), "*~",
-			// Appearance.RED, targetDirection,i, true, false));
-			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition()), "SFX_RENEGADE_BOD", i));
 			aLevel.addMessage(message.toString());
 

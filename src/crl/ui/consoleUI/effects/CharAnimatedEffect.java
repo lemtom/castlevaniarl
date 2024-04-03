@@ -2,14 +2,14 @@ package crl.ui.consoleUI.effects;
 
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
+import sz.util.Position;
 
 public class CharAnimatedEffect extends CharEffect{
 	private String frames;
 	private int color;
 
-	public CharAnimatedEffect(String ID, Position where, String frames, int color){
-		super (ID);
+	public CharAnimatedEffect(String id, Position where, String frames, int color){
+		super (id);
 		setFrames(frames);
 		setColor(color);
 	}

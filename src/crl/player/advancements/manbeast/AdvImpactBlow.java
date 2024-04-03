@@ -3,7 +3,8 @@ package crl.player.advancements.manbeast;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvImpactBlow extends Advancement{
+public class AdvImpactBlow extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Power Blow";
 	}

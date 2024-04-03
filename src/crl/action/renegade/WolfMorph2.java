@@ -4,27 +4,29 @@ import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class WolfMorph2 extends MorphAction{
+public class WolfMorph2 extends MorphAction {
+
+	private static final long serialVersionUID = 1L;
+
 	public int getHeartCost() {
 		return 10;
 	}
-	
-	public String getID(){
+
+	public String getID() {
 		return "WolfMorph2";
 	}
 
 	@Override
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/swaashll.wav";
 	}
 
 	@Override
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.5);
+		return (int) (p.getCastCost() * 1.5);
 	}
-	
-	
+
 	public int getMadChance() {
 		return 5;
 	}
@@ -42,7 +44,7 @@ public class WolfMorph2 extends MorphAction{
 	}
 
 	public int getMorphTime() {
-		return 30+getPlayer().getSoulPower()*4+(!getPlayer().getLevel().isDay()?40:0);
+		return 30 + getPlayer().getSoulPower() * 4 + (!getPlayer().getLevel().isDay() ? 40 : 0);
 	}
 
 	public boolean isBigMorph() {

@@ -5,7 +5,8 @@ import crl.level.Level;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class SoulWind extends HeartAction{
+public class SoulWind extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 10;
 	}

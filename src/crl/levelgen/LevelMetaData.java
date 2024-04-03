@@ -2,15 +2,17 @@ package crl.levelgen;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ArrayList;
 
 public class LevelMetaData implements Serializable {
+private static final long serialVersionUID = 1L;
 	private String levelID;
 	private int levelNumber = -1;
 	private ArrayList<String> exits = new ArrayList<>();
 	private HashMap<String, String> hexits = new HashMap<>();
 
-	public ArrayList<String> getExits() {
+	public List<String> getExits() {
 		return exits;
 	}
 

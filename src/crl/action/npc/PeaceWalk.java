@@ -6,7 +6,8 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 
-public class PeaceWalk extends Action{
+public class PeaceWalk extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "PeaceWalk";
 	}

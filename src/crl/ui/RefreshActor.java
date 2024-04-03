@@ -1,8 +1,9 @@
 package crl.ui;
 
-import crl.actor.*;
+import crl.actor.Actor;
 
-public class RefreshActor extends Actor{
+public class RefreshActor extends Actor {
+private static final long serialVersionUID = 1L;
 	/** This actor stays in the game queue
 	 * and operates on the UI */
 
@@ -34,11 +35,8 @@ public class RefreshActor extends Actor{
 
 	@Override
 	public void act(){
-		switch (opCode){
-		case REFRESHVIEWPORT:
-			//UserInterface.getUI().refresh();
-			//System.out.println("Refreshing!");
-		}
+        if (opCode == REFRESHVIEWPORT) {
+        }
 		level.removeActor(this);
 	}
 }

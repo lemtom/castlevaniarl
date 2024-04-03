@@ -3,11 +3,14 @@ package crl.player.advancements.invoker;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvBirdsEgg extends Advancement{
-	public String getName(){
+public class AdvBirdsEgg extends Advancement {
+
+	private static final long serialVersionUID = 1L;
+
+	public String getName() {
 		return "Birds' Egg";
 	}
-	
+
 	public void advance(Player p) {
 		p.setFlag("SKILL_BIRDSEGG", true);
 		p.setFlag(getID(), true);
@@ -17,15 +20,15 @@ public class AdvBirdsEgg extends Advancement{
 		return "ADV_BIRDSEGG";
 	}
 
-	public String[] requirements = new String[]{
-			
+	public String[] requirements = new String[] {
+
 	};
-	
+
 	public String[] getRequirements() {
 		return requirements;
 	}
 
-	public String getDescription(){
+	public String getDescription() {
 		return "Throw an ethereal exploding bird's egg";
 	}
 

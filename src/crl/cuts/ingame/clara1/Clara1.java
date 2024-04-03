@@ -7,6 +7,7 @@ import crl.ui.Display;
 import crl.ui.UserInterface;
 
 public class Clara1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 			Display.thus.showChat("VINDELITH3", game);

@@ -2,7 +2,8 @@ package crl.player.advancements.manbeast;
 
 import crl.player.advancements.FlagAdvancement;
 
-public class AdvPowerBlow2 extends FlagAdvancement{
+public class AdvPowerBlow2 extends FlagAdvancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Power Strike";
 	}

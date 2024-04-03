@@ -9,6 +9,7 @@ import crl.monster.Monster;
 import crl.ui.Display;
 
 public class Villa1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		Monster maiden = level.getNPCByID("MAIDEN");

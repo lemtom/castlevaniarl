@@ -12,7 +12,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class ClawSwipe extends HeartAction{
+public class ClawSwipe extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 3;	
 	}
@@ -94,7 +95,7 @@ public class ClawSwipe extends HeartAction{
 	}
 
 	private boolean hit (Position destinationPoint, int damage){
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
         //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));

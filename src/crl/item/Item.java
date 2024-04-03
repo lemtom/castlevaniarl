@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import sz.csi.textcomponents.MenuItem;
@@ -17,6 +16,7 @@ import crl.ui.consoleUI.CharAppearance;
 import crl.ui.graphicsUI.GFXAppearance;
 
 public class Item implements Serializable, MenuItem, GFXMenuItem {
+	private static final long serialVersionUID = 1L;
 	private transient ItemDefinition definition;
 	private String defID;
 	// Status
@@ -80,13 +80,13 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 
 	public String getDescription() {
 		StringBuilder description = new StringBuilder();
-        for (Modifier premodifier : premodifiers) {
-            description.append(premodifier.getDescription());
-        }
+		for (Modifier premodifier : premodifiers) {
+			description.append(premodifier.getDescription());
+		}
 		description.append(getDefinition().getDescription());
-        for (Modifier postmodifier : postmodifiers) {
-            description.append(postmodifier.getDescription());
-        }
+		for (Modifier postmodifier : postmodifiers) {
+			description.append(postmodifier.getDescription());
+		}
 		return description.toString();
 
 	}
@@ -97,80 +97,80 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 
 	private int getModifiersAttackBonus() {
 		int ret = 0;
-        for (Modifier premodifier : premodifiers) {
-            ret += premodifier.getAtkBonus();
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            ret += postmodifier.getAtkBonus();
-        }
+		for (Modifier premodifier : premodifiers) {
+			ret += premodifier.getAtkBonus();
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			ret += postmodifier.getAtkBonus();
+		}
 		return ret;
 	}
 
 	private int getModifiersAttackCost() {
 		int ret = 0;
-        for (Modifier premodifier : premodifiers) {
-            ret += premodifier.getAtkCostBonus();
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            ret += postmodifier.getAtkCostBonus();
-        }
+		for (Modifier premodifier : premodifiers) {
+			ret += premodifier.getAtkCostBonus();
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			ret += postmodifier.getAtkCostBonus();
+		}
 		return ret;
 	}
 
 	private double getModifiersGoldMod() {
 		double ret = 0;
-        for (Modifier premodifier : premodifiers) {
-            ret += premodifier.getPriceModifier() / 100.0;
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            ret += postmodifier.getPriceModifier() / 100.0;
-        }
+		for (Modifier premodifier : premodifiers) {
+			ret += premodifier.getPriceModifier() / 100.0;
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			ret += postmodifier.getPriceModifier() / 100.0;
+		}
 		return ret;
 	}
 
 	private int getModifiersDefenseBonus() {
 		int ret = 0;
-        for (Modifier premodifier : premodifiers) {
-            ret += premodifier.getDefenseBonus();
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            ret += postmodifier.getDefenseBonus();
-        }
+		for (Modifier premodifier : premodifiers) {
+			ret += premodifier.getDefenseBonus();
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			ret += postmodifier.getDefenseBonus();
+		}
 		return ret;
 	}
 
 	private int getModifiersRangeBonus() {
 		int ret = 0;
-        for (Modifier premodifier : premodifiers) {
-            ret += premodifier.getRangeBonus();
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            ret += postmodifier.getRangeBonus();
-        }
+		for (Modifier premodifier : premodifiers) {
+			ret += premodifier.getRangeBonus();
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			ret += postmodifier.getRangeBonus();
+		}
 		return ret;
 	}
 
 	private boolean modifiersHarmUndead() {
-        for (Modifier premodifier : premodifiers) {
-            if (premodifier.isHarmsUndead())
-                return true;
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            if (postmodifier.isHarmsUndead())
-                return true;
-        }
+		for (Modifier premodifier : premodifiers) {
+			if (premodifier.isHarmsUndead())
+				return true;
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			if (postmodifier.isHarmsUndead())
+				return true;
+		}
 		return false;
 	}
 
 	private boolean modifiersSliceThru() {
-        for (Modifier premodifier : premodifiers) {
-            if (premodifier.isSlicesThru())
-                return true;
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            if (postmodifier.isSlicesThru())
-                return true;
-        }
+		for (Modifier premodifier : premodifiers) {
+			if (premodifier.isSlicesThru())
+				return true;
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			if (postmodifier.isSlicesThru())
+				return true;
+		}
 		return false;
 	}
 
@@ -279,12 +279,12 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 
 	public String getFullID() {
 		StringBuilder toAddID = new StringBuilder(getDefinition().getID());
-        for (Modifier premodifier : premodifiers) {
-            toAddID.append(premodifier.getID());
-        }
-        for (Modifier postmodifier : postmodifiers) {
-            toAddID.append(postmodifier.getID());
-        }
+		for (Modifier premodifier : premodifiers) {
+			toAddID.append(premodifier.getID());
+		}
+		for (Modifier postmodifier : postmodifiers) {
+			toAddID.append(postmodifier.getID());
+		}
 		return toAddID.toString();
 	}
 

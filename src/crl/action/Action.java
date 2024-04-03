@@ -1,6 +1,6 @@
 package crl.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import sz.csi.CharKey;
 import sz.csi.textcomponents.MenuItem;
@@ -13,16 +13,26 @@ import crl.ui.UserInterface;
 import crl.ui.effects.Effect;
 
 public abstract class Action implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	protected Actor performer;
 
 	protected int targetDirection;
 	protected Item targetEquipedItem;
 	protected Item targetItem;
 	protected Position targetPosition;
-	protected ArrayList<MenuItem> targetMultiItems;
+	protected List<MenuItem> targetMultiItems;
 
-	public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, UPRIGHT = 4, UPLEFT = 5, DOWNRIGHT = 6, DOWNLEFT = 7,
-			SELF = 8;
+	public static final int UP = 0;
+	public static final int DOWN = 1;
+	public static final int LEFT = 2;
+	public static final int RIGHT = 3;
+	public static final int UPRIGHT = 4;
+	public static final int UPLEFT = 5;
+	public static final int DOWNRIGHT = 6;
+	public static final int DOWNLEFT = 7;
+	public static final int SELF = 8;
 
 	public abstract String getID();
 
@@ -57,7 +67,7 @@ public abstract class Action implements java.io.Serializable {
 		targetItem = what;
 	}
 
-	public void setMultiItems(ArrayList<MenuItem> what) {
+	public void setMultiItems(List<MenuItem> what) {
 		this.targetMultiItems = what;
 	}
 
@@ -305,8 +315,10 @@ public abstract class Action implements java.io.Serializable {
 		}
 	}
 
-	// Sometimes when we are executing an action, we need to pause to
-	// display an updated version of the world
+	/**
+	 * Sometimes when we are executing an action, we need to pause to display an
+	 * updated version of the world
+	 */
 	protected final void actionAnimationPause() {
 		try {
 			Thread.sleep(150);

@@ -4,6 +4,8 @@ import crl.actor.*;
 import crl.ui.*;
 
 public class SmartFeature extends Actor implements Cloneable {
+	private static final long serialVersionUID = 1L;
+
 	private boolean destroyable;
 	private int damageOnStep;
 	private transient Appearance appearance;

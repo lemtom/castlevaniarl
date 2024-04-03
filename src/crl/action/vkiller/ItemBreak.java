@@ -5,7 +5,8 @@ import crl.player.Player;
 import crl.ui.ActionCancelException;
 import crl.ui.UserInterface;
 
-public class ItemBreak extends HeartAction{
+public class ItemBreak extends HeartAction {
+private static final long serialVersionUID = 1L;
 	private HeartAction
 		AXEBREAK = new ItemBreakAxe(),
 		BIBLEBREAK = new ItemBreakBible(),

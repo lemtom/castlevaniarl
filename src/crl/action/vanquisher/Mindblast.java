@@ -7,7 +7,8 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class Mindblast extends HeartAction{
+public class Mindblast extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 15;
 	}
@@ -27,7 +28,7 @@ public class Mindblast extends HeartAction{
 			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>15){
 				
 			} else {
-				StringBuffer buff = new StringBuffer();
+				StringBuilder buff = new StringBuilder();
 				if (nearestMonster.wasSeen()){
 					drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_LIT_SPELL", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
 					buff.append("The ").append(nearestMonster.getDescription()).append(" mind is blasted!");

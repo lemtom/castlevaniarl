@@ -16,6 +16,8 @@ import crl.player.Player;
 import crl.actor.*;
 
 public class Monster extends Actor implements Cloneable {
+	private static final long serialVersionUID = 1L;
+
 	// Attributes
 	private transient MonsterDefinition definition;
 	private String defID;
@@ -83,7 +85,6 @@ public class Monster extends Actor implements Cloneable {
 		} catch (Exception x) {
 			return null;
 		}
-
 	}
 
 	/*
@@ -94,8 +95,8 @@ public class Monster extends Actor implements Cloneable {
 	 * getPosition().y) return true; return false; }
 	 */
 
+	/** returns the direction in which the player is seen */
 	public int starePlayer() {
-		/** returns the direction in which the player is seen */
 		if (level.getPlayer() == null || level.getPlayer().isInvisible()
 				|| level.getPlayer().getPosition().z != getPosition().z)
 			return -1;
@@ -128,7 +129,7 @@ public class Monster extends Actor implements Cloneable {
 		return -1;
 	}
 
-	public void damageWithWeapon(StringBuffer message, int dam) {
+	public void damageWithWeapon(StringBuilder message, int dam) {
 		Item wep = level.getPlayer().getWeapon();
 		if (wep != null)
 			level.getPlayer().increaseWeaponSkill(wep.getDefinition().getWeaponCategory());
@@ -137,7 +138,7 @@ public class Monster extends Actor implements Cloneable {
 		damage(message, dam);
 	}
 
-	public void damage(StringBuffer message, int dam) {
+	public void damage(StringBuilder message, int dam) {
 		if (getSelector() instanceof DraculaAI) {
 			((DraculaAI) getSelector()).setOnBattle(true);
 		}
@@ -155,7 +156,7 @@ public class Monster extends Actor implements Cloneable {
 		if (getDefinition().getBloodContent() > 0) {
 			if (level.getPlayer().hasCounter(Consts.C_BLOOD_THIRST)
 					&& Position.flatDistance(getPosition(), level.getPlayer().getPosition()) < 3) {
-				int recover = (int) Math.ceil(getDefinition().getBloodContent() / 30);
+				int recover = (int) (double) (getDefinition().getBloodContent() / 30);
 				level.addMessage(
 						"You drink some of the " + getDefinition().getDescription() + " blood! (+" + recover + ")");
 				level.getPlayer().recoverHits(recover);
@@ -176,10 +177,7 @@ public class Monster extends Actor implements Cloneable {
 				/*
 				 * } else setFeaturePrize("KEY");
 				 */
-				// level.addEffect(new DoubleSplashEffect(getPosition(),
-				// "O....,,..,.,.,,......", Appearance.RED, ".,,,,..,,.,.,..,,,,,,",
-				// Appearance.WHITE));
-				level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
+                level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
 				level.addMessage("The whole level trembles with holy energy!");
 				level.removeBoss();
 				level.getPlayer().addHistoricEvent(
@@ -449,19 +447,22 @@ public class Monster extends Actor implements Cloneable {
 			}
 			int baseDamage = magicalDamage;
 			double damageMod = 1;
-			StringBuffer hitDesc = new StringBuffer();
+			StringBuilder hitDesc = new StringBuilder();
 			int damage = (int) (baseDamage * damageMod);
 			double percent = (double) damage / (double) getDefinition().getMaxHits();
 			if (percent > 1.0d)
-				hitDesc.append("The ").append(attackDesc).append(" whacks the ").append(getDescription()).append(" apart!!");
+				hitDesc.append("The ").append(attackDesc).append(" whacks the ").append(getDescription())
+						.append(" apart!!");
 			else if (percent > 0.7d)
 				hitDesc.append("The ").append(attackDesc).append(" smashes the ").append(getDescription()).append("!");
 			else if (percent > 0.5d)
-				hitDesc.append("The ").append(attackDesc).append(" grievously hits the ").append(getDescription()).append("!");
+				hitDesc.append("The ").append(attackDesc).append(" grievously hits the ").append(getDescription())
+						.append("!");
 			else if (percent > 0.3d)
 				hitDesc.append("The ").append(attackDesc).append(" hits the ").append(getDescription()).append(".");
 			else
-				hitDesc.append("The ").append(attackDesc).append(" barely scratches the ").append(getDescription()).append("...");
+				hitDesc.append("The ").append(attackDesc).append(" barely scratches the ").append(getDescription())
+						.append("...");
 
 			damage(hitDesc, (int) (baseDamage * damageMod));
 			if (showMsg)
@@ -578,19 +579,24 @@ public class Monster extends Actor implements Cloneable {
 			int baseDamage = weaponAttack;
 			double damageMod = 1;
 
-			StringBuffer hitDesc = new StringBuffer();
+			StringBuilder hitDesc = new StringBuilder();
 			int damage = (int) (baseDamage * damageMod);
 			double percent = (double) damage / (double) getDefinition().getMaxHits();
 			if (percent > 1.0d)
-				hitDesc.append("The ").append(attacker.getDescription()).append(" whacks the ").append(getDescription()).append(" apart!!");
+				hitDesc.append("The ").append(attacker.getDescription()).append(" whacks the ").append(getDescription())
+						.append(" apart!!");
 			else if (percent > 0.7d)
-				hitDesc.append("The ").append(attacker.getDescription()).append(" smashes the ").append(getDescription()).append("!");
+				hitDesc.append("The ").append(attacker.getDescription()).append(" smashes the ")
+						.append(getDescription()).append("!");
 			else if (percent > 0.5d)
-				hitDesc.append("The ").append(attacker.getDescription()).append(" grievously hits the ").append(getDescription()).append("!");
+				hitDesc.append("The ").append(attacker.getDescription()).append(" grievously hits the ")
+						.append(getDescription()).append("!");
 			else if (percent > 0.3d)
-				hitDesc.append("The ").append(attacker.getDescription()).append(" hits the ").append(getDescription()).append(".");
+				hitDesc.append("The ").append(attacker.getDescription()).append(" hits the ").append(getDescription())
+						.append(".");
 			else
-				hitDesc.append("The ").append(attacker.getDescription()).append(" barely scratches the ").append(getDescription()).append("...");
+				hitDesc.append("The ").append(attacker.getDescription()).append(" barely scratches the ")
+						.append(getDescription()).append("...");
 
 			damage(hitDesc, (int) (baseDamage * damageMod));
 			level.addMessage(hitDesc.toString());

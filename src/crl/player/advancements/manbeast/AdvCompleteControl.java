@@ -3,7 +3,8 @@ package crl.player.advancements.manbeast;
 import crl.player.Consts;
 import crl.player.advancements.FlagAdvancement;
 
-public class AdvCompleteControl extends FlagAdvancement{
+public class AdvCompleteControl extends FlagAdvancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Complete Control";
 	}

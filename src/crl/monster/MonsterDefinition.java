@@ -124,11 +124,7 @@ public class MonsterDefinition {
 
 	public void setAppearance(Appearance appearance) {
 		this.appearance = appearance;
-		/*if (appearance != null){
-			((BasicListItem)sightListItem).setIndex(appearance.getChar());
-			((BasicListItem)sightListItem).setIndexColor(appearance.getColor());
-		}*/
-	}
+    }
 
 	public void setBloodContent(int bloodContent) {
 		this.bloodContent = bloodContent;
@@ -144,9 +140,7 @@ public class MonsterDefinition {
 
 	public void setDescription(String description) {
 		this.description = description;
-		/*if (appearance != null)
-			((BasicListItem)sightListItem).setRow(getDescription());*/
-	}
+    }
 
 	public void setEthereal(boolean ethereal) {
 		this.ethereal = ethereal;
@@ -176,15 +170,7 @@ public class MonsterDefinition {
 		this.undead = undead;
 	}
 
-	/*public ListItem getSightListItem() {
-		return sightListItem;
-	}
-
-	public void setSightListItem(ListItem sightListItem) {
-		this.sightListItem = sightListItem;
-	}*/
-
-	public int getMaxLevel() {
+    public int getMaxLevel() {
 		return maxLevel;
 	}
 

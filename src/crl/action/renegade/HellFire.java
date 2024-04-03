@@ -3,10 +3,11 @@ package crl.action.renegade;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
-public class HellFire extends BeamProjectileSkill{
-	
+public class HellFire extends BeamProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	public int getDamage() {
-		return 25+getPlayer().getSoulPower()*3;
+		return 25 + getPlayer().getSoulPower() * 3;
 	}
 
 	public int getHit() {
@@ -25,7 +26,7 @@ public class HellFire extends BeamProjectileSkill{
 		return "The fireball flies to the heavens";
 	}
 
-    public String getSFXID() {
+	public String getSFXID() {
 		return "SFX_HELLFIRE";
 	}
 
@@ -41,24 +42,23 @@ public class HellFire extends BeamProjectileSkill{
 		return 15;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "HellFire";
 	}
-	
+
 	@Override
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/fire.wav";
 	}
 
 	@Override
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.1);
+		return (int) (p.getCastCost() * 1.1);
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to summon Hellfire?";
 	}
-	
-	
+
 }

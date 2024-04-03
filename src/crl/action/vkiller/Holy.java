@@ -13,6 +13,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class Holy extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 1;
 	}
@@ -31,6 +32,7 @@ public class Holy extends HeartAction {
 	}
 
 	@Override
+	
 	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
@@ -99,7 +101,7 @@ public class Holy extends HeartAction {
 				}
 				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 				if (targetMonster != null) {
-					StringBuffer message = new StringBuffer();
+					StringBuilder message = new StringBuilder();
 					if (targetMonster.wasSeen())
 						message.append("The ").append(targetMonster.getDescription()).append(" catches in flame");
 					// targetMonster.damage(player.getWhipLevel());

@@ -1,6 +1,6 @@
 package sz.ca;
 
-import sz.util.*;
+import sz.util.Debug;
 
 public class CARule{
 	/** Stores a rule of the form:

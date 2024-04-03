@@ -11,7 +11,8 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class MonsterMissile extends Action{
+public class MonsterMissile extends Action {
+private static final long serialVersionUID = 1L;
 	private int range;
 	private String message;
 	private String effectType;
@@ -25,17 +26,8 @@ public class MonsterMissile extends Action{
 		return effectWav;
 	}
 	public static final String TYPE_AXE = "AXE", TYPE_STRAIGHT = "STRAIGHT", TYPE_DIRECT = "DIRECT";
-	
-	/*public void set(String pStatusEffect, int pRange, String pMessage, String pEffectType, String pEffectID){
-		range = pRange;
-		statusEffect = pStatusEffect;
-		message = pMessage;
-		effectType = pEffectType;
-		effectID = pEffectID;
-		damage = 0;
-	}*/
-	
-	public void set(String pType, String pStatusEffect, int pRange, String pMessage, String pEffectType, String pEffectID, int damage, String pEffectWav){
+
+    public void set(String pType, String pStatusEffect, int pRange, String pMessage, String pEffectType, String pEffectID, int damage, String pEffectWav){
 		type = pType;
 		range = pRange;
 		statusEffect = pStatusEffect;
@@ -56,13 +48,12 @@ public class MonsterMissile extends Action{
 		return true;
 	}
 
+
 	public void execute(){
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to throw a bone");
 		Monster aMonster = (Monster) performer;
         Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
-        //Cell playerCell = aLevel.getMapCell(aPlayer.getPosition());
-        //Cell monsterCell = aLevel.getMapCell(aMonster.getPosition());
         int targetDirection = solveDirection(performer.getPosition(), targetPosition);
         if (effectWav != null){
         	SFXManager.play(effectWav);
@@ -97,26 +88,14 @@ public class MonsterMissile extends Action{
                         break;
                     case TYPE_STRAIGHT:
                         //if (monsterCell.getHeight() == playerCell.getHeight()){
-                        if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()) {
-                            hits = true;
-                        } else {
-                            hits = false;
-                        }
+                        hits = aMonster.getStandingHeight() == aPlayer.getStandingHeight();
                         break;
                     case TYPE_AXE:
                         if (i > (range / 4) && i < (3 * (range / 4))) {
                             //if (playerCell.getHeight() == monsterCell.getHeight()+2 || playerCell.getHeight() == monsterCell.getHeight()+3){
-                            if (aMonster.getStandingHeight() + 2 == aPlayer.getStandingHeight() || aMonster.getStandingHeight() + 3 == aPlayer.getStandingHeight()) {
-                                hits = true;
-                            } else {
-                                hits = false;
-                            }
+                            hits = aMonster.getStandingHeight() + 2 == aPlayer.getStandingHeight() || aMonster.getStandingHeight() + 3 == aPlayer.getStandingHeight();
                         } else {
-                            if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()) {
-                                hits = true;
-                            } else {
-                                hits = false;
-                            }
+                            hits = aMonster.getStandingHeight() == aPlayer.getStandingHeight();
                         }
                         break;
                 }
@@ -146,11 +125,6 @@ public class MonsterMissile extends Action{
 		}
 		aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
 	}
-
-	@Override
-	public String getPromptPosition() {
-        return super.getPromptPosition();
-    }
 	
 	private int solveDirection(Position old, Position newP){
 		if (newP.x() == old.x()){

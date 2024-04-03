@@ -10,6 +10,7 @@ import crl.ui.Display;
 import crl.ui.UserInterface;
 
 public class Entrance1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		Monster clara = level.getNPCByID("UNIDED_CLAW");

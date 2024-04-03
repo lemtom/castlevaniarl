@@ -10,6 +10,7 @@ import crl.monster.Monster;
 import crl.player.Player;
 
 public class Rebound extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Rebound";
 	}
@@ -33,10 +34,8 @@ public class Rebound extends Action {
 
 		Position var = new Position(directionToVariation(targetDirection));
 		int runLength = 0;
-		// DirectionMissileEffect x = new DirectionMissileEffect(aPlayer.getPosition(),
-		// "\\|/--/|\\", Appearance.BLUE, targetDirection, 20, 15);
-		Position runner = new Position(performer.getPosition());
-		StringBuffer message = new StringBuffer();
+        Position runner = new Position(performer.getPosition());
+		StringBuilder message = new StringBuilder();
 		Position bouncePoint = new Position(performer.getPosition());
 		for (int i = 0; i < 20; i++) {
 			runLength++;
@@ -56,7 +55,7 @@ public class Rebound extends Action {
 				break;
 			}
 			Monster targetMonster = performer.getLevel().getMonsterAt(runner);
-			message = new StringBuffer();
+			message = new StringBuilder();
 			if (targetMonster != null && !targetMonster.isInWater()) {
 				message.append("The crystal hits the ").append(targetMonster.getDescription());
 				// targetMonster.damage(player.getWhipLevel());

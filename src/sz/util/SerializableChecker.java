@@ -17,15 +17,7 @@ package sz.util;
  * limitations under the License.
  */
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamClass;
-import java.io.ObjectStreamField;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -137,7 +129,7 @@ public class SerializableChecker extends ObjectOutputStream {
 	private Map<Object, Boolean> writeObjectMethodCache = new HashMap<>();
 
 	/** current full field description. */
-	private StringBuffer fieldDescription;
+	private StringBuilder fieldDescription;
 
 	public SerializableChecker() throws IOException {
 	}
@@ -312,7 +304,7 @@ public class SerializableChecker extends ObjectOutputStream {
 					throw new RuntimeException(e);
 				}
 
-                fieldDescription = new StringBuffer(field.toString());
+                fieldDescription = new StringBuilder(field.toString());
 				check(val);
 			}
 		}
@@ -394,9 +386,7 @@ public class SerializableChecker extends ObjectOutputStream {
 		/**
 		 * Construct.
 		 *
-		 * @param initialCapacity
-		 * @param loadFactor
-		 */
+         */
 		public HandleTable(int initialCapacity, float loadFactor) {
 			this.loadFactor = loadFactor;
 			spine = new int[initialCapacity];
@@ -410,9 +400,7 @@ public class SerializableChecker extends ObjectOutputStream {
 		 * Assigns next available handle to given object, and returns handle value.
 		 * Handles are assigned in ascending order starting at 0.
 		 *
-		 * @param obj
-		 * @return
-		 */
+         */
 		public int assign(Object obj) {
 			if (size >= next.length) {
 				growEntries();
@@ -447,9 +435,7 @@ public class SerializableChecker extends ObjectOutputStream {
 		 * Looks up and returns handle associated with given object, or -1 if no mapping
 		 * found.
 		 *
-		 * @param obj
-		 * @return
-		 */
+         */
 		public int lookup(Object obj) {
 			if (size == 0) {
 				return -1;
@@ -587,7 +573,7 @@ public class SerializableChecker extends ObjectOutputStream {
 
 		private final Object object;
 
-		TraceSlot(Object object, StringBuffer fieldDescription) {
+		TraceSlot(Object object, StringBuilder fieldDescription) {
 			this.object = object;
 			this.fieldDescription = fieldDescription == null ? null : fieldDescription.toString();
 		}

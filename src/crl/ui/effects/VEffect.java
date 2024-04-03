@@ -1,6 +1,6 @@
 package crl.ui.effects;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class VEffect {
    	ArrayList<Effect> effects;

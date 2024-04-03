@@ -11,6 +11,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class ShadowFlare extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "SHADOWFLARE";
 	}
@@ -67,7 +68,5 @@ public class ShadowFlare extends Action {
 		if (destinationPoint.equals(aPlayer.getPosition())) {
 			aPlayer.damage("You are burned by the shadow flare!", (Monster) performer, new Damage(3, false));
 		}
-		// drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint,
-		// "SFX_SHADOW_FLARE"));
-	}
+    }
 }

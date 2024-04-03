@@ -1,6 +1,7 @@
 package crl.action.invoker;
 
-public class InvokeEagle extends SummonSkill{
+public class InvokeEagle extends SummonSkill {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 5;
 	}

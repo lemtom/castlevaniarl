@@ -8,7 +8,8 @@ import crl.feature.action.CrossBack;
 import crl.ui.UserInterface;
 import sz.util.*;
 
-public class CrossAI implements ActionSelector, Cloneable{
+public class CrossAI implements ActionSelector, Cloneable {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 	     return "CROSS_SELECTOR";
 	}

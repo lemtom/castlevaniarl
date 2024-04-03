@@ -1,60 +1,21 @@
 package sz.util;
 
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.imageio.ImageIO;
 
 public class ImageUtils {
 	public static  BufferedImage createImage (String filename) throws Exception {
-         /*BufferedImage im =  ImageIO.read(
-                   ImageUtils.class.getResource(filename) );*/
-		BufferedImage im =  ImageIO.read(new File(filename));
+        BufferedImage im =  ImageIO.read(new File(filename));
          return im;
-         
-         /*int transparency = im.getColorModel( ).getTransparency( );
-         BufferedImage copy =  gc.createCompatibleImage(
-                                  im.getWidth( ), im.getHeight( ),
-                                  transparency );
 
-         Graphics2D g2d = copy.createGraphics( );
-         g2d.drawImage(im,0,0,null);
-         g2d.dispose();
-         return copy;*/
-	}
-	
-	/*public static Image crearImagen(String filename) throws Exception{
-    	//Debug.enterStaticMethod("IASImageUtils", "crearImagen "+filename);
-    	//Debug.say("estoy cargando una imagen "+filename);
-    	if (!FileUtil.fileExists(filename)){
-    		Exception e = new Exception("Archivo Inexistente " +filename);
-    		Debug.exitExceptionally(e);
-    		throw e;
-    	}
-        Image image = Toolkit.getDefaultToolkit().getImage(filename);
-        MediaTracker mediaTracker = new MediaTracker(new Container());
-        mediaTracker.addImage(image, 0);
-        try{
-            mediaTracker.waitForID(0);
-        }catch(InterruptedException ex){
-        	System.out.println(ex.getMessage());
-        }
-        //Debug.exitMethod(image);
-        return image;
-    }*/
-	
-	public static Image crearImagen(String filename, Component tracker) throws Exception{
-    	//Debug.enterStaticMethod("IASImageUtils", "crearImagen "+filename);
-    	//Debug.say("estoy cargando una imagen "+filename);
-    	if (!FileUtil.fileExists(filename)){
+    }
+
+    public static Image crearImagen(String filename, Component tracker) throws Exception{
+        if (!FileUtil.fileExists(filename)){
     		Exception e = new Exception("Archivo Inexistente " +filename);
     		Debug.exitExceptionally(e);
     		throw e;

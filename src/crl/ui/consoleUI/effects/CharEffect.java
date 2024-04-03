@@ -1,19 +1,18 @@
 package crl.ui.consoleUI.effects;
 
-import sz.csi.ConsoleSystemInterface;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import crl.ui.effects.Effect;
+import sz.csi.ConsoleSystemInterface;
 
-public abstract class CharEffect extends Effect{
-	public CharEffect(String id){
+public abstract class CharEffect extends Effect {
+	protected CharEffect(String id) {
 		super(id);
 	}
 
-	public CharEffect(String id, int delay){
+	protected CharEffect(String id, int delay) {
 		super(id, delay);
 	}
 
 	public abstract void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si);
-	
 
 }

@@ -7,7 +7,8 @@ import crl.monster.VMonster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class SoulFlame extends HeartAction{
+public class SoulFlame extends HeartAction {
+private static final long serialVersionUID = 1L;
 	
 	public String getID(){
 		return "Soul Flame";
@@ -29,7 +30,7 @@ public class SoulFlame extends HeartAction{
 		VMonster monsters = aLevel.getMonsters();
 		for (int i = 0; i < monsters.size(); i++){
 			if (monsters.get(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.get(i).getPosition(), performer.getPosition()) < 5){
-				StringBuffer buff = new StringBuffer();
+				StringBuilder buff = new StringBuilder();
 				if (monsters.get(i).wasSeen()) {
 					buff.append("The ").append(monsters.get(i).getDescription()).append(" is hit by the holy flames!");
 				}

@@ -6,7 +6,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.ui.Display;
 
-public class BadBelmont2 extends Unleasher{
+public class BadBelmont2 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		if (level.getPlayer().getFlag("SAVED_SOLIEYU")){

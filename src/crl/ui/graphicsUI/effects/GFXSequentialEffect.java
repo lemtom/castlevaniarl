@@ -1,21 +1,20 @@
 package crl.ui.graphicsUI.effects;
 
-import java.awt.Image;
-import java.util.Enumeration;
-import java.util.ArrayList;
-
-import sz.util.Position;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.util.Position;
+
+import java.awt.*;
+import java.util.List;
 
 public class GFXSequentialEffect extends GFXEffect {
-	private ArrayList<Position> sequence;
+	private List<Position> sequence;
 	private Image[] tiles;
 
-	public GFXSequentialEffect(String ID, ArrayList<Position> sequence, Image[] tiles, int delay,
+	public GFXSequentialEffect(String id, List<Position> sequence, Image[] tiles, int delay,
 			GFXConfiguration configuration) {
-		super(ID, configuration);
+		super(id, configuration);
 		setAnimationDelay(delay);
 		this.tiles = tiles;
 		this.sequence = sequence;

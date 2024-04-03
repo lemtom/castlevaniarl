@@ -15,6 +15,7 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 
 public class Jump extends Action {
+private static final long serialVersionUID = 1L;
 	private Player aPlayer;
 
 	public String getID() {
@@ -23,10 +24,7 @@ public class Jump extends Action {
 
 	@Override
 	public boolean needsDirection() {
-		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2) || aPlayer.isSwimming()) {
-			return false;
-		} else
-			return true;
+        return !aPlayer.hasCounter(Consts.C_BATMORPH) && !aPlayer.hasCounter(Consts.C_BATMORPH2) && !aPlayer.isSwimming();
 
 	}
 

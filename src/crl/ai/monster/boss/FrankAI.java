@@ -1,14 +1,15 @@
 package crl.ai.monster.boss;
 
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.monster.Monster;
+import sz.util.Util;
 
-public class FrankAI extends MonsterAI{
+public class FrankAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 	private int powerCounter = 5;
 	
 	public Action selectAction(Actor who){

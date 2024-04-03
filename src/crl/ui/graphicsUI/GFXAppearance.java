@@ -1,8 +1,8 @@
 package crl.ui.graphicsUI;
 
-import java.awt.Image;
-
 import crl.ui.Appearance;
+
+import java.awt.*;
 
 public class GFXAppearance extends Appearance{
 	private Image img;

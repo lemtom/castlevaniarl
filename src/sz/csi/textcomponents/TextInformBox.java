@@ -3,71 +3,72 @@ package sz.csi.textcomponents;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 
-/** Represents a text box which can be updated to
- * show a new text along with the old one until
- * it is full, in which case it shows a [More]
- * prompt, waits for a player keypress, erases it
- * selfs and continues exhibiting the same behaviour.
+/**
+ * Represents a text box which can be updated to show a new text along with the
+ * old one until it is full, in which case it shows a [More] prompt, waits for a
+ * player keypress, erases it selfs and continues exhibiting the same behaviour.
+ * 
  * @author szapata
  *
  */
-public class TextInformBox extends TextComponent{
-	private int curx, cury;
-	private StringBuffer[] lines;
+public class TextInformBox extends TextComponent {
+	private static final long serialVersionUID = 1L;
+	private int curx;
+	private int cury;
+	private StringBuilder[] lines;
 	private String curLine;
-	
+
 	@Override
 	public void setHeight(int value) {
 		super.setHeight(value);
-		lines = new StringBuffer[value];
+		lines = new StringBuilder[value];
 		for (int i = 0; i < lines.length; i++)
-			lines[i] = new StringBuffer();
+			lines[i] = new StringBuilder();
 	}
-	
+
 	public void draw() {
-		for (int i = 0; i < lines.length; i++){
-			si.print(position.x, position.y+i, lines[i].toString(), foreColor);
+		for (int i = 0; i < lines.length; i++) {
+			si.print(position.x, position.y + i, lines[i].toString(), foreColor);
 		}
 	}
-	
-	public void addText(String text){
-		String [] tokens = text.split(" ");
-        for (String token : tokens) {
-            int distance = width - curx;
-            if (cury >= height - 1)
-                distance -= "[MORE]".length();
-            if (distance < token.length() + 1) {
-                if (cury < height - 1) {
-                    curx = 0;
-                    cury++;
-                } else {
-                    //i--;
-                    lines[cury].append("[MORE]");
-                    morePrompt();
-                    clear();
-                }
-            }
-            lines[cury].append(token).append(" ");
-            curx += token.length() + 1;
-        }
+
+	public void addText(String text) {
+		String[] tokens = text.split(" ");
+		for (String token : tokens) {
+			int distance = width - curx;
+			if (cury >= height - 1)
+				distance -= "[MORE]".length();
+			if (distance < token.length() + 1) {
+				if (cury < height - 1) {
+					curx = 0;
+					cury++;
+				} else {
+					// i--;
+					lines[cury].append("[MORE]");
+					morePrompt();
+					clear();
+				}
+			}
+			lines[cury].append(token).append(" ");
+			curx += token.length() + 1;
+		}
 	}
-	
-	public void setText(String text){
+
+	public void setText(String text) {
 		clear();
 		addText(text);
 	}
-	
-	
-	public void clear(){
+
+	public void clear() {
 		for (int i = 0; i < lines.length; i++)
-			lines[i] = new StringBuffer();
+			lines[i] = new StringBuilder();
 		for (int i = 0; i < height; i++)
-			si.print(position.x, position.y+i, spaces);
-		curx=0;
-		cury=0;
+			si.print(position.x, position.y + i, spaces);
+		curx = 0;
+		cury = 0;
 	}
-	
-	private void morePrompt(){
+
+	private void morePrompt() {
 		draw();
 		si.refresh();
 		CharKey ck = new CharKey(CharKey.NONE);
@@ -75,7 +76,7 @@ public class TextInformBox extends TextComponent{
 			ck = si.inkey();
 	}
 
-	public TextInformBox(ConsoleSystemInterface si){
-		super(si);		
+	public TextInformBox(ConsoleSystemInterface si) {
+		super(si);
 	}
 }

@@ -1,8 +1,8 @@
 package crl.ui.consoleUI.effects;
 
 
-import sz.csi.ConsoleSystemInterface;
 import crl.ui.consoleUI.ConsoleUserInterface;
+import sz.csi.ConsoleSystemInterface;
 
 public class CharFlashEffect extends CharEffect{
 	private int color;

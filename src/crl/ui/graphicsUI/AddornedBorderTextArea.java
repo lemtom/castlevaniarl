@@ -1,14 +1,11 @@
 package crl.ui.graphicsUI;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 public class AddornedBorderTextArea extends AddornedBorderPanel {
+	private static final long serialVersionUID = 1L;
 	private JTextArea textArea;
 
 	public AddornedBorderTextArea(Image UPRIGHT, Image UPLEFT, Image DOWNRIGHT, Image DOWNLEFT, Color OUT_COLOR,

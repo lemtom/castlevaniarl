@@ -1,11 +1,11 @@
 package crl.ui.graphicsUI.effects;
 
-import java.awt.Image;
-
-import sz.util.Position;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.util.Position;
+
+import java.awt.*;
 
 public class GFXBeamEffect extends GFXDirectedEffect {
 	private Image [] missile;

@@ -4,7 +4,8 @@ import crl.action.ProjectileSkill;
 import crl.game.SFXManager;
 import crl.player.Player;
 
-public class ItemBreakDagger extends ProjectileSkill{
+public class ItemBreakDagger extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "DaggerBreak";
 	}

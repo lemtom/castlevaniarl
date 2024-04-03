@@ -2,9 +2,11 @@ package crl.action.weapon;
 
 import crl.action.ProjectileSkill;
 
-public class EnergyBeam extends ProjectileSkill{
+public class EnergyBeam extends ProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	public int getDamage() {
-		return 8 + getPlayer().getSoulPower()*5;
+		return 8 + getPlayer().getSoulPower() * 5;
 	}
 
 	public int getHit() {
@@ -39,11 +41,11 @@ public class EnergyBeam extends ProjectileSkill{
 		return 10;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "EnergyBeam";
 	}
-	
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to point the staff at?";
 	}
 
@@ -51,6 +53,5 @@ public class EnergyBeam extends ProjectileSkill{
 	public boolean piercesThru() {
 		return true;
 	}
-	
-	
+
 }

@@ -2,7 +2,8 @@ package crl.player;
 
 import java.io.Serializable;
 
-public class MonsterDeath implements Serializable{
+public class MonsterDeath implements Serializable {
+private static final long serialVersionUID = 1L;
 	private String monsterDescription;
 	private int times = 1;
 

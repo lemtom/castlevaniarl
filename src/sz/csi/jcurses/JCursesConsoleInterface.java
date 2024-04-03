@@ -1,7 +1,6 @@
 package sz.csi.jcurses;
 
 import jcurses.system.*;
-
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
@@ -146,14 +145,7 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 		refresh();
 	}
     public void flash(int color){
-/*		Toolkit.clearScreen(new CharColor(getJCurseColor(color).getForeground(), getJCurseColor(color).getForeground()));
-		try {
-			Thread.sleep(10);
-		}
-		 catch (InterruptedException ie){
-		}
-		Toolkit.clearScreen(BLACK);   */
-		//Toolkit.changeColors(new Rectangle(Toolkit.UL_CORNER, Toolkit.LR_CORNER), new CharColor(getJCurseColor(color).getForeground(), CharColor.BLACK));
+//Toolkit.changeColors(new Rectangle(Toolkit.UL_CORNER, Toolkit.LR_CORNER), new CharColor(getJCurseColor(color).getForeground(), CharColor.BLACK));
 	}
 
     public void setAutoRefresh(boolean value){}
@@ -280,11 +272,7 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 	}
 
 	public void restore() {
-		/*for (int i = 0; i < colors.length; i++){
-			System.arraycopy(colorsBuffer[i], 0, colors[i], 0, colors[i].length-1);
-			System.arraycopy(charsBuffer[i], 0, chars[i], 0, colors[i].length-1);
-		}*/
-		for (int x = 0; x < colors.length; x++)
+        for (int x = 0; x < colors.length; x++)
 			for (int y = 0; y < colors[0].length; y++)
 				this.print(x,y,charsBuffer[x][y], colorsBuffer[x][y]);
 	}

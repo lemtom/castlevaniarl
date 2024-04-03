@@ -1,14 +1,13 @@
 package crl.ui.graphicsUI;
 
-import java.awt.Color;
-
-import javax.swing.JTextArea;
-
-import sz.csi.CharKey;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
 import crl.ui.AppearanceFactory;
+import sz.csi.CharKey;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class GFXPlayerGenerator extends PlayerGenerator{
 	public GFXPlayerGenerator(SwingSystemInterface si, GFXConfiguration configuration){

@@ -1,7 +1,5 @@
 package crl.ai.monster.boss;
 
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.monster.MonsterMissile;
 import crl.action.monster.MonsterWalk;
@@ -11,8 +9,11 @@ import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.monster.Monster;
 import crl.player.Player;
+import sz.util.Position;
+import sz.util.Util;
 
 public class DeathAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 	private int powerCounter = 5;
 	private boolean powerActive;
 

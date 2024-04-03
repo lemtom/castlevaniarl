@@ -7,7 +7,8 @@ import crl.feature.SmartFeature;
 import crl.feature.SmartFeatureFactory;
 import crl.level.Level;
 
-public class Throw extends Action{
+public class Throw extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Throw";
 	}
@@ -27,6 +28,7 @@ public class Throw extends Action{
 		return true;
 	}
 
+	
 	public void execute(){
 		Level aLevel = performer.getLevel();
 		performer.getLevel().addMessage("You throw the "+targetItem.getDescription());

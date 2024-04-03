@@ -1,11 +1,14 @@
 package crl.level;
 
+import java.io.Serializable;
 import java.util.*;
 
 import sz.util.*;
 import crl.actor.*;
 
-public class Dispatcher implements java.io.Serializable{
+public class Dispatcher implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	private SZPriorityQueue actors;
 	private int countdown;
 	private Actor fixed;
@@ -18,7 +21,7 @@ public class Dispatcher implements java.io.Serializable{
 		return actors.contains(what);
 	}
 
-	public ArrayList<PriorityEnqueable> getActors(){
+	public List<PriorityEnqueable> getActors(){
 		return actors.getArrayList();
     }
 

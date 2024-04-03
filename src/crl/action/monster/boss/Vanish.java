@@ -5,7 +5,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.ui.effects.EffectFactory;
 
-public class Vanish extends Action{
+public class Vanish extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "VANISH";
 	}

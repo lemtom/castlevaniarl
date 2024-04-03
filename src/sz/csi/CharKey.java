@@ -1,8 +1,9 @@
 package sz.csi;
 
-import java.util.*;
-
 import sz.util.Debug;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CharKey {
 	public static final int UARROW = 0;
@@ -206,8 +207,9 @@ public class CharKey {
 
 	public boolean isArrow() {
 		Debug.enterMethod(this, "isArrow");
-		boolean ret = (isRightArrow() || isUpArrow() || isLeftArrow() || isDownArrow() || isDownLeftArrow()
-				|| isDownRightArrow() || isUpLeftArrow() || isUpRightArrow() || isSelfArrow());
+
+		boolean ret = isRightArrow() || isUpArrow() || isLeftArrow() || isDownArrow() || isDownLeftArrow()
+				|| isDownRightArrow() || isUpLeftArrow() || isUpRightArrow() || isSelfArrow();
 		Debug.exitMethod(ret + "");
 		return ret;
 	}
@@ -258,8 +260,6 @@ public class CharKey {
 			return true;
 		if (code >= 64 && code <= 89)
 			return true;
-		if (code >= 117 && code <= 126)
-			return true;
-		return false;
+		return code >= 117 && code <= 126;
 	}
 }

@@ -9,7 +9,8 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class ShadowApocalypse extends Action{
+public class ShadowApocalypse extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "SHADOW_APOCALYPSE";
 	}

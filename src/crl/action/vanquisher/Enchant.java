@@ -3,7 +3,8 @@ package crl.action.vanquisher;
 import crl.action.HeartAction;
 import crl.player.Consts;
 
-public class Enchant extends HeartAction{
+public class Enchant extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 5;
 	}

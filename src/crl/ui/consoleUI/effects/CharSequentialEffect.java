@@ -1,9 +1,10 @@
 package crl.ui.consoleUI.effects;
 
-import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
-import java.util.*;
+import sz.csi.ConsoleSystemInterface;
+import sz.util.Position;
+
+import java.util.ArrayList;
 
 public class CharSequentialEffect extends CharEffect {
 	private ArrayList<Position> sequence;

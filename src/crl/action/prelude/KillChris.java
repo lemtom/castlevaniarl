@@ -8,6 +8,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class KillChris extends Action {
+private static final long serialVersionUID = 1L;
 	private int range;
 	private String message;
 	private String effectType;

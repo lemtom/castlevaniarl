@@ -8,7 +8,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class FinalSlash extends Action{
+public class FinalSlash extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "FINAL_SLASH";
 	}
@@ -89,12 +90,10 @@ public class FinalSlash extends Action{
 	}
 
 	private boolean hit (Position destinationPoint){
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
-        //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 100));
-		//aLevel.addBlood(destinationPoint, 8);
-		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+        Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){
 	       	message.append("You slash through the ").append(destinationFeature.getDescription());
 			aLevel.addMessage(message.toString());

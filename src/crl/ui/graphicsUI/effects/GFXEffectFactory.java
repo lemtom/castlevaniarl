@@ -1,10 +1,10 @@
 package crl.ui.graphicsUI.effects;
 
-import java.util.HashMap;
-
-import sz.util.Position;
 import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
+import sz.util.Position;
+
+import java.util.HashMap;
 
 public class GFXEffectFactory extends EffectFactory{
 	private HashMap<String, Effect> effects = new HashMap<>();
@@ -15,6 +15,7 @@ public class GFXEffectFactory extends EffectFactory{
         }
 	}
 
+	
 	public boolean isDirectedEffect(String ID) {
 		return effects.containsKey(ID) && (effects.get(ID) instanceof GFXDirectedEffect);
 	}

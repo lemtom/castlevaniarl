@@ -6,7 +6,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Consts;
 
-public class Tame extends HeartAction{
+public class Tame extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Tame";
 	}

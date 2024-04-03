@@ -2,20 +2,23 @@ package sz.csi.textcomponents;
 
 import sz.csi.ConsoleSystemInterface;
 
-public class SimpleMenuItem implements MenuItem{
+public class SimpleMenuItem implements MenuItem {
+	private static final long serialVersionUID = 1L;
+
 	private char number;
 	private String description;
 	private int value;
+
 	public int getValue() {
 		return value;
 	}
 
-	public SimpleMenuItem(char number, String description, int value){
+	public SimpleMenuItem(char number, String description, int value) {
 		this.number = number;
 		this.description = description;
 		this.value = value;
 	}
-	
+
 	public char getMenuChar() {
 		return number;
 	}

@@ -71,6 +71,7 @@ public class PatternGenerator extends LevelGenerator {
 					if (map[z][y].charAt(x) == ' ')
 						continue;
 					// Debug.say(map[z][y].charAt(x));
+					
 					String[] cmds = (charMap.get(map[z][y].charAt(x) + "")).split(" ");
 					if (!cmds[0].equals("NOTHING"))
 						try {

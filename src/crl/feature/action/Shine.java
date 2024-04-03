@@ -2,7 +2,8 @@ package crl.feature.action;
 
 import crl.action.*;
 
-public class Shine extends Action{
+public class Shine extends Action {
+private static final long serialVersionUID = 1L;
 	
 	public String getID(){
 		return "Shine";
@@ -11,11 +12,7 @@ public class Shine extends Action{
 	private static Shine singleton = new Shine();
 
 	public void execute(){
-		//Level aLevel = performer.getLevel();
-		//aLevel.addMessage("The holy flame glows!");
-        //aLevel.addEffect(new StaticAnimEffect(performer.getPosition(), "\\|/|\\", Appearance.YELLOW));
-        //aLevel.addEffect(new StaticAnimEffect(performer.getPosition(), "�o�o", Appearance.YELLOW));
-	}
+    }
 
 	public static Shine getAction(){
 		return singleton;

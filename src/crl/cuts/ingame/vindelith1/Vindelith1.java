@@ -5,6 +5,7 @@ import crl.game.Game;
 import crl.level.Level;
 
 public class Vindelith1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		level.addCounter("COUNTBACK_VINDELITHMEETING", 0);

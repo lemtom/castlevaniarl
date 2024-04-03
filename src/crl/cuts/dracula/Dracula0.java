@@ -8,6 +8,7 @@ import crl.monster.Monster;
 import crl.ui.AppearanceFactory;
 
 public class Dracula0 extends Unleasher {
+private static final long serialVersionUID = 1L;
 	public void unleash(Level level, Game game){
 		Monster dracula = level.getMonsterByID("DRACULA");
 		dracula.setPosition(new Position(level.getExitFor("#DRACPOS")));

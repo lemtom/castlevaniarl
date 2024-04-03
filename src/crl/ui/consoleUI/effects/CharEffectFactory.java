@@ -1,11 +1,11 @@
 package crl.ui.consoleUI.effects;
 
-import java.util.HashMap;
-
-import sz.util.Position;
 import crl.game.Game;
 import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
+import sz.util.Position;
+
+import java.util.HashMap;
 
 public class CharEffectFactory extends EffectFactory {
 	private HashMap<String, Effect> effects = new HashMap<>();

@@ -1,5 +1,5 @@
 # CastlevaniaRL
-A fan made traditional roguelike inspired on the Castlevania Series
+A fan made traditional roguelike inspired by the Castlevania Series
 
 # Contributing
 - Visual improvements are welcome, especially to add more variety on the levels

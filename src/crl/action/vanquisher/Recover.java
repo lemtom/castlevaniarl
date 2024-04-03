@@ -3,7 +3,10 @@ package crl.action.vanquisher;
 import crl.action.HeartAction;
 import crl.player.Player;
 
-public class Recover extends HeartAction{
+public class Recover extends HeartAction {
+
+	private static final long serialVersionUID = 1L;
+
 	public int getHeartCost() {
 		return 15;
 	}

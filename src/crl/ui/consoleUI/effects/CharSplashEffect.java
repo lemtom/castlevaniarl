@@ -1,9 +1,9 @@
 package crl.ui.consoleUI.effects;
 
-import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
-import crl.ui.*;
+import crl.ui.UserInterface;
 import crl.ui.consoleUI.ConsoleUserInterface;
+import sz.csi.ConsoleSystemInterface;
+import sz.util.Position;
 
 public class CharSplashEffect extends CharEffect{
 	private String tiles;
@@ -40,9 +40,7 @@ public class CharSplashEffect extends CharEffect{
 			si.refresh();
 			animationPause();
 		}
-		/*si.cls();
-		ui.refresh();*/
-	}
+    }
 
 	private void drawCircle(ConsoleUserInterface ui, Position p, int radius, char tile, int color){
 		int d = 3 - (2 * radius);

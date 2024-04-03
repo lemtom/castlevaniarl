@@ -1,26 +1,26 @@
 package crl.ui.graphicsUI.components;
 
-import java.util.ArrayList;
-
-import javax.swing.JPanel;
-
 import sz.csi.textcomponents.MenuItem;
 
-public class GFXMenuBox extends JPanel{
+import javax.swing.*;
+import java.util.ArrayList;
 
-	public void setMenuItems(ArrayList<MenuItem> items){
-		
+public class GFXMenuBox extends JPanel {
+	private static final long serialVersionUID = 1L;
+
+	public void setMenuItems(ArrayList<MenuItem> items) {
+
 	}
-	
-	public void setPrompt(String prompt){
-		
+
+	public void setPrompt(String prompt) {
+
 	}
-		
-	public Object getSelection(){
+
+	public Object getSelection() {
 		return null;
 	}
 
-	public void setTitle(String title){
-		
+	public void setTitle(String title) {
+
 	}
 }

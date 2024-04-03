@@ -14,6 +14,7 @@ import crl.player.Damage;
 import crl.ui.effects.EffectFactory;
 
 public class MandragoraScream extends Action {
+private static final long serialVersionUID = 1L;
 	public static final int SCREAM_RANGE = 8;
 	public static final int SCREAM_DAMAGE = 20;
 	public static final String SCREAM_WAV = "wav/scream.wav";
@@ -43,7 +44,7 @@ public class MandragoraScream extends Action {
 					if (monster instanceof NPC || monster instanceof Hostage){
 						
 					} else {
-						StringBuffer messages = new StringBuffer("The "+monster.getDescription()+" hears the mandragora scream!");
+						StringBuilder messages = new StringBuilder("The "+monster.getDescription()+" hears the mandragora scream!");
 						//targetMonster.damage(player.getWhipLevel());
 						monster.damage(messages, SCREAM_DAMAGE);
 						if (monster.wasSeen()){

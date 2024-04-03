@@ -1,17 +1,14 @@
 package crl.conf.gfx.data;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Properties;
-
 import crl.game.Game;
-
 import sz.util.ImageUtils;
 import sz.util.Position;
 import sz.util.PropertyFilters;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Configuration settings for GFX UI

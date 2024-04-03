@@ -11,7 +11,8 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.UserInterface;
 
-public class MonsterCharge extends Action{
+public class MonsterCharge extends Action {
+private static final long serialVersionUID = 1L;
 	private int range;
 	private String message;
 	private String effectWav;
@@ -32,6 +33,7 @@ public class MonsterCharge extends Action{
 		damage = pDamage;
 		effectWav = pEffectWav;
 	}
+	
 	
 	public void execute(){
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to JumpOver");

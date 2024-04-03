@@ -224,12 +224,8 @@ public class Main {
 					}
 					STMusicManagerNew.thus.setEnabled(true);
 				}
-				if (configuration.getProperty("enableSFX") == null
-						|| !configuration.getProperty("enableSFX").equals("true")) {
-					SFXManager.setEnabled(false);
-				} else {
-					SFXManager.setEnabled(true);
-				}
+                SFXManager.setEnabled(configuration.getProperty("enableSFX") != null
+                        && configuration.getProperty("enableSFX").equals("true"));
 			}
 			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW", "THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
 
@@ -522,9 +518,7 @@ public class Main {
 					(ConsoleUserInterface) ui, keyBindings);
 			break;
 		case SWING_CONSOLE:
-			// ((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions,
-			// userCommands, walkAction, target, attack);
-			break;
+            break;
 		}
 	}
 
@@ -547,7 +541,7 @@ public class Main {
 			e.printStackTrace();
 			throw new RuntimeException("Error reading field : " + fieldName);
 		}
-    }
+	}
 
 	public static void main(String[] args) {
 		mode = SWING_GFX;
@@ -575,7 +569,6 @@ public class Main {
 			try {
 				System.in.read();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -583,16 +576,16 @@ public class Main {
 
 	private static void initializeGAppearances(GFXConfiguration gfx_configuration) {
 		Appearance[] definitions = new GFXAppearances(gfx_configuration).getAppearances();
-        for (Appearance definition : definitions) {
-            AppearanceFactory.getAppearanceFactory().addDefinition(definition);
-        }
+		for (Appearance definition : definitions) {
+			AppearanceFactory.getAppearanceFactory().addDefinition(definition);
+		}
 	}
 
 	private static void initializeCAppearances() {
 		Appearance[] definitions = new CharAppearances().getAppearances();
-        for (Appearance definition : definitions) {
-            AppearanceFactory.getAppearanceFactory().addDefinition(definition);
-        }
+		for (Appearance definition : definitions) {
+			AppearanceFactory.getAppearanceFactory().addDefinition(definition);
+		}
 	}
 
 	private static void initializeActions() {
@@ -600,7 +593,8 @@ public class Main {
 		Action[] definitions = new Action[] { new Dash(), new MonsterWalk(), new Swim(), new MonsterCharge(),
 				new MonsterMissile(), new SummonMonster(), new MummyStrangle(), new MummyTeleport(), new Teleport(),
 				new MandragoraScream() };
-        for (Action definition : definitions) af.addDefinition(definition);
+		for (Action definition : definitions)
+			af.addDefinition(definition);
 	}
 
 	private static void initializeCells() {
@@ -613,9 +607,9 @@ public class Main {
 
 	private static void initializeSelectors() {
 		ActionSelector[] definitions = getSelectorDefinitions();
-        for (ActionSelector definition : definitions) {
-            SelectorFactory.getSelectorFactory().addDefinition(definition);
-        }
+		for (ActionSelector definition : definitions) {
+			SelectorFactory.getSelectorFactory().addDefinition(definition);
+		}
 	}
 
 	private static void initializeMonsters() throws CRLException {
@@ -627,9 +621,9 @@ public class Main {
 	private static void initializeNPCs() {
 		NPCDefinition[] definitions = NPCs.getNPCDefinitions();
 		NPCFactory npcf = NPCFactory.getFactory();
-        for (NPCDefinition definition : definitions) {
-            npcf.addDefinition(definition);
-        }
+		for (NPCDefinition definition : definitions) {
+			npcf.addDefinition(definition);
+		}
 	}
 
 	private static void initializeItems() {
@@ -641,10 +635,9 @@ public class Main {
 	}
 
 	private static ActionSelector[] getSelectorDefinitions() {
-		ActionSelector[] ret = new ActionSelector[] { new WanderToPlayerAI(), new UnderwaterAI(), new RangedAI(),
-				new FlameAI(), new CrossAI(), new BlastCrystalAI(), new CountDown(), new VillagerAI(), new PriestAI(),
+		return new ActionSelector[] { new WanderToPlayerAI(), new UnderwaterAI(), new RangedAI(), new FlameAI(),
+				new CrossAI(), new BlastCrystalAI(), new CountDown(), new VillagerAI(), new PriestAI(),
 				new NullSelector(), new BasicMonsterAI(), new WildMorphAI() };
-		return ret;
 	}
 
 	public static void crash(String message, Throwable exception) {
@@ -679,10 +672,7 @@ class SaveGameFilenameFilter implements FilenameFilter {
 
 	public boolean accept(File arg0, String arg1) {
 		// if (arg0.getName().endsWith(".sav"))
-		if (arg1.endsWith(".sav"))
-			return true;
-		else
-			return false;
+        return arg1.endsWith(".sav");
 	}
 
 }

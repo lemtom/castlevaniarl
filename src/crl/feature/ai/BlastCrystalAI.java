@@ -6,23 +6,24 @@ import crl.ai.ActionSelector;
 import crl.feature.SmartFeature;
 import crl.feature.action.*;
 
-public class BlastCrystalAI implements ActionSelector, Cloneable{
+public class BlastCrystalAI implements ActionSelector, Cloneable {
+	private static final long serialVersionUID = 1L;
 	private int blastCounter;
-	private int turnsToBlast; 
+	private int turnsToBlast;
 	private boolean activated;
-	
-	public String getID(){
-	     return "CRYSTAL_SELECTOR";
+
+	public String getID() {
+		return "CRYSTAL_SELECTOR";
 	}
 
-	public Action selectAction(Actor who){
-		if (activated){
-			if (blastCounter > 2){
+	public Action selectAction(Actor who) {
+		if (activated) {
+			if (blastCounter > 2) {
 				who.die();
-				who.getLevel().removeSmartFeature((SmartFeature)who);
+				who.getLevel().removeSmartFeature((SmartFeature) who);
 				activated = false;
 				return null;
-			}else{
+			} else {
 				turnsToBlast--;
 				if (turnsToBlast == 0) {
 					turnsToBlast = 5;
@@ -37,14 +38,14 @@ public class BlastCrystalAI implements ActionSelector, Cloneable{
 			activated = true;
 			return new Blast();
 		}
- 	}
+	}
 
- 	public ActionSelector derive(){
- 		try {
-	 		return (ActionSelector) clone();
-	 	} catch (CloneNotSupportedException cnse){
+	public ActionSelector derive() {
+		try {
+			return (ActionSelector) clone();
+		} catch (CloneNotSupportedException cnse) {
 			return null;
-	 	}
- 	}
+		}
+	}
 
 }

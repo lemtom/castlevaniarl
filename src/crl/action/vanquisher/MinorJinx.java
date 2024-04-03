@@ -7,6 +7,8 @@ import crl.player.Damage;
 import crl.player.Player;
 
 public class MinorJinx extends Action {
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "MINOR_JINX";
 	}
@@ -26,6 +28,7 @@ public class MinorJinx extends Action {
 
 	}
 
+	@Override
 	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
 		Level aLevel = performer.getLevel();

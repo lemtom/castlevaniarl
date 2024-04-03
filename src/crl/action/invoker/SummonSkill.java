@@ -9,6 +9,7 @@ import crl.monster.MonsterFactory;
 import crl.player.Consts;
 
 public abstract class SummonSkill extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public abstract String getMonsterID();
 
 	@Override

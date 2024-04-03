@@ -1,8 +1,10 @@
 package crl.npc;
 
+import crl.ai.ActionSelector;
+import crl.ai.SelectorFactory;
+import crl.ui.Appearance;
+import crl.ui.AppearanceFactory;
 import sz.csi.textcomponents.ListItem;
-import crl.ui.*;
-import crl.ai.*;
 
 public class NPCDefinition {
 	private String ID;

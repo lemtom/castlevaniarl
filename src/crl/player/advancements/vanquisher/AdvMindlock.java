@@ -3,7 +3,8 @@ package crl.player.advancements.vanquisher;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvMindlock extends Advancement{
+public class AdvMindlock extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Mindlock";
 	}

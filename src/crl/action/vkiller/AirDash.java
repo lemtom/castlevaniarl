@@ -11,6 +11,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class AirDash extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 5;
 	}
@@ -100,7 +101,7 @@ public class AirDash extends HeartAction {
 							if (!fly.isSolid()) {
 								targetMonster.setPosition(runner);
 							} else {
-								StringBuffer byff = new StringBuffer("You smash the " + targetMonster.getDescription()
+								StringBuilder byff = new StringBuilder("You smash the " + targetMonster.getDescription()
 										+ " against the " + fly.getDescription() + "!");
 								targetMonster.damage(byff, damage);
 								aLevel.addMessage(byff.toString());

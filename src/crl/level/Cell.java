@@ -1,10 +1,18 @@
 package crl.level;
 
 import sz.util.*;
+
+import java.io.Serializable;
+
 import crl.ui.*;
 
-public class Cell implements Cloneable, java.io.Serializable{
-	private boolean isStair, isSolid, isWater, isOpaque, shallowWater;
+public class Cell implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
+	private boolean isStair;
+	private boolean isSolid;
+	private boolean isWater;
+	private boolean isOpaque;
+	private boolean shallowWater;
 	private boolean ethereal;
 	private transient Appearance appearance;
 	private String appearanceID;
@@ -16,14 +24,13 @@ public class Cell implements Cloneable, java.io.Serializable{
 	private int damageOnStep;
 	private int keyCost;
 
-
 	public static final int DOOR = 0;
 
-	public String getID(){
+	public String getID() {
 		return ID;
 	}
 
-	public Cell (String pID, String pShortDescription, String pDescription, Appearance pApp){
+	public Cell(String pID, String pShortDescription, String pDescription, Appearance pApp) {
 		ID = pID;
 		appearance = pApp;
 		appearanceID = pApp.getID();
@@ -32,38 +39,38 @@ public class Cell implements Cloneable, java.io.Serializable{
 		Debug.doAssert(pApp != null, "No se especifico apariencia pa la celda");
 	}
 
-	public String getShortDescription(){
+	public String getShortDescription() {
 		return shortDescription;
 	}
 
-	public Cell (String pID, String sdes, String pDescription, Appearance pApp, boolean isSolid, boolean isOpaque){
+	public Cell(String pID, String sdes, String pDescription, Appearance pApp, boolean isSolid, boolean isOpaque) {
 		this(pID, sdes, pDescription, pApp);
 		this.isSolid = isSolid;
 		this.isOpaque = isOpaque;
 	}
 
-	public void setAppearance(Appearance what){
+	public void setAppearance(Appearance what) {
 		appearanceID = what.getID();
 		appearance = what;
 	}
-	
-	public Appearance getAppearance(){
-		if (appearance == null){
+
+	public Appearance getAppearance() {
+		if (appearance == null) {
 			if (appearanceID != null)
 				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
 		}
 		return appearance;
 	}
 
-	public boolean isSolid(){
+	public boolean isSolid() {
 		return isSolid;
 	}
 
-	public boolean isWater(){
+	public boolean isWater() {
 		return isWater;
 	}
 
-	public void setWater(boolean what){
+	public void setWater(boolean what) {
 		isWater = what;
 	}
 

@@ -5,6 +5,7 @@ import crl.player.Player;
 import sz.csi.textcomponents.MenuItem;
 
 public class FusionSpirits extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Fusion Spirits";
 	}

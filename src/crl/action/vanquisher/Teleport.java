@@ -9,7 +9,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class Teleport extends HeartAction{
+public class Teleport extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Teleport2";
 	}

@@ -8,6 +8,7 @@ import crl.player.Player;
 import crl.ui.Display;
 
 public class Training3ChrisDeath extends Unleasher {
+private static final long serialVersionUID = 1L;
 	public void unleash(Level level, Game game){
 		NPC chris = level.getNPCByID("CHRISTRAIN");
 		if (chris == null || chris.isDead()){

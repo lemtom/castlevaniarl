@@ -3,7 +3,8 @@ package crl.player.advancements.renegade;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvSummonSoul extends Advancement{
+public class AdvSummonSoul extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Summon Soul";
 	}

@@ -8,6 +8,8 @@ import crl.level.Level;
 import crl.player.Player;
 
 public class EnergyBurst extends Action {
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "ENERGY_BURST";
 	}

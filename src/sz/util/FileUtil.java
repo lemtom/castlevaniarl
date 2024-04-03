@@ -11,10 +11,6 @@ public class FileUtil {
         BufferedReader inx = new BufferedReader(new FileReader(vArchivo));
         int lines = 0;
         while (inx.readLine() != null) lines++;
-        //Date end = new Date();
-        //System.out.println("Comienzo: "+starting);
-        //System.out.println("Fin: "+end);
-        //System.out.println("Lineas: "+lines);
         inx.close();
         Debug.exitMethod(lines+"");
         return lines;

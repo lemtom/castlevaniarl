@@ -11,6 +11,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class Egg extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 1;
 	}
@@ -25,6 +26,7 @@ public class Egg extends HeartAction {
 	}
 
 	@Override
+	
 	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
@@ -61,7 +63,7 @@ public class Egg extends HeartAction {
 
 		aLevel.addEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_EGG_BLAST"));
 
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		for (int x = flameOrigin.x - 1; x <= flameOrigin.x + 1; x++)
 			for (int y = flameOrigin.y - 1; y <= flameOrigin.y + 1; y++) {
 				Position destinationPoint = new Position(x, y, flameOrigin.z);

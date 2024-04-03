@@ -1,7 +1,5 @@
 package crl.ai.npc;
 
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.action.npc.PeaceWalk;
@@ -9,8 +7,11 @@ import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.level.Cell;
 import crl.npc.NPC;
+import sz.util.Position;
+import sz.util.Util;
 
-public class VillagerAI implements ActionSelector{
+public class VillagerAI implements ActionSelector {
+private static final long serialVersionUID = 1L;
 	 protected boolean onDanger;
 	 protected boolean attackPlayer;
 

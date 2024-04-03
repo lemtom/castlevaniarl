@@ -7,22 +7,7 @@ public class Debug {
 	static final boolean debug = false;
 	static final boolean timing = false;
 	static final boolean gossip = false;
-/*
-	static JTextArea testArea;
-	static {
-		if (debug){
-			JFrame testFrame = new JFrame();
-			testArea = new JTextArea();
-			testArea.setLineWrap(true);
-			testArea.setWrapStyleWord(true);
-			testFrame.getContentPane().setLayout(new GridLayout(1,1));
-			testFrame.getContentPane().add(new JScrollPane(testArea));
-			testFrame.setBounds(0,0,400,500);
-			testFrame.setVisible(true);
-		}
-		
-	}*/
-	static long firstTimer;
+static long firstTimer;
 	static long lastTimer;
 
 	public static void startTimer(){
@@ -48,9 +33,7 @@ public class Debug {
 	public static void enterMethod(Object cls, String method, Object params){
 		if (!debug) return;
 		methodLevel++;
-		//System.out.println(spaces(methodLevel) + "-"+cls.getClass().getName()+"."+method+"("+params+")");
-		//System.out.println(spaces(methodLevel) + "-"+cls+"("+cls.getClass().getName()+")."+method+"("+params+")");
-		System.out.println(spaces(methodLevel) + "-"+cls+"."+method+"("+params+")");
+        System.out.println(spaces(methodLevel) + "-"+cls+"."+method+"("+params+")");
 		//testArea.append(spaces(methodLevel) + "-"+cls+"."+method+"("+params+")");
 	}
 
@@ -62,15 +45,7 @@ public class Debug {
 		//testArea.append(spaces(methodLevel) + "-"+cls+"."+method+"()");
 	}
 
-	/*public static void doAssert(boolean expression){
-
-		if (!expression){
-			System.out.println("Programming Assertion Failed");
-			System.exit(0);
-		}
-	} */
-
-	public static void doAssert(boolean expression, String msg){
+    public static void doAssert(boolean expression, String msg){
 		if (!expression){
 			System.out.println("Programming Assertion Failed:"+msg);
 			System.exit(0);

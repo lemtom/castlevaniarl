@@ -2,7 +2,8 @@ package crl.player.advancements;
 
 import crl.player.Player;
 
-public class AdvDodge2 extends Advancement{
+public class AdvDodge2 extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Mirror Dodge";
 	}

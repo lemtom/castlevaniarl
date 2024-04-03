@@ -113,17 +113,7 @@ public class RuinLevelGenerator extends LevelGenerator {
 				preLevel[xpos+width-1][y] = baseWall;
 		}
 
-		/*if (Util.chance(50))
-			if (Util.chance(50))
-				preLevel[xpos][Util.rand(ypos+1, ypos+height-1)] = baseDoor;
-			else
-				preLevel[xpos+width-1][Util.rand(ypos+1, ypos+height-1)] = baseDoor;
-		else
-			if (Util.chance(50))
-				preLevel[Util.rand(xpos+1, xpos+width-1)][ypos] = baseDoor;
-			else
-				preLevel[Util.rand(xpos+1, xpos+width-1)][ypos+height-1] = baseDoor;*/
-		Debug.exitMethod();
+        Debug.exitMethod();
 	}
 
 	private boolean hasConflicts(int xpos, int ypos, int width, int height){

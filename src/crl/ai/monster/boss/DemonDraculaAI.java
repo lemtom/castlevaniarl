@@ -1,7 +1,5 @@
 package crl.ai.monster.boss;
 
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.ActionFactory;
 import crl.action.monster.MonsterCharge;
@@ -14,8 +12,11 @@ import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.ai.monster.RangedAttack;
 import crl.monster.Monster;
+import sz.util.Position;
+import sz.util.Util;
 
 public class DemonDraculaAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 	private int approachLimit = 0;
 	private int chargeCounter = 99;
 

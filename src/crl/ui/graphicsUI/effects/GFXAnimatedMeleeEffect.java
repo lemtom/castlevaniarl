@@ -1,12 +1,12 @@
 package crl.ui.graphicsUI.effects;
 
-import java.awt.image.BufferedImage;
-
-import sz.util.Position;
 import crl.action.Action;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.util.Position;
+
+import java.awt.image.BufferedImage;
 
 public class GFXAnimatedMeleeEffect extends GFXDirectionalEffect{
 	private BufferedImage[][] frames;
@@ -65,9 +65,7 @@ public class GFXAnimatedMeleeEffect extends GFXDirectionalEffect{
 				height = ui.getPlayer().getLevel().getMapCell(runner).getHeight();
 			Position relative = Position.subs(runner, ui.getPlayer().getPosition());
 			Position toPrint = Position.add(ui.PC_POS, relative);
-			/*if (!ui.insideViewPort(toPrint))
-				break;*/
-			toPrint = new Position(toPrint.x() * 32, 
+            toPrint = new Position(toPrint.x() * 32,
 					               toPrint.y() * 32 - 4 * height);
 			toPrint = Position.add(toPrint, vars[i]);
 			ui.drawImageVP(toPrint.x(), toPrint.y(), sequence[i]);

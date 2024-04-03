@@ -7,7 +7,8 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class SoulsStrike extends HeartAction{
+public class SoulsStrike extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Souls Strike";
 	}
@@ -27,7 +28,7 @@ public class SoulsStrike extends HeartAction{
 			Monster nearestMonster = aPlayer.getNearestMonster();
 			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>15){
 			} else {
-				StringBuffer buff = new StringBuffer();
+				StringBuilder buff = new StringBuilder();
 				if (nearestMonster.wasSeen())
 					buff.append("The soul impacts the ").append(nearestMonster.getDescription()).append("!");
 				nearestMonster.damage(buff, 10+aPlayer.getSoulPower()*2);

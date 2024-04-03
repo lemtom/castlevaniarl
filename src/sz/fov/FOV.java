@@ -1,6 +1,6 @@
 package sz.fov;
 
-import sz.util.*;
+import sz.util.Position;
 
 /*
  * RECURSIVE SHADOWCASTING

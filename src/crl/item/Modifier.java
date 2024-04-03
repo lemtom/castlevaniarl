@@ -2,7 +2,8 @@ package crl.item;
 
 import java.io.Serializable;
 
-public class Modifier implements Serializable{
+public class Modifier implements Serializable {
+private static final long serialVersionUID = 1L;
 	private String description;
 	private String id;
 	private double priceModifier;

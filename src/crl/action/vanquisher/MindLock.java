@@ -1,13 +1,14 @@
 package crl.action.vanquisher;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import crl.action.ProjectileSkill;
 import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class MindLock extends ProjectileSkill{
+public class MindLock extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public int getDamage() {
 		return 0;
 	}
@@ -61,13 +62,12 @@ public class MindLock extends ProjectileSkill{
 	@Override
 	public void execute(){
 		super.execute();
-		ArrayList<Monster> hitMonsters = getHitMonsters();
-		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = hitMonsters.get(i);
-			if (targetMonster.wasSeen())
-				targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ "'s mind is locked!");
-			targetMonster.setCounter(Consts.C_MONSTER_SLEEP, getPlayer().getSoulPower()*2+5);
-		}
+		List<Monster> hitMonsters = getHitMonsters();
+        for (Monster targetMonster : hitMonsters) {
+            if (targetMonster.wasSeen())
+                targetMonster.getLevel().addMessage("The " + targetMonster.getDescription() + "'s mind is locked!");
+            targetMonster.setCounter(Consts.C_MONSTER_SLEEP, getPlayer().getSoulPower() * 2 + 5);
+        }
 	}
 
 	@Override

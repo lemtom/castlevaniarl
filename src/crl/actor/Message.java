@@ -6,11 +6,7 @@ public class Message{
 	private String text;
 	private Position location;
 
-/*	public void act(){
-		die();
-	}   */
-
-	public Message (String pText, Position pLocation){
+    public Message (String pText, Position pLocation){
 		text = pText;
 		location = pLocation;
 	}

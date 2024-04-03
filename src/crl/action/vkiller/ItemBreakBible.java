@@ -4,6 +4,7 @@ import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
 public class ItemBreakBible extends BeamProjectileSkill {
+private static final long serialVersionUID = 1L;
 
 	public int getDamage() {
 		return 7 + getPlayer().getShotLevel() + getPlayer().getSoulPower() * 2;

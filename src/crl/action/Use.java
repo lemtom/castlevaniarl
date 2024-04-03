@@ -11,7 +11,8 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.UserInterface;
 
-public class Use extends Action{
+public class Use extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Use";
 	}

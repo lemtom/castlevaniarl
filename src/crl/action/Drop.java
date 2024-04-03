@@ -3,7 +3,8 @@ package crl.action;
 import crl.level.Level;
 import crl.player.Player;
 
-public class Drop extends Action{
+public class Drop extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Drop";
 	}

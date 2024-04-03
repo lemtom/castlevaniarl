@@ -3,7 +3,8 @@ package crl.player.advancements.invoker;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvInvokeCat extends Advancement{
+public class AdvInvokeCat extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Fang's Oath";
 	}

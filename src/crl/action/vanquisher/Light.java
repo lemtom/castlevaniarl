@@ -5,7 +5,8 @@ import crl.level.Level;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class Light extends HeartAction{
+public class Light extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Light";
 	}
@@ -13,11 +14,6 @@ public class Light extends HeartAction{
 	public int getHeartCost() {
 		return 15;
 	}
-	
-	@Override
-	public String getSFX() {
-        return super.getSFX();
-    }
 	
 	@Override
 	public int getCost(){

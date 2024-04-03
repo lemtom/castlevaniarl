@@ -15,6 +15,7 @@ import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 
 public class CrossBack extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Cross";
 	}
@@ -24,6 +25,7 @@ public class CrossBack extends Action {
 		return true;
 	}
 
+	
 	public void execute() {
 		Level aLevel = performer.getLevel();
 		aLevel.addMessage("The cross comes back!");
@@ -70,7 +72,7 @@ public class CrossBack extends Action {
 					if (targetMonster.wasSeen())
 						aLevel.addMessage("The cross flies under the " + targetMonster.getDescription());
 				} else {
-					StringBuffer buff = new StringBuffer();
+					StringBuilder buff = new StringBuilder();
 					if (targetMonster.wasSeen())
 						buff.append("The cross slashes the ").append(targetMonster.getDescription());
 					targetMonster.damage(buff, damage);

@@ -1,6 +1,7 @@
 package sz.csi.textcomponents;
 
 public class BasicListItem implements ListItem{
+	private static final long serialVersionUID = 1L;
 	private String rowData;
 	private char index;
 	private int indexColor;

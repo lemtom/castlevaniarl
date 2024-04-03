@@ -11,9 +11,9 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ArrayList;
 
 import sz.csi.textcomponents.MenuItem;
 import sz.util.Debug;
@@ -120,7 +120,8 @@ public class GameFiles {
 			BufferedWriter fileWriter = FileUtil.getWriter("memorials/" + player.getName() + "(" + now + ").life");
 			GameSessionInfo gsi = player.getGameSessionInfo();
 			gsi.setDeathLevelDescription(player.getLevel().getDescription());
-			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+
+			String heshe = player.getPronoun();
 
 			fileWriter.write("/-----------------------------------");
 			fileWriter.newLine();
@@ -142,9 +143,9 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe + " was able to use the following skills:");
 			fileWriter.newLine();
-			ArrayList<MenuItem> skills = player.getAvailableSkills();
-			for (int i = 0; i < skills.size(); i++) {
-				fileWriter.write(skills.get(i).getMenuDescription());
+			List<MenuItem> skills = player.getAvailableSkills();
+			for (MenuItem skill : skills) {
+				fileWriter.write(skill.getMenuDescription());
 				fileWriter.newLine();
 			}
 
@@ -189,9 +190,9 @@ public class GameFiles {
 			fileWriter.newLine();
 
 			fileWriter.newLine();
-			ArrayList<String> history = gsi.getHistory();
-			for (int i = 0; i < history.size(); i++) {
-				fileWriter.write(heshe + " " + history.get(i));
+			List<String> history = gsi.getHistory();
+			for (String s : history) {
+				fileWriter.write(heshe + " " + s);
 				fileWriter.newLine();
 			}
 			fileWriter.newLine();
@@ -236,7 +237,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 
-			ArrayList<MenuItem> inventory = player.getInventory();
+			List<MenuItem> inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");
 			fileWriter.newLine();
@@ -250,17 +251,17 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 
-            for (MenuItem menuItem : inventory) {
-                Equipment element = (Equipment) menuItem;
-                fileWriter.write(element.getQuantity() + " - " + element.getMenuDescription());
-                fileWriter.newLine();
-            }
+			for (MenuItem menuItem : inventory) {
+				Equipment element = (Equipment) menuItem;
+				fileWriter.write(element.getQuantity() + " - " + element.getMenuDescription());
+				fileWriter.newLine();
+			}
 			fileWriter.newLine();
 			fileWriter.write("-- Last Messages --");
 			fileWriter.newLine();
-			ArrayList<String> messages = UserInterface.getUI().getMessageBuffer();
-			for (int j = 0; j < messages.size(); j++) {
-				fileWriter.write(messages.get(j));
+			List<String> messages = UserInterface.getUI().getMessageBuffer();
+			for (String message : messages) {
+				fileWriter.write(message);
 				fileWriter.newLine();
 			}
 
@@ -290,7 +291,6 @@ public class GameFiles {
 		for (File file : previousSaves) {
 			file.delete();
 		}
-
 		String filename = "savegame/" + p.getName() + ", a Lv" + p.getPlayerLevel() + " " + p.getClassString() + ".sav";
 		p.setSelector(null);
 		try {
@@ -324,7 +324,8 @@ public class GameFiles {
 					.getWriter("memorials/" + player.getName() + " {Alive}(" + now + ").life");
 			GameSessionInfo gsi = player.getGameSessionInfo();
 			gsi.setDeathLevelDescription(player.getLevel().getDescription());
-			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+
+			String heshe = player.getPronoun();
 
 			fileWriter.write("/-----------------------------------");
 			fileWriter.newLine();
@@ -346,9 +347,9 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe + " is able to use the following skills:");
 			fileWriter.newLine();
-			ArrayList<MenuItem> skills = player.getAvailableSkills();
-			for (int i = 0; i < skills.size(); i++) {
-				fileWriter.write(skills.get(i).getMenuDescription());
+			List<MenuItem> skills = player.getAvailableSkills();
+			for (MenuItem skill : skills) {
+				fileWriter.write(skill.getMenuDescription());
 				fileWriter.newLine();
 			}
 
@@ -393,9 +394,9 @@ public class GameFiles {
 			fileWriter.newLine();
 
 			fileWriter.newLine();
-			ArrayList<String> history = gsi.getHistory();
-			for (int i = 0; i < history.size(); i++) {
-				fileWriter.write(heshe + " " + history.get(i));
+			List<String> history = gsi.getHistory();
+			for (String s : history) {
+				fileWriter.write(heshe + " " + s);
 				fileWriter.newLine();
 			}
 			fileWriter.newLine();
@@ -441,7 +442,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 
-			ArrayList<MenuItem> inventory = player.getInventory();
+			List<MenuItem> inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");
 			fileWriter.newLine();
@@ -455,17 +456,17 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 
-            for (MenuItem menuItem : inventory) {
-                Equipment element = (Equipment) menuItem;
-                fileWriter.write(element.getQuantity() + " - " + element.getMenuDescription());
-                fileWriter.newLine();
-            }
+			for (MenuItem menuItem : inventory) {
+				Equipment element = (Equipment) menuItem;
+				fileWriter.write(element.getQuantity() + " - " + element.getMenuDescription());
+				fileWriter.newLine();
+			}
 			fileWriter.newLine();
 			fileWriter.write("-- Latest Messages --");
 			fileWriter.newLine();
-			ArrayList<String> messages = UserInterface.getUI().getMessageBuffer();
-			for (int j = 0; j < messages.size(); j++) {
-				fileWriter.write(messages.get(j));
+			List<String> messages = UserInterface.getUI().getMessageBuffer();
+			for (String message : messages) {
+				fileWriter.write(message);
 				fileWriter.newLine();
 			}
 
@@ -500,7 +501,7 @@ public class GameFiles {
 
 	public static void updateGraveyard(Map<String, MonsterRecord> graveyard, GameSessionInfo gsi) {
 		Map<String, MonsterDeath> session = gsi.getDeathCount();
-		
+
 		for (String monsterID : session.keySet()) {
 			MonsterDeath deaths = gsi.getDeathCount().get(monsterID);
 			MonsterRecord monsterRecord = graveyard.get(monsterID);
@@ -511,7 +512,7 @@ public class GameFiles {
 				graveyard.put(monsterID, monsterRecord);
 			} else {
 				monsterRecord.setKilled(monsterRecord.getKilled() + deaths.getTimes());
-			}	
+			}
 		}
 		if (gsi.getKillerMonster() != null) {
 			MonsterRecord record = graveyard.get(gsi.getKillerMonster().getID());
@@ -530,7 +531,8 @@ public class GameFiles {
 			BufferedWriter fileWriter = FileUtil.getWriter("graveyard");
 			for (Entry<String, MonsterRecord> entry : graveyard.entrySet()) {
 				MonsterRecord monsterRecord = entry.getValue();
-				fileWriter.write(monsterRecord.getMonsterID() + "," + monsterRecord.getKilled() + "," + monsterRecord.getKillers());
+				fileWriter.write(monsterRecord.getMonsterID() + "," + monsterRecord.getKilled() + ","
+						+ monsterRecord.getKillers());
 				fileWriter.newLine();
 			}
 			fileWriter.close();

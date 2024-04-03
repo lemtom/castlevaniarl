@@ -13,7 +13,8 @@ import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Damage;
 
-public class MonsterWalk extends Action{
+public class MonsterWalk extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "MonsterWalk";
 	}
@@ -22,6 +23,7 @@ public class MonsterWalk extends Action{
 	public boolean needsDirection(){
 		return true;
 	}
+
 
 	public void execute(){
 		Debug.doAssert(performer instanceof Monster, "The player tried to MonsterWalk...");
@@ -90,7 +92,7 @@ public class MonsterWalk extends Action{
 										if (aLevel.getSmartFeature(destinationPoint) != null){
 											SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
 											if (sf.getDamageOnStep() > 0) {
-												StringBuffer buff = new StringBuffer("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
+												StringBuilder buff = new StringBuilder("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
 												aMonster.damage(buff, sf.getDamageOnStep());
 												aLevel.addMessage(buff.toString());
 											}
@@ -101,7 +103,7 @@ public class MonsterWalk extends Action{
 										if (aLevel.getSmartFeature(destinationPoint) != null){
 											SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
 											if (sf.getDamageOnStep() > 0) {
-												StringBuffer buff = new StringBuffer("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
+												StringBuilder buff = new StringBuilder("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
 												aMonster.damage(buff, sf.getDamageOnStep());
 												aLevel.addMessage(buff.toString());
 											}
@@ -112,7 +114,7 @@ public class MonsterWalk extends Action{
 									if (aLevel.getSmartFeature(destinationPoint) != null){
 										SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
 										if (sf.getDamageOnStep() > 0) {
-											StringBuffer buff = new StringBuffer("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
+											StringBuilder buff = new StringBuilder("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
 											aMonster.damage(buff, sf.getDamageOnStep());
 											aLevel.addMessage(buff.toString());
 										}

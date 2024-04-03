@@ -4,7 +4,8 @@ import sz.util.*;
 import crl.action.*;
 import crl.monster.*;
 
-public class EmergeMonster extends Action{
+public class EmergeMonster extends Action {
+private static final long serialVersionUID = 1L;
 	private static EmergeMonster singleton = new EmergeMonster();
 	
 	public String getID(){

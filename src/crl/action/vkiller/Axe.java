@@ -4,6 +4,8 @@ import crl.action.ProjectileSkill;
 import crl.player.Player;
 
 public class Axe extends ProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public boolean piercesThru() {
 		return true;

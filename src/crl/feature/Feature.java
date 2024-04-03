@@ -3,24 +3,35 @@ package crl.feature;
 import sz.util.*;
 
 import crl.ui.*;
+
+import java.io.Serializable;
+
 import crl.game.SFXManager;
 import crl.monster.Monster;
 import crl.player.*;
 
-public class Feature implements Cloneable, java.io.Serializable {
-	/** A feature is something that stays inside the level but may be moved,
-	 * destroyed or otherwise affected. */
+/**
+ * A feature is something that stays inside the level but may be moved,
+ * destroyed or otherwise affected.
+ */
+public class Feature implements Cloneable, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	private Feature prize;
 	private int resistance; // How many blows til it gives the prize (max)
 	private int currentResistance; // How many blows til it gives the prize
-	private boolean destroyable, isSolid;
-	private int heartPrize,
-			mysticWeaponPrize = -1,
-			keyPrize,
-			upgradePrize;
+	private boolean destroyable;
+	private boolean isSolid;
+	private int heartPrize;
+	private int mysticWeaponPrize = -1;
+	private int keyPrize;
+	private int upgradePrize;
 	private Position position;
 	private transient Appearance appearance;
-	private String ID, description,appearanceID;
+	private String ID;
+	private String description;
+	private String appearanceID;
 	private String trigger;
 	private int heightMod;
 	private int keyCost;
@@ -31,82 +42,81 @@ public class Feature implements Cloneable, java.io.Serializable {
 	private int faint;
 	private int light;
 
-	public String getID(){
+	public String getID() {
 		return ID;
 	}
 
-	private Feature getPrizeFor(Player p){
+	private Feature getPrizeFor(Player p) {
 		if (p.deservesUpgrade())
 			return FeatureFactory.getFactory().buildFeature("UPGRADE");
-		
-        String [] prizeList = null;
 
-        if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
-        	if (Util.chance(10)){
-        		//Will get a mystic weapon
-        		if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(50))
-        			prizeList = new String[]{"CRYSTALWP"};
-        		else if (p.getFlag("MYSTIC_FIST") && Util.chance(50))
-        			prizeList = new String[]{"FISTWP"};
-        		else if (p.getFlag("MYSTIC_CROSS") && Util.chance(50))
-        			prizeList = new String[]{"CROSSWP"};
-        		else if (p.getFlag("MYSTIC_STOPWATCH") && Util.chance(50))
-        			prizeList = new String[]{"STOPWATCHWP"};
-        		else if (p.getFlag("MYSTIC_HOLY_WATER") && Util.chance(50))
-        			prizeList = new String[]{"HOLYWP"};
-        		else if (p.getFlag("MYSTIC_HOLY_BIBLE") && Util.chance(50))
-        			prizeList = new String[]{"BIBLEWP"};
-        		else 
-        			prizeList = new String[]{"AXEWP", "DAGGERWP"};
-        	} else
-	        if (Util.chance(40))
-    	    if (Util.chance(30))
-        	if (Util.chance(10))
-	        if (Util.chance(10))
-    	    if (Util.chance(10))
-   	    		prizeList = new String[]{"WHITE_MONEY_BAG"};
+		String[] prizeList = null;
+
+		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+			if (Util.chance(10)) {
+				// Will get a mystic weapon
+				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(50))
+					prizeList = new String[] { "CRYSTALWP" };
+				else if (p.getFlag("MYSTIC_FIST") && Util.chance(50))
+					prizeList = new String[] { "FISTWP" };
+				else if (p.getFlag("MYSTIC_CROSS") && Util.chance(50))
+					prizeList = new String[] { "CROSSWP" };
+				else if (p.getFlag("MYSTIC_STOPWATCH") && Util.chance(50))
+					prizeList = new String[] { "STOPWATCHWP" };
+				else if (p.getFlag("MYSTIC_HOLY_WATER") && Util.chance(50))
+					prizeList = new String[] { "HOLYWP" };
+				else if (p.getFlag("MYSTIC_HOLY_BIBLE") && Util.chance(50))
+					prizeList = new String[] { "BIBLEWP" };
+				else
+					prizeList = new String[] { "AXEWP", "DAGGERWP" };
+			} else if (Util.chance(40))
+				if (Util.chance(30))
+					if (Util.chance(10))
+						if (Util.chance(10))
+							if (Util.chance(10))
+								prizeList = new String[] { "WHITE_MONEY_BAG" };
+							else
+								prizeList = new String[] { "POT_ROAST" };
+						else
+							prizeList = new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
+					else
+						prizeList = new String[] { "RED_MONEY_BAG" };
+				else
+					prizeList = new String[] { "BIGHEART" };
 			else
-				prizeList = new String[]{"POT_ROAST"};
+				prizeList = new String[] { "SMALLHEART" };
+		} else {
+			if (Util.chance(50))
+				if (Util.chance(40))
+					if (Util.chance(10))
+						if (Util.chance(10))
+							if (Util.chance(10))
+								prizeList = new String[] { "WHITE_MONEY_BAG" };
+							else
+								prizeList = new String[] { "POT_ROAST" };
+						else
+							prizeList = new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
+					else
+						prizeList = new String[] { "RED_MONEY_BAG" };
+				else
+					prizeList = new String[] { "BIGHEART" };
 			else
-				prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"RED_MONEY_BAG"};
-			else
-				prizeList = new String[]{"BIGHEART"};
-			else
-				prizeList = new String[]{"SMALLHEART"};
-    	} else {
-	        if (Util.chance(50))
-    	    if (Util.chance(40))
-        	if (Util.chance(10))
-	        if (Util.chance(10))
-    	    if (Util.chance(10))
-    	    	prizeList = new String[]{"WHITE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"POT_ROAST"};
-			else
-				prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"RED_MONEY_BAG"};
-			else
-				prizeList = new String[]{"BIGHEART"};
-			else
-				prizeList = new String[]{"SMALLHEART"};    	
-    	}
-        //return FeatureFactory.getFactory().buildFeature("ROSARY");
-        if (prizeList != null)
-        	return FeatureFactory.getFactory().buildFeature(Util.randomElementOf(prizeList));
-        else
-        	return null;
+				prizeList = new String[] { "SMALLHEART" };
+		}
+		// return FeatureFactory.getFactory().buildFeature("ROSARY");
+		if (prizeList != null)
+			return FeatureFactory.getFactory().buildFeature(Util.randomElementOf(prizeList));
+		else
+			return null;
 	}
 
-	public Feature damage(Player p, int damage){
+	public Feature damage(Player p, int damage) {
 		currentResistance -= damage;
-		if (currentResistance < 0){
+		if (currentResistance < 0) {
 			Feature pPrize = getPrizeFor(p);
 			p.getLevel().destroyFeature(this);
 			SFXManager.play("wav/breakpot.wav");
-			if (pPrize != null){
+			if (pPrize != null) {
 				pPrize.setPosition(position.x, position.y, position.z);
 				p.getLevel().addFeature(pPrize);
 			}
@@ -115,26 +125,26 @@ public class Feature implements Cloneable, java.io.Serializable {
 		return null;
 	}
 
-	public Object clone(){
+	public Object clone() {
 		try {
 			Feature x = (Feature) super.clone();
 
 			if (position != null)
 				x.setPosition(position.x, position.y, position.z);
 			if (prize != null)
-				x.setPrize((Feature)prize.clone());
+				x.setPrize((Feature) prize.clone());
 			return x;
-		} catch (CloneNotSupportedException cnse){
+		} catch (CloneNotSupportedException cnse) {
 			Debug.doAssert(false, "failed class cast, Feature.clone()");
 		}
 		return null;
 	}
 
-	public void setPrize(Feature what){
+	public void setPrize(Feature what) {
 		prize = what;
 	}
 
-	public Feature (String pID, Appearance pApp, int resistance, String pDescription, int faint, int light){
+	public Feature(String pID, Appearance pApp, int resistance, String pDescription, int faint, int light) {
 		ID = pID;
 		appearance = pApp;
 		appearanceID = pApp.getID();
@@ -143,38 +153,37 @@ public class Feature implements Cloneable, java.io.Serializable {
 		currentResistance = resistance;
 		this.faint = faint;
 		this.light = light;
-		//sightListItem = new BasicListItem(appearance.getChar(), appearance.getColor(), description);
-		Debug.doAssert(pApp != null, "No se especifico apariencia pa la featura");
+        Debug.doAssert(pApp != null, "No se especifico apariencia pa la featura");
 	}
 
-	public void setPosition(int x, int y, int z){
-		position = new Position (x,y, z);
+	public void setPosition(int x, int y, int z) {
+		position = new Position(x, y, z);
 	}
 
-	public Appearance getAppearance(){
-		if (appearance == null){
+	public Appearance getAppearance() {
+		if (appearance == null) {
 			if (appearanceID != null)
 				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
 		}
 		return appearance;
 	}
 
-	public String getDescription(){
+	public String getDescription() {
 		return description;
 	}
 
-	public Position getPosition(){
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setPrizesFor(Player p){
+	public void setPrizesFor(Player p) {
 		heartPrize = 0;
 		mysticWeaponPrize = -1;
 		upgradePrize = 0;
 
 		if (p.deservesUpgrade())
 			upgradePrize = 1;
-    }
+	}
 
 	public int getHeartPrize() {
 		return heartPrize;
@@ -192,15 +201,13 @@ public class Feature implements Cloneable, java.io.Serializable {
 		mysticWeaponPrize = value;
 	}
 
-
-    public int getUpgradePrize() {
+	public int getUpgradePrize() {
 		return upgradePrize;
 	}
 
 	public void setUpgradePrize(int value) {
 		upgradePrize = value;
 	}
-
 
 	public int getKeyPrize() {
 		return keyPrize;
@@ -282,7 +289,7 @@ public class Feature implements Cloneable, java.io.Serializable {
 		this.relevant = relevant;
 	}
 
-	public boolean isVisible(){
+	public boolean isVisible() {
 		return !getAppearance().getID().equals("VOID");
 	}
 
@@ -297,10 +304,10 @@ public class Feature implements Cloneable, java.io.Serializable {
 	public int getLight() {
 		return light;
 	}
-	
-	public void damage(Monster m){
+
+	public void damage(Monster m) {
 		currentResistance -= m.getAttack();
-		if (currentResistance < 0){
+		if (currentResistance < 0) {
 			m.getLevel().destroyFeature(this);
 		}
 	}

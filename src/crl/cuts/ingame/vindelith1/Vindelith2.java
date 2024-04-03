@@ -10,6 +10,7 @@ import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
 public class Vindelith2 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		//if (level.getFlag("VINDELITHMEETING")&& level.getCounter("COUNTBACK_VINDELITHMEETING").isOver()){

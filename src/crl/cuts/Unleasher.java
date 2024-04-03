@@ -6,6 +6,7 @@ import crl.game.Game;
 import crl.level.Level;
 
 public abstract class Unleasher implements Serializable {
+private static final long serialVersionUID = 1L;
 	protected boolean enabled = true;
 	
 	public boolean enabled(){

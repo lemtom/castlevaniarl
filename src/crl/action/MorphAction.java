@@ -3,7 +3,8 @@ package crl.action;
 import crl.actor.Actor;
 import crl.player.Player;
 
-public abstract class MorphAction extends HeartAction{
+public abstract class MorphAction extends HeartAction {
+private static final long serialVersionUID = 1L;
 	@Override
 	public final void execute(){
 		super.execute();

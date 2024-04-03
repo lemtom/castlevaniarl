@@ -10,6 +10,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public abstract class BeamProjectileSkill extends ProjectileSkill {
+	private static final long serialVersionUID = 1L;
+
 	public String plottedLocatedEffect() {
 		return null;
 	}
@@ -131,10 +133,10 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 								drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint,
 										getSFXID(), i));
 								deadLines[hits] = true;
-                            }
+							}
 
 						}
-                    } else if (projectileHeight < monsterHeight) {
+					} else if (projectileHeight < monsterHeight) {
 						aLevel.addMessage(
 								"The " + getSpellAttackDesc() + " flies under the " + targetMonster.getDescription());
 					} else {

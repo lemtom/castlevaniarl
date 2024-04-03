@@ -8,13 +8,7 @@ public class MapCellFactory {
 	private HashMap<String, Cell> definitions;
 
 
-
-/*	public Cell buildMapCell (String id){
-		Cell x = (Cell) definitions.get(id);
-		return x.clone();
-	}   */
-
-	public static MapCellFactory getMapCellFactory(){
+    public static MapCellFactory getMapCellFactory(){
 		return singleton;
     }
 

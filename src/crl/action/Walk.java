@@ -15,7 +15,8 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.UserInterface;
 
-public class Walk extends Action{
+public class Walk extends Action {
+private static final long serialVersionUID = 1L;
 	private Player aPlayer;
 	
 	public String getID(){
@@ -123,7 +124,7 @@ public class Walk extends Action{
 												} else {
 													Monster aMonster = (Monster) aActor;
 													if (aPlayer.hasEnergyField()){
-														StringBuffer buff = new StringBuffer("You shock the "+aMonster.getDescription()+"!"); 
+														StringBuilder buff = new StringBuilder("You shock the "+aMonster.getDescription()+"!"); 
 														aMonster.damage(buff, aPlayer.getAttack());
 														aLevel.addMessage(buff.toString());
 													} else {

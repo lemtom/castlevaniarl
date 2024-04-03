@@ -4,7 +4,8 @@ import crl.action.*;
 import crl.ai.*;
 import crl.actor.*;
 
-public class CountDown implements ActionSelector, Cloneable{
+public class CountDown implements ActionSelector, Cloneable {
+private static final long serialVersionUID = 1L;
 	private int turnsToDie;
 
 	public void setTurns(int turns){

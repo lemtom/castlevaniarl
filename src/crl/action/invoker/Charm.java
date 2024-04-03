@@ -8,6 +8,7 @@ import crl.player.Consts;
 import crl.player.Player;
 
 public class Charm extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Charm";
 	}

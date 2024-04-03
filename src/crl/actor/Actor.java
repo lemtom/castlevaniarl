@@ -14,6 +14,7 @@ import crl.level.Level;
 import crl.ui.Appearance;
 
 public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable {
+	private static final long serialVersionUID = 1L;
 	protected /* transient */ int positionx;
 	protected /* transient */ int positiony;
 	protected /* transient */ int positionz;
@@ -86,8 +87,8 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		position.z = z;
 	}
 
+	/** Request to be removed from any dispatcher or structure */
 	public void die() {
-		/** Request to be removed from any dispatcher or structure */
 		aWannaDie = true;
 	}
 
@@ -178,7 +179,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	}
 
 	public void setHoverHeight(int hoverHeight) {
-        this.hoverHeight = java.lang.Math.max(hoverHeight, 0);
+		this.hoverHeight = Math.max(hoverHeight, 0);
 	}
 
 	public int getStandingHeight() {

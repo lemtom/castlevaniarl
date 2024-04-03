@@ -2,7 +2,8 @@ package sz.util;
 
 import java.io.Serializable;
 
-public class Counter implements Serializable{
+public class Counter implements Serializable {
+private static final long serialVersionUID = 1L;
 
 	private int value;
 	public Counter(int initialCoun){

@@ -26,15 +26,7 @@ public class Line {
 	    	 end.y = tmp;
 	     }
 	     if (start.x > end.x){
-	    	 /*
-	    	 int tmp = start.x;
-	    	 start.x = end.x;
-	    	 end.x = tmp;
-	    	 
-	    	 tmp = start.y;
-	    	 start.y = end.y;
-	    	 end.y = tmp;*/
-	    	 xvar = -1;
+             xvar = -1;
 	    	 deltax = start.x - end.x;
 	     } else {
 	    	 deltax = end.x - start.x;

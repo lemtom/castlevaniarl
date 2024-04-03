@@ -1,18 +1,19 @@
 package crl.ui;
 
-import java.util.*;
-
+import crl.action.Action;
+import crl.actor.Actor;
+import crl.actor.Message;
+import crl.item.Merchant;
+import crl.level.Level;
+import crl.npc.NPC;
+import crl.player.Player;
+import crl.ui.effects.Effect;
 import sz.csi.textcomponents.ListItem;
-import sz.util.*;
+import sz.util.Debug;
 
-import crl.action.*;
-//import crl.action.vkiller.Whip;
-import crl.ui.effects.*;
-import crl.player.*;
-import crl.item.*;
-import crl.level.*;
-import crl.npc.*;
-import crl.actor.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Shows the level Informs the Actions and Commands of the player. Must be
@@ -85,7 +86,7 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 
 	public abstract void addMessage(Message message);
 
-	public abstract ArrayList<String> getMessageBuffer();
+	public abstract List<String> getMessageBuffer();
 
 	public void setPlayer(Player pPlayer) {
 		player = pPlayer;
@@ -120,9 +121,9 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 
 	protected void informPlayerCommand(int command) {
 		Debug.enterMethod(this, "informPlayerCommand", command + "");
-		for (int i = 0; i < commandListeners.size(); i++) {
-			(commandListeners.get(i)).commandSelected(command);
-		}
+        for (CommandListener commandListener : commandListeners) {
+            commandListener.commandSelected(command);
+        }
 		Debug.exitMethod();
 	}
 

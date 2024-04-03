@@ -4,7 +4,8 @@ import crl.actor.Actor;
 import crl.item.Item;
 import crl.player.Player;
 
-public class Reload extends Action{
+public class Reload extends Action {
+private static final long serialVersionUID = 1L;
 	private transient Item weapon;
 
 	@Override

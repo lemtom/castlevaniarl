@@ -7,7 +7,8 @@ import crl.monster.Monster;
 import crl.player.Damage;
 import crl.player.Player;
 
-public class Dash extends Action{
+public class Dash extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "SLICE_DIVE";
 	}

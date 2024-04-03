@@ -3,7 +3,8 @@ package crl.player.advancements.manbeast;
 import crl.player.Consts;
 import crl.player.advancements.FlagAdvancement;
 
-public class AdvSelfControl extends FlagAdvancement{
+public class AdvSelfControl extends FlagAdvancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Self Control";
 	}

@@ -9,7 +9,8 @@ import crl.ai.monster.MonsterAI;
 import crl.level.Cell;
 import crl.monster.Monster;
 
-public class SickleAI extends MonsterAI{
+public class SickleAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 	public Action selectAction(Actor who){
 		Monster aMonster = (Monster) who;
 		int directionToPlayer = aMonster.starePlayer();

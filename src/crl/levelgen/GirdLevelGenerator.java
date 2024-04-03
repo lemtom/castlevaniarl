@@ -22,16 +22,6 @@ public class GirdLevelGenerator extends LevelGenerator {
 		candles = value;
 	}
 
-	/*
-	 * public Level generateLevel(String param, Dispatcher disp){
-	 * Debug.enterMethod(this, "generateLevel", param); String[] parameters =
-	 * param.split(" "); Level ret = generateLevel(new
-	 * Position(Integer.parseInt(parameters[0]), Integer.parseInt(parameters[1])),
-	 * Integer.parseInt(parameters[2]),
-	 * Integer.parseInt(parameters[3]),Integer.parseInt(parameters[4]),
-	 * Integer.parseInt(parameters[5])); Debug.exitMethod(ret); return ret; }
-	 */
-
 	public void init(String baseWall, String baseFloor) {
 		this.baseWall = baseWall;
 		this.baseFloor = baseFloor;
@@ -61,7 +51,8 @@ public class GirdLevelGenerator extends LevelGenerator {
 	}
 
 	private boolean horizontal;
-	private Position entrancePosition, exitPosition;
+	private Position entrancePosition;
+	private Position exitPosition;
 
 	public Level generateLevel(Position size, int startIndex, int endIndex, int roomWidth, int roomHeight,
 			boolean horizontal) throws CRLException {
@@ -129,7 +120,7 @@ public class GirdLevelGenerator extends LevelGenerator {
 
 	private boolean connected() {
 		Debug.enterMethod(this, "connected");
-		Stack<Position> stack = new Stack<>();
+		Deque<Position> stack = new LinkedList<>();
 		Position now = new Position(0, startIndex);
 		Position end = new Position(visitedRooms.length - 1, endIndex);
 		if (!horizontal) {
@@ -143,7 +134,7 @@ public class GirdLevelGenerator extends LevelGenerator {
 
 		boolean[][] goneThru = new boolean[visitedRooms.length][visitedRooms[0].length];
 		for (int x = 0; x < goneThru.length; x++)
-            System.arraycopy(visitedRooms[x], 0, goneThru[x], 0, goneThru[0].length);
+			System.arraycopy(visitedRooms[x], 0, goneThru[x], 0, goneThru[0].length);
 
 		do {
 			now = stack.pop();
@@ -197,8 +188,6 @@ public class GirdLevelGenerator extends LevelGenerator {
 			cells[0][cells[0].length - 1][y] = MapCellFactory.getMapCellFactory().getMapCell(baseWall);
 		}
 		// Place the entrance
-		// ret.setPositions(new Position(0,roomHeight * startIndex + roomHeight / 2,0),
-		// new Position(cells[0].length-1,roomHeight * endIndex + roomHeight / 2, 0));
 
 		Debug.exitMethod(ret);
 		return ret;

@@ -78,7 +78,5 @@ public class Town {
 
 	public static final Position endPoint = new Position(69, 11);
 	public static final Position startPoint = new Position(12, 14);
-	// public static final Position startPoint = new Position(69,12);
-	// public static final Position playerPosition = new Position(50,11);
 
 }

@@ -163,9 +163,7 @@ public class ItemDefinition {
 		unique = pUnique;
 		this.fixedMaterial = fixedMaterial;
 		this.pinLevel = pinLevel;
-		// sightListItem = new BasicListItem(appearance.getChar(),
-		// appearance.getColor(), description);
-	}
+    }
 
 	/*
 	 * public MenuItem getShopMenuItem(){ return shopMenuItem; }

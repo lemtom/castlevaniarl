@@ -1,17 +1,18 @@
 package crl.ui;
 
-import java.util.HashMap;
-import java.util.Properties;
-
-import sz.csi.CharKey;
-import sz.util.Debug;
-import sz.util.Position;
 import crl.action.Action;
 import crl.ai.ActionSelector;
 import crl.level.Level;
 import crl.player.Player;
+import sz.csi.CharKey;
+import sz.util.Debug;
+import sz.util.Position;
 
-public abstract class UISelector implements ActionSelector  {
+import java.util.HashMap;
+import java.util.Properties;
+
+public abstract class UISelector implements ActionSelector {
+private static final long serialVersionUID = 1L;
 	protected HashMap<Object, UserAction> gameActions = new HashMap<>();
 	
 	protected Action advance;

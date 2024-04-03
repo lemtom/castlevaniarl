@@ -7,6 +7,7 @@ import crl.game.SFXManager;
 import crl.player.Player;
 
 public class ItemBreakCross extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public int getDamage() {
 		return 5 + getPlayer().getShotLevel() + 2 * getPlayer().getSoulPower();
 	}

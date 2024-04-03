@@ -9,7 +9,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class SpinningSlice extends Action{
+public class SpinningSlice extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "SpinningSlice";
 	}
@@ -38,7 +39,7 @@ public class SpinningSlice extends Action{
 	}
 
 	private void hit(Position destinationPoint, Level aLevel, Player player){
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 		if (destinationFeature != null && destinationFeature.isDestroyable()){
 			message.append("You slice the ").append(destinationFeature.getDescription());
@@ -50,7 +51,7 @@ public class SpinningSlice extends Action{
 		}
 
 		Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-		message = new StringBuffer();
+		message = new StringBuilder();
 		if (
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())

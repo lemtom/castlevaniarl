@@ -3,7 +3,8 @@ package crl.player.advancements.invoker;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvInvokeBird extends Advancement{
+public class AdvInvokeBird extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Feather's Oath";
 	}

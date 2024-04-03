@@ -4,6 +4,7 @@ import crl.action.ProjectileSkill;
 import crl.player.Player;
 
 public class ChargeBall extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public int getDamage() {
 		return 8 + (int) Math.round(getPlayer().getSoulPower() * 2.5d);
 	}

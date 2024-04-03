@@ -1,16 +1,16 @@
 package sz.gadgets;
 
-import sz.csi.CharKey;
-import sz.csi.textcomponents.MenuItem;
-import sz.util.*;
-
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.*;
-
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXDisplay;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.csi.CharKey;
+import sz.csi.textcomponents.MenuItem;
+import sz.util.Util;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuBox {
 
@@ -23,7 +23,7 @@ public class MenuBox {
 
 	// Components
 	private int xpos, ypos, width, itemsPerPage;
-    private SwingSystemInterface si;
+	private SwingSystemInterface si;
 	private BufferedImage box;
 	private GFXConfiguration configuration;
 
@@ -73,13 +73,13 @@ public class MenuBox {
 		si.getGraphics2D().drawRect(realPosX + 8, realPosY + 8, realW - 18, realH - 18);
 
 		// pages = (int)(Math.floor((items.size()-1) / inHeight) +1);
-		pages = (int) (Math.floor((items.size() - 1) / (itemsPerPage)) + 1);
+		pages = (int) ((double) ((items.size() - 1) / (itemsPerPage)) + 1);
 		/*
 		 * System.out.println("items.size() "+items.size());
 		 * System.out.println("inHeight "+inHeight);
 		 */
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
-		ArrayList<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
+		List<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
 
 		if (ordinal) {
 			xpos -= 2;
@@ -131,7 +131,7 @@ public class MenuBox {
 		while (true) {
 
 			draw();
-			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			List<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE && key.code != CharKey.UARROW && key.code != CharKey.DARROW
 					&& key.code != CharKey.N8 && key.code != CharKey.N2
@@ -159,7 +159,7 @@ public class MenuBox {
 	public Object getUnpagedSelection() {
 		int pageElements = itemsPerPage;
 		draw();
-		ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+		List<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 		CharKey key = new CharKey(CharKey.NONE);
 		while (key.code != CharKey.SPACE && (key.code < CharKey.A || key.code > CharKey.A + pageElements - 1)
 				&& (key.code < CharKey.a || key.code > CharKey.a + pageElements - 1))

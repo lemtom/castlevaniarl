@@ -1,12 +1,14 @@
 package sz.csi.textcomponents;
 
-import java.util.*;
-
 import sz.csi.ConsoleSystemInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListBox extends TextComponent {
 
-	public ArrayList<ListItem> itemsLista;
+	private static final long serialVersionUID = 1L;
+	public List<ListItem> itemsLista;
 
 	public ListBox(ConsoleSystemInterface si) {
 		super(si);
@@ -15,7 +17,8 @@ public class ListBox extends TextComponent {
 
 	public void draw() {
 		clearBox();
-		int length = (Math.min(itemsLista.size(), super.inHeight));
+
+		int length = Math.min(itemsLista.size(), super.inHeight);
 		for (int i = 0; i < length; i++) {
 			ListItem item = itemsLista.get(i);
 			// Debug.say("Item app"+item);
@@ -31,12 +34,12 @@ public class ListBox extends TextComponent {
 		itemsLista.clear();
 	}
 
-	public void setElements(ArrayList<ListItem> elements) {
+	public void setElements(List<ListItem> elements) {
 		clear();
 		addElements(elements);
 	}
 
-	public void addElements(ArrayList<ListItem> elements) {
+	public void addElements(List<ListItem> elements) {
 		itemsLista.addAll(elements);
 	}
 

@@ -9,6 +9,7 @@ import java.util.*;
 import crl.item.*;
 import crl.action.*;
 import crl.action.renegade.*;
+import crl.action.renegade.MinorJinx;
 import crl.action.renegade.Teleport;
 import crl.action.weapon.*;
 import crl.action.vanquisher.*;
@@ -38,6 +39,7 @@ import crl.player.advancements.invoker.*;
 import crl.player.advancements.manbeast.*;
 
 public class Player extends Actor {
+	private static final long serialVersionUID = 1L;
 	private Game game;
 	private boolean doNotRecordScore = false;
 	private static int HITMAX = 60;
@@ -455,7 +457,9 @@ public class Player extends Actor {
 	}
 
 	public void increaseWeaponSkillLevel(String category) {
+
 		Counter c = (weaponSkillsCounters.get(category));
+
 		Counter s = (weaponSkills.get(category));
 		c.reset();
 		if (s.getCount() < 10) {
@@ -525,7 +529,7 @@ public class Player extends Actor {
 	public boolean damage(String mxessage, Monster who, Damage dam) {
 		int attackDirection = Action.getGeneralDirection(who.getPosition(), getPosition());
 		if (hasEnergyField()) {
-			StringBuffer buff = new StringBuffer("The " + who.getDescription() + " is shocked!");
+			StringBuilder buff = new StringBuilder("The " + who.getDescription() + " is shocked!");
 			who.damage(buff, 1);
 			level.addMessage(buff.toString());
 			return false;
@@ -676,10 +680,7 @@ public class Player extends Actor {
 			break;
 		}
 
-		if (!effectOnAcquire[0].isEmpty() && toAdd.getDefinition().isSingleUse())
-			;
-
-		else {
+		if (!(!effectOnAcquire[0].isEmpty() && toAdd.getDefinition().isSingleUse())) {
 			if (canCarry()) {
 				String toAddID = toAdd.getFullID();
 				Equipment equipmentx = (Equipment) inventory.get(toAddID);
@@ -729,7 +730,7 @@ public class Player extends Actor {
 	 * inventory.remove(toRemove.getDefinition().getID()); }
 	 */
 
-	public ArrayList<MenuItem> getInventory() {
+	public List<MenuItem> getInventory() {
 		ArrayList<MenuItem> ret = new ArrayList<>();
 		Enumeration<MenuItem> x = inventory.elements();
 		while (x.hasMoreElements())
@@ -884,6 +885,10 @@ public class Player extends Actor {
 
 	public int getSex() {
 		return sex;
+	}
+
+	public String getPronoun() {
+		return getSex() == Player.MALE ? "He" : "She";
 	}
 
 	public void setSex(int value) {
@@ -1062,8 +1067,7 @@ public class Player extends Actor {
 
 	/**
 	 * Lands on the destination point, steping on height changing triggers
-	 * 
-	 * @param destinationPoint
+	 *
 	 */
 	public void landOn(Position destinationPoint) {
 		landOn(destinationPoint, true);
@@ -1072,8 +1076,7 @@ public class Player extends Actor {
 	/**
 	 * Lands on the destination point
 	 * 
-	 * @param destinationPoint
-	 * @param step             If true, step on height changing triggers
+	 * @param step If true, step on height changing triggers
 	 */
 	public void landOn(Position destinationPoint, boolean step) {
 		Debug.enterMethod(this, "landOn", destinationPoint);
@@ -1125,7 +1128,7 @@ public class Player extends Actor {
 		if (destinationCell.isShallowWater()) {
 			level.addMessage("You swim in the " + destinationCell.getShortDescription() + "!");
 		}
-		ArrayList<MenuItem> destinationItems = level.getItemsAt(destinationPoint);
+		List<MenuItem> destinationItems = level.getItemsAt(destinationPoint);
 		if (destinationItems != null) {
 			if (destinationItems.size() == 1)
 				level.addMessage("There is a " + ((Item) destinationItems.get(0)).getDescription() + " here");
@@ -1338,8 +1341,6 @@ public class Player extends Actor {
 
 	private void invokeRosary() {
 		level.addMessage("A blast of holy light surrounds you!");
-		// level.addEffect(new SplashEffect(getPosition(), "****~~~~,,,,....",
-		// Appearance.WHITE));
 		SFXManager.play("wav/lazrshot.wav");
 		level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_ROSARY_BLAST"));
 
@@ -1347,15 +1348,14 @@ public class Player extends Actor {
 
 		ArrayList<Monster> monsters = new ArrayList<>(level.getMonsters().getArrayList());
 		ArrayList<Monster> removables = new ArrayList<>();
-		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = monsters.get(i);
+		for (Monster monster : monsters) {
 			if (Position.flatDistance(getPosition(), monster.getPosition()) < 16) {
 				if (monster instanceof NPC || monster instanceof Hostage) {
 
 				} else {
 					// targetMonster.damage(player.getWhipLevel());
 
-					monster.damage(new StringBuffer(), 10);
+					monster.damage(new StringBuilder(), 10);
 					if (monster.isDead()) {
 						message = "The " + monster.getDescription() + " is shredded by the holy light!";
 						removables.add(monster);
@@ -1571,7 +1571,7 @@ public class Player extends Actor {
 	}
 
 	public void recoverHitsP(int p) {
-		int recovery = (int) Math.round((double) getHitsMax() * (p / 100.0D));
+		int recovery = (int) Math.round(getHitsMax() * (p / 100.0D));
 		recoverHits(recovery);
 	}
 
@@ -1652,7 +1652,7 @@ public class Player extends Actor {
 
 	private ArrayList<MenuItem> availableSkills = new ArrayList<>(10);
 
-	public ArrayList<MenuItem> getAvailableSkills() {
+	public List<MenuItem> getAvailableSkills() {
 		availableSkills.clear();
 		if (getFlag("PASIVE_DODGE"))
 			availableSkills.add(skills.get("DODGE"));
@@ -1838,7 +1838,7 @@ public class Player extends Actor {
 	}
 
 	public int weaponSkill(String catID) {
-		return (weaponSkills.get(catID)).getCount();
+		return weaponSkills.get(catID).getCount();
 	}
 
 	public String getWeaponDescription() {
@@ -1903,7 +1903,7 @@ public class Player extends Actor {
 		skills.put("SKILL_SOULSSTRIKE", new Skill("Soul's Strike", new SoulsStrike(), 8));
 		skills.put("SKILL_FLAMESSHOOT", new Skill("Flame Shoot", new FlamesShoot(), 10));
 		skills.put("SKILL_HELLFIRE", new Skill("Hellfire", new HellFire(), 15));
-		skills.put("MINOR_JINX", new Skill("Minor Jinx", new crl.action.renegade.MinorJinx(), 0));
+		skills.put("MINOR_JINX", new Skill("Minor Jinx", new MinorJinx(), 0));
 		skills.put("BLOOD", new Skill("Dark Metamorphosis", new BloodThirst(), 10));
 		skills.put("TELEPORT", new Skill("Shade Teleport", new Teleport(), 5));
 		skills.put("SKILL_WOLFMORPH", new Skill("Lupine Metamorphosis", new WolfMorph(), 10));
@@ -2225,8 +2225,6 @@ public class Player extends Actor {
 	private transient FOV fov;
 
 	public void see() {
-		// fov.startCircle(getLevel(), getPosition().x, getPosition().y,
-		// getSightRange());
 		fov.startCircle(getLevel(), getPosition().x, getPosition().y, getDarkSightRange());
 	}
 
@@ -2462,9 +2460,9 @@ public class Player extends Actor {
 				} };
 	}
 
-	private ArrayList<Advancement> tmpAvailableAdvancements = new ArrayList<>();
+	private List<Advancement> tmpAvailableAdvancements = new ArrayList<>();
 
-	public ArrayList<Advancement> getAvailableAdvancements() {
+	public List<Advancement> getAvailableAdvancements() {
 		tmpAvailableAdvancements.clear();
 		out: for (int i = 0; i < ADVANCEMENTS[getPlayerClass()].length; i++) {
 			if (getFlag(ADVANCEMENTS[getPlayerClass()][i].getID())) {
@@ -2490,7 +2488,7 @@ public class Player extends Actor {
 		return tmpAvailableAdvancements;
 	}
 
-	public ArrayList<Advancement> getAvailableStatAdvancements() {
+	public List<Advancement> getAvailableStatAdvancements() {
 		tmpAvailableAdvancements.clear();
 		tmpAvailableAdvancements.addAll(Arrays.asList(STATADVANCEMENTS[getPlayerClass()]));
 		int rand = Util.rand(2, 3);
@@ -2506,13 +2504,10 @@ public class Player extends Actor {
 	public boolean canAttack() {
 		if (isSwimming()) {
 
-			if (getWeapon() == null || getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_UNARMED)
+			return getWeapon() == null || getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_UNARMED)
 					|| getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_DAGGERS)
 					|| getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_SPEARS)
-					|| getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_RINGS))
-				return true;
-			else
-				return false;
+					|| getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_RINGS);
 		}
 		return !(hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2) || hasCounter(Consts.C_MYSTMORPH)
 				|| hasCounter(Consts.C_MYSTMORPH2));
@@ -2731,11 +2726,11 @@ public class Player extends Actor {
 		} else if (hasCounter(Consts.C_BEARMORPH)) {
 			punchDamage = (int) Math.ceil(1.7 * punchDamage);
 		} else if (hasCounter(Consts.C_DEMONMORPH)) {
-			punchDamage = (int) Math.ceil(2 * punchDamage);
+			punchDamage = 2 * punchDamage;
 		} else if (hasCounter(Consts.C_LUPINEMORPH)) {
 			punchDamage = (int) Math.ceil(1.5d * punchDamage);
 		} else if (hasCounter(Consts.C_WEREWOLFMORPH)) {
-			punchDamage = (int) Math.ceil(3 * punchDamage);
+			punchDamage = 3 * punchDamage;
 		} else if (hasCounter(Consts.C_WOLFMORPH) || hasCounter(Consts.C_WOLFMORPH2)) {
 			punchDamage = getAttack() + 1 + Util.rand(0, 2);
 		} else if (hasCounter(Consts.C_POWERBLOW)) {
@@ -2841,7 +2836,7 @@ public class Player extends Actor {
 				blockChance = (int) (getShield().getCoverage() / 2.0d);
 			}
 			blockChance += 2 * weaponSkill(ItemDefinition.CAT_SHIELD);
-			return java.lang.Math.min(blockChance, 70);
+			return Math.min(blockChance, 70);
 		} else {
 			return 0;
 		}

@@ -11,6 +11,7 @@ import crl.monster.MonsterFactory;
 import crl.ui.UserInterface;
 
 public class Intro3 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		if (level.getFlag("INTRO2")&& level.getCounter("COUNTBACK_INTRO_2").isOver()){

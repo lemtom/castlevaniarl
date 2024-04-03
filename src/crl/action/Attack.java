@@ -15,6 +15,8 @@ import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 
 public class Attack extends Action {
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "Attack";
 	}
@@ -61,7 +63,7 @@ public class Attack extends Action {
 			int push = player.getPunchPush();
 
 			if (targetMonster != null && targetMonster.getStandingHeight() == player.getStandingHeight()) {
-				StringBuffer buff = new StringBuffer(
+				StringBuilder buff = new StringBuilder(
 						"You " + attackDescription + " the " + targetMonster.getDescription() + "!");
 				targetMonster.damageWithWeapon(buff, punchDamage);
 				aLevel.addMessage(buff.toString());
@@ -173,7 +175,7 @@ public class Attack extends Action {
 				attack -= penalty;
 				if (attack < 1)
 					attack = 1;
-				StringBuffer hitMsg = new StringBuffer();
+				StringBuilder hitMsg = new StringBuilder();
 				if (weapon.isHarmsUndead() && targetMonster.isUndead()) {
 					attack *= 2;
 					if (targetMonster.wasSeen())
@@ -249,10 +251,7 @@ public class Attack extends Action {
 
 	private boolean reload(Item weapon, Player aPlayer) {
 		if (weapon != null) {
-			if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold()) {
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
-				return false;
-			} else if (aPlayer.getHearts() < 2) {
+			if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold() || aPlayer.getHearts() < 2) {
 				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
 				return false;
 			} else {
@@ -320,8 +319,8 @@ public class Attack extends Action {
 					targetMonster.setPosition(runner);
 				}
 			} else {
-				StringBuffer buff = new StringBuffer("You smash the " + targetMonster.getDescription() + " against the "
-						+ fly.getDescription() + "!");
+				StringBuilder buff = new StringBuilder("You smash the " + targetMonster.getDescription()
+						+ " against the " + fly.getDescription() + "!");
 				targetMonster.damage(buff, 2);
 				aLevel.addMessage(buff.toString());
 			}
@@ -352,6 +351,8 @@ public class Attack extends Action {
 	}
 
 	static class WhipFireball extends ProjectileSkill {
+		private static final long serialVersionUID = 1L;
+
 		public int getDamage() {
 			return 4;
 		}

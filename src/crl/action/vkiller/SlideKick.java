@@ -10,6 +10,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class SlideKick extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 2;
 	}

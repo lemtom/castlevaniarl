@@ -3,7 +3,8 @@ package crl.action.vanquisher;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class LitSpell extends ProjectileSkill{
+public class LitSpell extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public int getDamage() {
 		return 5+4*getPlayer().getSoulPower();
 	}

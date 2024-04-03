@@ -3,7 +3,8 @@ package crl.player.advancements.vkiller;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvHolyBible extends Advancement{
+public class AdvHolyBible extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Holy Bible";
 	}

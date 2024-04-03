@@ -1,14 +1,42 @@
 
 package crl.ui.graphicsUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import crl.action.Action;
+import crl.action.*;
+import crl.actor.Actor;
+import crl.actor.Message;
+import crl.conf.gfx.data.GFXConfiguration;
+import crl.feature.Feature;
+import crl.feature.SmartFeature;
+import crl.game.Game;
+import crl.game.GameFiles;
+import crl.game.STMusicManagerNew;
+import crl.item.Item;
+import crl.item.ItemDefinition;
+import crl.item.Merchant;
+import crl.level.Cell;
+import crl.level.Level;
+import crl.monster.Monster;
+import crl.monster.VMonster;
+import crl.npc.Hostage;
+import crl.npc.NPC;
+import crl.player.*;
+import crl.player.advancements.Advancement;
+import crl.ui.*;
+import crl.ui.effects.Effect;
+import crl.ui.graphicsUI.components.GFXButton;
+import crl.ui.graphicsUI.effects.GFXEffect;
+import sz.csi.CharKey;
+import sz.csi.textcomponents.MenuItem;
+import sz.gadgets.AdditionalKeysSignal;
+import sz.gadgets.BorderedMenuBox;
+import sz.gadgets.MenuBox;
+import sz.gadgets.SimpleGFXMenuItem;
+import sz.util.*;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,38 +44,15 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import sz.csi.CharKey;
-import sz.csi.textcomponents.MenuItem;
-import sz.gadgets.*;
-import sz.util.*;
-import crl.action.*;
-import crl.action.Action;
-import crl.ui.effects.*;
-import crl.ui.graphicsUI.components.GFXButton;
-import crl.ui.graphicsUI.effects.GFXEffect;
-import crl.player.*;
-import crl.player.advancements.Advancement;
-import crl.item.*;
-import crl.level.*;
-import crl.npc.*;
-import crl.monster.*;
-import crl.feature.*;
-import crl.game.*;
-import crl.actor.*;
-import crl.conf.gfx.data.GFXConfiguration;
-import crl.ui.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Shows the level using characters. Informs the Actions and Commands of the
  * player. Must be listening to a System Interface
  */
-
 public class GFXUserInterface extends UserInterface implements Runnable {
+	private static final long serialVersionUID = 1L;
 	private static final String BORDERS_FILE = "gfx/barrett-interface.gif"; // TODO: Move to GFXConfiguration
 	private static final int BORDERS_SCALE = 1; // TODO: Move to GFXConfiguration
 	private static final int BORDERS_SIZE = 32; // TODO: Move to GFXConfiguration
@@ -124,7 +129,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	private BufferedImage IMG_YES_BTN;
 	private BufferedImage IMG_NO_BTN;
 	private BufferedImage IMG_ICON;
-	private Color COLOR_BORDER_OUT, COLOR_BORDER_IN, COLOR_WINDOW_BACKGROUND;
+	private Color COLOR_BORDER_OUT;
+	private Color COLOR_BORDER_IN;
+	private Color COLOR_WINDOW_BACKGROUND;
 	private Color COLOR_LAST_MESSAGE = Color.WHITE, COLOR_OLD_MESSAGE = Color.GRAY;
 	private static final Color WATERCOLOR_BLOCKED = new Color(0, 50, 100, 200), WATERCOLOR = new Color(0, 70, 120, 200),
 			RAINCOLOR = new Color(180, 200, 250, 100), THUNDERCOLOR = new Color(180, 200, 200, 150),
@@ -265,6 +272,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	 * Expensively render the minimap as part of the HUD instead of being a separete
 	 * mode.
 	 */
+
 	private void renderMiniMap() {
 		int lw = level.getWidth();
 		int lh = level.getHeight();
@@ -350,7 +358,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				if (choosen != null)
 					cellHeight = choosen.getHeight();
 				Feature feat = level.getFeatureAt(browser);
-				ArrayList<MenuItem> items = level.getItemsAt(browser);
+				List<MenuItem> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
 					item = (Item) items.get(0);
@@ -393,14 +401,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			} else {
 				offset.add(Action.directionToVariation(UISelector.toIntDirection(x)));
 
-				if (offset.x >= xrange)
-					offset.x = xrange;
-				if (offset.x <= -xrange)
-					offset.x = -xrange;
-				if (offset.y >= yrange)
-					offset.y = yrange;
-				if (offset.y <= -yrange)
-					offset.y = -yrange;
+				adjustOffset(offset);
 			}
 		}
 		messageBox.setText("Look mode off");
@@ -409,11 +410,22 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	}
 
+	private void adjustOffset(Position offset) {
+		if (offset.x >= xrange)
+			offset.x = xrange;
+		if (offset.x <= -xrange)
+			offset.x = -xrange;
+		if (offset.y >= yrange)
+			offset.y = yrange;
+		if (offset.y <= -yrange)
+			offset.y = -yrange;
+	}
+
 	public synchronized void launchMerchant(Merchant who) {
 		Debug.enterMethod(this, "launchMerchant", who);
 		Equipment.eqMode = true;
 		Item.shopMode = true;
-		ArrayList<MenuItem> merchandise = who.getMerchandiseFor(player);
+		List<MenuItem> merchandise = who.getMerchandiseFor(player);
 		if (merchandise == null || merchandise.isEmpty()) {
 			chat(who);
 			Debug.exitMethod();
@@ -490,9 +502,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private void drawLevel() {
 		Debug.enterMethod(this, "drawLevel");
-		// Cell[] [] cells =
-		// level.getCellsAround(player.getPosition().x,player.getPosition().y,
-		// player.getPosition().z, range);
 		Cell[][] rcells = level.getMemoryCellsAround(player.getPosition().x, player.getPosition().y,
 				player.getPosition().z, xrange, yrange);
 		Cell[][] vcells = level.getVisibleCellsAround(player.getPosition().x, player.getPosition().y,
@@ -514,43 +523,15 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				FOVMask[PC_POS.x - xrange + x][PC_POS.y - yrange + y] = false;
 				int cellHeight = 0;
 				if (vcells[x][y] == null || vcells[x][y].getID().equals("AIR")) {
-					if (rcells[x][y] != null && !rcells[x][y].getAppearance().getID().equals("NOTHING")) {
-						GFXAppearance app = (GFXAppearance) rcells[x][y].getAppearance();
-						try {
-							Image cellImage;
-							if (level.isDay())
-								cellImage = app.getDarkImage();
-							else
-								cellImage = app.getDarkniteImage();
-							drawImageVP((PC_POS.x - xrange + x) * 32,
-									(PC_POS.y - yrange + y) * 32 - 17 - app.getSuperHeight(), cellImage);
-						} catch (NullPointerException npe) {
-							Color c = si.getGraphics2D().getColor();
-							si.getGraphics2D().setColor(Color.RED);
-							si.getGraphics2D().fillRect((PC_POS.x - xrange + x) * STANDARD_WIDTH,
-									(PC_POS.y - yrange + y) * STANDARD_WIDTH - 17 - app.getSuperHeight(),
-									STANDARD_WIDTH, 49);
-							si.getGraphics2D().setColor(c);
-						}
-					} else {
-						// Draw nothing
-						// si.drawImage((PC_POS.x-xrange+x)*32,(PC_POS.y-yrange+y)*32-17,
-						// "gfx/black.gif");
-						// si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y,
-						// CharAppearance.getVoidAppearance().getChar(),
-						// CharAppearance.getVoidAppearance().BLACK);
-					}
+					drawIfEmptyOrAir(rcells, y, x);
 				} else {
 					cellHeight = vcells[x][y].getHeight();
 					FOVMask[PC_POS.x - xrange + x][PC_POS.y - yrange + y] = true;
 					String bloodLevel = level.getBloodAt(runner);
 					GFXAppearance cellApp = (GFXAppearance) vcells[x][y].getAppearance();
 
-					boolean frosty = false;
-					if (level.getFrostAt(runner) != 0) {
-						frosty = true;
-						// TODO: Apply a blue tint
-					}
+					boolean frosty = level.getFrostAt(runner) != 0;
+					// TODO: Apply a blue tint
 					int depthFromPlayer = level.getDepthFromPlayer(player.getPosition().x - xrange + x,
 							player.getPosition().y - yrange + y);
 					if (depthFromPlayer != 0) {
@@ -608,7 +589,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 						}
 					}
 
-					ArrayList<MenuItem> items = level.getItemsAt(runner);
+					List<MenuItem> items = level.getItemsAt(runner);
 					Item item = null;
 					if (items != null) {
 						item = (Item) items.get(0);
@@ -634,6 +615,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 								playerImage = ImageUtils.vFlip(playerImage);
 								// flipFacing = false;
 							}
+
 							int waterBonus = (level.getMapCell(player.getPosition()) != null
 									&& level.getMapCell(player.getPosition()).isShallowWater()) ? 16 : 0;
 							drawImageVP(PC_POS.x * 32 - playerAppearance.getSuperWidth(), PC_POS.y * 32
@@ -645,6 +627,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 					if (monster != null && monster.isVisible()) {
 						GFXAppearance monsterApp = (GFXAppearance) monster.getAppearance();
+
 						int swimBonus = (monster.canSwim() && level.getMapCell(runner) != null
 								&& level.getMapCell(runner).isShallowWater()) ? 16 : 0; // TODO: Overlap water on the
 																						// monster, draw it lowly
@@ -680,21 +663,30 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			runner.y++;
 		}
 
-		// Overlay
-		// Draw Masks
-		/*
-		 * Color mask = null; //Rain if (player.getFlag(Consts.ENV_RAIN)) mask =
-		 * RAINCOLOR;
-		 * 
-		 * //Thunderstorm if (player.getFlag(Consts.ENV_THUNDERSTORM)) mask =
-		 * THUNDERCOLOR; //Fog if (player.getFlag(Consts.ENV_FOG)) mask = FOGCOLOR;
-		 * 
-		 * if (mask != null){ si.getGraphics2D().setColor(mask);
-		 * si.getGraphics2D().fillRect(0,0, this.configuration.getScreenWidth(),
-		 * this.configuration.getScreenHeight()); }
-		 */
-
 		Debug.exitMethod();
+	}
+
+	private void drawIfEmptyOrAir(Cell[][] rcells, int y, int x) {
+		if (rcells[x][y] != null && !rcells[x][y].getAppearance().getID().equals("NOTHING")) {
+			GFXAppearance app = (GFXAppearance) rcells[x][y].getAppearance();
+			try {
+				Image cellImage;
+				if (level.isDay())
+					cellImage = app.getDarkImage();
+				else
+					cellImage = app.getDarkniteImage();
+				drawImageVP((PC_POS.x - xrange + x) * 32, (PC_POS.y - yrange + y) * 32 - 17 - app.getSuperHeight(),
+						cellImage);
+			} catch (NullPointerException npe) {
+				Color c = si.getGraphics2D().getColor();
+				si.getGraphics2D().setColor(Color.RED);
+				si.getGraphics2D().fillRect((PC_POS.x - xrange + x) * STANDARD_WIDTH,
+						(PC_POS.y - yrange + y) * STANDARD_WIDTH - 17 - app.getSuperHeight(), STANDARD_WIDTH, 49);
+				si.getGraphics2D().setColor(c);
+			}
+		} else {
+			// Draw nothing
+		}
 	}
 
 	public void addMessage(Message message) {
@@ -775,6 +767,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			shotTile = TILE_SHOT_III;
 		if (shotTile != null)
 			si.drawImage(18, 80, shotTile);
+
 		int rest = ((player.getHits() - 1) % 20) + 1;
 
 		si.printAtPixel(14, 30, player.getName() + ", the Lv" + player.getPlayerLevel() + " " + player.getClassString()
@@ -789,8 +782,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				si.drawImage(41 + (i * 6), 40, backColor);
 
 		if (player.getLevel().getBoss() != null) {
-			int sixthiedBossHits = (int) Math.ceil(
-					(player.getLevel().getBoss().getHits() * 60.0) / player.getLevel().getBoss().getMaxHits());
+			int sixthiedBossHits = (int) Math
+					.ceil((player.getLevel().getBoss().getHits() * 60.0) / player.getLevel().getBoss().getMaxHits());
 			Image foreColorB;
 			Image backColorB;
 			// switch (((player.getLevel().getBoss().getHits()-1) / 20) + 1){
@@ -881,8 +874,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		super.init(gameCommands);
 		this.target = target;
 		initProperties();
-		// GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(new
-		// DisplayMode(800,600,8, DisplayMode.REFRESH_RATE_UNKNOWN));
 
 		/*-- Assign values */
 		si = psi;
@@ -899,7 +890,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			Game.crash("Error loading the font", ffe);
 		}
 
-        /*-- Load UI Images */
+		/*-- Load UI Images */
 		try {
 			BufferedImage userInterfaceTileset = this.configuration.getImageConfiguration().getUserInterfaceTileset();
 			BufferedImage viewportUserInterfaceTileset = this.configuration.getImageConfiguration()
@@ -946,8 +937,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 			BORDER1 = ImageUtils.crearImagen(BORDERS_FILE, 34 * BORDERS_SCALE, BORDERS_SCALE, BORDERS_SIZE,
 					BORDERS_SIZE);
-			BORDER2 = ImageUtils.crearImagen(BORDERS_FILE, BORDERS_SCALE, BORDERS_SCALE, BORDERS_SIZE,
-					BORDERS_SIZE);
+			BORDER2 = ImageUtils.crearImagen(BORDERS_FILE, BORDERS_SCALE, BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
 			BORDER3 = ImageUtils.crearImagen(BORDERS_FILE, 100 * BORDERS_SCALE, BORDERS_SCALE, BORDERS_SIZE,
 					BORDERS_SIZE);
 			BORDER4 = ImageUtils.crearImagen(BORDERS_FILE, 67 * BORDERS_SCALE, BORDERS_SCALE, BORDERS_SIZE,
@@ -1043,6 +1033,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	 * Checks if the point, relative to the console coordinates, is inside the
 	 * ViewPort
 	 */
+
 	public boolean insideViewPort(int x, int y) {
 		// return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
 		return (x >= 0 && x < FOVMask.length && y >= 0 && y < FOVMask[0].length) && FOVMask[x][y];
@@ -1083,11 +1074,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		messageBox.setText(prompt);
 		Position defaultTarget = null;
 		Position nearest = getNearestMonsterPosition();
-		if (nearest != null) {
-			defaultTarget = nearest;
-		} else {
-			defaultTarget = null;
-		}
+		defaultTarget = nearest;
 
 		Position browser = null;
 		Position offset = new Position(0, 0);
@@ -1124,7 +1111,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				ArrayList<MenuItem> items = level.getItemsAt(browser);
+				List<MenuItem> items = level.getItemsAt(browser);
 				if (choosen != null)
 					cellHeight = choosen.getHeight();
 				Item item = null;
@@ -1144,8 +1131,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 					looked += ", " + item.getDescription();
 			}
 			messageBox.setText(prompt + " " + looked);
-			// si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_',
-			// ConsoleSystemInterface.RED);
 			drawStepsTo(PC_POS.x + offset.x, (PC_POS.y + offset.y), TILE_LINE_STEPS, cellHeight);
 
 			drawImageVP((PC_POS.x + offset.x) * 32 - 2, (PC_POS.y + offset.y) * 32 - 2 - 4 * cellHeight, TILE_LINE_AIM);
@@ -1167,14 +1152,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			}
 			offset.add(Action.directionToVariation(UISelector.toIntDirection(x)));
 
-			if (offset.x >= xrange)
-				offset.x = xrange;
-			if (offset.x <= -xrange)
-				offset.x = -xrange;
-			if (offset.y >= yrange)
-				offset.y = yrange;
-			if (offset.y <= -yrange)
-				offset.y = -yrange;
+			adjustOffset(offset);
 		}
 
 	}
@@ -1184,8 +1162,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		// refresh();
 		leaveScreen();
 		messageBox.setText(prompt);
-		// si.refresh();
-		// refresh();
 
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code == CharKey.NONE)
@@ -1247,7 +1223,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private Item pickItem(String prompt) throws ActionCancelException {
 		enterScreen();
-		ArrayList<MenuItem> inventory = player.getInventory();
+		List<MenuItem> inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
 		menuBox.setPosition(6, 4);
@@ -1275,14 +1251,12 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private ArrayList<MenuItem> pickMultiItems(String prompt) throws ActionCancelException {
 		// Equipment.eqMode = true;
-		ArrayList<MenuItem> inventory = player.getInventory();
+		List<MenuItem> inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setBounds(25, 3, 40, 18);
 		// menuBox.setPromptSize(2);
 		menuBox.setMenuItems(inventory);
 		menuBox.setTitle(prompt);
-		// menuBox.setForeColor(ConsoleSystemInterface.RED);
-		// menuBox.setBorder(true);
 		ArrayList<MenuItem> ret = new ArrayList<>();
 		BorderedMenuBox selectedBox = GetMenuBox();
 		selectedBox.setBounds(5, 3, 20, 18);
@@ -1408,7 +1382,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private Item pickUnderlyingItem(String prompt) throws ActionCancelException {
 		enterScreen();
-		ArrayList<MenuItem> items = level.getItemsAt(player.getPosition());
+		List<MenuItem> items = level.getItemsAt(player.getPosition());
 		if (items == null)
 			return null;
 		if (items.size() == 1)
@@ -1453,7 +1427,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	public Action showInventory() throws ActionCancelException {
 		enterScreen();
 		Equipment.menuDetail = true;
-		ArrayList<MenuItem> inventory = player.getInventory();
+		List<MenuItem> inventory = player.getInventory();
 		int xpos = 1, ypos = 0;
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
@@ -1497,8 +1471,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		si.print(xpos + 10, ypos + 4, player.getSecondaryWeaponDescription(), Color.WHITE);
 		si.print(xpos + 10, ypos + 5, player.getArmorDescription(), Color.WHITE);
 		si.print(xpos + 10, ypos + 6, player.getAccDescription(), Color.WHITE);
-		// menuBox.draw();
-		// si.print(xpos,24, "[Space] to continue, Up and Down to browse", Color.WHITE);
 
 		si.refresh();
 		si.saveBuffer();
@@ -1761,7 +1733,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Debug.enterMethod(this, "showSkills");
 		enterScreen();
 		si.saveBuffer();
-		ArrayList<MenuItem> skills = player.getAvailableSkills();
+		List<MenuItem> skills = player.getAvailableSkills();
 		BorderedMenuBox menuBox = GetMenuBox(true);
 		menuBox.setItemsPerPage(14);
 		menuBox.setWidth(48);
@@ -1805,7 +1777,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		si.waitKey(CharKey.SPACE);
 		enterScreen();
 		if (player.deservesAdvancement(player.getPlayerLevel())) {
-			ArrayList<Advancement> advancements = player.getAvailableAdvancements();
+			List<Advancement> advancements = player.getAvailableAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1813,7 +1785,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			}
 		}
 		if (player.deservesStatAdvancement(player.getPlayerLevel())) {
-			ArrayList<Advancement> advancements = player.getAvailableStatAdvancements();
+			List<Advancement> advancements = player.getAvailableStatAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1827,10 +1799,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		player.resetLastIncrements();
 
 		/*
-		 * int soulOptions = 5; ArrayList soulIds = getLevelUpSouls(); int playerChoice =
-		 * Display.thus.showLevelUp(soulIds); Item soul =
-		 * ItemFactory.getItemFactory().createItem((String)soulIds.get(
-		 * playerChoice)); if (player.canCarry()){ player.addItem(soul); } else {
+		 * int soulOptions = 5; ArrayList soulIds = getLevelUpSouls(); int playerChoice
+		 * = Display.thus.showLevelUp(soulIds); Item soul =
+		 * ItemFactory.getItemFactory().createItem((String)soulIds.get( playerChoice));
+		 * if (player.canCarry()){ player.addItem(soul); } else {
 		 * player.getLevel().addItem(player.getPosition(), soul); }
 		 * showMessage("You acquired a "+soul.getDescription());
 		 */
@@ -1942,6 +1914,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 	class MerchantBox extends AddornedBorderPanel {
+		private static final long serialVersionUID = 1L;
+
 		private JList<MenuItem> lstMerchandise;
 		private GFXButton btnBuy;
 		private GFXButton btnExit;
@@ -2138,10 +2112,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			this.prompt.setText(prompt);
 		}
 
-		public void setMerchandise(ArrayList<MenuItem> skills) {
+		public void setMerchandise(List<MenuItem> skills) {
 			((DefaultListModel<MenuItem>) lstMerchandise.getModel()).clear();
-			for (int i = 0; i < skills.size(); i++) {
-				((DefaultListModel<MenuItem>) lstMerchandise.getModel()).addElement(skills.get(i));
+			for (MenuItem skill : skills) {
+				((DefaultListModel<MenuItem>) lstMerchandise.getModel()).addElement(skill);
 			}
 		}
 
@@ -2160,6 +2134,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 		class MerchandiseCellRenderer extends DefaultListCellRenderer {
 			private JLabel ren;
+			private static final long serialVersionUID = 1L;
 
 			public MerchandiseCellRenderer() {
 				ren = new JLabel();
@@ -2186,6 +2161,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 	class MultiItemsBox extends AddornedBorderPanel {
+		private static final long serialVersionUID = 1L;
+
 		private JList<MenuItem> lstInventory;
 		private GFXButton btnExit;
 		private GFXButton btnOk;
@@ -2267,9 +2244,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			if (activeThread != null) {
 				choice = new ArrayList<>();
 				int[] indices = lstInventory.getSelectedIndices();
-                for (int index : indices) {
-                    choice.add(((Equipment) inventory.get(index)).getItem());
-                }
+				for (int index : indices) {
+					choice.add(((Equipment) inventory.get(index)).getItem());
+				}
 				activeThread.interrupt();
 			}
 		}
@@ -2284,7 +2261,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		private ArrayList<Item> choice;
 		private ArrayList<MenuItem> inventory;
 
-		public ArrayList<Item> getChoice() {
+		public List<Item> getChoice() {
 			return choice;
 		}
 
@@ -2295,8 +2272,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		public void setItems(ArrayList<MenuItem> items) {
 			inventory = (ArrayList<MenuItem>) items.clone();
 			((DefaultListModel<MenuItem>) lstInventory.getModel()).clear();
-			for (int i = 0; i < items.size(); i++) {
-				((DefaultListModel<MenuItem>) lstInventory.getModel()).addElement(items.get(i));
+			for (MenuItem item : items) {
+				((DefaultListModel<MenuItem>) lstInventory.getModel()).addElement(item);
 			}
 		}
 
@@ -2305,6 +2282,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		}
 
 		class ItemsCellRenderer extends DefaultListCellRenderer {
+			private static final long serialVersionUID = 1L;
+
 			private JLabel ren;
 
 			public ItemsCellRenderer() {
@@ -2344,6 +2323,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 	class HelpBox extends AddornedBorderPanel {
+		private static final long serialVersionUID = 1L;
 		private GFXButton btnOk;
 
 		public HelpBox(Image UPRIGHT, Image UPLEFT, Image DOWNRIGHT, Image DOWNLEFT, Color OUT_COLOR, Color IN_COLOR,
@@ -2435,9 +2415,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 					GFXDisplay.COLOR_BOLD);
 			print(g, 41, 7, "(" + CharKey.getString(Display.getKeyBindings().getProperty("SHOW_MAP_KEY")) + ")",
 					GFXDisplay.COLOR_BOLD);
-			// print(g, 41,8,
-			// "("+CharKey.getString(Display.getKeyBindings().getProperty("EXAMINE_LEVEL_MAP_KEY"))+")",
-			// GFXDisplay.COLOR_BOLD);
 			print(g, 41, 9, "(" + CharKey.getString(Display.getKeyBindings().getProperty("QUIT_KEY")) + ")",
 					GFXDisplay.COLOR_BOLD);
 			print(g, 41, 10, "(" + CharKey.getString(Display.getKeyBindings().getProperty("PROMPT_SAVE_KEY")) + ")",

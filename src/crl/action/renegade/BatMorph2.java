@@ -4,7 +4,8 @@ import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class BatMorph2 extends MorphAction{
+public class BatMorph2 extends MorphAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 10;
 	}

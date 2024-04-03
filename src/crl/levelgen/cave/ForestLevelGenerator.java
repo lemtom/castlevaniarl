@@ -22,17 +22,18 @@ public class ForestLevelGenerator  extends LevelGenerator{
 		this.baseFloor = baseFloor;
 		this.baseLava = baseLava;
 	}
-	
+
+	/** Uses Cave Cellular automata, by SantiagoZ
+	 * Init (1) 30%
+	 * If 0 and more than 3 1 around, 1
+	 * If 1 and less than 2 1 around, 0
+	 * If 0 and more than 7 0 around, 2
+	 * If 2 and more than 2 0 around, 0
+	 * <p>
+	 * Run for 5 turns
+	 */
 	public Level generateLevel(int xdim, int ydim, boolean locked) throws CRLException{
-		/** Uses Cave Cellular automata, by SantiagoZ
-		 * Init (1) 30%
-		 * If 0 and more than 3 1 around, 1
-		 * If 1 and less than 2 1 around, 0
-		 * If 0 and more than 7 0 around, 2
-		 * If 2 and more than 2 0 around, 0
-		 * <p>
-		 * Run for 5 turns
-		 */
+
 		
 		CARandomInitializer vInit = new CARandomInitializer(new double [] {0.3}, true);
 		CARule [] vRules = new CARule []{

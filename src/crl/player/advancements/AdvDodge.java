@@ -2,11 +2,14 @@ package crl.player.advancements;
 
 import crl.player.Player;
 
-public class AdvDodge extends Advancement{
-	public String getName(){
+public class AdvDodge extends Advancement {
+
+	private static final long serialVersionUID = 1L;
+
+	public String getName() {
 		return "Dodge";
 	}
-	
+
 	public void advance(Player p) {
 		p.setFlag("PASIVE_DODGE", true);
 		p.setFlag(getID(), true);
@@ -16,23 +19,22 @@ public class AdvDodge extends Advancement{
 		return "ADV_DODGE";
 	}
 
-	public String[] requirements = new String[]{
-		
+	public String[] requirements = new String[] {
+
 	};
-	
+
 	public String[] getRequirements() {
 		return requirements;
 	}
 
-	public String getDescription(){
+	public String getDescription() {
 		return "Adds 10% to chance of evading attack";
 	}
 
-	public String[] bans = new String[]{
-	};
-	
+	public String[] bans = new String[] {};
+
 	@Override
-	public String[] getBans(){
+	public String[] getBans() {
 		return bans;
 	}
 }

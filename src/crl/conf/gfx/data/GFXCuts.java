@@ -1,13 +1,12 @@
 package crl.conf.gfx.data;
 
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
-
+import crl.game.Game;
+import crl.ui.graphicsUI.GFXChat;
 import sz.util.Debug;
 import sz.util.ImageUtils;
 
-import crl.game.Game;
-import crl.ui.graphicsUI.GFXChat;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 public class GFXCuts {
 	public static GFXCuts thus;

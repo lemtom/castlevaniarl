@@ -6,7 +6,8 @@ import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
 
-public class MummyTeleport extends Action{
+public class MummyTeleport extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "MUMMY_TELEPORT";
 	}

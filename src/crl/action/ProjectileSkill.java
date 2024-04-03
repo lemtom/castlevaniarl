@@ -1,6 +1,7 @@
 package crl.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import sz.util.Line;
 import sz.util.Position;
@@ -11,6 +12,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public abstract class ProjectileSkill extends HeartAction {
+	private static final long serialVersionUID = 1L;
+
 	public abstract String getSelfTargettedMessage();
 
 	public abstract String getShootMessage();
@@ -51,7 +54,7 @@ public abstract class ProjectileSkill extends HeartAction {
 
 	private ArrayList<Monster> hitMonsters = new ArrayList<>(10);
 
-	public ArrayList<Monster> getHitMonsters() {
+	public List<Monster> getHitMonsters() {
 		return hitMonsters;
 	}
 
@@ -82,7 +85,7 @@ public abstract class ProjectileSkill extends HeartAction {
 						getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())) {
 					hitMonsters.add(targetMonster);
 				}
-            }
+			}
 			// }
 			return;
 		}
@@ -189,7 +192,7 @@ public abstract class ProjectileSkill extends HeartAction {
 						}
 
 					}
-                } else if (projectileHeight < monsterHeight) {
+				} else if (projectileHeight < monsterHeight) {
 					aLevel.addMessage(
 							"The " + getSpellAttackDesc() + " flies under the " + targetMonster.getDescription());
 				} else {

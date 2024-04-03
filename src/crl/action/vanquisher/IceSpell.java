@@ -1,14 +1,17 @@
 package crl.action.vanquisher;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import crl.action.ProjectileSkill;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class IceSpell extends ProjectileSkill{
+public class IceSpell extends ProjectileSkill {
+
+	private static final long serialVersionUID = 1L;
+
 	public int getDamage() {
-		return 15+2*getPlayer().getSoulPower();
+		return 15 + 2 * getPlayer().getSoulPower();
 	}
 
 	public int getHit() {
@@ -48,36 +51,34 @@ public class IceSpell extends ProjectileSkill{
 		return 8;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "IceSpell";
-	}
-	
-	@Override
-	public void execute(){
-		super.execute();
-		ArrayList<Monster> hitMonsters = getHitMonsters();
-		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = hitMonsters.get(i);
-			int friz = 10 +getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
-			if (friz > 0){
-				if (targetMonster.wasSeen())
-					targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ " is frozen!");
-				targetMonster.freeze(friz);
-			} else
-				if (targetMonster.wasSeen())
-					targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ " is too hot!");
-			
-		}
 	}
 
 	@Override
-	public int getCost(){
-		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.3);
+	public void execute() {
+		super.execute();
+		List<Monster> hitMonsters = getHitMonsters();
+        for (Monster targetMonster : hitMonsters) {
+            int friz = 10 + getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
+            if (friz > 0) {
+                if (targetMonster.wasSeen())
+                    targetMonster.getLevel().addMessage("The " + targetMonster.getDescription() + " is frozen!");
+                targetMonster.freeze(friz);
+            } else if (targetMonster.wasSeen())
+                targetMonster.getLevel().addMessage("The " + targetMonster.getDescription() + " is too hot!");
+
+        }
 	}
-	
-	public String getPromptPosition(){
+
+	@Override
+	public int getCost() {
+		Player p = (Player) performer;
+		return (int) (p.getCastCost() * 1.3);
+	}
+
+	public String getPromptPosition() {
 		return "Where do you want to invoke the frost?";
 	}
-	
+
 }

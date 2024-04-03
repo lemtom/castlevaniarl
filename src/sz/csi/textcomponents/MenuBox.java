@@ -1,14 +1,16 @@
 package sz.csi.textcomponents;
 
+import crl.ui.consoleUI.AdditionalKeysSignal;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
-import java.util.*;
-import crl.ui.consoleUI.AdditionalKeysSignal;
+import sz.util.Util;
+
+import java.util.List;
 
 public class MenuBox extends TextComponent {
+	private static final long serialVersionUID = 1L;
 
-	private ArrayList<MenuItem> items;
+	private List<MenuItem> items;
 	private int promptSize;
 	private String title = "";
 
@@ -54,7 +56,7 @@ public class MenuBox extends TextComponent {
 		promptBox.setText(prompt);
 	}
 
-	public void setMenuItems(ArrayList<MenuItem> items) {
+	public void setMenuItems(List<MenuItem> items) {
 		this.items = items;
 	}
 
@@ -82,7 +84,7 @@ public class MenuBox extends TextComponent {
 		 * " PE "+pageElements+"CP"+currentPage+"pages"+pages); si.refresh();
 		 * si.waitKey(CharKey.SPACE);
 		 */
-		ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+		List<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 
 		int i = 0;
 		for (; i < shownItems.size(); i++) {
@@ -109,7 +111,7 @@ public class MenuBox extends TextComponent {
 		while (true) {
 			clearBox();
 			draw();
-			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			List<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE && key.code != CharKey.UARROW && key.code != CharKey.DARROW
 					&& (key.code < CharKey.A || key.code > CharKey.A + pageElements - 1)
@@ -133,10 +135,10 @@ public class MenuBox extends TextComponent {
 	}
 
 	private boolean isOneOf(int value, int[] values) {
-        for (int j : values) {
-            if (value == j)
-                return true;
-        }
+		for (int j : values) {
+			if (value == j)
+				return true;
+		}
 		return false;
 	}
 
@@ -168,7 +170,7 @@ public class MenuBox extends TextComponent {
 		while (true) {
 			clearBox();
 			draw();
-			ArrayList<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
+			List<MenuItem> shownItems = Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE && key.code != CharKey.UARROW && key.code != CharKey.DARROW
 					&& (key.code < CharKey.A || key.code > CharKey.A + pageElements - 1)

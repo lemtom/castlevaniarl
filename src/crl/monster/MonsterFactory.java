@@ -26,11 +26,7 @@ public class MonsterFactory {
 		return definitions.get(id);
 	}
 
-	/*public void addDefinition(MonsterDefinition definition){
-		definitions.put(definition.getID(), definition);
-	}*/
-
-	public MonsterFactory(){
+    public MonsterFactory(){
 		definitions = new Hashtable<>(40);
 	}
 	

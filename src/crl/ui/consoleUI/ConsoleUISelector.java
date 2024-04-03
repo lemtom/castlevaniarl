@@ -1,11 +1,5 @@
 package crl.ui.consoleUI;
 
-import java.util.Properties;
-
-import sz.csi.CharKey;
-import sz.csi.ConsoleSystemInterface;
-import sz.util.Debug;
-import sz.util.Position;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.actor.Message;
@@ -17,8 +11,15 @@ import crl.player.Player;
 import crl.ui.ActionCancelException;
 import crl.ui.UISelector;
 import crl.ui.UserAction;
+import sz.csi.CharKey;
+import sz.csi.ConsoleSystemInterface;
+import sz.util.Debug;
+import sz.util.Position;
+
+import java.util.Properties;
 
 public class ConsoleUISelector extends UISelector {
+	private static final long serialVersionUID = 1L;
 	private ConsoleSystemInterface si;
 	public ConsoleUserInterface ui(){
 		return (ConsoleUserInterface) getUI();
@@ -34,6 +35,7 @@ public class ConsoleUISelector extends UISelector {
      * It may also forward a command instead
      * 
      */
+	
 	public Action selectAction(Actor who){
     	Debug.enterMethod(this, "selectAction", who);
 	    CharKey input = null;
@@ -113,9 +115,7 @@ public class ConsoleUISelector extends UISelector {
 
 				}
 				catch (ActionCancelException ace){
-					//si.cls();
-	 				//refresh();
-					ui().addMessage(new Message("Cancelled", player.getPosition()));
+                    ui().addMessage(new Message("Cancelled", player.getPosition()));
 					ret = null;
 				}
 				//refresh();

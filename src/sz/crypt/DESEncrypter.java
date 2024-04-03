@@ -1,5 +1,8 @@
 package sz.crypt;
 
+import javax.crypto.*;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
@@ -8,10 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-
-import javax.crypto.*;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
 
 public class DESEncrypter {
     Cipher ecipher;

@@ -145,13 +145,6 @@ public class STMusicManagerNew {
 			stopMusic();
 		}
 	}
-	
-	/*public void playNight (){
-		String niteMusic = (String) musics.get(NITE_MUSIC);
-		if (niteMusic != null)
-			play(niteMusic); 
-	}
-	
-	private static final String NITE_MUSIC = "NITE_MUSIC";*/
+
 }
 

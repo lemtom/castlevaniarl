@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class WhirlwindWhip extends Action{
+public class WhirlwindWhip extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "WhirlwindWhip";
 	}
@@ -39,7 +40,7 @@ public class WhirlwindWhip extends Action{
 
 	
 	private boolean hit (Position destinationPoint, int attack){
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
         UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_WHITE_HIT"));

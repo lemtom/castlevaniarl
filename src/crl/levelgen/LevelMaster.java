@@ -386,9 +386,7 @@ public class LevelMaster {
 							new MonsterSpawnInfo("SPEAR_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
 							new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.UNDERGROUND, 50), });
 			ret.setMapLocationKey("WAREHOUSE");
-			// ret.setIsCandled(true);
-			// lightCandles(ret);
-			ret.populate();
+            ret.populate();
 			ret.setRutinary(true);
 			if (levelID.equals("WAREHOUSEX0")) {
 				Position p = ret.getExitFor("_BACK");
@@ -500,9 +498,7 @@ public class LevelMaster {
 							new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 50), });
 
 			ret.setMapLocationKey("DUNGEON");
-			// ret.setIsCandled(true);
-			// lightCandles(ret);
-			ret.populate();
+            ret.populate();
 			ret.setRutinary(true);
 		} else if (levelID.startsWith("CLOCK_BASE")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
@@ -523,9 +519,7 @@ public class LevelMaster {
 					new MonsterSpawnInfo("BONE_MUSKET", MonsterSpawnInfo.UNDERGROUND, 40),
 					new MonsterSpawnInfo("LILITH", MonsterSpawnInfo.UNDERGROUND, 50), });
 			ret.setMapLocationKey("CLOCKTOWER");
-			// ret.setIsCandled(true);
-			// lightCandles(ret);
-			ret.populate();
+            ret.populate();
 			ret.setRutinary(true);
 		} else if (levelID.startsWith("SEWERS")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();

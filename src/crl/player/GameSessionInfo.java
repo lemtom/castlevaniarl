@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import crl.monster.*;
 
 public class GameSessionInfo implements Serializable {
+private static final long serialVersionUID = 1L;
 	private Player player;
 	private Monster killerMonster;
 	private int deathCause = -1;
@@ -159,7 +160,7 @@ public class GameSessionInfo implements Serializable {
 		this.deathLevelDescription = deathLevelDescription;
 	}
 
-	public ArrayList<String> getHistory() {
+	public List<String> getHistory() {
 		return history;
 	}
 

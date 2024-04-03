@@ -1,8 +1,5 @@
 package crl.ai.monster;
 
-import sz.util.Debug;
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.ActionFactory;
 import crl.action.monster.MonsterWalk;
@@ -11,8 +8,12 @@ import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
 import crl.player.Player;
+import sz.util.Debug;
+import sz.util.Position;
+import sz.util.Util;
 
-public class UnderwaterAI extends MonsterAI{
+public class UnderwaterAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 	/** Dwells in the water swimming until he spots the player, swims to him
 	 * and Jumps out of the water. walks to it and fires */
 	public Action selectAction(Actor who){
@@ -36,23 +37,17 @@ public class UnderwaterAI extends MonsterAI{
 			} else
 				return null;
 		} else {
-			/*if (aMonster.isInWater() && !aPlayer.isSwimming()){
-                Action ret = new Swim();
-	            ret.setDirection(directionToPlayer);
-		     	return ret;
-			}*/
-			if (rangedAttacks != null){
+            if (rangedAttacks != null){
 				int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
 				//Try to attack
-				for (int i = 0; i < rangedAttacks.size(); i++){
-					RangedAttack ra = rangedAttacks.get(i);
-					if (distanceToPlayer <= ra.getRange())
-						if (Util.chance(ra.getFrequency())){
-							Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
-							ret.setDirection(directionToPlayer);
-							return ret;
-						}
-				}
+                for (RangedAttack ra : rangedAttacks) {
+                    if (distanceToPlayer <= ra.getRange())
+                        if (Util.chance(ra.getFrequency())) {
+                            Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
+                            ret.setDirection(directionToPlayer);
+                            return ret;
+                        }
+                }
 			}
 			//COuldnt attack... walk or swim to the player
 			if (aMonster.isInWater()){

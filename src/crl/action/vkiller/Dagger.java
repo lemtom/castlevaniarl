@@ -4,6 +4,7 @@ import crl.action.ProjectileSkill;
 import crl.player.Player;
 
 public class Dagger extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Dagger";
 	}

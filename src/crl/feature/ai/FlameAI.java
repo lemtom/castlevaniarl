@@ -11,7 +11,8 @@ import crl.monster.Monster;
 /** Stays alive for 5 turns, causes an animation each turn
  * then dies;*/
 
-public class FlameAI implements ActionSelector, Cloneable{
+public class FlameAI implements ActionSelector, Cloneable {
+private static final long serialVersionUID = 1L;
 	private int turnsToDie;
 	private boolean activated;
 	public String getID(){
@@ -29,7 +30,7 @@ public class FlameAI implements ActionSelector, Cloneable{
 			}
 			Monster m = who.getLevel().getMonsterAt(who.getPosition());
 			if (m != null){
-				m.damage(new StringBuffer(), 1);
+				m.damage(new StringBuilder(), 1);
 			}
 			return Shine.getAction();
 		} else {

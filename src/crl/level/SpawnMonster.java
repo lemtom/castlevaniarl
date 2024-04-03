@@ -3,7 +3,8 @@ package crl.level;
 import sz.util.*;
 import crl.action.*;
 
-public class SpawnMonster extends Action{
+public class SpawnMonster extends Action {
+private static final long serialVersionUID = 1L;
 	private static SpawnMonster singleton = new SpawnMonster();
 	public String getID(){
 		return "SpawnMonster";

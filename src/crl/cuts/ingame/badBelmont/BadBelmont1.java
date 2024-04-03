@@ -7,6 +7,7 @@ import crl.level.Level;
 import crl.ui.Display;
 
 public class BadBelmont1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		Display.thus.showChat("BADSOLIEYU1", game);

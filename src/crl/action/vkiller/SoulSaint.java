@@ -5,17 +5,13 @@ import crl.player.Consts;
 import crl.player.Player;
 
 public class SoulSaint extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 15;
 	}
 
 	public String getID() {
 		return "Soul Saint";
-	}
-
-	@Override
-	public String getSFX() {
-		return super.getSFX();
 	}
 
 	@Override

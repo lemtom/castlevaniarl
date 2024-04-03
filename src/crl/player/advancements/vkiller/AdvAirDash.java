@@ -4,6 +4,8 @@ import crl.player.Player;
 import crl.player.advancements.Advancement;
 
 public class AdvAirDash extends Advancement {
+	private static final long serialVersionUID = 1L;
+
 	public String getName() {
 		return "Air Dash";
 	}

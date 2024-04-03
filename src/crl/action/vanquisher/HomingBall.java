@@ -3,7 +3,8 @@ package crl.action.vanquisher;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class HomingBall extends ProjectileSkill{
+public class HomingBall extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public int getDamage() {
 		return 5+(int)Math.round(getPlayer().getSoulPower()*1.5d);
 	}

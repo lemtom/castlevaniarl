@@ -13,6 +13,7 @@ import crl.levelgen.StaticGenerator;
 import crl.ui.Display;
 
 public class Mummy1 extends Unleasher {
+private static final long serialVersionUID = 1L;
 	public void unleash(Level level, Game game){
 		if (level.getBoss() == null){
 			Display.thus.showScreen("As you destroy the mummy of Akmodan, the whole room trembles, and a cold hurricaned wind covers all the place, shredding everything on sight. All of a sudden, the floor under you collapses.");

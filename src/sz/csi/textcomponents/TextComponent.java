@@ -1,11 +1,12 @@
 package sz.csi.textcomponents;
 
-import java.io.Serializable;
-
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
 
-public abstract class TextComponent implements Serializable{
+import java.io.Serializable;
+
+public abstract class TextComponent implements Serializable {
+private static final long serialVersionUID = 1L;
 	protected Position position = new Position(0,0);
 	protected int width;
 	protected int height;

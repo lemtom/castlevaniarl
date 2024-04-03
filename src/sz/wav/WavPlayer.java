@@ -1,14 +1,9 @@
 package sz.wav;
 
-import java.io.File;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.SourceDataLine;
-
 import crl.game.Game;
+
+import javax.sound.sampled.*;
+import java.io.File;
 
 public class WavPlayer implements Runnable{
 	private String wavFile;

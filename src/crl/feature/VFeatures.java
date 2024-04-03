@@ -6,6 +6,7 @@ import java.util.*;
 import sz.util.*;
 
 public class VFeatures implements Serializable {
+private static final long serialVersionUID = 1L;
 	ArrayList<Feature> features;
 	HashMap<Position, Feature> mLocs;
 
@@ -19,11 +20,11 @@ public class VFeatures implements Serializable {
 
 	public Feature[] getFeaturesAt(Position p) {
 		temp.clear();
-		for (int i = 0; i < features.size(); i++) {
-			if ((features.get(i)).getPosition().equals(p)) {
-				temp.add(features.get(i));
-			}
-		}
+        for (Feature feature : features) {
+            if (feature.getPosition().equals(p)) {
+                temp.add(feature);
+            }
+        }
 		if (temp.isEmpty()) {
 			return null;
 		} else {
@@ -33,11 +34,11 @@ public class VFeatures implements Serializable {
 
 	public Feature getFeatureAt(Position p) {
 		// return (Feature) mLocs.get(p);
-		for (int i = 0; i < features.size(); i++) {
-			if ((features.get(i)).getPosition().equals(p)) {
-				return features.get(i);
-			}
-		}
+        for (Feature feature : features) {
+            if (feature.getPosition().equals(p)) {
+                return feature;
+            }
+        }
 		// Debug.byebye("Feature not found! "+p);
 		return null;
 	}
@@ -58,12 +59,11 @@ public class VFeatures implements Serializable {
 
 	public List<Feature> getAllOf(String featureID) {
 		tempArrayList.clear();
-		for (int i = 0; i < features.size(); i++) {
-			Feature f = features.get(i);
-			if (f.getID().equals(featureID)) {
-				tempArrayList.add(f);
-			}
-		}
+        for (Feature f : features) {
+            if (f.getID().equals(featureID)) {
+                tempArrayList.add(f);
+            }
+        }
 		return tempArrayList;
 	}
 

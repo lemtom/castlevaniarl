@@ -1,6 +1,6 @@
 package crl.action.renegade;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import sz.util.Util;
 
@@ -9,6 +9,7 @@ import crl.monster.Monster;
 import crl.player.Player;
 
 public class SoulSteal extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 
 	public int getDamage() {
 		return 1 + getPlayer().getSoulPower();
@@ -73,14 +74,13 @@ public class SoulSteal extends ProjectileSkill {
 	@Override
 	public void execute() {
 		super.execute();
-		ArrayList<Monster> monsters = getHitMonsters();
-		for (int i = 0; i < monsters.size(); i++) {
-			Monster m = monsters.get(i);
-			// TODO: Make this relative to the monster's soul or something
-			if (Util.chance(70)) {
-				getPlayer().getLevel().addMessage("You steal the " + m.getDescription() + " soul!");
-				getPlayer().recoverHitsP(5 + getPlayer().getSoulPower());
-			}
-		}
+		List<Monster> monsters = getHitMonsters();
+        for (Monster m : monsters) {
+            // TODO: Make this relative to the monster's soul or something
+            if (Util.chance(70)) {
+                getPlayer().getLevel().addMessage("You steal the " + m.getDescription() + " soul!");
+                getPlayer().recoverHitsP(5 + getPlayer().getSoulPower());
+            }
+        }
 	}
 }

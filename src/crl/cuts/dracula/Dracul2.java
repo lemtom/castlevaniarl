@@ -9,7 +9,8 @@ import crl.player.Player;
 import crl.ui.Display;
 import crl.ui.UserInterface;
 
-public class Dracul2 extends Unleasher{
+public class Dracul2 extends Unleasher {
+private static final long serialVersionUID = 1L;
 
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("DRACULA");

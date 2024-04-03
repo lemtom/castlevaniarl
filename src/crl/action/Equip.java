@@ -6,6 +6,7 @@ import crl.item.ItemDefinition;
 import crl.player.Player;
 
 public class Equip extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Equip";
 	}

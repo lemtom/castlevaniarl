@@ -1,18 +1,5 @@
 package crl.data;
 
-import crl.ai.ActionSelector;
-import crl.ai.monster.BasicMonsterAI;
-import crl.ai.monster.MonsterAI;
-import crl.ai.monster.RangedAI;
-import crl.ai.monster.RangedAttack;
-import crl.ai.monster.StationaryAI;
-import crl.ai.monster.UnderwaterAI;
-import crl.ai.monster.WanderToPlayerAI;
-import crl.ai.monster.boss.DeathAI;
-import crl.ai.monster.boss.DemonDraculaAI;
-import crl.ai.monster.boss.DraculaAI;
-import crl.ai.monster.boss.FrankAI;
-import crl.ai.monster.boss.MedusaAI;
 import crl.game.CRLException;
 import crl.monster.*;
 import crl.ui.AppearanceFactory;
@@ -22,10 +9,11 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
-import org.xml.sax.AttributeList;
-import org.xml.sax.DocumentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.ParserAdapter;
+
 import sz.crypt.*;
 import uk.co.wilson.xml.MinML;
 
@@ -35,7 +23,8 @@ public class MonsterLoader {
 		try {
 			ArrayList<MonsterDefinition> vecMonsters = new ArrayList<>(10);
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-			br = new BufferedReader(new InputStreamReader(encrypter.decrypt(Files.newInputStream(Paths.get(monsterFile)))));
+			br = new BufferedReader(
+					new InputStreamReader(encrypter.decrypt(Files.newInputStream(Paths.get(monsterFile)))));
 			String line = br.readLine();
 			line = br.readLine();
 			while (line != null) {
@@ -84,27 +73,14 @@ public class MonsterLoader {
 				hashMonsters.put(monster.getID(), monster);
 			}
 
-			MonsterDocumentHandler handler = new MonsterDocumentHandler(hashMonsters);
-			MinML parser = new MinML();
-			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-			// parser.setContentHandler(handler);
-			parser.setDocumentHandler(handler);
-			parser.parse(new InputSource(encrypter.decrypt(Files.newInputStream(Paths.get(monsterXMLAIFile)))));
-			return monsters;
+			MonsterContentHandler handler2 = new MonsterContentHandler(hashMonsters);
 
-			/*
-			 * Print Some data to a CSV File, yeah I am evil BufferedWriter write =
-			 * FileUtil.getWriter("monsterStats.csv"); for (int i = 0; i < ret.length; i++){
-			 * write.write(ret[i].getID()+","+ret[i].getAppearance().getID()+","+ret[i].
-			 * getDescription()+",,"+ ret[i].getWavOnHit()+","+ret[i].getBloodContent()+","+
-			 * ret[i].isUndead()+","+ret[i].isEthereal()+","+
-			 * ret[i].isCanSwim()+",false,"+ret[i].getScore()+","+
-			 * ret[i].getSightRange()+","+ret[i].getMaxHits()+","+
-			 * ret[i].getAttack()+","+ret[i].getWalkCost()+","+ret[i].getAttackCost()+","+
-			 * ret[i].getEvadeChance()+","+ret[i].getEvadeMessage()+","+ret[i].
-			 * getAutorespawnCount() ); write.write("\n"); } write.close();
-			 */
-			// End Print Some data to a CSV File, yeah I am evil
+			XMLReader reader = new ParserAdapter(new MinML());
+			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
+			reader.setContentHandler(handler2);
+			reader.parse(new InputSource(encrypter.decrypt(Files.newInputStream(Paths.get(monsterXMLAIFile)))));
+
+			return monsters;
 
 		} catch (IOException ioe) {
 			throw new CRLException("Error while loading data from monster file");
@@ -114,133 +90,4 @@ public class MonsterLoader {
 		}
 	}
 
-}
-
-class MonsterDocumentHandler implements DocumentHandler {
-	private HashMap<String, MonsterDefinition> hashMonsters;
-
-	MonsterDocumentHandler(HashMap<String, MonsterDefinition> hashMonsters) {
-		this.hashMonsters = hashMonsters;
-	}
-
-	private MonsterDefinition currentMD;
-	private ActionSelector currentSelector;
-	private ArrayList<RangedAttack> currentRangedAttacks;
-
-	public void startDocument() throws org.xml.sax.SAXException {
-	}
-
-	public void startElement(String localName, AttributeList at) throws org.xml.sax.SAXException {
-        switch (localName) {
-            case "monster":
-                currentMD = hashMonsters.get(at.getValue("id"));
-                break;
-            case "sel_wander":
-                currentSelector = new WanderToPlayerAI();
-                break;
-            case "sel_underwater":
-                currentSelector = new UnderwaterAI();
-                break;
-            case "sel_sickle":
-                currentSelector = new crl.action.monster.boss.SickleAI();
-                break;
-            case "sel_death":
-                currentSelector = new DeathAI();
-                break;
-            case "sel_dracula":
-                currentSelector = new DraculaAI();
-                break;
-            case "sel_demondracula":
-                currentSelector = new DemonDraculaAI();
-                break;
-            case "sel_medusa":
-                currentSelector = new MedusaAI();
-                break;
-            case "sel_frank":
-                currentSelector = new FrankAI();
-                break;
-            case "sel_stationary":
-                currentSelector = new StationaryAI();
-                break;
-            case "sel_basic":
-                currentSelector = new BasicMonsterAI();
-                if (at.getValue("stationary") != null)
-                    ((BasicMonsterAI) currentSelector).setStationary(at.getValue("stationary").equals("true"));
-                if (at.getValue("approachLimit") != null)
-                    ((BasicMonsterAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-                if (at.getValue("waitPlayerRange") != null)
-                    ((BasicMonsterAI) currentSelector).setWaitPlayerRange(inte(at.getValue("waitPlayerRange")));
-                if (at.getValue("patrolRange") != null)
-                    ((BasicMonsterAI) currentSelector).setPatrolRange(inte(at.getValue("patrolRange")));
-                break;
-            case "sel_ranged":
-                currentSelector = new RangedAI();
-                ((RangedAI) currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-                break;
-            case "rangedAttacks":
-                currentRangedAttacks = new ArrayList<>(10);
-                break;
-            case "rangedAttack":
-                int damage = 0;
-                try {
-                    damage = Integer.parseInt(at.getValue("damage"));
-                } catch (NumberFormatException nfe) {
-
-                }
-
-                RangedAttack ra = new RangedAttack(at.getValue("id"), at.getValue("type"), at.getValue("status_effect"),
-                        Integer.parseInt(at.getValue("range")), Integer.parseInt(at.getValue("frequency")),
-                        at.getValue("message"), at.getValue("effectType"), at.getValue("effectID"), damage
-
-                        // color
-                );
-                if (at.getValue("effectWav") != null)
-                    ra.setEffectWav(at.getValue("effectWav"));
-                if (at.getValue("summonMonsterId") != null)
-                    ra.setSummonMonsterId(at.getValue("summonMonsterId"));
-                if (at.getValue("charge") != null)
-                    ra.setChargeCounter(inte(at.getValue("charge")));
-
-                currentRangedAttacks.add(ra);
-                break;
-        }
-	}
-
-	public void endElement(String localName) throws org.xml.sax.SAXException {
-		if (localName.equals("rangedAttacks")) {
-			((MonsterAI) currentSelector).setRangedAttacks(currentRangedAttacks);
-		} else if (localName.equals("selector")) {
-
-			currentMD.setDefaultSelector(currentSelector);
-		}
-
-	}
-
-	public void characters(char[] values, int param, int param2) throws org.xml.sax.SAXException {
-	}
-
-	public void endDocument() throws org.xml.sax.SAXException {
-	}
-
-	public void endPrefixMapping(String str) throws org.xml.sax.SAXException {
-	}
-
-	public void ignorableWhitespace(char[] values, int param, int param2) throws org.xml.sax.SAXException {
-	}
-
-	public void processingInstruction(String str, String str1) throws org.xml.sax.SAXException {
-	}
-
-	public void setDocumentLocator(org.xml.sax.Locator locator) {
-	}
-
-	public void skippedEntity(String str) throws org.xml.sax.SAXException {
-	}
-
-	public void startPrefixMapping(String str, String str1) throws org.xml.sax.SAXException {
-	}
-
-	private int inte(String s) {
-		return Integer.parseInt(s);
-	}
 }

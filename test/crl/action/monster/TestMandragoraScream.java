@@ -1,10 +1,10 @@
 package crl.action.monster;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.AdditionalMatchers.*;
 
+import static org.mockito.AdditionalMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,18 +30,18 @@ public class TestMandragoraScream {
 	Position playerPosition;
 	Level level;
 	VMonster monsters;
-	
+
 	@Before
 	public void setUp() throws Exception {
-		effectFactory = mock(EffectFactory.class);	
+		effectFactory = mock(EffectFactory.class);
 		EffectFactory.setSingleton(effectFactory);
-		
+
 		monsters = mock(VMonster.class);
-		
+
 		level = mock(Level.class);
 		when(level.getMonsters()).thenReturn(monsters);
 		when(level.isDay()).thenReturn(true);
-		
+
 		playerPosition = new Position(8, 8);
 		player = new Player();
 		player.setPosition(playerPosition);
@@ -49,12 +49,12 @@ public class TestMandragoraScream {
 		player.setHitsMax(30);
 		player.setHits(30);
 		when(level.getPlayer()).thenReturn(player);
-		
-		performerPosition = new Position(10, 10);		
+
+		performerPosition = new Position(10, 10);
 		performer = mock(Monster.class);
 		when(performer.getLevel()).thenReturn(level);
 		when(performer.getPosition()).thenReturn(performerPosition);
-		
+
 		action = new MandragoraScream();
 		action.setPerformer(performer);
 	}
@@ -66,18 +66,18 @@ public class TestMandragoraScream {
 	@Test
 	public void pullingMandragoraRootShouldSetFlag() {
 		when(performer.getFlag("MANDRAGORA_PULLED")).thenReturn(false);
-		
+
 		action.execute();
-		
+
 		verify(performer).setFlag("MANDRAGORA_PULLED", true);
 	}
-	
+
 	@Test
 	public void pullingMandragoraRootShouldEmitAMessage() {
 		when(performer.getFlag("MANDRAGORA_PULLED")).thenReturn(false);
-		
+
 		action.execute();
-		
+
 		verify(level).addMessage(find("pulls out a mandragora"));
 	}
 
@@ -85,15 +85,15 @@ public class TestMandragoraScream {
 	@Test
 	public void mandragoraScreamShouldIgnoreArmor() {
 		when(performer.getFlag("MANDRAGORA_PULLED")).thenReturn(true);
-		
+
 		int oldHits = player.getHits();
 		Item armour = mock(Item.class);
 		when(armour.getDefense()).thenReturn(10);
-		
+
 		player.setArmor(armour);
-	
+
 		action.execute();
-		
+
 		assertThat(player.getHits(), equalTo(oldHits - MandragoraScream.SCREAM_DAMAGE));
 	}
 }

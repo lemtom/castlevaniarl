@@ -1,12 +1,12 @@
 package crl.ui.graphicsUI.effects;
 
-import java.awt.Image;
-
-import sz.util.Position;
 import crl.action.Action;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.util.Position;
+
+import java.awt.*;
 
 public class GFXMeleeEffect extends GFXDirectionalEffect{
 	private Image[] missile;
@@ -57,9 +57,7 @@ public class GFXMeleeEffect extends GFXDirectionalEffect{
 				height = ui.getPlayer().getLevel().getMapCell(runner).getHeight();
 			Position relative = Position.subs(runner, ui.getPlayer().getPosition());
 			Position toPrint = Position.add(ui.PC_POS, relative);
-			/*if (!ui.insideViewPort(toPrint))
-				break;*/
-			ui.drawImageVP(toPrint.x() * 32 + 8, toPrint.y() * 32 + 8 - 4 * height, icon);
+            ui.drawImageVP(toPrint.x() * 32 + 8, toPrint.y() * 32 + 8 - 4 * height, icon);
 			si.refresh();
 			animationPause();
 			si.restore();

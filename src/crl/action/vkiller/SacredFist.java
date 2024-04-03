@@ -3,7 +3,8 @@ package crl.action.vkiller;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
-public class SacredFist extends BeamProjectileSkill{
+public class SacredFist extends BeamProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "SacredFist";
 	}

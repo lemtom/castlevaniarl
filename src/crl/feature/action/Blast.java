@@ -7,6 +7,7 @@ import crl.monster.Monster;
 import crl.ui.effects.EffectFactory;
 
 public class Blast extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID() {
 		return "Blast";
 	}
@@ -30,7 +31,7 @@ public class Blast extends Action {
 				if (targetMonster != null) {
 					if (targetMonster.wasSeen())
 						aLevel.addMessage("The " + targetMonster.getDescription() + " is hit by the holy wave!");
-					targetMonster.damage(new StringBuffer(), damage);
+					targetMonster.damage(new StringBuilder(), damage);
 				}
 			}
 	}
@@ -38,10 +39,5 @@ public class Blast extends Action {
 	@Override
 	public String getSFX() {
 		return "wav/lazrshot.wav";
-	}
-
-	@Override
-	public int getCost() {
-		return super.getCost();
 	}
 }

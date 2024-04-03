@@ -1,10 +1,10 @@
 package crl.ui.consoleUI.effects;
 
-import crl.ui.*;
+import crl.action.Action;
+import crl.ui.UserInterface;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
-import crl.action.*;
+import sz.util.Position;
 
 public class CharDirectionalMissileEffect extends CharDirectedEffect {
 	private String missile;

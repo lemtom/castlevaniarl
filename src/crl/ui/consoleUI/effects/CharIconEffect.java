@@ -1,8 +1,8 @@
 package crl.ui.consoleUI.effects;
 
+import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
-import crl.ui.consoleUI.ConsoleUserInterface;
 
 public class CharIconEffect extends CharEffect{
 	private char tile;

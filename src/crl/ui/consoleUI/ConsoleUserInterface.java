@@ -1,32 +1,37 @@
 package crl.ui.consoleUI;
 
-import java.util.*;
-
-import sz.csi.CharKey;
-import sz.csi.ConsoleSystemInterface;
-import sz.csi.textcomponents.BasicListItem;
-import sz.csi.textcomponents.ListBox;
-import sz.csi.textcomponents.MenuBox;
-import sz.csi.textcomponents.MenuItem;
-import sz.csi.textcomponents.SimpleMenuItem;
-import sz.csi.textcomponents.TextBox;
-import sz.csi.textcomponents.TextInformBox;
-import sz.util.*;
-
 import crl.action.*;
-import crl.ui.consoleUI.effects.CharEffect;
-import crl.ui.effects.*;
-import crl.player.*;
-import crl.player.advancements.Advancement;
-import crl.item.*;
-import crl.level.*;
-import crl.npc.*;
-import crl.monster.*;
-import crl.feature.*;
+import crl.actor.Actor;
+import crl.actor.Message;
+import crl.feature.Feature;
+import crl.feature.SmartFeature;
 import crl.game.GameFiles;
 import crl.game.STMusicManagerNew;
-import crl.actor.*;
+import crl.item.Item;
+import crl.item.ItemDefinition;
+import crl.item.Merchant;
+import crl.level.Cell;
+import crl.level.Level;
+import crl.monster.Monster;
+import crl.monster.VMonster;
+import crl.npc.NPC;
+import crl.player.*;
+import crl.player.advancements.Advancement;
 import crl.ui.*;
+import crl.ui.consoleUI.effects.CharEffect;
+import crl.ui.effects.Effect;
+import sz.csi.CharKey;
+import sz.csi.ConsoleSystemInterface;
+import sz.csi.textcomponents.*;
+import sz.util.Debug;
+import sz.util.Line;
+import sz.util.Position;
+import sz.util.Util;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Shows the level using characters. Informs the Actions and Commands of the
@@ -83,7 +88,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				ArrayList<MenuItem> items = level.getItemsAt(browser);
+				List<MenuItem> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
 					item = (Item) items.get(0);
@@ -144,7 +149,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		Debug.enterMethod(this, "launchMerchant", who);
 		si.saveBuffer();
 
-		ArrayList<MenuItem> merchandise = who.getMerchandiseFor(player);
+		List<MenuItem> merchandise = who.getMerchandiseFor(player);
 		if (merchandise == null || merchandise.isEmpty()) {
 			chat(who);
 			return;
@@ -253,10 +258,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private void drawLevel() {
 		Debug.enterMethod(this, "drawLevel");
-		// Cell[] [] cells =
-		// level.getCellsAround(player.getPosition().x,player.getPosition().y,
-		// player.getPosition().z, range);
-		Cell[][] rcells = level.getMemoryCellsAround(player.getPosition().x, player.getPosition().y,
+        Cell[][] rcells = level.getMemoryCellsAround(player.getPosition().x, player.getPosition().y,
 				player.getPosition().z, xrange, yrange);
 		Cell[][] vcells = level.getVisibleCellsAround(player.getPosition().x, player.getPosition().y,
 				player.getPosition().z, xrange, yrange);
@@ -303,32 +305,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 						cellColor = ConsoleSystemInterface.DARK_BLUE;
 					}
 					if (bloodLevel != null) {
-						switch (Integer.parseInt(bloodLevel)) {
-						case 0:
-							if (!level.isDay()) {
-								cellColor = ConsoleSystemInterface.DARK_RED;
-							} else {
-								cellColor = ConsoleSystemInterface.RED;
-							}
-							break;
-						case 1:
-							if (!level.isDay()) {
-								cellColor = ConsoleSystemInterface.PURPLE;
-							} else {
-								cellColor = ConsoleSystemInterface.DARK_RED;
-							}
-							break;
-						case 8:
-							cellColor = ConsoleSystemInterface.LEMON;
-							break;
-						}
+						cellColor = determineCellColorByBloodLevel(bloodLevel, cellColor);
 					}
 					if (vcells[x][y].isWater()) {
-						if (level.canFloatUpward(runner)) {
-							cellColor = ConsoleSystemInterface.BLUE;
-						} else {
-							cellColor = ConsoleSystemInterface.DARK_BLUE;
-						}
+						cellColor = determineCellColorByWater(runner);
 					}
 
 					char cellChar = cellApp.getChar();
@@ -372,66 +352,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 						}
 					}
 
-					ArrayList<MenuItem> items = level.getItemsAt(runner);
-					Item item = null;
-					if (items != null) {
-						item = (Item) items.get(0);
-					}
-					if (item != null) {
-						if (item.isVisible()) {
-							CharAppearance itemApp = (CharAppearance) item.getAppearance();
-							si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, itemApp.getChar(),
-									itemApp.getColor());
-							BasicListItem li = sightListItems.get(item.getDefinition().getID());
-							if (li == null) {
-								// Debug.say("Adding "+item.getDefinition().getID()+" to the HashMap");
-								sightListItems.put(item.getDefinition().getID(),
-										new BasicListItem(((CharAppearance) item.getAppearance()).getChar(),
-												((CharAppearance) item.getAppearance()).getColor(),
-												item.getDefinition().getDescription()));
-								li = sightListItems.get(item.getDefinition().getID());
-							}
-							if (!itemsOnSight.contains(li))
-								itemsOnSight.add(li);
-						}
-					}
+					determineItems(runner, x, y);
 
-					Monster monster = level.getMonsterAt(runner);
-					if (monster != null && monster.isVisible()) {
-						BasicListItem li = null;
-						if (monster instanceof NPC) {
-							li = sightListItems.get(monster.getDescription());
-							if (li == null) {
-								CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
-								Debug.say("Adding " + monster.getID() + " to the HashMap");
-								sightListItems.put(monster.getDescription(), new BasicListItem(monsterApp.getChar(),
-										monsterApp.getColor(), monster.getDescription()));
-								li = sightListItems.get(monster.getDescription());
-							}
-						} else {
-							li = sightListItems.get(monster.getID());
-							if (li == null) {
-								CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
-								Debug.say("Adding " + monster.getID() + " to the HashMap");
-								sightListItems.put(monster.getID(), new BasicListItem(monsterApp.getChar(),
-										monsterApp.getColor(), monster.getDescription()));
-								li = sightListItems.get(monster.getID());
-							}
-						}
-						if (!monstersOnSight.contains(li))
-							monstersOnSight.add(li);
-
-						CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
-						if (monster.canSwim() && level.getMapCell(runner) != null
-								&& level.getMapCell(runner).isShallowWater())
-							si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, '~', monsterApp.getColor());
-						else if (monster.hasCounter(Consts.C_MONSTER_FREEZE))
-							si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, monsterApp.getChar(),
-									ConsoleSystemInterface.CYAN);
-						else
-							si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, monsterApp.getChar(),
-									monsterApp.getColor());
-					}
+					determineMonsters(runner, x, y);
 
 					if (!player.isInvisible()) {
 						si.print(PC_POS.x, PC_POS.y, ((CharAppearance) player.getAppearance()).getChar(),
@@ -474,6 +397,101 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		Debug.exitMethod();
 	}
 
+	private void determineMonsters(Position runner, int x, int y) {
+		Monster monster = level.getMonsterAt(runner);
+		if (monster != null && monster.isVisible()) {
+			BasicListItem li = null;
+			if (monster instanceof NPC) {
+				li = sightListItems.get(monster.getDescription());
+				if (li == null) {
+					CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
+					Debug.say("Adding " + monster.getID() + " to the HashMap");
+					sightListItems.put(monster.getDescription(),
+							new BasicListItem(monsterApp.getChar(), monsterApp.getColor(), monster.getDescription()));
+					li = sightListItems.get(monster.getDescription());
+				}
+			} else {
+				li = sightListItems.get(monster.getID());
+				if (li == null) {
+					CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
+					Debug.say("Adding " + monster.getID() + " to the HashMap");
+					sightListItems.put(monster.getID(),
+							new BasicListItem(monsterApp.getChar(), monsterApp.getColor(), monster.getDescription()));
+					li = sightListItems.get(monster.getID());
+				}
+			}
+			if (!monstersOnSight.contains(li))
+				monstersOnSight.add(li);
+
+			CharAppearance monsterApp = (CharAppearance) monster.getAppearance();
+			if (monster.canSwim() && level.getMapCell(runner) != null && level.getMapCell(runner).isShallowWater())
+				si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, '~', monsterApp.getColor());
+			else if (monster.hasCounter(Consts.C_MONSTER_FREEZE))
+				si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, monsterApp.getChar(),
+						ConsoleSystemInterface.CYAN);
+			else
+				si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, monsterApp.getChar(), monsterApp.getColor());
+		}
+	}
+
+	private void determineItems(Position runner, int x, int y) {
+		List<MenuItem> items = level.getItemsAt(runner);
+		Item item = null;
+		if (items != null) {
+			item = (Item) items.get(0);
+		}
+		if (item != null) {
+			if (item.isVisible()) {
+				CharAppearance itemApp = (CharAppearance) item.getAppearance();
+				si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, itemApp.getChar(), itemApp.getColor());
+				BasicListItem li = sightListItems.get(item.getDefinition().getID());
+				if (li == null) {
+					// Debug.say("Adding "+item.getDefinition().getID()+" to the HashMap");
+					sightListItems.put(item.getDefinition().getID(),
+							new BasicListItem(((CharAppearance) item.getAppearance()).getChar(),
+									((CharAppearance) item.getAppearance()).getColor(),
+									item.getDefinition().getDescription()));
+					li = sightListItems.get(item.getDefinition().getID());
+				}
+				if (!itemsOnSight.contains(li))
+					itemsOnSight.add(li);
+			}
+		}
+	}
+
+	private int determineCellColorByWater(Position runner) {
+		int cellColor;
+		if (level.canFloatUpward(runner)) {
+			cellColor = ConsoleSystemInterface.BLUE;
+		} else {
+			cellColor = ConsoleSystemInterface.DARK_BLUE;
+		}
+		return cellColor;
+	}
+
+	private int determineCellColorByBloodLevel(String bloodLevel, int cellColor) {
+		switch (Integer.parseInt(bloodLevel)) {
+		case 0:
+			if (!level.isDay()) {
+				cellColor = ConsoleSystemInterface.DARK_RED;
+			} else {
+				cellColor = ConsoleSystemInterface.RED;
+			}
+			break;
+		case 1:
+			if (!level.isDay()) {
+				cellColor = ConsoleSystemInterface.PURPLE;
+			} else {
+				cellColor = ConsoleSystemInterface.DARK_RED;
+			}
+			break;
+		case 8:
+			cellColor = ConsoleSystemInterface.LEMON;
+			break;
+		}
+		return cellColor;
+	}
+
 	@Override
 	public void setPersistantMessage(String description) {
 		persistantMessageBox.setText(description);
@@ -504,24 +522,56 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	}
 
+	public static class ForeBackColorTuple {
+		private final int foreColor;
+		private final int backColor;
+
+		public ForeBackColorTuple(int foreColor, int backColor) {
+			this.foreColor = foreColor;
+			this.backColor = backColor;
+		}
+
+		public int getForeColor() {
+			return foreColor;
+		}
+
+		public int getBackColor() {
+			return backColor;
+		}
+	}
+
+	private ForeBackColorTuple determinePlayerHitColor() {
+		switch (calculate(player.getHits())) {
+		case 1:
+			return new ForeBackColorTuple(ConsoleSystemInterface.RED, ConsoleSystemInterface.WHITE);
+		case 2:
+			return new ForeBackColorTuple(ConsoleSystemInterface.DARK_RED, ConsoleSystemInterface.RED);
+		default:
+			return new ForeBackColorTuple(ConsoleSystemInterface.MAGENTA, ConsoleSystemInterface.DARK_RED);
+		}
+	}
+
+	private ForeBackColorTuple determineBossColor(int sixthiedBossHits) {
+		switch (calculate(sixthiedBossHits)) {
+		case 1:
+			return new ForeBackColorTuple(ConsoleSystemInterface.YELLOW, ConsoleSystemInterface.WHITE);
+		case 2:
+			return new ForeBackColorTuple(ConsoleSystemInterface.BROWN, ConsoleSystemInterface.YELLOW);
+		default:
+			return new ForeBackColorTuple(ConsoleSystemInterface.PURPLE, ConsoleSystemInterface.BROWN);
+		}
+	}
+
+	private int calculate(int hits) {
+		return (hits - 1) / 20 + 1;
+	}
+
 	private void drawPlayerStatus() {
 		Debug.enterMethod(this, "drawPlayerStatus");
-		int foreColor;
-		int backColor;
-		switch (((player.getHits() - 1) / 20) + 1) {
-		case 1:
-			foreColor = ConsoleSystemInterface.RED;
-			backColor = ConsoleSystemInterface.WHITE;
-			break;
-		case 2:
-			foreColor = ConsoleSystemInterface.DARK_RED;
-			backColor = ConsoleSystemInterface.RED;
-			break;
-		default:
-			foreColor = ConsoleSystemInterface.MAGENTA;
-			backColor = ConsoleSystemInterface.DARK_RED;
-			break;
-		}
+
+		ForeBackColorTuple colors = determinePlayerHitColor();
+		int foreColor = colors.getForeColor();
+		int backColor = colors.getBackColor();
 		String timeTile = "";
 		int timeColor = ConsoleSystemInterface.YELLOW;
 		switch (level.getDayTime()) {
@@ -556,7 +606,8 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			shot = "II ";
 		if (player.getShotLevel() == 2)
 			shot = "III";
-		int rest = ((player.getHits() - 1) % 20) + 1;
+
+		int rest = calculateRest(player.getHits());
 
 		si.print(0, 0, "SCORE    " + player.getScore());
 		si.print(0, 1, "PLAYER   ");
@@ -573,22 +624,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					.ceil((player.getLevel().getBoss().getHits() * 60.0) / player.getLevel().getBoss().getMaxHits());
 			int foreColorB = 0;
 			int backColorB = 0;
-			switch (((sixthiedBossHits - 1) / 20) + 1) {
-			case 1:
-				foreColorB = ConsoleSystemInterface.YELLOW;
-				backColorB = ConsoleSystemInterface.WHITE;
-				break;
-			case 2:
-				foreColorB = ConsoleSystemInterface.BROWN;
-				backColorB = ConsoleSystemInterface.YELLOW;
-				break;
-			default:
-				foreColorB = ConsoleSystemInterface.PURPLE;
-				backColorB = ConsoleSystemInterface.BROWN;
-				break;
-			}
+			ForeBackColorTuple bossColors = determineBossColor(sixthiedBossHits);
+			foreColorB = bossColors.getForeColor();
+			backColorB = bossColors.getBackColor();
 
-			int restB = ((sixthiedBossHits - 1) % 20) + 1;
+			int restB = calculateRest(sixthiedBossHits);
 
 			for (int i = 0; i < 20; i++)
 				if (i + 1 <= restB)
@@ -628,13 +668,15 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			si.print(71, 1, "SUNNY", ConsoleSystemInterface.YELLOW);
 		if (player.getFlag(Consts.ENV_THUNDERSTORM))
 			si.print(71, 1, "STORM", ConsoleSystemInterface.WHITE);
-		// si.print (71,2,"P - 0");
 
-		// si.print(1,24, " ");
-		si.print(1, 24, fill(player.getName() + ", the Lv" + player.getPlayerLevel() + " " + player.getClassString()
+        si.print(1, 24, fill(player.getName() + ", the Lv" + player.getPlayerLevel() + " " + player.getClassString()
 				+ " " + player.getStatusString(), 70));
 
 		Debug.exitMethod();
+	}
+
+	private int calculateRest(int hits) {
+		return (hits - 1) % 20 + 1;
 	}
 
 	private String fill(String str, int limit) {
@@ -696,6 +738,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	 * Checks if the point, relative to the console coordinates, is inside the
 	 * ViewPort
 	 */
+
 	public boolean insideViewPort(int x, int y) {
 		// return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
 		return (x >= 0 && x < FOVMask.length && y >= 0 && y < FOVMask[0].length) && FOVMask[x][y];
@@ -719,11 +762,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 		Position defaultTarget = null;
 		Position nearest = getNearestMonsterPosition();
-		if (nearest != null) {
-			defaultTarget = nearest;
-		} else {
-			defaultTarget = null;
-		}
+        defaultTarget = nearest;
 
 		Position browser = null;
 		Position offset = new Position(0, 0);
@@ -756,7 +795,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				ArrayList<MenuItem> items = level.getItemsAt(browser);
+				List<MenuItem> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
 					item = (Item) items.get(0);
@@ -777,9 +816,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			}
 			messageBox.setText(prompt + " " + looked);
 			messageBox.draw();
-			// si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_',
-			// ConsoleSystemInterface.BLUE);
-			drawLineTo(PC_POS.x + offset.x, PC_POS.y + offset.y, '*', ConsoleSystemInterface.DARK_BLUE);
+            drawLineTo(PC_POS.x + offset.x, PC_POS.y + offset.y, '*', ConsoleSystemInterface.DARK_BLUE);
 			si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, 'X', ConsoleSystemInterface.BLUE);
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
@@ -863,7 +900,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Item pickItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickItem");
-		ArrayList<MenuItem> inventory = player.getInventory();
+		List<MenuItem> inventory = player.getInventory();
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setBounds(10, 3, 60, 18);
 		menuBox.setPromptSize(2);
@@ -885,7 +922,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Item pickUnderlyingItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickUnderlyingItem");
-		ArrayList<MenuItem> items = level.getItemsAt(player.getPosition());
+		List<MenuItem> items = level.getItemsAt(player.getPosition());
 		if (items == null)
 			return null;
 		if (items.size() == 1)
@@ -911,7 +948,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private ArrayList<MenuItem> pickMultiItems(String prompt) {
 		Equipment.eqMode = true;
-		ArrayList<MenuItem> inventory = player.getInventory();
+		List<MenuItem> inventory = player.getInventory();
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setBounds(25, 3, 40, 18);
 		menuBox.setPromptSize(2);
@@ -946,14 +983,14 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	}
 
 	private ArrayList<MenuItem> pickSpirits() {
-		ArrayList<MenuItem> originalInventory = player.getInventory();
-		ArrayList<MenuItem> inventory = new ArrayList<>();
-		for (int i = 0; i < originalInventory.size(); i++) {
-			Equipment testEq = (Equipment) originalInventory.get(i);
-			if (testEq.getItem().getDefinition().getID().endsWith("_SPIRIT")) {
-				inventory.add(testEq);
-			}
-		}
+		List<MenuItem> originalInventory = player.getInventory();
+		List<MenuItem> inventory = new ArrayList<>();
+        for (MenuItem menuItem : originalInventory) {
+            Equipment testEq = (Equipment) menuItem;
+            if (testEq.getItem().getDefinition().getID().endsWith("_SPIRIT")) {
+                inventory.add(testEq);
+            }
+        }
 
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setBounds(25, 3, 40, 18);
@@ -1032,7 +1069,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.Y && x.code != CharKey.y && x.code != CharKey.N && x.code != CharKey.n)
 			x = si.inkey();
-		return (x.code == CharKey.Y || x.code == CharKey.y);
+		return x.code == CharKey.Y || x.code == CharKey.y;
 	}
 
 	@Override
@@ -1109,7 +1146,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	public Action showInventory() throws ActionCancelException {
 		Equipment.eqMode = true;
-		ArrayList<MenuItem> inventory = player.getInventory();
+		List<MenuItem> inventory = player.getInventory();
 		int xpos = 1;
 		int ypos = 0;
 		MenuBox menuBox = new MenuBox(si);
@@ -1211,25 +1248,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 			itemUsageChoices.draw();
 			itemDescription.draw();
-			SimpleMenuItem choice = null;
-			try {
-				choice = (SimpleMenuItem) itemUsageChoices.getNullifiedSelection(itemUsageAdditionalKeys);
-			} catch (AdditionalKeysSignal aks) {
-				switch (aks.getKeyCode()) {
-				case CharKey.u:
-					choice = (SimpleMenuItem) vecItemUsageChoices.get(0);
-					break;
-				case CharKey.e:
-					choice = (SimpleMenuItem) vecItemUsageChoices.get(1);
-					break;
-				case CharKey.d:
-					choice = (SimpleMenuItem) vecItemUsageChoices.get(2);
-					break;
-				case CharKey.t:
-					choice = (SimpleMenuItem) vecItemUsageChoices.get(3);
-					break;
-				}
-			}
+			SimpleMenuItem choice = determineChoice(itemUsageChoices);
 
 			if (choice != null) {
 				switch (choice.getValue()) {
@@ -1274,8 +1293,31 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return null;
 	}
 
+	private SimpleMenuItem determineChoice(MenuBox itemUsageChoices) {
+		SimpleMenuItem choice = null;
+		try {
+			choice = (SimpleMenuItem) itemUsageChoices.getNullifiedSelection(itemUsageAdditionalKeys);
+		} catch (AdditionalKeysSignal aks) {
+			switch (aks.getKeyCode()) {
+			case CharKey.u:
+				choice = (SimpleMenuItem) vecItemUsageChoices.get(0);
+				break;
+			case CharKey.e:
+				choice = (SimpleMenuItem) vecItemUsageChoices.get(1);
+				break;
+			case CharKey.d:
+				choice = (SimpleMenuItem) vecItemUsageChoices.get(2);
+				break;
+			case CharKey.t:
+				choice = (SimpleMenuItem) vecItemUsageChoices.get(3);
+				break;
+			}
+		}
+		return choice;
+	}
+
 	/**
-	 * Shows a message inmediately; useful for system messages.
+	 * Shows a message immediately; useful for system messages.
 	 * 
 	 * @param x the message to be shown
 	 */
@@ -1374,7 +1416,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	public Action showSkills() throws ActionCancelException {
 		Debug.enterMethod(this, "showSkills");
 		si.saveBuffer();
-		ArrayList<MenuItem> skills = player.getAvailableSkills();
+		List<MenuItem> skills = player.getAvailableSkills();
 		MenuBox menuBox = new MenuBox(si);
 		menuBox.setHeight(14);
 		menuBox.setWidth(33);
@@ -1414,7 +1456,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		showMessage("You gained a level!, [Press Space to continue]");
 		si.waitKey(CharKey.SPACE);
 		if (player.deservesAdvancement(player.getPlayerLevel())) {
-			ArrayList<Advancement> advancements = player.getAvailableAdvancements();
+			List<Advancement> advancements = player.getAvailableAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1422,7 +1464,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			}
 		}
 		if (player.deservesStatAdvancement(player.getPlayerLevel())) {
-			ArrayList<Advancement> advancements = player.getAvailableStatAdvancements();
+			List<Advancement> advancements = player.getAvailableStatAdvancements();
 			if (!advancements.isEmpty()) {
 				Advancement playerChoice = Display.thus.showLevelUp(advancements);
 				playerChoice.advance(player);
@@ -1615,7 +1657,8 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		int lh = level.getHeight();
 		int remnantx = (int) ((80 - (lw)) / 2.0d);
 		// int remnanty = (int)((25 - (lh))/2.0d);
-		int pages = ((lh - 1) / 23) + 1;
+
+		int pages = (lh - 1) / 23 + 1;
 		int cellColor = 0;
 		Position runner = new Position(0, 0, player.getPosition().z);
 		for (int i = 1; i <= pages; i++) {

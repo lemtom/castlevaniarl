@@ -1,14 +1,11 @@
 package crl.ui.graphicsUI.effects;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-
-import sz.util.Position;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.util.Position;
+
+import java.awt.*;
 
 public class GFXCircleBlastEffect extends GFXEffect{
 	private Color blastColor;

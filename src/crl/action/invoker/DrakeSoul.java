@@ -9,6 +9,7 @@ import crl.monster.Monster;
 import crl.player.Player;
 
 public class DrakeSoul extends BeamProjectileSkill {
+private static final long serialVersionUID = 1L;
 
 	public int getDamage() {
 		return 1 + getPlayer().getSoulPower() * 3;
@@ -88,7 +89,7 @@ public class DrakeSoul extends BeamProjectileSkill {
 	}
 
 	private boolean hit(Position destinationPoint, int damage) {
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);

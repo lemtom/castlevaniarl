@@ -3,7 +3,8 @@ package crl.action.renegade;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class Fireball extends ProjectileSkill{
+public class Fireball extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	
 	public int getDamage() {
 		return 3+getPlayer().getSoulPower()*2;

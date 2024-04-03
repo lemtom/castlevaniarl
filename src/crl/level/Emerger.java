@@ -6,6 +6,7 @@ import crl.actor.*;
 import crl.feature.Feature;
 
 public class Emerger extends Actor {
+	private static final long serialVersionUID = 1L;
 	private Monster monster;
 	private Feature mound;
 	private Position point;

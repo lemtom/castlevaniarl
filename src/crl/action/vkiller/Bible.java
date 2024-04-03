@@ -11,6 +11,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class Bible extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 2;
 	}
@@ -29,47 +30,45 @@ public class Bible extends HeartAction {
 		Level aLevel = performer.getLevel();
 		Player aPlayer = (Player) performer;
 		aPlayer.getLevel().addMessage("You open the bible!");
-		// drawEffect(new SequentialEffect(performer.getPosition(), steps, "?�",
-		// Appearance.CYAN, 10));
-		drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_BIBLE"));
+        drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_BIBLE"));
 
 		int damage = getDamage();
-		for (int i = 0; i < steps.size(); i++) {
-			Position destinationPoint = Position.add(performer.getPosition(), steps.get(i));
-			StringBuffer message = new StringBuffer();
-			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (destinationFeature != null && destinationFeature.isDestroyable()) {
-				message.append("The ").append(destinationFeature.getDescription()).append(" is slashed");
-				Feature prize = destinationFeature.damage(aLevel.getPlayer(), damage);
-				if (prize != null) {
-					message.append(" and thorn apart!");
-				} else
-					message.append(".");
-				aLevel.addMessage(message.toString());
-			}
+        for (Position step : steps) {
+            Position destinationPoint = Position.add(performer.getPosition(), step);
+            StringBuilder message = new StringBuilder();
+            Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+            if (destinationFeature != null && destinationFeature.isDestroyable()) {
+                message.append("The ").append(destinationFeature.getDescription()).append(" is slashed");
+                Feature prize = destinationFeature.damage(aLevel.getPlayer(), damage);
+                if (prize != null) {
+                    message.append(" and thorn apart!");
+                } else
+                    message.append(".");
+                aLevel.addMessage(message.toString());
+            }
 
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-			message = new StringBuffer();
-			if (targetMonster != null) {
-				message.append("The ").append(targetMonster.getDescription()).append(" is slashed");
-				// targetMonster.damage(player.getWhipLevel());
-				targetMonster.damage(message, damage);
-				if (targetMonster.isDead()) {
-					message.append(" apart!");
-					performer.getLevel().removeMonster(targetMonster);
-				} else {
-					message.append(".");
-				}
-				if (targetMonster.wasSeen())
-					aLevel.addMessage(message.toString());
-			}
-		}
+            Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+            message = new StringBuilder();
+            if (targetMonster != null) {
+                message.append("The ").append(targetMonster.getDescription()).append(" is slashed");
+                // targetMonster.damage(player.getWhipLevel());
+                targetMonster.damage(message, damage);
+                if (targetMonster.isDead()) {
+                    message.append(" apart!");
+                    performer.getLevel().removeMonster(targetMonster);
+                } else {
+                    message.append(".");
+                }
+                if (targetMonster.wasSeen())
+                    aLevel.addMessage(message.toString());
+            }
+        }
 	}
 
 	@Override
 	public int getCost() {
 		Player p = (Player) performer;
-		return (25 / (p.getShotLevel() + 1));
+		return 25 / (p.getShotLevel() + 1);
 	}
 
 	@Override

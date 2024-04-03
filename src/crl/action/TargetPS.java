@@ -10,6 +10,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class TargetPS extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	private Player player;
 	private Item weapon;
 	private int reloadTime;

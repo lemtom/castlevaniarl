@@ -1,18 +1,16 @@
 package crl.ui.graphicsUI.components;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-
 public class GFXButton extends JPanel implements MouseListener {
+	private static final long serialVersionUID = 1L;
+
 	private Image imgActivado;
 	private Image imgDesactivado;
 	private Image imgHover;
@@ -79,9 +77,9 @@ public class GFXButton extends JPanel implements MouseListener {
 	}
 
 	private void fireActionEvent() {
-        for (ActionListener element : objListeners) {
-            element.actionPerformed(new ActionEvent(this, 1, ""));
-        }
+		for (ActionListener element : objListeners) {
+			element.actionPerformed(new ActionEvent(this, 1, ""));
+		}
 	}
 
 	public void mouseClicked(MouseEvent e) {

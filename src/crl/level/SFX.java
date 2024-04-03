@@ -3,7 +3,8 @@ package crl.level;
 import crl.action.*;
 import crl.ui.effects.*;
 
-public class SFX extends Action{
+public class SFX extends Action {
+private static final long serialVersionUID = 1L;
 	private static SFX singleton = new SFX();
 	public String getID(){
 		return "SFX";

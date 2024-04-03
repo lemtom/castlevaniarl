@@ -1,8 +1,8 @@
 package crl.ai;
 
-import java.util.HashMap;
-
 import sz.util.Debug;
+
+import java.util.HashMap;
 
 public class SelectorFactory {
 	private static final SelectorFactory singleton = new SelectorFactory();
@@ -24,6 +24,7 @@ public class SelectorFactory {
 	}
 
 	public ActionSelector createSelector(String id) {
+	
 		ActionSelector ret = (definitions.get(id)).derive();
 		Debug.doAssert(ret != null, "Tried to create an invalid " + id + " ActionSelector" + " " + this);
 		return ret;

@@ -3,7 +3,8 @@ package crl.player.advancements.vkiller;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvItemBreak extends Advancement{
+public class AdvItemBreak extends Advancement {
+private static final long serialVersionUID = 1L;
 	public String getName(){
 		return "Item Break";
 	}

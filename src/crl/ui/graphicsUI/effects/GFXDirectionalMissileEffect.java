@@ -1,12 +1,12 @@
 package crl.ui.graphicsUI.effects;
 
-import java.awt.Image;
-
-import sz.util.Position;
 import crl.action.Action;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import sz.util.Position;
+
+import java.awt.*;
 
 public class GFXDirectionalMissileEffect extends GFXDirectedEffect {
 	private Image[] missile;
@@ -89,18 +89,8 @@ public class GFXDirectionalMissileEffect extends GFXDirectedEffect {
 			animationPause();
 			si.restore();
 		}
-		
-		/*
-		for (int i = 0; i < depth; i++){
-			ui.drawImageVP(next.x(), next.y(), icon);
-			si.refresh();
-			animationPause();
-			si.restore();
-			for (int j = 0; j < 2; j++, i++   )
-				next = effectLine.next();
-		}
-		setAnimationDelay(animationDelay * 36);*/
-	}
+
+    }
 
 	public GFXDirectionalMissileEffect(String ID, Image[] missile, int delay, GFXConfiguration configuration){
 		super(ID, delay, configuration);

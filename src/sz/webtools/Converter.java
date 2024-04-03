@@ -1,11 +1,11 @@
 package sz.webtools;
 
+import sz.util.FileUtil;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-
-import sz.util.FileUtil;
 
 public class Converter {
 	public static void main (String[] args){

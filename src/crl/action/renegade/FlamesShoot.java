@@ -3,7 +3,8 @@ package crl.action.renegade;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
-public class FlamesShoot extends BeamProjectileSkill{
+public class FlamesShoot extends BeamProjectileSkill {
+private static final long serialVersionUID = 1L;
 	
 	public int getDamage() {
 		return 15+getPlayer().getSoulPower()*2;

@@ -3,7 +3,8 @@ package crl.action;
 import crl.actor.Actor;
 import crl.player.Player;
 
-public class Unequip extends Action{
+public class Unequip extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "Unequip";
 	}

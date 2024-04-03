@@ -1,19 +1,15 @@
 package crl.ai.monster;
 
-import sz.util.OutParameter;
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.ActionFactory;
-import crl.action.monster.MonsterCharge;
-import crl.action.monster.MonsterMissile;
-import crl.action.monster.MonsterWalk;
-import crl.action.monster.SummonMonster;
-import crl.action.monster.Swim;
+import crl.action.monster.*;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
 import crl.player.Consts;
+import sz.util.OutParameter;
+import sz.util.Position;
+import sz.util.Util;
 
 /**
  * Multifunctional AI Module
@@ -22,6 +18,7 @@ import crl.player.Consts;
  *
  */
 public class BasicMonsterAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 	// AI Parameters
 	/**
 	 * Defines if the monster never moves
@@ -66,6 +63,7 @@ public class BasicMonsterAI extends MonsterAI {
 	/**
 	 * Selects an action to perform
 	 */
+	
 	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster) who;
 
@@ -273,11 +271,8 @@ public class BasicMonsterAI extends MonsterAI {
 
 	/**
 	 * Defines if a monster can walk toward a direction
-	 * 
-	 * @param aMonster
-	 * @param direction
-	 * @return
-	 */
+	 *
+     */
 	private boolean canWalkTowards(Monster aMonster, int direction) {
 		Position destination = Position.add(aMonster.getPosition(), Action.directionToVariation(direction));
 		if (!aMonster.getLevel().isValidCoordinate(destination))
@@ -286,16 +281,10 @@ public class BasicMonsterAI extends MonsterAI {
 			return false;
 		}
 		if (aMonster.getLevel().isAir(destination)) {
-			if (aMonster.isEthereal() || aMonster.isFlying())
-				return true;
-			else
-				return false;
+            return aMonster.isEthereal() || aMonster.isFlying();
 		}
 		if (!aMonster.getLevel().isWalkable(destination)) {
-			if (aMonster.isEthereal())
-				return true;
-			else
-				return false;
+            return aMonster.isEthereal();
 		} else
 			return true;
 	}

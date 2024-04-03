@@ -1,16 +1,17 @@
 package crl.ai.player;
 
 
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.Attack;
 import crl.action.Walk;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.player.Player;
+import sz.util.Position;
+import sz.util.Util;
 
-public class WildMorphAI implements ActionSelector{
+public class WildMorphAI implements ActionSelector {
+private static final long serialVersionUID = 1L;
 	public Action selectAction(Actor who){
 		Player aPlayer = (Player) who;
 		if (aPlayer.getEnemy() != null){

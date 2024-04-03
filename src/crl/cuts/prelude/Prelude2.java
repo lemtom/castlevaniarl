@@ -11,14 +11,17 @@ import crl.ui.Display;
 
 public class Prelude2 extends Unleasher {
 
+	private static final long serialVersionUID = 1L;
+
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA");
-		int distance = Position.distance(dracula.getPosition(), game.getPlayer().getPosition()); 
-		if (distance > 3 && !((DraculaAI)dracula.getSelector()).isOnBattle())
+		int distance = Position.distance(dracula.getPosition(), game.getPlayer().getPosition());
+		if (distance > 3 && !((DraculaAI) dracula.getSelector()).isOnBattle())
 			return;
 		Display.thus.showChat("PRELUDE_DRACULA1", game);
-		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance("DRACULA_THRONE2_X"));
-		((DraculaAI)dracula.getSelector()).setOnBattle(true);
+		level.getMapCell(level.getExitFor("#DRACPOS"))
+				.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance("DRACULA_THRONE2_X"));
+		((DraculaAI) dracula.getSelector()).setOnBattle(true);
 		dracula.setVisible(true);
 		enabled = false;
 	}

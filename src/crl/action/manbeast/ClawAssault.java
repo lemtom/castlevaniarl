@@ -3,6 +3,7 @@ package crl.action.manbeast;
 import crl.action.ProjectileSkill;
 
 public class ClawAssault extends ProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public int getDamage() {
 		return 15 + getPlayer().getPunchDamage() * 2;
 	}

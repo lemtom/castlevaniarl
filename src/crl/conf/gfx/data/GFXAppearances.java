@@ -1,11 +1,11 @@
 package crl.conf.gfx.data;
-import java.awt.image.BufferedImage;
-
-import sz.util.ImageUtils;
 
 import crl.game.Game;
-import crl.ui.*;
-import crl.ui.graphicsUI.*;
+import crl.ui.Appearance;
+import crl.ui.graphicsUI.GFXAppearance;
+import sz.util.ImageUtils;
+
+import java.awt.image.BufferedImage;
 
 public class GFXAppearances {
 	private int WIDTH_BIG;
@@ -24,7 +24,7 @@ public class GFXAppearances {
 		WIDTH_BIG = configuration.getBigTileWidth();
 		WIDTH_HALF = configuration.getHalfTileWidth();
 		UI_SCALE = configuration.getViewportUserInterfaceScale();
-		WIDTH_QUARTER = (int) Math.floor(configuration.getHalfTileWidth() / 2);
+		WIDTH_QUARTER = (int) (double) (configuration.getHalfTileWidth() / 2);
 		CELL_HEIGHT = configuration.getCellHeight();
 		WIDTH_NORMAL = configuration.getNormalTileWidth();
 		

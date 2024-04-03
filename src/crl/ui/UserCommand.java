@@ -1,7 +1,8 @@
 package crl.ui;
 
+/** Links a Command with a KeyCode with which it is triggered */
 public class UserCommand implements java.io.Serializable {
-	/** Links a Command with a KeyCode with which it is triggered*/
+	private static final long serialVersionUID = 1L;
 	private int keyCode;
 	private int command;
 
@@ -10,7 +11,7 @@ public class UserCommand implements java.io.Serializable {
 	}
 
 	private void setKeyCode(int value) {
-		if (value<0 || value > 115)
+		if (value < 0 || value > 115)
 			keyCode = 0;
 		else
 			keyCode = value;
@@ -20,7 +21,7 @@ public class UserCommand implements java.io.Serializable {
 		return command;
 	}
 
-	public UserCommand(int command, int keycode){
+	public UserCommand(int command, int keycode) {
 		this.command = command;
 		setKeyCode(keycode);
 	}

@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class ItemBreakHoly extends HeartAction{
+public class ItemBreakHoly extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 5;
 	}
@@ -33,7 +34,7 @@ public class ItemBreakHoly extends HeartAction{
 		for (int i = 0; i < monsters.size(); i++){
 			
 			if (monsters.get(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.get(i).getPosition(), performer.getPosition()) < 4){
-				StringBuffer buff = new StringBuffer();
+				StringBuilder buff = new StringBuilder();
 				if (monsters.get(i).wasSeen()) {
 					buff.append("The ").append(monsters.get(i).getDescription()).append(" is splashed with holy water!");
 				}
@@ -63,7 +64,7 @@ public class ItemBreakHoly extends HeartAction{
 				}
 				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 				if (targetMonster != null){
-					StringBuffer buff = new StringBuffer();
+					StringBuilder buff = new StringBuilder();
 					buff.append("The ").append(monsters.get(i).getDescription()).append(" is splashed with holy rain!");
 					targetMonster.damage(buff, damage);
 					aLevel.addMessage (buff.toString());
@@ -81,6 +82,7 @@ public class ItemBreakHoly extends HeartAction{
 	}
 
 	@Override
+	
 	public int getCost(){
 		Player p = (Player) performer;
 		return (25 / (p.getShotLevel()+1));

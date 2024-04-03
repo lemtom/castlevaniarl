@@ -1,7 +1,7 @@
 package crl.ui.consoleUI;
 
-import crl.ui.*;
-import sz.csi.*;
+import crl.ui.Appearance;
+import sz.csi.ConsoleSystemInterface;
 
 
 public class CharAppearance extends Appearance {

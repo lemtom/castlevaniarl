@@ -1,6 +1,6 @@
 package sz.ca;
 
-import sz.util.*;
+import sz.util.Util;
 
 public class CARandomInitializer {
 	private double [] proportions;

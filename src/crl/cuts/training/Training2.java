@@ -6,6 +6,7 @@ import crl.game.Game;
 import crl.level.Level;
 
 public class Training2 extends Unleasher {
+private static final long serialVersionUID = 1L;
 	public void unleash(Level level, Game game){
 		Position x = level.getExitFor("#END");
 		if (level.getPlayer().getPosition().equals(x)){

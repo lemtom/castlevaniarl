@@ -8,7 +8,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.MonsterFactory;
 
-public class SummonMonster extends Action{
+public class SummonMonster extends Action {
+private static final long serialVersionUID = 1L;
 	private String monsterId;
 	private String actionMessage;
 	

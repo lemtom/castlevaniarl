@@ -7,7 +7,8 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.MonsterFactory;
 
-public class UnleashSickles extends Action{
+public class UnleashSickles extends Action {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "UNLEASH_SICKLES";
 	}

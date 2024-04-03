@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class EnergyScythe extends HeartAction{
+public class EnergyScythe extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 5;
 	}
@@ -96,7 +97,7 @@ public class EnergyScythe extends HeartAction{
 	}
 	
 	private boolean hit (Position destinationPoint, int damage){
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
         //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));

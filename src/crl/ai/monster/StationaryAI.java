@@ -1,14 +1,15 @@
 package crl.ai.monster;
 
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.ActionFactory;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
+import sz.util.Position;
+import sz.util.Util;
 
 public class StationaryAI extends MonsterAI {
+private static final long serialVersionUID = 1L;
 
 	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster) who;

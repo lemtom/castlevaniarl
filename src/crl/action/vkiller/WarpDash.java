@@ -9,7 +9,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class WarpDash extends HeartAction{
+public class WarpDash extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 3;
 	}

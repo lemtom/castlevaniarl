@@ -9,7 +9,8 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class ItemBreakSacredFist extends BeamProjectileSkill{
+public class ItemBreakSacredFist extends BeamProjectileSkill {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 		return "ItemBreakSacredFist";
 	}

@@ -6,19 +6,21 @@ import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
 import crl.action.*;
 
-public class Skill implements MenuItem, GFXMenuItem{
+public class Skill implements MenuItem, GFXMenuItem {
+	private static final long serialVersionUID = 1L;
+
 	private Action action;
 	private int heartCost;
 	private String actionDescription;
 	private boolean symbolic;
 
-	public Skill(String pActionDescription, Action pAction, int pHeartCost){
+	public Skill(String pActionDescription, Action pAction, int pHeartCost) {
 		actionDescription = pActionDescription;
 		action = pAction;
 		heartCost = pHeartCost;
 	}
-	
-	public Skill(String pActionDescription){
+
+	public Skill(String pActionDescription) {
 		actionDescription = pActionDescription;
 		symbolic = true;
 	}
@@ -27,20 +29,19 @@ public class Skill implements MenuItem, GFXMenuItem{
 		return action;
 	}
 
-
-	public String getMenuDescription(){
+	public String getMenuDescription() {
 		if (isSymbolic())
 			return actionDescription;
 		else
-			return actionDescription + " ("+ heartCost+")";
+			return actionDescription + " (" + heartCost + ")";
 	}
 
-	/*Unsafe, Coupled*/
+	/* Unsafe, Coupled */
 	public char getMenuChar() {
 		return ' ';
 	}
-	
-	/*Unsafe, Coupled*/
+
+	/* Unsafe, Coupled */
 	public int getMenuColor() {
 		return 0;
 	}
@@ -48,7 +49,7 @@ public class Skill implements MenuItem, GFXMenuItem{
 	public boolean isSymbolic() {
 		return symbolic;
 	}
-	
+
 	public Image getMenuImage() {
 		return null;
 	}

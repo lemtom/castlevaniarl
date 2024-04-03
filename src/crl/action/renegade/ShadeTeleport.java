@@ -9,67 +9,68 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class ShadeTeleport extends HeartAction{
-	public String getID(){
+public class ShadeTeleport extends HeartAction {
+
+	private static final long serialVersionUID = 1L;
+
+	public String getID() {
 		return "ShadeTeleport";
 	}
-	
+
 	public int getHeartCost() {
 		return 5;
 	}
-	
+
 	@Override
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
 	@Override
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to blink?";
 	}
 
 	@Override
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player player = (Player) performer;
 		Level level = player.getLevel();
 		level.addMessage("You wrap in your cape and dissapear!");
-		if (targetPosition.equals(performer.getPosition())){
-        	level.addMessage("You appear in the same place!");
-        	return;
-        }
+		if (targetPosition.equals(performer.getPosition())) {
+			level.addMessage("You appear in the same place!");
+			return;
+		}
 
-		//crl.ui.effects.FlashEffect x = new FlashEffect(player.getPosition(), Appearance.GRAY);
-		Line line = new Line(player.getPosition(), targetPosition);
+        Line line = new Line(player.getPosition(), targetPosition);
 		Position runner = line.next();
 		int i = 0;
-		for (; i < 8; i++){
+		for (; i < 8; i++) {
 			runner = line.next();
-        	Cell destinationCell = performer.getLevel().getMapCell(runner);
-			if (
-				level.isWalkable(runner) &&	
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 
-			)
+			Cell destinationCell = performer.getLevel().getMapCell(runner);
+			if (level.isWalkable(runner)
+					&& destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight())
 				;
 			else
 				break;
 		}
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(player.getPosition(), targetPosition, "SFX_SHADETELEPORT", i));
-		
+		drawEffect(EffectFactory.getSingleton().createDirectedEffect(player.getPosition(), targetPosition,
+				"SFX_SHADETELEPORT", i));
+
 		player.setPosition(new Position(runner));
 		player.see();
 		UserInterface.getUI().refresh();
-		
+
 	}
 
 	@Override
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.4);
+		return (int) (p.getCastCost() * 1.4);
 	}
-	
+
 	@Override
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
 }

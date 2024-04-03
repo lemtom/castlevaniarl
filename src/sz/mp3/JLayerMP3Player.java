@@ -1,12 +1,11 @@
 package sz.mp3;
 
-import java.io.File;
-
-import java.io.IOException;
-import java.nio.file.Files;
-
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class JLayerMP3Player implements Runnable {
 	private static String currentMP3File = "__noneYet";

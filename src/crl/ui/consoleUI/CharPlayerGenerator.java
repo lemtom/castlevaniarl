@@ -1,12 +1,12 @@
 package crl.ui.consoleUI;
 
-import sz.csi.CharKey;
-import sz.csi.ConsoleSystemInterface;
-import sz.csi.textcomponents.TextBox;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
 import crl.ui.AppearanceFactory;
 import crl.ui.Display;
+import sz.csi.CharKey;
+import sz.csi.ConsoleSystemInterface;
+import sz.csi.textcomponents.TextBox;
 
 public class CharPlayerGenerator extends PlayerGenerator{
 	public CharPlayerGenerator(ConsoleSystemInterface si){

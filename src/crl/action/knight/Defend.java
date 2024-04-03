@@ -5,6 +5,7 @@ import crl.action.HeartAction;
 import crl.actor.Actor;
 
 public class Defend extends HeartAction {
+private static final long serialVersionUID = 1L;
 	public int getHeartCost() {
 		return 1;
 	}

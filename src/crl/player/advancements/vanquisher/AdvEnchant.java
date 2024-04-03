@@ -3,11 +3,14 @@ package crl.player.advancements.vanquisher;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 
-public class AdvEnchant extends Advancement{
-	public String getName(){
+public class AdvEnchant extends Advancement {
+
+	private static final long serialVersionUID = 1L;
+
+	public String getName() {
 		return "Weapon Enchantment";
 	}
-	
+
 	public void advance(Player p) {
 		p.setFlag("SKILL_ENCHANT", true);
 		p.setFlag(getID(), true);
@@ -17,12 +20,13 @@ public class AdvEnchant extends Advancement{
 		return "ADV_ENCHANT";
 	}
 
-	public String[] requirements = new String[]{};
+	public String[] requirements = new String[] {};
+
 	public String[] getRequirements() {
 		return requirements;
 	}
 
-	public String getDescription(){
+	public String getDescription() {
 		return "Covers weapons in a blue aura";
 	}
 }

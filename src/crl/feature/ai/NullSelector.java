@@ -4,7 +4,8 @@ import crl.action.*;
 import crl.ai.*;
 import crl.actor.*;
 
-public class NullSelector implements ActionSelector, Cloneable{
+public class NullSelector implements ActionSelector, Cloneable {
+private static final long serialVersionUID = 1L;
 	public String getID(){
 	     return "NULL_SELECTOR";
 	}

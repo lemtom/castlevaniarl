@@ -1,7 +1,5 @@
 package crl.ai.monster.boss;
 
-import sz.util.Position;
-import sz.util.Util;
 import crl.action.Action;
 import crl.action.monster.boss.Materialize;
 import crl.action.monster.boss.ShadowExtinction;
@@ -13,8 +11,11 @@ import crl.ai.monster.MonsterAI;
 import crl.game.SFXManager;
 import crl.monster.Monster;
 import crl.player.Player;
+import sz.util.Position;
+import sz.util.Util;
 
 public class DraculaAI extends MonsterAI {
+	private static final long serialVersionUID = 1L;
 	private int vanishCounter = 3;
 	private int appearCounter = 0;
 	private boolean onBattle;
@@ -94,8 +95,8 @@ public class DraculaAI extends MonsterAI {
 	private boolean playerOnLine(Monster me) {
 		Position mePosition = me.getPosition();
 		Position pPosition = me.getLevel().getPlayer().getPosition();
-		return (pPosition.x == mePosition.x || pPosition.x == mePosition.x - 1 || pPosition.x == mePosition.x + 1
-				|| pPosition.y == mePosition.y || pPosition.y == mePosition.y - 1 || pPosition.y == mePosition.y + 1);
+		return pPosition.x == mePosition.x || pPosition.x == mePosition.x - 1 || pPosition.x == mePosition.x + 1
+				|| pPosition.y == mePosition.y || pPosition.y == mePosition.y - 1 || pPosition.y == mePosition.y + 1;
 	}
 
 	private int starePlayer(Monster me) {
