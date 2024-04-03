@@ -1,12 +1,14 @@
 package crl;
 
+import static crl.Helper.i;
+import static crl.Helper.readKeyString;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
@@ -16,44 +18,18 @@ import java.util.Properties;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
-import sz.csi.CharKey;
+import sz.SystemInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.jcurses.JCursesConsoleInterface;
 import sz.csi.wswing.WSwingConsoleInterface;
 import sz.midi.STMidiPlayer;
 
 import crl.action.*;
-import crl.action.monster.*;
-import crl.action.monster.boss.*;
-import crl.ai.ActionSelector;
-import crl.ai.SelectorFactory;
-import crl.ai.monster.BasicMonsterAI;
-import crl.ai.monster.RangedAI;
-import crl.ai.monster.UnderwaterAI;
-import crl.ai.monster.WanderToPlayerAI;
-import crl.ai.npc.PriestAI;
-import crl.ai.npc.VillagerAI;
-import crl.ai.player.WildMorphAI;
-import crl.conf.console.data.CharAppearances;
 import crl.conf.console.data.CharCuts;
 import crl.conf.console.data.CharEffects;
-import crl.conf.gfx.data.GFXAppearances;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.conf.gfx.data.GFXCuts;
 import crl.conf.gfx.data.GFXEffects;
-import crl.data.Cells;
-import crl.data.Features;
-import crl.data.Items;
-import crl.data.MonsterLoader;
-import crl.data.NPCs;
-import crl.data.SmartFeatures;
-import crl.feature.CountDown;
-import crl.feature.FeatureFactory;
-import crl.feature.SmartFeatureFactory;
-import crl.feature.ai.BlastCrystalAI;
-import crl.feature.ai.CrossAI;
-import crl.feature.ai.FlameAI;
-import crl.feature.ai.NullSelector;
 import crl.game.CRLException;
 import crl.game.Game;
 import crl.game.GameFiles;
@@ -62,14 +38,7 @@ import crl.game.MonsterRecord;
 import crl.game.PlayerGenerator;
 import crl.game.SFXManager;
 import crl.game.STMusicManagerNew;
-import crl.item.ItemFactory;
-import crl.level.MapCellFactory;
-import crl.monster.MonsterFactory;
-import crl.npc.NPCDefinition;
-import crl.npc.NPCFactory;
 import crl.player.Player;
-import crl.ui.Appearance;
-import crl.ui.AppearanceFactory;
 import crl.ui.CommandListener;
 import crl.ui.Display;
 import crl.ui.UISelector;
@@ -81,6 +50,7 @@ import crl.ui.consoleUI.CharPlayerGenerator;
 import crl.ui.consoleUI.ConsoleUISelector;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import crl.ui.consoleUI.effects.CharEffectFactory;
+import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 import crl.ui.graphicsUI.GFXDisplay;
 import crl.ui.graphicsUI.GFXPlayerGenerator;
@@ -93,7 +63,6 @@ public class Main {
 	private static final int JCURSES_CONSOLE = 0;
 	private static final int SWING_GFX = 1;
 	private static final int SWING_CONSOLE = 2;
-	// private static SystemInterface si;
 	private static UserInterface ui;
 	private static UISelector uiSelector;
 
@@ -111,88 +80,7 @@ public class Main {
 			System.out.println("by slashie ~ 2005-2007, 2010, 2024");
 			System.out.println("Reading configuration");
 			readConfiguration();
-			GFXConfiguration gfx_configuration = null;
-			try {
-
-				switch (mode) {
-				case SWING_GFX:
-					gfx_configuration = new GFXConfiguration();
-					gfx_configuration.LoadConfiguration(UIconfiguration);
-					System.out.println("Initializing Graphics Appearances");
-					initializeGAppearances(gfx_configuration);
-					break;
-				case JCURSES_CONSOLE:
-				case SWING_CONSOLE:
-					System.out.println("Initializing Char Appearances");
-					initializeCAppearances();
-					break;
-				}
-				System.out.println("Initializing Action Objects");
-				initializeActions();
-				initializeSelectors();
-				System.out.println("Loading Data");
-				initializeCells();
-				initializeItems();
-				initializeMonsters();
-				initializeNPCs();
-				initializeFeatures();
-				initializeSmartFeatures();
-				switch (mode) {
-				case SWING_GFX:
-					System.out.println("Initializing Swing GFX System Interface");
-					SwingSystemInterface si = new SwingSystemInterface(gfx_configuration);
-					System.out.println("Initializing Swing GFX User Interface");
-					UserInterface.setSingleton(new GFXUserInterface(gfx_configuration));
-					GFXCuts.initializeSingleton();
-					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
-					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
-					// PlayerGenerator.thus.initSpecialPlayers();
-					EffectFactory.setSingleton(new GFXEffectFactory());
-					((GFXEffectFactory) EffectFactory.getSingleton())
-							.setEffects(new GFXEffects(gfx_configuration).getEffects());
-					ui = UserInterface.getUI();
-					initializeUI(si);
-					break;
-				case JCURSES_CONSOLE:
-					System.out.println("Initializing JCurses System Interface");
-					ConsoleSystemInterface csi = null;
-					try {
-						csi = new JCursesConsoleInterface();
-					} catch (ExceptionInInitializerError eiie) {
-						crash("Fatal Error Initializing JCurses", eiie);
-						eiie.printStackTrace();
-						System.exit(-1);
-					}
-					System.out.println("Initializing Console User Interface");
-					UserInterface.setSingleton(new ConsoleUserInterface());
-					CharCuts.initializeSingleton();
-					Display.thus = new CharDisplay(csi);
-					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					// PlayerGenerator.thus.initSpecialPlayers();
-					EffectFactory.setSingleton(new CharEffectFactory());
-					((CharEffectFactory) EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
-					ui = UserInterface.getUI();
-					initializeUI(csi);
-					break;
-				case SWING_CONSOLE:
-					System.out.println("Initializing Swing Console System Interface");
-					csi = null;
-					csi = new WSwingConsoleInterface();
-					System.out.println("Initializing Console User Interface");
-					UserInterface.setSingleton(new ConsoleUserInterface());
-					CharCuts.initializeSingleton();
-					Display.thus = new CharDisplay(csi);
-					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					// PlayerGenerator.thus.initSpecialPlayers();
-					EffectFactory.setSingleton(new CharEffectFactory());
-					((CharEffectFactory) EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
-					ui = UserInterface.getUI();
-					initializeUI(csi);
-				}
-
-			} catch (CRLException crle) {
-				crash("Error initializing", crle);
-			}
+			firstInitializations();
 			STMusicManagerNew.initManager();
 			if (configuration.getProperty("enableSound") != null
 					&& configuration.getProperty("enableSound").equals("true")) { // Sound
@@ -203,7 +91,6 @@ public class Main {
 					System.out.println("Initializing Midi Sequencer");
 					try {
 						STMidiPlayer.sequencer = MidiSystem.getSequencer();
-						// STMidiPlayer.setVolume(0.1d);
 						STMidiPlayer.sequencer.open();
 
 					} catch (MidiUnavailableException mue) {
@@ -212,59 +99,164 @@ public class Main {
 						STMusicManagerNew.thus.setEnabled(false);
 						return;
 					}
-					System.out.println("Initializing Music Manager");
-
-					Enumeration<Object> keys = configuration.keys();
-					while (keys.hasMoreElements()) {
-						String key = (String) keys.nextElement();
-						if (key.startsWith("mus_")) {
-							String music = key.substring(4);
-							STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
-						}
-					}
-					STMusicManagerNew.thus.setEnabled(true);
+					initializeMusicManager();
 				}
-                SFXManager.setEnabled(configuration.getProperty("enableSFX") != null
-                        && configuration.getProperty("enableSFX").equals("true"));
+				SFXManager.setEnabled(configuration.getProperty("enableSFX") != null
+						&& configuration.getProperty("enableSFX").equals("true"));
 			}
 			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW", "THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
 
-			try {
-				GameVersion latestVersion = GameVersion.getLatestVersion();
-				if (latestVersion == null) {
-					ui.showVersionDialog("Error checking for updates.", true);
-					System.err.println("null latest version");
-				} else if (latestVersion.equals(GameVersion.getCurrentVersion())) {
-					ui.showVersionDialog("You are using the latest available version", false);
-				} else {
-					ui.showVersionDialog("A newer version, " + latestVersion.getCode() + " from "
-							+ latestVersion.getFormattedDate() + " is available!", true);
-				}
-			} catch (IOException ex) {
-				ui.showVersionDialog("Error checking for updates.", true);
-				ex.printStackTrace();
-			}
+			checkForUpdates();
 			createNew = false;
 		}
 	}
 
+	private static void initializeMusicManager() {
+		System.out.println("Initializing Music Manager");
+
+		Enumeration<Object> keys = configuration.keys();
+		while (keys.hasMoreElements()) {
+			String key = (String) keys.nextElement();
+			if (key.startsWith("mus_")) {
+				String music = key.substring(4);
+				STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
+			}
+		}
+		STMusicManagerNew.thus.setEnabled(true);
+	}
+
+	private static void firstInitializations() {
+		GFXConfiguration gfxConfiguration = null;
+		try {
+
+			switch (mode) {
+			case SWING_GFX:
+				gfxConfiguration = new GFXConfiguration();
+				gfxConfiguration.LoadConfiguration(uiConfiguration);
+				System.out.println("Initializing Graphics Appearances");
+				Helper.initializeGAppearances(gfxConfiguration);
+				break;
+			case JCURSES_CONSOLE:
+			case SWING_CONSOLE:
+				System.out.println("Initializing Char Appearances");
+				Helper.initializeCAppearances();
+				break;
+			}
+			System.out.println("Initializing Action Objects");
+			Helper.initializeActions();
+			Helper.initializeSelectors();
+			System.out.println("Loading Data");
+			Helper.initializeCells();
+			Helper.initializeItems();
+			Helper.initializeMonsters();
+			Helper.initializeNPCs();
+			Helper.initializeFeatures();
+			Helper.initializeSmartFeatures();
+			switch (mode) {
+			case SWING_GFX:
+				initializeSwing(gfxConfiguration);
+				break;
+			case JCURSES_CONSOLE:
+				initializeJcursesConsole();
+				break;
+			case SWING_CONSOLE:
+				initializeSwingConsole();
+			}
+
+		} catch (CRLException crle) {
+			crash("Error initializing", crle);
+		}
+	}
+
+	private static void checkForUpdates() {
+		try {
+			GameVersion latestVersion = GameVersion.getLatestVersion();
+			if (latestVersion == null) {
+				ui.showVersionDialog("Error checking for updates.", true);
+				System.err.println("null latest version");
+			} else if (latestVersion.equals(GameVersion.getCurrentVersion())) {
+				ui.showVersionDialog("You are using the latest available version", false);
+			} else {
+				ui.showVersionDialog("A newer version, " + latestVersion.getCode() + " from "
+						+ latestVersion.getFormattedDate() + " is available!", true);
+			}
+		} catch (IOException ex) {
+			ui.showVersionDialog("Error checking for updates.", true);
+			ex.printStackTrace();
+		}
+	}
+
+	private static void initializeJcursesConsole() {
+		System.out.println("Initializing JCurses System Interface");
+		initializeConsole(setJcursesCsi());
+	}
+
+	private static void initializeSwingConsole() {
+		System.out.println("Initializing Swing Console System Interface");
+		initializeConsole(new WSwingConsoleInterface());
+	}
+
+	private static void initializeConsole(ConsoleSystemInterface csi) {
+		System.out.println("Initializing Console User Interface");
+		UserInterface.setSingleton(new ConsoleUserInterface());
+		CharCuts.initializeSingleton();
+		setGenerators(csi, new CharDisplay(csi), new CharPlayerGenerator(csi), new CharEffects().getEffects(), false);
+	}
+
+	private static void initializeSwing(GFXConfiguration gfxConfiguration) {
+		System.out.println("Initializing Swing GFX System Interface");
+		SwingSystemInterface si = new SwingSystemInterface(gfxConfiguration);
+		System.out.println("Initializing Swing GFX User Interface");
+		UserInterface.setSingleton(new GFXUserInterface(gfxConfiguration));
+		GFXCuts.initializeSingleton();
+		setGenerators(si, new GFXDisplay(si, uiConfiguration, gfxConfiguration),
+				new GFXPlayerGenerator(si, gfxConfiguration), new GFXEffects(gfxConfiguration).getEffects(), true);
+	}
+
+	private static void setGenerators(SystemInterface si, Display display, PlayerGenerator playerGenerator,
+			Effect[] effects, boolean isGraphical) {
+		Display.thus = display;
+		PlayerGenerator.thus = playerGenerator;
+		if (isGraphical) {
+			EffectFactory.setSingleton(new GFXEffectFactory());
+			((GFXEffectFactory) EffectFactory.getSingleton()).setEffects(effects);
+		} else {
+			EffectFactory.setSingleton(new CharEffectFactory());
+			((CharEffectFactory) EffectFactory.getSingleton()).setEffects(effects);
+		}
+		ui = UserInterface.getUI();
+		initializeUI(si);
+	}
+
+	private static ConsoleSystemInterface setJcursesCsi() {
+		ConsoleSystemInterface csi = null;
+		try {
+			csi = new JCursesConsoleInterface();
+		} catch (ExceptionInInitializerError eiie) {
+			crash("Fatal Error Initializing JCurses", eiie);
+			eiie.printStackTrace();
+			System.exit(-1);
+		}
+		return csi;
+	}
+
 	private static Properties configuration;
-	private static Properties UIconfiguration;
+	private static Properties uiConfiguration;
 	private static String uiFile;
 
 	private static void readConfiguration() {
 		configuration = new Properties();
-		try {
-			configuration.load(Files.newInputStream(Paths.get("cvrl.cfg")));
+		try (InputStream newInputStream = Files.newInputStream(Paths.get("cvrl.cfg"))) {
+			configuration.load(newInputStream);
 		} catch (IOException e) {
 			System.out.println("Error loading configuration file, please confirm existence of cvrl.cfg");
 			System.exit(-1);
 		}
 
 		if (mode == SWING_GFX) {
-			UIconfiguration = new Properties();
-			try {
-				UIconfiguration.load(Files.newInputStream(Paths.get(uiFile)));
+			uiConfiguration = new Properties();
+			try (InputStream newInputStream = Files.newInputStream(Paths.get(uiFile))) {
+				uiConfiguration.load(newInputStream);
 			} catch (IOException e) {
 				System.out.println("Error loading configuration file, please confirm existence of " + uiFile);
 				System.exit(-1);
@@ -315,7 +307,6 @@ public class Main {
 		currentGame = new Game();
 		currentGame.setCanSave(false);
 		currentGame.setInterfaces(ui, uiSelector);
-		// si.cls();
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.prologue();
 		title();
@@ -329,7 +320,6 @@ public class Main {
 		currentGame.setCanSave(false);
 		currentGame.setInterfaces(ui, uiSelector);
 		setMonsterRecord(GameFiles.getMonsterRecord());
-		// si.cls();
 		currentGame.arena();
 		title();
 	}
@@ -341,7 +331,6 @@ public class Main {
 		currentGame = new Game();
 		currentGame.setCanSave(false);
 		currentGame.setInterfaces(ui, uiSelector);
-		// si.cls();
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.training();
 		title();
@@ -354,12 +343,9 @@ public class Main {
 		int index = Display.thus.showSavedGames(saves);
 		if (index == -1)
 			title();
-		try {
-			ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(saves[index].toPath()));
+		try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(saves[index].toPath()))) {
 			currentGame = (Game) ois.readObject();
-			ois.close();
 		} catch (IOException ioe) {
-
 			ioe.printStackTrace();
 		} catch (ClassNotFoundException cnfe) {
 			crash("Invalid savefile or wrong version", new CRLException("Invalid savefile or wrong version"));
@@ -408,9 +394,10 @@ public class Main {
 		UserAction[] userActions = null;
 		UserCommand[] userCommands = null;
 		Properties keyBindings = null;
-		try {
+		try (FileInputStream inStream = new FileInputStream("keys.cfg")) {
 			Properties keyConfig = new Properties();
-			keyConfig.load(new FileInputStream("keys.cfg"));
+
+			keyConfig.load(inStream);
 
 			keyBindings = new Properties();
 			keyBindings.put("WEAPON_KEY", readKeyString(keyConfig, "weapon"));
@@ -508,7 +495,7 @@ public class Main {
 		case SWING_GFX:
 			((GFXUserInterface) ui).init((SwingSystemInterface) si, userCommands, target);
 			uiSelector = new GFXUISelector();
-			((GFXUISelector) uiSelector).init((SwingSystemInterface) si, userActions, UIconfiguration, walkAction,
+			((GFXUISelector) uiSelector).init((SwingSystemInterface) si, userActions, uiConfiguration, walkAction,
 					target, attack, (GFXUserInterface) ui, keyBindings);
 			break;
 		case JCURSES_CONSOLE:
@@ -518,28 +505,7 @@ public class Main {
 					(ConsoleUserInterface) ui, keyBindings);
 			break;
 		case SWING_CONSOLE:
-            break;
-		}
-	}
-
-	private static int i(String s) {
-		return Integer.parseInt(s);
-	}
-
-	private static String readKeyString(Properties config, String keyName) {
-		return readKey(config, keyName) + "";
-	}
-
-	private static int readKey(Properties config, String keyName) {
-		String fieldName = config.getProperty(keyName).trim();
-		if (fieldName == null)
-			throw new RuntimeException("Invalid key.cfg file, property not found: " + keyName);
-		try {
-			Field field = CharKey.class.getField(fieldName);
-			return field.getInt(CharKey.class);
-		} catch (SecurityException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error reading field : " + fieldName);
+			break;
 		}
 	}
 
@@ -574,72 +540,6 @@ public class Main {
 		}
 	}
 
-	private static void initializeGAppearances(GFXConfiguration gfx_configuration) {
-		Appearance[] definitions = new GFXAppearances(gfx_configuration).getAppearances();
-		for (Appearance definition : definitions) {
-			AppearanceFactory.getAppearanceFactory().addDefinition(definition);
-		}
-	}
-
-	private static void initializeCAppearances() {
-		Appearance[] definitions = new CharAppearances().getAppearances();
-		for (Appearance definition : definitions) {
-			AppearanceFactory.getAppearanceFactory().addDefinition(definition);
-		}
-	}
-
-	private static void initializeActions() {
-		ActionFactory af = ActionFactory.getActionFactory();
-		Action[] definitions = new Action[] { new Dash(), new MonsterWalk(), new Swim(), new MonsterCharge(),
-				new MonsterMissile(), new SummonMonster(), new MummyStrangle(), new MummyTeleport(), new Teleport(),
-				new MandragoraScream() };
-		for (Action definition : definitions)
-			af.addDefinition(definition);
-	}
-
-	private static void initializeCells() {
-		MapCellFactory.getMapCellFactory().init(Cells.getCellDefinitions(AppearanceFactory.getAppearanceFactory()));
-	}
-
-	private static void initializeFeatures() {
-		FeatureFactory.getFactory().init(Features.getFeatureDefinitions(AppearanceFactory.getAppearanceFactory()));
-	}
-
-	private static void initializeSelectors() {
-		ActionSelector[] definitions = getSelectorDefinitions();
-		for (ActionSelector definition : definitions) {
-			SelectorFactory.getSelectorFactory().addDefinition(definition);
-		}
-	}
-
-	private static void initializeMonsters() throws CRLException {
-
-		MonsterFactory.getFactory()
-				.init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv", "data/monsters.exml"));
-	}
-
-	private static void initializeNPCs() {
-		NPCDefinition[] definitions = NPCs.getNPCDefinitions();
-		NPCFactory npcf = NPCFactory.getFactory();
-		for (NPCDefinition definition : definitions) {
-			npcf.addDefinition(definition);
-		}
-	}
-
-	private static void initializeItems() {
-		ItemFactory.getItemFactory().init(Items.getItemDefinitions());
-	}
-
-	private static void initializeSmartFeatures() {
-		SmartFeatureFactory.getFactory().init(SmartFeatures.getSmartFeatures(SelectorFactory.getSelectorFactory()));
-	}
-
-	private static ActionSelector[] getSelectorDefinitions() {
-		return new ActionSelector[] { new WanderToPlayerAI(), new UnderwaterAI(), new RangedAI(), new FlameAI(),
-				new CrossAI(), new BlastCrystalAI(), new CountDown(), new VillagerAI(), new PriestAI(),
-				new NullSelector(), new BasicMonsterAI(), new WildMorphAI() };
-	}
-
 	public static void crash(String message, Throwable exception) {
 		System.out.println("CastlevaniaRL " + Game.getVersion() + ": Error");
 		System.out.println();
@@ -664,15 +564,6 @@ public class Main {
 
 	public static Map<String, MonsterRecord> getMonsterRecord() {
 		return monsterRecord;
-	}
-
-}
-
-class SaveGameFilenameFilter implements FilenameFilter {
-
-	public boolean accept(File arg0, String arg1) {
-		// if (arg0.getName().endsWith(".sav"))
-        return arg1.endsWith(".sav");
 	}
 
 }

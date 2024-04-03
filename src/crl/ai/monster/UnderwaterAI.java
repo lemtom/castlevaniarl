@@ -13,65 +13,74 @@ import sz.util.Position;
 import sz.util.Util;
 
 public class UnderwaterAI extends MonsterAI {
-private static final long serialVersionUID = 1L;
-	/** Dwells in the water swimming until he spots the player, swims to him
-	 * and Jumps out of the water. walks to it and fires */
-	public Action selectAction(Actor who){
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Dwells in the water swimming until he spots the player, swims to him and
+	 * Jumps out of the water. walks to it and fires
+	 */
+	public Action selectAction(Actor who) {
 		Debug.doAssert(who instanceof Monster, "Underwater AI selectAction");
 		Monster aMonster = (Monster) who;
 		Player aPlayer = who.getLevel().getPlayer();
 		int directionToPlayer = aMonster.starePlayer();
-		if (directionToPlayer == -1){
-			//The player is somewhere
-			if (!aMonster.waitsPlayer()){
-				int direction = Util.rand(0,7);
-				if (aMonster.isInWater()){
-			     	Action ret = new Swim();
-			     	ret.setDirection(direction);
-			     	return ret;
-				} else {
-                    Action ret = new MonsterWalk();
-			     	ret.setDirection(direction);
-			     	return ret;
-				}
-			} else
-				return null;
+		if (directionToPlayer == -1) {
+			return playerIsSomewhere(aMonster);
 		} else {
-            if (rangedAttacks != null){
-				int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
-				//Try to attack
-                for (RangedAttack ra : rangedAttacks) {
-                    if (distanceToPlayer <= ra.getRange())
-                        if (Util.chance(ra.getFrequency())) {
-                            Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
-                            ret.setDirection(directionToPlayer);
-                            return ret;
-                        }
-                }
+			if (rangedAttacks != null) {
+				int distanceToPlayer = Position.flatDistance(aMonster.getPosition(),
+						aMonster.getLevel().getPlayer().getPosition());
+				// Try to attack
+				for (RangedAttack ra : rangedAttacks) {
+					if (distanceToPlayer <= ra.getRange() && Util.chance(ra.getFrequency())) {
+						Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
+						ret.setDirection(directionToPlayer);
+						return ret;
+					}
+				}
 			}
-			//COuldnt attack... walk or swim to the player
-			if (aMonster.isInWater()){
-                Action ret = new Swim();
-	            ret.setDirection(directionToPlayer);
-		     	return ret;
+			// COuldnt attack... walk or swim to the player
+			if (aMonster.isInWater()) {
+				Action ret = new Swim();
+				ret.setDirection(directionToPlayer);
+				return ret;
 			} else {
 				Action ret = new MonsterWalk();
-	            ret.setDirection(directionToPlayer);
-		     	return ret;
+				ret.setDirection(directionToPlayer);
+				return ret;
 			}
 		}
-	 }
+	}
 
-	 public String getID(){
-		 return "UNDERWATER";
-	 }
+	/**
+	 * The player is somewhere.
+	 */
+	private Action playerIsSomewhere(Monster aMonster) {
+		if (!aMonster.waitsPlayer()) {
+			int direction = Util.rand(0, 7);
+			if (aMonster.isInWater()) {
+				Action ret = new Swim();
+				ret.setDirection(direction);
+				return ret;
+			} else {
+				Action ret = new MonsterWalk();
+				ret.setDirection(direction);
+				return ret;
+			}
+		} else
+			return null;
+	}
+
+	public String getID() {
+		return "UNDERWATER";
+	}
 
 	@Override
-	public ActionSelector derive(){
- 		try {
-	 		return (ActionSelector) clone();
-	 	} catch (CloneNotSupportedException cnse){
+	public ActionSelector derive() {
+		try {
+			return (ActionSelector) clone();
+		} catch (CloneNotSupportedException cnse) {
 			return null;
-	 	}
- 	}
+		}
+	}
 }

@@ -1,8 +1,9 @@
 package sz.csi;
 
+import sz.SystemInterface;
 import sz.util.Position;
 
-public interface ConsoleSystemInterface {
+public interface ConsoleSystemInterface extends SystemInterface {
 	/**
 	 * Prints a character on the console
 	 * 

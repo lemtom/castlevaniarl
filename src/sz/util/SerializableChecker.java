@@ -240,8 +240,9 @@ public class SerializableChecker extends ObjectOutputStream {
 						return streamObj;
 					}
 				}
-				InterceptingObjectOutputStream ioos = new InterceptingObjectOutputStream();
-				ioos.writeObject(obj);
+				try (InterceptingObjectOutputStream ioos = new InterceptingObjectOutputStream()) {
+					ioos.writeObject(obj);
+				}
 			} else {
 				Object[] slots;
 				try {

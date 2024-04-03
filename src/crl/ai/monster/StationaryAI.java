@@ -9,7 +9,7 @@ import sz.util.Position;
 import sz.util.Util;
 
 public class StationaryAI extends MonsterAI {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster) who;
@@ -22,16 +22,16 @@ private static final long serialVersionUID = 1L;
 			// Randomly decide if will approach the player or attack
 			if (rangedAttacks != null && Util.chance(80)) {
 				// Try to attack the player
-                for (RangedAttack element : rangedAttacks) {
-                    if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
-                        // Perform the attack
-                        Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
-                        ret.setDirection(directionToPlayer);
-                        return ret;
-                    }
-                }
+				for (RangedAttack element : rangedAttacks) {
+					if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
+						// Perform the attack
+						Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+						ret.setDirection(directionToPlayer);
+						return ret;
+					}
+				}
 			}
-			// Couldnt attack the player, so do nothing
+			// Couldn't attack the player, so do nothing
 			return null;
 		}
 	}

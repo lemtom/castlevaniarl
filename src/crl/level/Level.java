@@ -196,14 +196,14 @@ public class Level implements FOVMap, Serializable {
 
 	public Actor getActorAt(Position x) {
 		List<PriorityEnqueable> actors = dispatcher.getActors();
-        for (PriorityEnqueable actor : actors) {
-            Actor a = (Actor) actor;
-            /*
-             * Debug.say(a); Debug.say(a.getPosition());
-             */
-            if (a.getPosition().equals(x))
-                return (Actor) actor;
-        }
+		for (PriorityEnqueable actor : actors) {
+			Actor a = (Actor) actor;
+			/*
+			 * Debug.say(a); Debug.say(a.getPosition());
+			 */
+			if (a.getPosition().equals(x))
+				return (Actor) actor;
+		}
 		return null;
 	}
 
@@ -216,11 +216,11 @@ public class Level implements FOVMap, Serializable {
 		if (lightSources.contains(what)) {
 			lightSources.remove(what);
 			lightAt(what.getPosition(), what.getLight(), false);
-            for (Feature lightSource : lightSources) {
-                if (Position.distance(what.getPosition(), lightSource.getPosition()) < 10) {
-                    lightAt(lightSource.getPosition(), lightSource.getLight(), true);
-                }
-            }
+			for (Feature lightSource : lightSources) {
+				if (Position.distance(what.getPosition(), lightSource.getPosition()) < 10) {
+					lightAt(lightSource.getPosition(), lightSource.getLight(), true);
+				}
+			}
 		}
 		features.removeFeature(what);
 	}
@@ -321,14 +321,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void addFeature(Feature what) {
-		features.addFeature(what);
-		if (what.getFaint() > 0) {
-			doomedFeatures.add(what);
-		}
-		if (what.getLight() > 0) {
-			lightSources.add(what);
-			lightAt(what.getPosition(), what.getLight(), true);
-		}
+		addFeature(what, true);
 	}
 
 	public void addFeature(Feature what, boolean doom) {
@@ -635,9 +628,9 @@ public class Level implements FOVMap, Serializable {
 		 * doomedFeatures.get(i); f.setFaint(f.getFaint()-1); if (f.getFaint() <= 0){
 		 * doomedFeatures.remove(f); destroyFeature(f); } }
 		 */
-        for (Feature f : doomedFeatures) {
-            f.setFaint(f.getFaint() - 1);
-        }
+		for (Feature f : doomedFeatures) {
+			f.setFaint(f.getFaint() - 1);
+		}
 		for (int i = 0; i < doomedFeatures.size(); i++) {
 			Feature f = doomedFeatures.get(i);
 			if (f.getFaint() <= 0) {
@@ -737,10 +730,10 @@ public class Level implements FOVMap, Serializable {
 
 	public void signal(Position center, int range, String message) {
 		List<PriorityEnqueable> actors = dispatcher.getActors();
-        for (PriorityEnqueable actor : actors) {
-            if (Position.flatDistance(center, ((Actor) actor).getPosition()) <= range)
-                ((Actor) actor).message(message);
-        }
+		for (PriorityEnqueable actor : actors) {
+			if (Position.flatDistance(center, ((Actor) actor).getPosition()) <= range)
+				((Actor) actor).message(message);
+		}
 	}
 
 	public void removeRespawner() {
@@ -751,7 +744,8 @@ public class Level implements FOVMap, Serializable {
 	public void anihilate() {
 		smartFeatures.clear();
 		List<Feature> mounds = features.getAllOf("MOUND");
-        for (Feature mound : mounds) features.removeFeature(mound);
+		for (Feature mound : mounds)
+			features.removeFeature(mound);
 		monsters.removeAll();
 		dispatcher.removeAll();
 		dispatcher.addActor(player);
@@ -776,7 +770,8 @@ public class Level implements FOVMap, Serializable {
 
 	public void destroyCandles() {
 		List<Feature> candles = features.getAllOf("CANDLE");
-        for (Feature candle : candles) destroyFeature(candle);
+		for (Feature candle : candles)
+			destroyFeature(candle);
 	}
 
 	public boolean isDay() {
@@ -842,12 +837,12 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void loadPop() {
-        for (PriorityEnqueable tempActor : tempActors) {
-            dispatcher.addActor(tempActor);
-            if (tempActor instanceof Monster) {
-                monsters.addMonster((Monster) tempActor);
-            }
-        }
+		for (PriorityEnqueable tempActor : tempActors) {
+			dispatcher.addActor(tempActor);
+			if (tempActor instanceof Monster) {
+				monsters.addMonster((Monster) tempActor);
+			}
+		}
 	}
 
 	private ArrayList<PriorityEnqueable> tempActors;
@@ -890,7 +885,7 @@ public class Level implements FOVMap, Serializable {
 			return false;
 		else
 			return map[player.getPosition().z][x][y].isOpaque();
-    }
+	}
 
 	private Position tempSeen = new Position(0, 0);
 
@@ -966,7 +961,7 @@ public class Level implements FOVMap, Serializable {
 
 	public boolean getFlag(String flagID) {
 		Boolean flag = hashFlags.get(flagID);
-        return flag != null && flag;
+		return flag != null && flag;
 	}
 
 	public Monster getMonsterByID(String monsterID) {
@@ -1071,14 +1066,14 @@ public class Level implements FOVMap, Serializable {
 
 	public NPC getNPCByID(String id) {
 		List<PriorityEnqueable> actors = dispatcher.getActors();
-        for (PriorityEnqueable actor : actors) {
-            if (actor instanceof NPC) {
-                NPC npc = (NPC) actor;
-                if (npc.getNPCID().equals(id)) {
-                    return npc;
-                }
-            }
-        }
+		for (PriorityEnqueable actor : actors) {
+			if (actor instanceof NPC) {
+				NPC npc = (NPC) actor;
+				if (npc.getNPCID().equals(id)) {
+					return npc;
+				}
+			}
+		}
 		return null;
 	}
 
@@ -1130,16 +1125,16 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void lightLights() {
-        for (Feature f : lightSources) {
-            lightAt(f.getPosition(), f.getLight(), true);
-        }
+		for (Feature f : lightSources) {
+			lightAt(f.getPosition(), f.getLight(), true);
+		}
 	}
 
 	public boolean canFloatUpward(Position where) {
 		if (where.z != 0) {
 			Position deep = new Position(where);
 			deep.z--;
-            return getMapCell(deep).isShallowWater();
+			return getMapCell(deep).isShallowWater();
 		}
 		return false;
 	}

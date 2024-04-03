@@ -2,26 +2,29 @@ package crl.ui.graphicsUI;
 
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.game.Game;
+import sz.SystemInterface;
 import sz.csi.CharKey;
 import sz.util.ImageUtils;
 import sz.util.Position;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.Map;
 
-public class SwingSystemInterface implements Runnable {
+public class SwingSystemInterface implements SystemInterface, Runnable {
 	protected GFXConfiguration configuration;
 
 	public void run() {
+		// Void
 	}
 
 	private SwingInterfacePanel sip;
 	private StrokeNClickInformer aStrokeInformer;
 	private Position caretPosition = new Position(0, 0);
-	private HashMap<String, Image> images = new HashMap<>();
+	private Map<String, Image> images = new HashMap<>();
 
 	// private JTextArea invTextArea;
 	private JFrame frameMain;
@@ -79,12 +82,6 @@ public class SwingSystemInterface implements Runnable {
 		frameMain.addMouseListener(aStrokeInformer);
 		frameMain.setFocusable(true);
 		sip.init();
-		/*
-		 * invTextArea = new JTextArea(); invTextArea.setEditable(false);
-		 * invTextArea.setEnabled(false); invTextArea.setOpaque(false);
-		 * invTextArea.setForeground(Color.WHITE); invTextArea.setVisible(false);
-		 */
-		// sip.add(invTextArea);
 
 		frameMain.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent e) {
@@ -93,18 +90,22 @@ public class SwingSystemInterface implements Runnable {
 			}
 
 			public void mouseMoved(MouseEvent e) {
+				// Void
 			}
 
 		});
 		frameMain.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
+				// Void
 			}
 
 			public void mouseEntered(MouseEvent e) {
+				// Void
 			}
 
 			public void mouseExited(MouseEvent e) {
+				// Void
 			}
 
 			public void mousePressed(MouseEvent e) {
@@ -112,6 +113,7 @@ public class SwingSystemInterface implements Runnable {
 			}
 
 			public void mouseReleased(MouseEvent e) {
+				// Void
 			}
 		});
 		int n = JOptionPane.showConfirmDialog(frameMain, "Activate Full Screen Mode?", "Welcome to CastlevaniaRL",
@@ -138,40 +140,6 @@ public class SwingSystemInterface implements Runnable {
 			}
 		}
 	}
-
-	/*
-	 * public SwingSystemInterface(){ GraphicsEnvironment ge =
-	 * GraphicsEnvironment.getLocalGraphicsEnvironment(); GraphicsDevice gs =
-	 * ge.getDefaultScreenDevice(); // Determine if the display mode can be changed
-	 * /*boolean canChg = gs.isDisplayChangeSupported(); if (canChg) {
-	 * System.out.println("Can change screen size"); // Change the screen size and
-	 * number of colors DisplayMode displayMode = gs.getDisplayMode(); int
-	 * screenWidth = 800; int screenHeight = 600; int bitDepth = 8; displayMode =
-	 * new DisplayMode( screenWidth, screenHeight, bitDepth,
-	 * displayMode.getRefreshRate()); try { gs.setDisplayMode(displayMode); } catch
-	 * (Throwable e) { System.out.
-	 * println("Desired display mode is not supported; leave full-screen mode");
-	 * gs.setFullScreenWindow(null); } //} if (gs.isFullScreenSupported()){
-	 * System.out.println("Fullscreen supported"); Frame frame = new
-	 * Frame(gs.getDefaultConfiguration()); Window win = new Window(frame);
-	 * frame.setLayout(new GridLayout(1,1)); sip = new SwingInterfacePanel();
-	 * frame.add(sip); frame.setVisible(true);
-	 * //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); aStrokeInformer = new
-	 * StrokeInformer(); frame.addKeyListener(aStrokeInformer); sip.init();
-	 * gs.setFullScreenWindow(win); win.validate(); } else { JFrame frame = new
-	 * JFrame(); frame.setBounds(0,0,800,600); frame.getContentPane().setLayout(new
-	 * GridLayout(1,1)); sip = new SwingInterfacePanel();
-	 * frame.getContentPane().add(sip); frame.setVisible(true);
-	 * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); aStrokeInformer = new
-	 * StrokeInformer(); frame.addKeyListener(aStrokeInformer); sip.init(); }
-	 * 
-	 * //frame.setBounds(0,0,800,600);
-	 * 
-	 * invTextArea = new JTextArea(); invTextArea.setVisible(false);
-	 * add(invTextArea);
-	 * 
-	 * }
-	 */
 
 	public void cls() {
 		sip.cls();
@@ -200,10 +168,6 @@ public class SwingSystemInterface implements Runnable {
 		// invTextArea.setVisible(false);
 		sip.repaint();
 	}
-
-	/*
-	 * public void print(int x, int y, String text){ sip.print(x*10, y*24, text); }
-	 */
 
 	public void printAtPixel(int x, int y, String text) {
 		sip.print(x, y, text);
@@ -265,13 +229,6 @@ public class SwingSystemInterface implements Runnable {
 	public Graphics2D getGraphics2D() {
 		return sip.getCurrentGraphics();
 	}
-
-	/*
-	 * public void showTextArea(int scrX, int scrY, int scrW, int scrH, String
-	 * text){ invTextArea.setBounds(scrX, scrY, scrW, scrH);
-	 * invTextArea.setText(text); invTextArea.setVisible(true);
-	 * invTextArea.repaint(); invTextArea.setVisible(false); }
-	 */
 
 	public void setFont(Font fnt) {
 		sip.setFontFace(fnt);
@@ -361,291 +318,4 @@ public class SwingSystemInterface implements Runnable {
 	public void recoverFocus() {
 		frameMain.requestFocus();
 	}
-}
-
-class SwingInterfacePanel extends JPanel {
-
-	private static final long serialVersionUID = -7392757206841150146L;
-	private Image bufferImage;
-	private Graphics bufferGraphics;
-
-	private Image backImage;
-	private Graphics backGraphics;
-
-	private Image[] backImageBuffers;
-	private Graphics[] backGraphicsBuffers;
-
-	private Color color;
-	private Font font;
-	private FontMetrics fontMetrics;
-	protected GFXConfiguration configuration;
-
-	public void cls() {
-		Color oldColor = bufferGraphics.getColor();
-		bufferGraphics.setColor(Color.BLACK);
-		bufferGraphics.fillRect(0, 0, configuration.getScreenWidth(), configuration.getScreenHeight());
-		bufferGraphics.setColor(oldColor);
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-		bufferGraphics.setColor(color);
-	}
-
-	public void setFontFace(Font f) {
-		font = f;
-		bufferGraphics.setFont(f);
-		fontMetrics = bufferGraphics.getFontMetrics();
-	}
-
-	public Graphics2D getCurrentGraphics() {
-		return (Graphics2D) bufferGraphics;
-	}
-
-	public SwingInterfacePanel(GFXConfiguration configuration) {
-		this.configuration = configuration;
-		setLayout(null);
-		setBorder(new LineBorder(Color.GRAY));
-	}
-
-	public void init() {
-		bufferImage = createImage(configuration.getScreenWidth(), configuration.getScreenHeight());
-		bufferGraphics = bufferImage.getGraphics();
-		bufferGraphics.setColor(Color.WHITE);
-		backImage = createImage(configuration.getScreenWidth(), configuration.getScreenHeight());
-		backGraphics = backImage.getGraphics();
-		backImageBuffers = new Image[5];
-		backGraphicsBuffers = new Graphics[5];
-		for (int i = 0; i < 5; i++) {
-			backImageBuffers[i] = createImage(configuration.getScreenWidth(), configuration.getScreenHeight());
-			backGraphicsBuffers[i] = backImageBuffers[i].getGraphics();
-		}
-
-	}
-
-	public void drawImage(Image img) {
-		bufferGraphics.drawImage(img, 0, 0, this);
-	}
-
-	public void drawImage(int scrX, int scrY, Image img) {
-		bufferGraphics.drawImage(img, scrX, scrY, this);
-	}
-
-	public void print(int x, int y, String text) {
-		bufferGraphics.drawString(text, x, y);
-		// repaint();
-	}
-
-	public void print(int x, int y, String text, Color c, boolean centered) {
-		if (centered) {
-			int width = fontMetrics.stringWidth(text);
-			x = x - (width / 2);
-		}
-		Color old = bufferGraphics.getColor();
-		bufferGraphics.setColor(c);
-		bufferGraphics.drawString(text, x, y);
-		bufferGraphics.setColor(old);
-	}
-
-	public void print(int x, int y, String text, Color c) {
-		print(x, y, text, c, false);
-		// repaint();
-	}
-
-	public void saveBuffer() {
-		backGraphics.drawImage(bufferImage, 0, 0, this);
-	}
-
-	public void saveBuffer(int buffer) {
-		backGraphicsBuffers[buffer].drawImage(bufferImage, 0, 0, this);
-	}
-
-	public void restore() {
-		bufferGraphics.drawImage(backImage, 0, 0, this);
-	}
-
-	public void restore(int buffer) {
-		bufferGraphics.drawImage(backImageBuffers[buffer], 0, 0, this);
-	}
-
-	public void flash(Color c) {
-
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		if (bufferImage != null) {
-			g.drawImage(bufferImage, 0, 0, this);
-		}
-	}
-}
-
-class StrokeInformer implements KeyListener {
-	protected int bufferCode;
-	protected transient Thread keyListener;
-
-	public StrokeInformer() {
-		bufferCode = -1;
-	}
-
-	public void informKey(Thread toWho) {
-		keyListener = toWho;
-	}
-
-	public int getInkeyBuffer() {
-		return bufferCode;
-	}
-
-	public void keyPressed(KeyEvent e) {
-		bufferCode = charCode(e);
-		// if (!e.isShiftDown())
-		if (keyListener != null)
-			keyListener.interrupt();
-	}
-
-	private int charCode(KeyEvent x) {
-		int code = x.getKeyCode();
-		if (x.isControlDown()) {
-			return CharKey.CTRL;
-		}
-		if (code >= KeyEvent.VK_A && code <= KeyEvent.VK_Z) {
-			if (x.getKeyChar() >= 'a') {
-				int diff = KeyEvent.VK_A - CharKey.a;
-				return code - diff;
-			} else {
-				int diff = KeyEvent.VK_A - CharKey.A;
-				return code - diff;
-			}
-		}
-
-		switch (x.getKeyCode()) {
-		case KeyEvent.VK_SPACE:
-			return CharKey.SPACE;
-		case KeyEvent.VK_COMMA:
-			return CharKey.COMMA;
-		case KeyEvent.VK_PERIOD:
-			return CharKey.DOT;
-		case KeyEvent.VK_DELETE:
-			return CharKey.DELETE;
-		case KeyEvent.VK_NUMPAD0:
-			return CharKey.N0;
-		case KeyEvent.VK_NUMPAD1:
-			return CharKey.N1;
-		case KeyEvent.VK_NUMPAD2:
-			return CharKey.N2;
-		case KeyEvent.VK_NUMPAD3:
-			return CharKey.N3;
-		case KeyEvent.VK_NUMPAD4:
-			return CharKey.N4;
-		case KeyEvent.VK_NUMPAD5:
-			return CharKey.N5;
-		case KeyEvent.VK_NUMPAD6:
-			return CharKey.N6;
-		case KeyEvent.VK_NUMPAD7:
-			return CharKey.N7;
-		case KeyEvent.VK_NUMPAD8:
-			return CharKey.N8;
-		case KeyEvent.VK_NUMPAD9:
-			return CharKey.N9;
-		case KeyEvent.VK_1:
-			return CharKey.N1;
-		case KeyEvent.VK_2:
-			return CharKey.N2;
-		case KeyEvent.VK_3:
-			return CharKey.N3;
-		case KeyEvent.VK_4:
-			return CharKey.N4;
-		case KeyEvent.VK_5:
-			return CharKey.N5;
-		case KeyEvent.VK_6:
-			return CharKey.N6;
-		case KeyEvent.VK_7:
-			return CharKey.N7;
-		case KeyEvent.VK_8:
-			return CharKey.N8;
-		case KeyEvent.VK_9:
-			return CharKey.N9;
-		case KeyEvent.VK_F1:
-			return CharKey.F1;
-		case KeyEvent.VK_F2:
-			return CharKey.F2;
-		case KeyEvent.VK_F3:
-			return CharKey.F3;
-		case KeyEvent.VK_F4:
-			return CharKey.F4;
-		case KeyEvent.VK_F5:
-			return CharKey.F5;
-		case KeyEvent.VK_F6:
-			return CharKey.F6;
-		case KeyEvent.VK_F7:
-			return CharKey.F7;
-		case KeyEvent.VK_F8:
-			return CharKey.F8;
-		case KeyEvent.VK_F9:
-			return CharKey.F9;
-		case KeyEvent.VK_F10:
-			return CharKey.F10;
-		case KeyEvent.VK_F11:
-			return CharKey.F11;
-		case KeyEvent.VK_F12:
-			return CharKey.F12;
-		case KeyEvent.VK_ENTER:
-			return CharKey.ENTER;
-		case KeyEvent.VK_BACK_SPACE:
-			return CharKey.BACKSPACE;
-		case KeyEvent.VK_ESCAPE:
-			return CharKey.ESC;
-		case KeyEvent.VK_UP:
-			return CharKey.UARROW;
-		case KeyEvent.VK_DOWN:
-			return CharKey.DARROW;
-		case KeyEvent.VK_LEFT:
-			return CharKey.LARROW;
-		case KeyEvent.VK_RIGHT:
-			return CharKey.RARROW;
-
-		}
-		if (x.getKeyChar() == '.')
-			return CharKey.DOT;
-		if (x.getKeyChar() == '?')
-			return CharKey.QUESTION;
-		return -1;
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
-	public void keyTyped(KeyEvent e) {
-	}
-}
-
-class StrokeNClickInformer extends StrokeInformer implements MouseListener {
-	public void mousePressed(MouseEvent e) {
-		if (keyListener != null) {
-			bufferCode = CharKey.NONE;
-			keyListener.interrupt();
-		}
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

@@ -5,7 +5,9 @@ import java.util.List;
 
 import sz.util.Line;
 import sz.util.Position;
+import crl.actor.Actor;
 import crl.feature.Feature;
+import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
@@ -66,27 +68,7 @@ public abstract class ProjectileSkill extends HeartAction {
 		Player aPlayer = aLevel.getPlayer();
 		int attackHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
 		if (targetPosition.equals(performer.getPosition()) && allowsSelfTarget()) {
-			aLevel.addMessage(getSelfTargettedMessage());
-			// if (getPathType() == PATH_CURVED){
-			Feature destinationFeature = aLevel.getFeatureAt(getPlayer().getPosition());
-			if (destinationFeature != null && destinationFeature.isDestroyable()) {
-				String message = "The " + getSpellAttackDesc() + " hits the " + destinationFeature.getDescription();
-				Feature prize = destinationFeature.damage(aPlayer, getDamage());
-				if (prize != null) {
-					message += " and destroys it.";
-				}
-				aLevel.addMessage(message);
-			}
-
-			Monster targetMonster = performer.getLevel().getMonsterAt(getPlayer().getPosition());
-
-			if (targetMonster != null) {
-				if (targetMonster.tryMagicHit(aPlayer, getDamage(), getHit(), targetMonster.wasSeen(),
-						getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())) {
-					hitMonsters.add(targetMonster);
-				}
-			}
-			// }
+			handleSelfTarget(aLevel, aPlayer);
 			return;
 		}
 		if (showThrowMessage())
@@ -109,66 +91,38 @@ public abstract class ProjectileSkill extends HeartAction {
 			if (!aLevel.isValidCoordinate(destinationPoint))
 				continue;
 			if (curved) {
-				if (i > flyStart && i < flyEnd)
-					projectileHeight = attackHeight + 1;
-				else
-					projectileHeight = attackHeight;
+				projectileHeight = calculateProjectileHeight(attackHeight, flyStart, flyEnd, i);
 			}
-			if (aLevel.isSolid(destinationPoint)
-					|| projectileHeight < -1 + aLevel.getMapCell(destinationPoint).getHeight()) {
-				// if (!piercesThru()){
-				endProjectile(i - 1);
+			if (checkIfSolid(aLevel, projectileHeight, destinationPoint)) {
+				drawIfSfxEffect(performer, i - 1);
 				return;
-				// }
 			}
 
-			String message = "";
-
-			if (aLevel.getMapCell(destinationPoint) == null) {
-				if (getPathType() == PATH_HOVER) {
-					// if (destinationPoint.z() < aLevel.getDepth()-1){
-					destinationPoint = aLevel.getDeepPosition(destinationPoint);
-					if (destinationPoint == null) {
-						endProjectile(i);
-						return;
-					}
-					projectileHeight = aLevel.getMapCell(destinationPoint).getHeight();
-					/*
-					 * } else { endProjectile(i); return; }
-					 */
+			if (aLevel.getMapCell(destinationPoint) == null && getPathType() == PATH_HOVER) {
+				destinationPoint = aLevel.getDeepPosition(destinationPoint);
+				if (destinationPoint == null) {
+					drawIfSfxEffect(performer, i);
+					return;
 				}
+				projectileHeight = aLevel.getMapCell(destinationPoint).getHeight();
+
 			}
 
-			int destinationHeight = 0;
-
-			if (aLevel.getMapCell(destinationPoint) != null) {
-				destinationHeight = aLevel.getMapCell(destinationPoint).getHeight();
-			}
+			int destinationHeight = calculateDestinationHeight(aLevel.getMapCell(destinationPoint));
 
 			if (getPathType() == PATH_HOVER) {
 				if (destinationHeight < projectileHeight)
 					projectileHeight = destinationHeight;
 				else if (destinationHeight > projectileHeight) {
-					if (getSFXID() != null)
-						drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
-								targetPosition, getSFXID(), i));
+					drawIfSfxEffect(performer, i);
 					return;
 				}
 			}
 
 			if (destinationHeight == projectileHeight) {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-				if (destinationFeature != null && destinationFeature.isDestroyable()) {
-					message = "The " + getSpellAttackDesc() + " hits the " + destinationFeature.getDescription();
-					if (!piercesThru())
-						if (getSFXID() != null)
-							drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
-									targetPosition, getSFXID(), i));
-					Feature prize = destinationFeature.damage(aPlayer, getDamage());
-					if (prize != null) {
-						message += " and destroys it.";
-					}
-					aLevel.addMessage(message);
+				if (checkIfDestroyable(destinationFeature)) {
+					aLevel.addMessage(spellHits(aPlayer, i, destinationFeature));
 					if (!piercesThru())
 						return;
 				}
@@ -176,36 +130,102 @@ public abstract class ProjectileSkill extends HeartAction {
 			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 
 			if (targetMonster != null) {
-				// int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
-
-				if (projectileHeight == monsterHeight || getPathType() == PATH_DIRECT) {
+				if (checkDirectPathToMonster(projectileHeight, monsterHeight)) {
 					if (targetMonster.tryMagicHit(aPlayer, getDamage(), getHit(), targetMonster.wasSeen(),
 							getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())) {
 						hit = true;
 						hitMonsters.add(targetMonster);
 						if (!piercesThru()) {
-							if (getSFXID() != null)
-								drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
-										targetPosition, getSFXID(), i));
+							drawIfSfxEffect(aPlayer, i);
 							return;
 						}
-
 					}
-				} else if (projectileHeight < monsterHeight) {
-					aLevel.addMessage(
-							"The " + getSpellAttackDesc() + " flies under the " + targetMonster.getDescription());
 				} else {
 					aLevel.addMessage(
-							"The " + getSpellAttackDesc() + " flies over the " + targetMonster.getDescription());
+							spellFliesMessage(targetMonster.getDescription(), projectileHeight, monsterHeight));
 				}
 			}
 		}
-		if (!hit || piercesThru())
-			if (getSFXID() != null)
-				drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition,
-						getSFXID(), getRange() - 1));
+		drawEffectIfPierced(aPlayer, hit);
+	}
 
+	private boolean checkIfDestroyable(Feature destinationFeature) {
+		return destinationFeature != null && destinationFeature.isDestroyable();
+	}
+
+	private boolean checkDirectPathToMonster(int projectileHeight, int monsterHeight) {
+		return projectileHeight == monsterHeight || getPathType() == PATH_DIRECT;
+	}
+
+	private void drawEffectIfPierced(Player aPlayer, boolean hit) {
+		if (!hit || piercesThru() && (getSFXID() != null))
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition,
+					getSFXID(), getRange() - 1));
+	}
+
+	private boolean checkIfSolid(Level aLevel, int projectileHeight, Position destinationPoint) {
+		return aLevel.isSolid(destinationPoint)
+				|| projectileHeight < -1 + aLevel.getMapCell(destinationPoint).getHeight();
+	}
+
+	private int calculateDestinationHeight(Cell mapCell) {
+		if (mapCell != null) {
+			return mapCell.getHeight();
+		}
+		return 0;
+	}
+
+	private String spellFliesMessage(String monsterDescription, int projectileHeight, int monsterHeight) {
+		String underOver = projectileHeight < monsterHeight ? "under" : "over";
+		return "The " + getSpellAttackDesc() + " flies " + underOver + " the " + monsterDescription;
+	}
+
+	private void drawIfSfxEffect(Actor actor, int i) {
+		if (getSFXID() != null)
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(actor.getPosition(), targetPosition,
+					getSFXID(), i));
+	}
+
+	private void handleSelfTarget(Level aLevel, Player aPlayer) {
+		aLevel.addMessage(getSelfTargettedMessage());
+		Feature destinationFeature = aLevel.getFeatureAt(getPlayer().getPosition());
+		if (checkIfDestroyable(destinationFeature)) {
+			aLevel.addMessage(hitMessage(aPlayer, destinationFeature));
+		}
+
+		Monster targetMonster = performer.getLevel().getMonsterAt(getPlayer().getPosition());
+
+		if (targetMonster != null && targetMonster.tryMagicHit(aPlayer, getDamage(), getHit(), targetMonster.wasSeen(),
+				getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())) {
+			hitMonsters.add(targetMonster);
+		}
+	}
+
+	private String hitMessage(Player aPlayer, Feature destinationFeature) {
+		String message = "The " + getSpellAttackDesc() + " hits the " + destinationFeature.getDescription();
+		Feature prize = destinationFeature.damage(aPlayer, getDamage());
+		if (prize != null) {
+			message += " and destroys it.";
+		}
+		return message;
+	}
+
+	private String spellHits(Player aPlayer, int i, Feature destinationFeature) {
+		if (!piercesThru() && getSFXID() != null) {
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
+					getSFXID(), i));
+		}
+		return hitMessage(aPlayer, destinationFeature);
+	}
+
+	private int calculateProjectileHeight(int attackHeight, int flyStart, int flyEnd, int i) {
+		int projectileHeight;
+		if (i > flyStart && i < flyEnd)
+			projectileHeight = attackHeight + 1;
+		else
+			projectileHeight = attackHeight;
+		return projectileHeight;
 	}
 
 	public boolean allowsSelfTarget() {
@@ -214,11 +234,5 @@ public abstract class ProjectileSkill extends HeartAction {
 
 	public boolean isWeaponAttack() {
 		return false;
-	}
-
-	private void endProjectile(int depth) {
-		if (getSFXID() != null)
-			drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
-					getSFXID(), depth));
 	}
 }

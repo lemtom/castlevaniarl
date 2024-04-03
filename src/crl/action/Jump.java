@@ -15,7 +15,7 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 
 public class Jump extends Action {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private Player aPlayer;
 
 	public String getID() {
@@ -24,7 +24,8 @@ private static final long serialVersionUID = 1L;
 
 	@Override
 	public boolean needsDirection() {
-        return !aPlayer.hasCounter(Consts.C_BATMORPH) && !aPlayer.hasCounter(Consts.C_BATMORPH2) && !aPlayer.isSwimming();
+		return !aPlayer.hasCounter(Consts.C_BATMORPH) && !aPlayer.hasCounter(Consts.C_BATMORPH2)
+				&& !aPlayer.isSwimming();
 
 	}
 
@@ -58,46 +59,14 @@ private static final long serialVersionUID = 1L;
 	public void execute() {
 		Debug.doAssert(performer instanceof Player, "Walk action, tried for not player");
 		aPlayer = (Player) performer;
-		Position var = directionToVariation(targetDirection);
+		Position variation = directionToVariation(targetDirection);
 		Level aLevel = performer.getLevel();
 		if (aPlayer.isSwimming()) {
-			if (aLevel.getMapCell(aPlayer.getPosition()).isShallowWater()) {
-				aLevel.addMessage("You are already floating");
-			} else {
-				if (aPlayer.getPosition().z != 0) {
-					Position deep = new Position(aPlayer.getPosition());
-					deep.z--;
-					if (aLevel.getMapCell(deep).isShallowWater()) {
-						aLevel.addMessage("You float to the surface");
-						aPlayer.landOn(deep);
-					} else {
-						aLevel.addMessage("You can't float upward");
-					}
-				} else {
-					aLevel.addMessage("You can't float upward");
-				}
-			}
+			tryFloating(aLevel);
 			return;
 		}
 		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2)) {
-			if (aPlayer.getStandingHeight() > 3) {
-				if (aPlayer.getPosition().z != 0) {
-					Position deep = new Position(aPlayer.getPosition());
-					deep.z--;
-					if (aLevel.getMapCell(deep).getID().equals("AIR")) {
-						aLevel.addMessage("You fly upward");
-						aPlayer.setPosition(deep);
-						aPlayer.setHoverHeight(0);
-					} else {
-						aLevel.addMessage("You can't fly upward");
-					}
-				} else {
-					aLevel.addMessage("You can't fly upward");
-				}
-			} else {
-				aLevel.addMessage("You fly upward.");
-				aPlayer.setHoverHeight(aPlayer.getHoverHeight() + 1);
-			}
+			tryFlying(aLevel);
 			return;
 		}
 
@@ -115,15 +84,19 @@ private static final long serialVersionUID = 1L;
 		aPlayer.setJustJumped(true);
 		Cell currentCell = aLevel.getMapCell(startingPosition);
 		aPlayer.doJump(aPlayer.getStandingHeight());
+		loopOverJumpingRange(variation, aLevel, startingHeight, startingPosition, jumpingRange, messaged, currentCell);
+		aPlayer.stopJump();
+		aLevel.addMessage("You hold your breath.");
+	}
+
+	private void loopOverJumpingRange(Position variation, Level aLevel, int startingHeight, Position startingPosition,
+			int jumpingRange, boolean messaged, Cell currentCell) {
 		for (int i = 1; i < jumpingRange; i++) {
-			Position destinationPoint = Position.add(startingPosition, Position.mul(var, i));
+			Position destinationPoint = Position.add(startingPosition, Position.mul(variation, i));
 			Cell destinationCell = aLevel.getMapCell(destinationPoint);
-			/*
-			 * if (destinationCell == null) break out;
-			 */
 			if (destinationCell == null) {
 				if (!aLevel.isValidCoordinate(destinationPoint)) {
-					destinationPoint = Position.subs(destinationPoint, var);
+					destinationPoint = Position.subs(destinationPoint, variation);
 					aPlayer.landOn(destinationPoint);
 					break;
 				}
@@ -152,13 +125,7 @@ private static final long serialVersionUID = 1L;
 					messaged = true;
 				}
 				if (!destinationCell.isSolid()) {
-					if (i < jumpingRange - 1) {
-						aPlayer.setPosition(destinationPoint);
-						UserInterface.getUI().safeRefresh();
-						actionAnimationPause();
-					} else {
-						aPlayer.landOn(destinationPoint);
-					}
+					tryToLand(jumpingRange, i, destinationPoint);
 				} else {
 					aLevel.addMessage("You bump into the " + destinationCell.getShortDescription());
 					aPlayer.land();
@@ -170,11 +137,59 @@ private static final long serialVersionUID = 1L;
 				// Damage the poor player and bounce him back
 				if (aPlayer.damage("You are bounced back by the " + aMonster.getDescription() + "!", aMonster,
 						new Damage(aMonster.getAttack(), false)))
-					aLevel.getPlayer().bounceBack(Position.mul(var, -1), 3);
+					aLevel.getPlayer().bounceBack(Position.mul(variation, -1), 3);
 				break;
 			}
 		}
-		aPlayer.stopJump();
-		aLevel.addMessage("You hold your breath.");
+	}
+
+	private void tryToLand(int jumpingRange, int i, Position destinationPoint) {
+		if (i < jumpingRange - 1) {
+			aPlayer.setPosition(destinationPoint);
+			UserInterface.getUI().safeRefresh();
+			actionAnimationPause();
+		} else {
+			aPlayer.landOn(destinationPoint);
+		}
+	}
+
+	private void tryFlying(Level aLevel) {
+		if (aPlayer.getStandingHeight() > 3) {
+			if (aPlayer.getPosition().z != 0) {
+				Position deep = new Position(aPlayer.getPosition());
+				deep.z--;
+				if (aLevel.getMapCell(deep).getID().equals("AIR")) {
+					aLevel.addMessage("You fly upward");
+					aPlayer.setPosition(deep);
+					aPlayer.setHoverHeight(0);
+				} else {
+					aLevel.addMessage("You can't fly upward");
+				}
+			} else {
+				aLevel.addMessage("You can't fly upward");
+			}
+		} else {
+			aLevel.addMessage("You fly upward.");
+			aPlayer.setHoverHeight(aPlayer.getHoverHeight() + 1);
+		}
+	}
+
+	private void tryFloating(Level aLevel) {
+		if (aLevel.getMapCell(aPlayer.getPosition()).isShallowWater()) {
+			aLevel.addMessage("You are already floating");
+		} else {
+			if (aPlayer.getPosition().z != 0) {
+				Position deep = new Position(aPlayer.getPosition());
+				deep.z--;
+				if (aLevel.getMapCell(deep).isShallowWater()) {
+					aLevel.addMessage("You float to the surface");
+					aPlayer.landOn(deep);
+				} else {
+					aLevel.addMessage("You can't float upward");
+				}
+			} else {
+				aLevel.addMessage("You can't float upward");
+			}
+		}
 	}
 }

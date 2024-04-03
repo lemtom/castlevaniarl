@@ -7,7 +7,6 @@ import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.level.Cell;
 import crl.monster.Monster;
-import crl.player.Consts;
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
@@ -17,62 +16,25 @@ import sz.util.Util;
  * optionally performing a ranged attack him when he is in range
  */
 public class WanderToPlayerAI extends MonsterAI {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	public Action selectAction(Actor who) {
 		Debug.doAssert(who instanceof Monster, "WanderToPlayerAI selectAction");
 		Monster aMonster = (Monster) who;
 
-		if (aMonster.getEnemy() != null) {
-			if (!aMonster.getLevel().getMonsters().contains(aMonster.getEnemy())) {
-				aMonster.setEnemy(null);
-			}
+		if (checkIfEnemyInLevel(aMonster)) {
+			aMonster.setEnemy(null);
 		}
 
-		if (aMonster.getEnemy() != null || aMonster.hasCounter(Consts.C_MONSTER_CHARM)) {
+		if (checkIfEnemyOrCharmed(aMonster)) {
 
-			int directionToMonster = -1;
-			if (aMonster.getEnemy() != null) {
-				directionToMonster = aMonster.stareMonster(aMonster.getEnemy());
-			} else {
-				directionToMonster = aMonster.stareMonster();
-			}
+			int directionToMonster = establishDirectionToMonster(aMonster);
 
 			if (directionToMonster == -1) {
-				// Walk TO player except if will bump him
 				directionToMonster = aMonster.starePlayer();
-				if (directionToMonster == -1) {
-					return null;
-				} else {
-					Position targetPositionX = Position.add(who.getPosition(),
-							Action.directionToVariation(directionToMonster));
-					if (!who.getLevel().isWalkable(targetPositionX)) {
-						return null;
-					} else {
-						if (who.getLevel().getPlayer().getPosition().equals(targetPositionX)) {
-							return null;
-						} else {
-							Action ret = new MonsterWalk();
-							ret.setDirection(directionToMonster);
-							return ret;
-						}
-					}
-				}
+				return tryToWalkToPlayer(who, directionToMonster);
 			} else {
-				Action ret = new MonsterWalk();
-				if (!who.getLevel()
-						.isWalkable(Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)))) {
-					directionToMonster = Util.rand(0, 7);
-					while (true) {
-						if (!Position.add(who.getPosition(), Action.directionToVariation(directionToMonster))
-								.equals(who.getLevel().getPlayer().getPosition()))
-							break;
-					}
-					ret.setDirection(directionToMonster);
-				} else {
-					ret.setDirection(directionToMonster);
-				}
-				return ret;
+				return walk(who, directionToMonster);
 			}
 		}
 
@@ -86,38 +48,84 @@ private static final long serialVersionUID = 1L;
 		} else {
 			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(),
 					aMonster.getLevel().getPlayer().getPosition());
-			// Decide if will attack the player or walk to him
-			if (Util.chance(50)) {
-				// Will try to attack the player
-				if (rangedAttacks != null) {
-					// Try
-                    for (RangedAttack ra : rangedAttacks) {
-                        if (distanceToPlayer <= ra.getRange())
-                            if (Util.chance(ra.getFrequency())) {
-                                Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
-                                ret.setDirection(directionToPlayer);
-                                return ret;
-                            }
-                    }
+			// Decide if will try to attack the player or walk to him
+			if (canRangedAttack()) {
+				// Try
+				for (RangedAttack ra : rangedAttacks) {
+					if (considerAttacking(distanceToPlayer, ra)) {
+						Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
+						ret.setDirection(directionToPlayer);
+						return ret;
+					}
 				}
-			}
-			// Couldnt attack the player, move to him
-			Action ret = new MonsterWalk();
-			ret.setDirection(directionToPlayer);
-			Cell currentCell = aMonster.getLevel().getMapCell(aMonster.getPosition());
-			Cell destinationCell = aMonster.getLevel()
-					.getMapCell(Position.add(aMonster.getPosition(), Action.directionToVariation(directionToPlayer)));
 
-			if (destinationCell == null || currentCell == null) {
-				ret.setDirection(Util.rand(0, 7));
-				return ret;
 			}
-			if ((destinationCell.isSolid() && !aMonster.isEthereal())
-					|| destinationCell.getHeight() > currentCell.getHeight() + aMonster.getLeaping() + 1)
-				ret.setDirection(Util.rand(0, 7));
-			return ret;
+			return moveTowardsPlayer(aMonster, directionToPlayer);
 		}
 
+	}
+
+	/**
+	 * Couldn't attack the player, move to him
+	 */
+	private Action moveTowardsPlayer(Monster aMonster, int directionToPlayer) {
+		Action ret = new MonsterWalk();
+		ret.setDirection(directionToPlayer);
+		Cell currentCell = aMonster.getLevel().getMapCell(aMonster.getPosition());
+		Cell destinationCell = aMonster.getLevel()
+				.getMapCell(Position.add(aMonster.getPosition(), Action.directionToVariation(directionToPlayer)));
+
+		if (nullCheck(currentCell, destinationCell)) {
+			ret.setDirection(Util.rand(0, 7));
+			return ret;
+		}
+		if (evaluateDestinationCell(aMonster, currentCell, destinationCell))
+			ret.setDirection(Util.rand(0, 7));
+		return ret;
+	}
+
+	private Action walk(Actor who, int directionToMonster) {
+		Action ret = new MonsterWalk();
+		if (!who.getLevel()
+				.isWalkable(Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)))) {
+			directionToMonster = Util.rand(0, 7);
+			while (true) {
+				if (!Position.add(who.getPosition(), Action.directionToVariation(directionToMonster))
+						.equals(who.getLevel().getPlayer().getPosition()))
+					break;
+			}
+			ret.setDirection(directionToMonster);
+		} else {
+			ret.setDirection(directionToMonster);
+		}
+		return ret;
+	}
+
+	/**
+	 * Walk TO player except if will bump him
+	 */
+	private Action tryToWalkToPlayer(Actor who, int directionToMonster) {
+		if (directionToMonster == -1) {
+			return null;
+		} else {
+			Position targetPositionX = Position.add(who.getPosition(), Action.directionToVariation(directionToMonster));
+			if (!who.getLevel().isWalkable(targetPositionX)) {
+				return null;
+			} else {
+				return walkConditionally(directionToMonster,
+						who.getLevel().getPlayer().getPosition().equals(targetPositionX));
+			}
+		}
+	}
+
+	private Action walkConditionally(int directionToMonster, boolean condition) {
+		if (condition) {
+			return null;
+		} else {
+			Action ret = new MonsterWalk();
+			ret.setDirection(directionToMonster);
+			return ret;
+		}
 	}
 
 	public String getID() {
@@ -132,6 +140,25 @@ private static final long serialVersionUID = 1L;
 		} catch (CloneNotSupportedException cnse) {
 			return null;
 		}
+	}
+
+	// Conditions
+
+	private boolean nullCheck(Cell currentCell, Cell destinationCell) {
+		return destinationCell == null || currentCell == null;
+	}
+
+	private boolean evaluateDestinationCell(Monster aMonster, Cell currentCell, Cell destinationCell) {
+		return (destinationCell.isSolid() && !aMonster.isEthereal())
+				|| destinationCell.getHeight() > currentCell.getHeight() + aMonster.getLeaping() + 1;
+	}
+
+	private boolean canRangedAttack() {
+		return Util.chance(50) && rangedAttacks != null;
+	}
+
+	private boolean considerAttacking(int distanceToPlayer, RangedAttack ra) {
+		return distanceToPlayer <= ra.getRange() && Util.chance(ra.getFrequency());
 	}
 
 }

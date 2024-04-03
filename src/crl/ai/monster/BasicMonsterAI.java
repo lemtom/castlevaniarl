@@ -6,7 +6,6 @@ import crl.action.monster.*;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
-import crl.player.Consts;
 import sz.util.OutParameter;
 import sz.util.Position;
 import sz.util.Util;
@@ -18,7 +17,7 @@ import sz.util.Util;
  *
  */
 public class BasicMonsterAI extends MonsterAI {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	// AI Parameters
 	/**
 	 * Defines if the monster never moves
@@ -55,15 +54,14 @@ private static final long serialVersionUID = 1L;
 	private int lastDirection = -1;
 
 	/**
-	 * Keeps track if the monster must change direction Used mainly for patrolling
-	 * monsters
+	 * Keeps track if the monster must change direction. Used mainly for patrolling
+	 * monsters.
 	 */
 	private boolean changeDirection;
 
 	/**
 	 * Selects an action to perform
 	 */
-	
 	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster) who;
 
@@ -72,45 +70,15 @@ private static final long serialVersionUID = 1L;
 		}
 
 		// If monster has an enemy, check if he is still at the level
-		if (aMonster.getEnemy() != null) {
-			if (!aMonster.getLevel().getMonsters().contains(aMonster.getEnemy())) {
-				aMonster.setEnemy(null);
-			}
+		if (checkIfEnemyInLevel(aMonster)) {
+			aMonster.setEnemy(null);
 		}
 		// If monster has an enemy, or is charmed
-		if (aMonster.getEnemy() != null || aMonster.hasCounter(Consts.C_MONSTER_CHARM)) {
+		if (checkIfEnemyOrCharmed(aMonster)) {
 			// Stare at your enemy or pick a enemy from nearby monsters
-			int directionToMonster = -1;
-			if (aMonster.getEnemy() != null) {
-				directionToMonster = aMonster.stareMonster(aMonster.getEnemy());
-			} else {
-				directionToMonster = aMonster.stareMonster();
-			}
+			int directionToMonster = establishDirectionToMonster(aMonster);
 			// If you found no enemy
-			if (directionToMonster == -1) {
-				// Stare to the player
-				directionToMonster = aMonster.starePlayer();
-				// If you didnt find the player, do nothing
-				if (directionToMonster == -1) {
-					return null;
-				} else {
-					// Ensure we are not bumping the player
-					Position targetPositionX = Position.add(who.getPosition(),
-							Action.directionToVariation(directionToMonster));
-					if (who.getLevel().getPlayer().getPosition().equals(targetPositionX)) {
-						return null;
-					} else {
-						return tryWalking(aMonster, directionToMonster);
-					}
-				}
-			} else { // Found your enemy
-				// If you are stationary, do nothing
-				if (isStationary) {
-					return null;
-				} else {
-					return tryWalking(aMonster, directionToMonster);
-				}
-			}
+			return findEnemy(who, aMonster, directionToMonster);
 		}
 		// else, monster has no enemy, and is not charmed
 		// Stare to the player
@@ -120,11 +88,7 @@ private static final long serialVersionUID = 1L;
 		// If monster is a patroller, and player distance is bigger than patrol range,
 		// continue patrolling
 		if (patrolRange > 0 && playerDistance > patrolRange) {
-			if (lastDirection == -1 || changeDirection) {
-				lastDirection = Util.rand(0, 7);
-				changeDirection = false;
-			}
-			return tryWalking(aMonster, lastDirection);
+			return patrol(aMonster);
 		}
 		// monster is not a patroller
 		// If monster didn't see the player
@@ -138,68 +102,131 @@ private static final long serialVersionUID = 1L;
 				return tryWalking(aMonster, direction);
 			}
 		} else {
-			// else, the monster saw the player
-			// If is stationary or semistationary and the player is still too far, do
-			// nothing
-			if (waitPlayerRange > 0 && playerDistance > waitPlayerRange) {
+			return seePlayer(who, aMonster, directionToPlayer, playerDistance);
+		}
+	}
+
+	private Action findEnemy(Actor who, Monster aMonster, int directionToMonster) {
+		if (directionToMonster == -1) {
+			// Stare to the player
+			directionToMonster = aMonster.starePlayer();
+			// If you didn't find the player, do nothing
+			if (directionToMonster == -1) {
 				return null;
-			}
-
-			// If monster has an approach limit, and player is closer than it
-			if (playerDistance < approachLimit) {
-				// Get away from player
-				int direction = Action.toIntDirection(Position.mul(Action.directionToVariation(directionToPlayer), -1));
-				return tryWalking(aMonster, direction);
 			} else {
-				// else, just attack the player
-				// If monster is on the water, swim to the player
-				if (aMonster.canSwim() && aMonster.isInWater() && !aMonster.getLevel().getPlayer().isSwimming()) {
-					return tryWalking(aMonster, directionToPlayer);
-				}
-				// If monster sees the player and has attacks, may be try attacking the player
-				if (aMonster.seesPlayer() && rangedAttacks != null) {
+				// Ensure we are not bumping the player
+				Position targetPositionX = Position.add(who.getPosition(),
+						Action.directionToVariation(directionToMonster));
+				return walkConditionally(aMonster, directionToMonster,
+						who.getLevel().getPlayer().getPosition().equals(targetPositionX));
+			}
+		} else { // Found your enemy
+			// If you are stationary, do nothing
+			return tryWalking(aMonster, directionToMonster);
+		}
+	}
 
-					// Pick an attack from those available
-					for (RangedAttack element : rangedAttacks) {
-						// If the player is on attack range, and is either a direct attack or we are at
-						// the same height as the player, and randomly
-						if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())
-								&& (element.getAttackType().equals(MonsterMissile.TYPE_DIRECT)
-										|| (!element.getAttackType().equals(MonsterMissile.TYPE_DIRECT)
-												&& aMonster.getStandingHeight() == aMonster.getLevel().getPlayer()
-														.getStandingHeight()))) {
-							Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
-							// If attacks needs charge, ensure I have charge, else try another attack
-							if (element.getChargeCounter() > 0) {
-								if (chargeCounter > 0) {
-									continue;
-								} else {
-									// Prepare to charge again, but try to execute the attack
-									chargeCounter = element.getChargeCounter();
-								}
-							}
+	private Action patrol(Monster aMonster) {
+		if (lastDirection == -1 || changeDirection) {
+			lastDirection = Util.rand(0, 7);
+			changeDirection = false;
+		}
+		return tryWalking(aMonster, lastDirection);
+	}
 
-							// Configure attack according to its type
-							if (ret instanceof MonsterMissile) {
-								((MonsterMissile) ret).set(element.getAttackType(), element.getStatusEffect(),
-										element.getRange(), element.getAttackMessage(), element.getEffectType(),
-										element.getEffectID(), element.getDamage(), element.getEffectWav());
-							} else if (ret instanceof MonsterCharge) {
-								((MonsterCharge) ret).set(element.getRange(), element.getAttackMessage(),
-										element.getDamage(), element.getEffectWav());
-							} else if (ret instanceof SummonMonster) {
-								((SummonMonster) ret).set(element.getSummonMonsterId(), element.getAttackMessage());
-							}
-							// Set the player position as the attack target
-							ret.setPosition(who.getLevel().getPlayer().getPreviousPosition());
-							return ret;
-						}
-					}
-				}
+	/**
+	 * The monster saw the player.
+	 */
+	private Action seePlayer(Actor who, Monster aMonster, int directionToPlayer, int playerDistance) {
+		// If is stationary or semistationary and the player is still too far, do
+		// nothing
+		if (waitPlayerRange > 0 && playerDistance > waitPlayerRange) {
+			return null;
+		}
 
-				// Didn't try to attack the player, so try to walk to him
+		// If monster has an approach limit, and player is closer than it
+		if (playerDistance < approachLimit) {
+			// Get away from player
+			int direction = Action.toIntDirection(Position.mul(Action.directionToVariation(directionToPlayer), -1));
+			return tryWalking(aMonster, direction);
+		} else {
+			// else, just attack the player
+			// If monster is on the water, swim to the player
+			if (aMonster.canSwim() && aMonster.isInWater() && !aMonster.getLevel().getPlayer().isSwimming()) {
 				return tryWalking(aMonster, directionToPlayer);
 			}
+			return tryAttacking(who, aMonster, directionToPlayer, playerDistance);
+		}
+	}
+
+	/**
+	 * If monster sees the player and has attacks, maybe try attacking the player.
+	 */
+	private Action tryAttacking(Actor who, Monster aMonster, int directionToPlayer, int playerDistance) {
+		if (checkIfCanAttack(aMonster)) {
+
+			// Pick an attack from those available
+			for (RangedAttack element : rangedAttacks) {
+				if (checkRange(aMonster, playerDistance, element)) {
+					Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+					// If attacks needs charge, ensure I have charge, else try another attack
+					if (element.getChargeCounter() > 0) {
+						if (chargeCounter > 0) {
+							continue;
+						} else {
+							// Prepare to charge again, but try to execute the attack
+							chargeCounter = element.getChargeCounter();
+						}
+					}
+
+					configureAttack(element, ret);
+					// Set the player position as the attack target
+					ret.setPosition(who.getLevel().getPlayer().getPreviousPosition());
+					return ret;
+				}
+			}
+		}
+		// Didn't try to attack the player, so try to walk to him
+		return tryWalking(aMonster, directionToPlayer);
+	}
+
+	private boolean checkIfCanAttack(Monster aMonster) {
+		return aMonster.seesPlayer() && rangedAttacks != null;
+	}
+
+	/**
+	 * If the player is on attack range, and is either a direct attack or we are at
+	 * the same height as the player, and randomly
+	 * 
+	 */
+	private boolean checkRange(Monster aMonster, int playerDistance, RangedAttack element) {
+		return element.getRange() >= playerDistance && Util.chance(element.getFrequency()) && (element.getAttackType()
+				.equals(MonsterMissile.TYPE_DIRECT)
+				|| (!element.getAttackType().equals(MonsterMissile.TYPE_DIRECT)
+						&& aMonster.getStandingHeight() == aMonster.getLevel().getPlayer().getStandingHeight()));
+	}
+
+	/**
+	 * Configure attack according to its type
+	 */
+	private void configureAttack(RangedAttack element, Action ret) {
+		if (ret instanceof MonsterMissile) {
+			((MonsterMissile) ret).set(element.getAttackType(), element.getStatusEffect(), element.getRange(),
+					element.getAttackMessage(), element.getEffectType(), element.getEffectID(), element.getDamage(),
+					element.getEffectWav());
+		} else if (ret instanceof MonsterCharge) {
+			((MonsterCharge) ret).set(element.getRange(), element.getAttackMessage(), element.getDamage(),
+					element.getEffectWav());
+		} else if (ret instanceof SummonMonster) {
+			((SummonMonster) ret).set(element.getSummonMonsterId(), element.getAttackMessage());
+		}
+	}
+
+	private Action walkConditionally(Monster aMonster, int directionToMonster, boolean condition) {
+		if (condition) {
+			return null;
+		} else {
+			return tryWalking(aMonster, directionToMonster);
 		}
 	}
 
@@ -252,18 +279,18 @@ private static final long serialVersionUID = 1L;
 	 *                         RIGHT, UPRIGHT, UPLEFT, DOWNRIGHT or DOWNLEFT
 	 */
 	private void fillAlternateDirections(OutParameter direction1, OutParameter direction2, int generalDirection) {
-		Position var = Action.directionToVariation(generalDirection);
+		Position pos = Action.directionToVariation(generalDirection);
 		Position d1 = null;
 		Position d2 = null;
-		if (var.x == 0) {
-			d1 = new Position(-1, var.y);
-			d2 = new Position(1, var.y);
-		} else if (var.y == 0) {
-			d1 = new Position(var.x, -1);
-			d2 = new Position(var.x, 1);
+		if (pos.x == 0) {
+			d1 = new Position(-1, pos.y);
+			d2 = new Position(1, pos.y);
+		} else if (pos.y == 0) {
+			d1 = new Position(pos.x, -1);
+			d2 = new Position(pos.x, 1);
 		} else {
-			d1 = new Position(var.x, 0);
-			d2 = new Position(0, var.y);
+			d1 = new Position(pos.x, 0);
+			d2 = new Position(0, pos.y);
 		}
 		direction1.setIntValue(Action.toIntDirection(d1));
 		direction2.setIntValue(Action.toIntDirection(d2));
@@ -271,8 +298,7 @@ private static final long serialVersionUID = 1L;
 
 	/**
 	 * Defines if a monster can walk toward a direction
-	 *
-     */
+	 */
 	private boolean canWalkTowards(Monster aMonster, int direction) {
 		Position destination = Position.add(aMonster.getPosition(), Action.directionToVariation(direction));
 		if (!aMonster.getLevel().isValidCoordinate(destination))
@@ -281,10 +307,10 @@ private static final long serialVersionUID = 1L;
 			return false;
 		}
 		if (aMonster.getLevel().isAir(destination)) {
-            return aMonster.isEthereal() || aMonster.isFlying();
+			return aMonster.isEthereal() || aMonster.isFlying();
 		}
 		if (!aMonster.getLevel().isWalkable(destination)) {
-            return aMonster.isEthereal();
+			return aMonster.isEthereal();
 		} else
 			return true;
 	}

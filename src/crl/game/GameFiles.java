@@ -293,14 +293,10 @@ public class GameFiles {
 		}
 		String filename = "savegame/" + p.getName() + ", a Lv" + p.getPlayerLevel() + " " + p.getClassString() + ".sav";
 		p.setSelector(null);
-		try {
-			SerializableChecker sc = new SerializableChecker();
+		try (SerializableChecker sc = new SerializableChecker();
+				ObjectOutputStream os = new ObjectOutputStream(Files.newOutputStream(Paths.get(filename)))) {
 			sc.writeObject(g);
-			sc.close();
-
-			ObjectOutputStream os = new ObjectOutputStream(Files.newOutputStream(Paths.get(filename)));
 			os.writeObject(g);
-			os.close();
 		} catch (IOException ioe) {
 			Game.crash("Error saving the game", ioe);
 		}
