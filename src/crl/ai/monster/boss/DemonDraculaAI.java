@@ -16,7 +16,7 @@ import sz.util.Position;
 import sz.util.Util;
 
 public class DemonDraculaAI extends MonsterAI {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private int approachLimit = 0;
 	private int chargeCounter = 99;
 
@@ -34,50 +34,55 @@ private static final long serialVersionUID = 1L;
 			// Randomly decide if will approach the player or attack
 			if (Util.chance(70)) {
 				if (playerDistance < 5) {
-					if (Util.chance(70))
-						return new ShadowApocalypse();
-					else {
-						Action ret = new MonsterWalk();
-						int direction = Action
-								.toIntDirection(Position.mul(Action.directionToVariation(directionToPlayer), -1));
-						ret.setDirection(direction);
-						return ret;
-					}
+					return attack(directionToPlayer);
 				}
-
 			} else if (rangedAttacks != null && Util.chance(80)) {
 				// Try to attack the player
-                for (RangedAttack element : rangedAttacks) {
-                    if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
-                        // Perform the attack
-                        Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
-                        if (element.getChargeCounter() > 0) {
-                            if (chargeCounter == 0) {
-                                chargeCounter = element.getChargeCounter();
-                            } else {
-                                chargeCounter--;
-                                continue;
-                            }
-                        }
-
-                        if (ret instanceof MonsterMissile) {
-                            ((MonsterMissile) ret).set(element.getAttackType(), element.getStatusEffect(),
-                                    element.getRange(), element.getAttackMessage(), element.getEffectType(),
-                                    element.getEffectID(), element.getDamage(), element.getEffectWav());
-                        } else if (ret instanceof MonsterCharge) {
-                            ((MonsterCharge) ret).set(element.getRange(), element.getAttackMessage(),
-                                    element.getDamage(), element.getEffectWav());
-                        } else if (ret instanceof SummonMonster) {
-                            ((SummonMonster) ret).set(element.getSummonMonsterId(), element.getAttackMessage());
-                        }
-                        ret.setPosition(who.getLevel().getPlayer().getPosition());
-                        return ret;
-                    }
-                }
+				for (RangedAttack element : rangedAttacks) {
+					if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
+						// Perform the attack
+						Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+						if (element.getChargeCounter() > 0) {
+							if (chargeCounter == 0) {
+								chargeCounter = element.getChargeCounter();
+							} else {
+								chargeCounter--;
+								continue;
+							}
+						}
+						return rangedAttack(who, element, ret);
+					}
+				}
 			}
-			// Couldnt attack the player, so walk to him
+			// Couldn't attack the player, so walk to him
 			Action ret = new MonsterWalk();
 			ret.setDirection(directionToPlayer);
+			return ret;
+		}
+	}
+
+	private Action rangedAttack(Actor who, RangedAttack element, Action ret) {
+		if (ret instanceof MonsterMissile) {
+			((MonsterMissile) ret).set(element.getAttackType(), element.getStatusEffect(), element.getRange(),
+					element.getAttackMessage(), element.getEffectType(), element.getEffectID(), element.getDamage(),
+					element.getEffectWav());
+		} else if (ret instanceof MonsterCharge) {
+			((MonsterCharge) ret).set(element.getRange(), element.getAttackMessage(), element.getDamage(),
+					element.getEffectWav());
+		} else if (ret instanceof SummonMonster) {
+			((SummonMonster) ret).set(element.getSummonMonsterId(), element.getAttackMessage());
+		}
+		ret.setPosition(who.getLevel().getPlayer().getPosition());
+		return ret;
+	}
+
+	private Action attack(int directionToPlayer) {
+		if (Util.chance(70))
+			return new ShadowApocalypse();
+		else {
+			Action ret = new MonsterWalk();
+			int direction = Action.toIntDirection(Position.mul(Action.directionToVariation(directionToPlayer), -1));
+			ret.setDirection(direction);
 			return ret;
 		}
 	}

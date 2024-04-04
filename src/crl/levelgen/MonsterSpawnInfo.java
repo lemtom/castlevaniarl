@@ -3,16 +3,16 @@ package crl.levelgen;
 import java.io.Serializable;
 
 public class MonsterSpawnInfo implements Serializable {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private String monsterID;
 	private int spawnLocation;
 	private int frequency;
 
-	public static final int UNDERGROUND = 0,
-		BORDER = 1,
-		WATER = 2;
+	public static final int UNDERGROUND = 0;
+	public static final int BORDER = 1;
+	public static final int WATER = 2;
 
-	public MonsterSpawnInfo(String pMonsterID, int pSpawnLocation, int pFrequency){
+	public MonsterSpawnInfo(String pMonsterID, int pSpawnLocation, int pFrequency) {
 		monsterID = pMonsterID;
 		spawnLocation = pSpawnLocation;
 		frequency = pFrequency;

@@ -176,7 +176,7 @@ public abstract class ProjectileSkill extends HeartAction {
 		return 0;
 	}
 
-	private String spellFliesMessage(String monsterDescription, int projectileHeight, int monsterHeight) {
+	protected String spellFliesMessage(String monsterDescription, int projectileHeight, int monsterHeight) {
 		String underOver = projectileHeight < monsterHeight ? "under" : "over";
 		return "The " + getSpellAttackDesc() + " flies " + underOver + " the " + monsterDescription;
 	}
@@ -202,7 +202,7 @@ public abstract class ProjectileSkill extends HeartAction {
 		}
 	}
 
-	private String hitMessage(Player aPlayer, Feature destinationFeature) {
+	protected String hitMessage(Player aPlayer, Feature destinationFeature) {
 		String message = "The " + getSpellAttackDesc() + " hits the " + destinationFeature.getDescription();
 		Feature prize = destinationFeature.damage(aPlayer, getDamage());
 		if (prize != null) {

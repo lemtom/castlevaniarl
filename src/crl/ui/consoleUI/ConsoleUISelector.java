@@ -21,28 +21,28 @@ import java.util.Properties;
 public class ConsoleUISelector extends UISelector {
 	private static final long serialVersionUID = 1L;
 	private ConsoleSystemInterface si;
-	public ConsoleUserInterface ui(){
+
+	public ConsoleUserInterface ui() {
 		return (ConsoleUserInterface) getUI();
 	}
-	
-	public void init(ConsoleSystemInterface csi, UserAction[] gameActions, Action advance, Action target, Action attack, ConsoleUserInterface ui, Properties keyBindings){
+
+	public void init(ConsoleSystemInterface csi, UserAction[] gameActions, Action advance, Action target, Action attack,
+			ConsoleUserInterface ui, Properties keyBindings) {
 		super.init(gameActions, advance, target, attack, ui, keyBindings);
 		this.si = csi;
 	}
-	
-	/** 
-	 * Returns the Action that the player wants to perform.
-     * It may also forward a command instead
-     * 
-     */
-	
-	public Action selectAction(Actor who){
-    	Debug.enterMethod(this, "selectAction", who);
-	    CharKey input = null;
-	    Action ret = null;
-	    while (ret == null){
-	    	if (ui().gameOver())
-	    		return null;
+
+	/**
+	 * Returns the Action that the player wants to perform. It may also forward a
+	 * command instead
+	 */
+	public Action selectAction(Actor who) {
+		Debug.enterMethod(this, "selectAction", who);
+		CharKey input = null;
+		Action ret = null;
+		while (ret == null) {
+			if (ui().gameOver())
+				return null;
 			input = si.inkey();
 			ret = ui().selectCommand(input);
 			if (ret != null)
@@ -55,15 +55,16 @@ public class ConsoleUISelector extends UISelector {
 				Debug.exitMethod("null");
 				return null;
 			}
-			if (Cheat.cheatConsole(player, input.code)){
+			if (Cheat.cheatConsole(player, input.code)) {
 				continue;
 			}
-			if (isArrow(input)){
+			if (isArrow(input)) {
 				int direction = toIntDirection(input);
-				Monster vMonster = player.getLevel().getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
-				if (vMonster != null && 
-					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))){
-					if (attack.canPerform(player)){
+				Monster vMonster = player.getLevel()
+						.getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
+				if (vMonster != null
+						&& (!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC) vMonster).isHostile()))) {
+					if (attack.canPerform(player)) {
 						attack.setDirection(direction);
 						Debug.exitMethod(attack);
 						return attack;
@@ -76,63 +77,58 @@ public class ConsoleUISelector extends UISelector {
 					Debug.exitMethod(advance);
 					return advance;
 				}
-			} else
-			if (input.code == WEAPON_KEY){
+			} else if (input.code == WEAPON_KEY) {
 				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 					ret = player.getMysticAction();
 					try {
-		            	if (ret != null){
-		                	ret.setPerformer(player);
-		                	if (ret.canPerform(player))
-		                		ui().setTargets(ret);
-		                	else {
-		                		level.addMessage(ret.getInvalidationMessage());
-		                		throw new ActionCancelException();
-		                	}
-        	                Debug.exitMethod(ret);
-            	        	return ret;
+						if (ret != null) {
+							ret.setPerformer(player);
+							if (ret.canPerform(player))
+								ui().setTargets(ret);
+							else {
+								level.addMessage(ret.getInvalidationMessage());
+								throw new ActionCancelException();
+							}
+							Debug.exitMethod(ret);
+							return ret;
 						}
-					}
-					catch (ActionCancelException ace){
+					} catch (ActionCancelException ace) {
 						ret = null;
 					}
-				} 
-			}else{
-            	ret = getRelatedAction(input.code);
-            	try {
-	            	if (ret != null){
-	            		ret.setPerformer(player);
-	            		if (ret.canPerform(player))
-	            			ui().setTargets(ret);
-	            		else {
-	            			level.addMessage(ret.getInvalidationMessage());
-	            			throw new ActionCancelException();
-	            		}
-	            		
-                     	Debug.exitMethod(ret);
-                    	return ret;
+				}
+			} else {
+				ret = getRelatedAction(input.code);
+				try {
+					if (ret != null) {
+						ret.setPerformer(player);
+						if (ret.canPerform(player))
+							ui().setTargets(ret);
+						else {
+							level.addMessage(ret.getInvalidationMessage());
+							throw new ActionCancelException();
+						}
+
+						Debug.exitMethod(ret);
+						return ret;
 					}
 
-				}
-				catch (ActionCancelException ace){
-                    ui().addMessage(new Message("Cancelled", player.getPosition()));
+				} catch (ActionCancelException ace) {
+					ui().addMessage(new Message("Cancelled", player.getPosition()));
 					ret = null;
 				}
-				//refresh();
+				// refresh();
 			}
 		}
 		Debug.exitMethod("null");
 		return null;
 	}
-	
-	public String getID(){
+
+	public String getID() {
 		return "UI";
 	}
-    
-	public ActionSelector derive(){
- 		return null;
- 	}
-	
-	
-	
+
+	public ActionSelector derive() {
+		return null;
+	}
+
 }

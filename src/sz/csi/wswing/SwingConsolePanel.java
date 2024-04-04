@@ -7,7 +7,8 @@ public class SwingConsolePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private char[][] charBuffer;
 	private Color[][] colorBuffer;
-	private Color backGround, foreGround;
+	private Color backGround;
+	private Color foreGround;
 	private boolean[][] updateBuffer;
 	private boolean autoUpdate;
 
@@ -56,26 +57,7 @@ public class SwingConsolePanel extends JPanel {
 	}
 
 	public void plot(char c, int x, int y) {
-		colorBuffer[x][y] = foreGround;
-		charBuffer[x][y] = c;
-		updateBuffer[x][y] = true;
-		if (autoUpdate) {
-			graphicsBuff.setColor(backGround);
-			graphicsBuff.fillRect(x * fontWidth, y * fontSize, fontWidth, fontDown);
-			// Fix upper and lower positions if possible
-			if (y - 1 >= 0) {
-				graphicsBuff.setColor(colorBuffer[x][y - 1]);
-				graphicsBuff.drawString("" + charBuffer[x][y - 1], x * fontWidth, (y) * fontSize);
-			}
-			if (y + 1 < ydim) {
-				graphicsBuff.setColor(colorBuffer[x][y + 1]);
-				graphicsBuff.drawString("" + charBuffer[x][y + 1], x * fontWidth, (y + 2) * fontSize);
-			}
-
-			graphicsBuff.setColor(colorBuffer[x][y]);
-			graphicsBuff.drawString("" + charBuffer[x][y], x * fontWidth, (y + 1) * fontSize);
-			updateBuffer[x][y] = false;
-		}
+		plot(c, x, y, foreGround);
 	}
 
 	public void plot(char c, int x, int y, Color foreColor) {
@@ -83,20 +65,7 @@ public class SwingConsolePanel extends JPanel {
 		charBuffer[x][y] = c;
 		updateBuffer[x][y] = true;
 		if (autoUpdate) {
-			graphicsBuff.setColor(backGround);
-			graphicsBuff.fillRect(x * fontWidth, y * fontSize, fontWidth, fontDown);
-			// Fix upper and lower positions if possible
-			if (y - 1 >= 0) {
-				graphicsBuff.setColor(colorBuffer[x][y - 1]);
-				graphicsBuff.drawString("" + charBuffer[x][y - 1], x * fontWidth, (y) * fontSize);
-			}
-			if (y + 1 < ydim) {
-				graphicsBuff.setColor(colorBuffer[x][y + 1]);
-				graphicsBuff.drawString("" + charBuffer[x][y + 1], x * fontWidth, (y + 2) * fontSize);
-			}
-
-			graphicsBuff.setColor(colorBuffer[x][y]);
-			graphicsBuff.drawString("" + charBuffer[x][y], x * fontWidth, (y + 1) * fontSize);
+			fillGraphicsBuffer(x, y);
 			repaint();
 			updateBuffer[x][y] = false;
 		}
@@ -108,7 +77,6 @@ public class SwingConsolePanel extends JPanel {
 
 	public void setAutoUpdate(boolean value) {
 		autoUpdate = value;
-		// autoUpdate = false;
 	}
 
 	@Override
@@ -125,31 +93,21 @@ public class SwingConsolePanel extends JPanel {
 
 	public void flash(Color fc) {
 		flash = true;
-
 		flashColor = fc;
 		repaint();
 	}
 
 	public void cls() {
-//		autoUpdate = true;
 		for (int x = 0; x < charBuffer.length; x++)
 			for (int y = 0; y < charBuffer[0].length; y++) {
 				charBuffer[x][y] = ' ';
 				updateBuffer[x][y] = true;
 			}
-		/*
-		 * graphicsBuff.setColor(Color.BLACK); graphicsBuff.clearRect(0,0,getWidth(),
-		 * getHeight()); repaint(); autoUpdate = false;
-		 */
-
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		// public void paint(Graphics g){
-
 		if (flash) {
-
 			g.setColor(flashColor);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			for (int x = 0; x < charBuffer.length; x++)
@@ -157,30 +115,12 @@ public class SwingConsolePanel extends JPanel {
 					g.setColor(colorBuffer[x][y]);
 					g.drawString("" + charBuffer[x][y], x * fontWidth, (y + 1) * fontSize);
 				}
-			// g.drawImage(imageBuff, 0, 0, null);
 
 			for (int x = 0; x < charBuffer.length; x++)
-
 				for (int y = 0; y < charBuffer[0].length; y++) {
-
-					graphicsBuff.setColor(backGround);
-					graphicsBuff.fillRect(x * fontWidth, y * fontSize, fontWidth, fontDown);
-					// Fix upper and lower positions if possible
-					if (y - 1 >= 0) {
-						graphicsBuff.setColor(colorBuffer[x][y - 1]);
-						graphicsBuff.drawString("" + charBuffer[x][y - 1], x * fontWidth, (y) * fontSize);
-					}
-					if (y + 1 < ydim) {
-						graphicsBuff.setColor(colorBuffer[x][y + 1]);
-						graphicsBuff.drawString("" + charBuffer[x][y + 1], x * fontWidth, (y + 2) * fontSize);
-					}
-
-					graphicsBuff.setColor(colorBuffer[x][y]);
-					graphicsBuff.drawString("" + charBuffer[x][y], x * fontWidth, (y + 1) * fontSize);
-					// graphicsBuff.drawChars(charBuffer[x], 0,1,x * fontWidth, y * fontSize);
+					fillGraphicsBuffer(x, y);
 				}
-
-            flash = false;
+			flash = false;
 			return;
 		}
 
@@ -188,25 +128,28 @@ public class SwingConsolePanel extends JPanel {
 			for (int x = 0; x < charBuffer.length; x++)
 				for (int y = 0; y < charBuffer[0].length; y++) {
 					if (updateBuffer[x][y]) {
-						graphicsBuff.setColor(backGround);
-						graphicsBuff.fillRect(x * fontWidth, y * fontSize, fontWidth, fontDown);
-						// Fix upper and lower positions if possible
-						if (y - 1 >= 0) {
-							graphicsBuff.setColor(colorBuffer[x][y - 1]);
-							graphicsBuff.drawString("" + charBuffer[x][y - 1], x * fontWidth, y * fontSize);
-						}
-						if (y + 1 < ydim) {
-							graphicsBuff.setColor(colorBuffer[x][y + 1]);
-							graphicsBuff.drawString("" + charBuffer[x][y + 1], x * fontWidth, (y + 2) * fontSize);
-						}
-
-						graphicsBuff.setColor(colorBuffer[x][y]);
-						graphicsBuff.drawString("" + charBuffer[x][y], x * fontWidth, (y + 1) * fontSize);
-						// graphicsBuff.drawChars(charBuffer[x], 0,1,x * fontWidth, y * fontSize);
+						fillGraphicsBuffer(x, y);
 						updateBuffer[x][y] = false;
 					}
 				}
 		}
 		g.drawImage(imageBuff, 0, 0, null);
+	}
+
+	private void fillGraphicsBuffer(int x, int y) {
+		graphicsBuff.setColor(backGround);
+		graphicsBuff.fillRect(x * fontWidth, y * fontSize, fontWidth, fontDown);
+		// Fix upper and lower positions if possible
+		if (y - 1 >= 0) {
+			graphicsBuff.setColor(colorBuffer[x][y - 1]);
+			graphicsBuff.drawString("" + charBuffer[x][y - 1], x * fontWidth, y * fontSize);
+		}
+		if (y + 1 < ydim) {
+			graphicsBuff.setColor(colorBuffer[x][y + 1]);
+			graphicsBuff.drawString("" + charBuffer[x][y + 1], x * fontWidth, (y + 2) * fontSize);
+		}
+
+		graphicsBuff.setColor(colorBuffer[x][y]);
+		graphicsBuff.drawString("" + charBuffer[x][y], x * fontWidth, (y + 1) * fontSize);
 	}
 }

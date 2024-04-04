@@ -10,7 +10,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class TargetPS extends ProjectileSkill {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private Player player;
 	private Item weapon;
 	private int reloadTime;
@@ -32,15 +32,9 @@ private static final long serialVersionUID = 1L;
 
 		ItemDefinition weaponDef = weapon.getDefinition();
 
-		if (weapon.getReloadTurns() > 0)
-			if (weapon.getRemainingTurnsToReload() == 0) {
-				/*
-				 * aLevel.addMessage("You must reload the "+weapon.getDescription()+"!");
-				 * return;
-				 */
-				if (!reload(weapon, player))
-					return;
-			}
+		if (weapon.getReloadTurns() > 0 && weapon.getRemainingTurnsToReload() == 0 && !reload(weapon, player)) {
+			return;
+		}
 
 		super.execute();
 
@@ -89,10 +83,7 @@ private static final long serialVersionUID = 1L;
 
 	private boolean reload(Item weapon, Player aPlayer) {
 		if (weapon != null) {
-			if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold()) {
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
-				return false;
-			} else if (aPlayer.getHearts() < 1) {
+			if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold() || aPlayer.getHearts() < 1) {
 				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
 				return false;
 			} else {
@@ -143,15 +134,12 @@ private static final long serialVersionUID = 1L;
 
 		if (player.getWeapon() != null && player.getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_BOWS)) {
 			Monster nearest = player.getNearestMonster();
-			if (nearest != null) {
-				if (Position.flatDistance(nearest.getPosition(), player.getPosition()) < 2) {
-					invalidationMessage = "You can't aim your " + player.getWeapon().getDescription()
-							+ " this close to the enemy, get away!";
-					return false;
-				}
+			if (nearest != null && Position.flatDistance(nearest.getPosition(), player.getPosition()) < 2) {
+				invalidationMessage = "You can't aim your " + player.getWeapon().getDescription()
+						+ " this close to the enemy, get away!";
+				return false;
 			}
 		}
-
 		return true;
 	}
 

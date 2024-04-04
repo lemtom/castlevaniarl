@@ -156,7 +156,7 @@ public class CharDisplay extends Display {
 		si.cls();
 		printBars();
 
-		String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+		String heshe = player.getPronoun();
 
 		si.print(2, 3, "The chronicles of " + player.getName(), ConsoleSystemInterface.RED);
 
@@ -189,7 +189,7 @@ public class CharDisplay extends Display {
 		si.cls();
 		printBars();
 
-		String heshe = player.getSex() == Player.MALE ? "he" : "she";
+		String heshe = player.getPronoun().toLowerCase();
 
 		si.print(2, 3, "                           ", ConsoleSystemInterface.RED);
 
@@ -236,7 +236,7 @@ public class CharDisplay extends Display {
 			si.print(13, 5 + i, "" + scores[i].getScore());
 			si.print(25, 5 + i, scores[i].getDate());
 			si.print(36, 5 + i, scores[i].getTurns());
-			si.print(43, 5 + i, (scores[i].getDeathString() + " on level " + scores[i].getDeathLevel()));
+			si.print(43, 5 + i, scores[i].getDeathString() + " on level " + scores[i].getDeathLevel());
 
 		}
 		si.print(2, 23, "[Press Space]");
@@ -326,62 +326,6 @@ public class CharDisplay extends Display {
 
 		si.print(6, 18, "[ Press space to exit ]", ConsoleSystemInterface.WHITE);
 
-		/*
-		 * 
-		 * 
-		 * si.print(0,1,
-		 * "                                                                                "
-		 * ); si.print(0,2,
-		 * "                                                                                "
-		 * ); si.print(0,3,
-		 * "                              * - HELP - *                                      "
-		 * , ConsoleSystemInterface.RED); si.print(0,4,
-		 * "                                                                                "
-		 * ); si.print(0,5,
-		 * "                                                                                "
-		 * ); si.print(0,6,
-		 * "        -- ACTIONS --                             -- MOVEMENT --                "
-		 * , ConsoleSystemInterface.RED); si.print(0,7,
-		 * "                                                                      7 8 9     "
-		 * ); si.print(0,8,
-		 * "  ( ) Action: Aim mystic or ranged weapon                              \\|/      "
-		 * ); si.print(0,9,
-		 * "  (a) Attack: Uses a weapon                     Arrow Keys or Numpad  4-@-6     "
-		 * ); si.print(0,10,
-		 * "  (d) Drop: Drops an item                                              /|\\      "
-		 * ); si.print(0,11,
-		 * "  (D) Dive: Dives into deep water                                     1 2 3     "
-		 * ); si.print(0,12,
-		 * "                                                  -- COMMANDS --                "
-		 * , ConsoleSystemInterface.RED); si.print(0,12,
-		 * "  (e) Equip: Wears equipment               "); si.print(0,13,
-		 * "  (f) Fire: Aims a ranged weapon                                                "
-		 * ); si.print(0,14,
-		 * "  (g) Get: Picks up an item                (c) Character info: Player attributes"
-		 * ); si.print(0,15,
-		 * "  (j) Jump: Jumps, emerge, fly             (i) Inventory: Shows the inventory   "
-		 * ); si.print(0,16,
-		 * "  (r) Reload: Reloads a given weapon       (l) Look: Identifies map symbols 	"
-		 * ); si.print(0,17,
-		 * "  (s) Skills: Use character skills         (m) Messages: Latest messages        "
-		 * ); si.print(0,18,
-		 * "  (t) Throw: Throws an Item                (M) Map: Shows the castle map        "
-		 * ); si.print(0,19,
-		 * "  (u) Use: Uses an Item                    (Q) Quit: Exits game                 "
-		 * ); si.print(0,19,
-		 * "  (U) Unequip: Take off an item            (S) Save: Saves game                 "
-		 * ); si.print(0,20,
-		 * "  (x) Switch: Primary for secondary weapon (T) Switch music: Turns on/off music "
-		 * ); si.print(0,21,
-		 * "                                                                                "
-		 * ); si.print(0,22,
-		 * "                                                                                "
-		 * ); si.print(0,23,
-		 * "                                            [ Press Space to Continue ]         "
-		 * , ConsoleSystemInterface.RED); si.print(0,24,
-		 * "                                                                                "
-		 * );
-		 */
 		si.refresh();
 		si.waitKey(CharKey.SPACE);
 	}
@@ -492,24 +436,6 @@ public class CharDisplay extends Display {
 		int choice = readAlphaToNumber(advancements.size());
 		si.restore();
 		return advancements.get(choice);
-		/*
-		 * ItemDefinition[] defs = new ItemDefinition[soulIds.size()]; for (int i = 0; i
-		 * < defs.length; i++){ defs[i] =
-		 * ItemFactory.getItemFactory().getDefinition((String)soulIds.get(i)); }
-		 * si.cls(); printBars();
-		 * 
-		 * si.print(2,3, " - - Level Up - -", ConsoleSystemInterface.RED); si.print(2,5,
-		 * "Please pick a spiritual memento");
-		 * 
-		 * for (int i = 0; i < defs.length; i++){ si.print(2,7+i, (char)('a'+i) + ") ",
-		 * ConsoleSystemInterface.WHITE); si.print(5,7+i,
-		 * ((CharAppearance)defs[i].getAppearance()).getChar(),
-		 * ((CharAppearance)defs[i].getAppearance()).getColor()); si.print(7,7+i,
-		 * defs[i].getDescription() + ": " + defs[i].getMenuDescription()); }
-		 * si.refresh();
-		 * 
-		 * int choice = readAlphaToNumber(defs.length); si.cls(); return choice;
-		 */
 	}
 
 	private int readAlphaToNumber(int numbers) {

@@ -355,9 +355,8 @@ public class Player extends Actor {
 			dam.boostDamage(1);
 		if (getFlag(Consts.ENV_THUNDERSTORM))
 			dam.boostDamage(2);
-		if (getFlag(Consts.ENV_SUNNY)) {
-			if (dam.getDamage() > 2)
-				dam.reduceDamage(2);
+		if (getFlag(Consts.ENV_SUNNY) && dam.getDamage() > 2) {
+			dam.reduceDamage(2);
 		}
 
 		if (hasCounter(Consts.C_ENERGYSHIELD)) {
@@ -554,13 +553,12 @@ public class Player extends Actor {
 			int blockChance = getShieldBlockChance();
 			int coverageChance = getShieldCoverageChance();
 
-			if (hasCounter("SHIELD_GUARD")) {
-				if (attackDirection == blockDirection || attackDirection == blockDirection1
-						|| attackDirection == blockDirection2) {
-					level.addMessage("You withstand the attack!");
-					blockChance *= 3;
-					coverageChance = 100;
-				}
+			if (hasCounter("SHIELD_GUARD") && (attackDirection == blockDirection || attackDirection == blockDirection1
+					|| attackDirection == blockDirection2)) {
+				level.addMessage("You withstand the attack!");
+				blockChance *= 3;
+				coverageChance = 100;
+
 			}
 
 			if (Util.chance(blockChance)) {
@@ -680,15 +678,14 @@ public class Player extends Actor {
 			break;
 		}
 
-		if (!(!effectOnAcquire[0].isEmpty() && toAdd.getDefinition().isSingleUse())) {
-			if (canCarry()) {
-				String toAddID = toAdd.getFullID();
-				Equipment equipmentx = (Equipment) inventory.get(toAddID);
-				if (equipmentx == null)
-					inventory.put(toAddID, new Equipment(toAdd, 1));
-				else
-					equipmentx.increaseQuantity();
-			}
+		if (!(!effectOnAcquire[0].isEmpty() && toAdd.getDefinition().isSingleUse()) && canCarry()) {
+			String toAddID = toAdd.getFullID();
+			Equipment equipmentx = (Equipment) inventory.get(toAddID);
+			if (equipmentx == null)
+				inventory.put(toAddID, new Equipment(toAdd, 1));
+			else
+				equipmentx.increaseQuantity();
+
 		}
 	}
 
@@ -949,17 +946,12 @@ public class Player extends Actor {
 		if (isFainted())
 			faintCount--;
 
-		if (isPoisoned()) {
-			if (Util.chance(40)) {
-				selfDamage("You feel the poison coursing through your veins!", Player.DAMAGE_POISON,
-						new Damage(3, true));
-			}
+		if (isPoisoned() && Util.chance(40)) {
+			selfDamage("You feel the poison coursing through your veins!", Player.DAMAGE_POISON, new Damage(3, true));
+
 		}
-		if (getHoverHeight() > 0)
-			if (hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2))
-				;
-			else
-				setHoverHeight(getHoverHeight() - 4);
+		if (getHoverHeight() > 0 && (!(hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2))))
+			setHoverHeight(getHoverHeight() - 4);
 		if (level.getMapCell(getPosition()) != null && level.getMapCell(getPosition()).isWater()) {
 			if (getFlag("PLAYER_SWIMMING")) {
 				if (getCounter("OXYGEN") == 0) {
@@ -1137,12 +1129,11 @@ public class Player extends Actor {
 		}
 
 		Actor aActor = level.getActorAt(destinationPoint);
-		if (aActor instanceof Hostage) {
-			if (!hasHostage() && !((Hostage) aActor).isRescued()) {
-				setHostage((Hostage) aActor);
-				addHistoricEvent("rescued " + aActor.getDescription() + " from the " + level.getDescription());
-				level.removeMonster((Monster) aActor);
-			}
+		if (aActor instanceof Hostage && !hasHostage() && !((Hostage) aActor).isRescued()) {
+			setHostage((Hostage) aActor);
+			addHistoricEvent("rescued " + aActor.getDescription() + " from the " + level.getDescription());
+			level.removeMonster((Monster) aActor);
+
 		}
 
 		Feature[] destinationFeatures = level.getFeaturesAt(destinationPoint);

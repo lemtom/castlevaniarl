@@ -37,159 +37,30 @@ public class LevelMaster {
 		Respawner x = new Respawner(15, 90);
 		x.setSelector(new RespawnAI());
 		boolean hasHostage = false;
-		boolean isStatic = false;
-		StaticPattern pattern = null;
-		if (levelID.startsWith("TOWN")) {
-			isStatic = true;
-			pattern = new BigTown();
-		} else if (levelID.startsWith("CASTLE_BRIDGE")) {
-			isStatic = true;
-			pattern = new CastleBridge();
-		} else if (levelID.startsWith("MEDUSA_LAIR")) {
-			isStatic = true;
-			pattern = new MedusaLair();
-		} else if (levelID.startsWith("FRANK_LAIR")) {
-			isStatic = true;
-			pattern = new FrankLair();
-		} else if (levelID.startsWith("TOWER_TOP")) {
-			isStatic = true;
-			pattern = new TowerTop();
-		} else if (levelID.startsWith("KEEP")) {
-			isStatic = true;
-			pattern = new Keep();
-		} else if (levelID.startsWith("VOID")) {
-			isStatic = true;
-			pattern = new DimensionalVoid();
-		} else if (levelID.startsWith("PROLOGUE_KEEP")) {
-			isStatic = true;
-			pattern = new PrologueKeep();
-		} else if (levelID.startsWith("CHAPEL")) {
-			isStatic = true;
-			pattern = new RoyalChapel();
-			hasHostage = true;
-		} else if (levelID.startsWith("GARDEN")) {
-			isStatic = true;
-			pattern = new Garden();
-		} else if (levelID.startsWith("MUMMIES_LAIR")) {
-			isStatic = true;
-			pattern = new MummiesLair();
-		} else if (levelID.startsWith("COURTYARD")) {
-			isStatic = true;
-			pattern = new Courtyard();
-		} else if (levelID.startsWith("TOWER")) {
-			isStatic = true;
-			pattern = new Tower();
-		} else if (levelID.startsWith("VILLA")) {
-			isStatic = true;
-			pattern = new Villa();
-		} else if (levelID.startsWith("TRAINING")) {
-			isStatic = true;
-			pattern = new TrainingArea();
-		} else if (levelID.startsWith("PRELUDE_ARENA")) {
-			isStatic = true;
-			pattern = new PreludeArena();
-		} else if (levelID.startsWith("TELEPAD")) {
-			isStatic = true;
-			pattern = new Telepad();
-		} else if (levelID.startsWith("DEATH_HALL")) {
-			isStatic = true;
-			pattern = new DeathHall();
-		} else if (levelID.startsWith("LEGION_LAIR")) {
-			isStatic = true;
-			pattern = new LegionLair();
-		} else if (levelID.startsWith("CAVE_FORK")) {
-			isStatic = true;
-			pattern = new CaveFork();
-		} else if (levelID.startsWith("DEEP_FORK")) {
-			isStatic = true;
-			pattern = new DeepFork();
-		} else if (levelID.startsWith("WATER_DRAGON_LAIR")) {
-			isStatic = true;
-			pattern = new WaterDragonLair();
-		} else if (levelID.startsWith("DINING_HALL")) {
-			isStatic = true;
-			pattern = new CastleCenter();
-		} else if (levelID.startsWith("QUARTERS_FORK")) {
-			isStatic = true;
-			pattern = new QuartersFork();
-		} else if (levelID.startsWith("QUARTERS_PRIZE")) {
-			isStatic = true;
-			pattern = new QuartersPrize();
-		} else if (levelID.startsWith("PRIZE_CATACOMBS")) {
-			isStatic = true;
-			pattern = new CatacombsPrize();
-		} else if (levelID.startsWith("PRIZE_RESERVOIR")) {
-			isStatic = true;
-			pattern = new ReservoirPrize();
-		} else if (levelID.startsWith("SPECIAL_RESERVOIR_TELEPAD")) {
-			isStatic = true;
-			pattern = new ReservoirTelepad();
-		} else if (levelID.startsWith("VINDELITH_MEETING")) {
-			isStatic = true;
-			pattern = new VindelithMeeting();
-		} else if (levelID.startsWith("CLARA_MEETING")) {
-			isStatic = true;
-			pattern = new ClaraMeeting();
-		} else if (levelID.startsWith("BADBELMONT")) {
-			isStatic = true;
-			pattern = new BadBelmontLair();
-		} else if (levelID.startsWith("SPECIAL_SEWERS_ENTRANCE")) {
-			isStatic = true;
-			pattern = new SewersEntrance();
-		} else if (levelID.startsWith("PRIZE_SEWERS")) {
-			isStatic = true;
-			pattern = new SewersBottom();
-		}
-
-		if (isStatic) {
-			pattern.setup(StaticGenerator.getGenerator());
-			ret = StaticGenerator.getGenerator().createLevel();
-			ret.setRutinary(pattern.isRutinary());
-			if (pattern.isHaunted()) {
-				ret.setHaunted(true);
-				ret.setNightRespawner(x);
-				ret.savePop();
-				ret.getMonsters().removeAll();
-				ret.getDispatcher().removeAll();
-
+		StaticPattern pattern = checkIfStatic(levelID);
+		if (pattern != null) {
+			if (pattern instanceof RoyalChapel) {
+				hasHostage = true;
 			}
-			ret.setRespawner(x);
-			ret.setInhabitants(pattern.getSpawnInfo());
-			ret.setDwellersInfo(pattern.getDwellers());
-			ret.setDescription(pattern.getDescription());
-			ret.setHostageSafe(pattern.isHostageSafe());
-			ret.setMusicKeyMorning(pattern.getMusicKeyMorning());
-			ret.setMusicKeyNoon(pattern.getMusicKeyNoon());
-
-			if (pattern.getBoss() != null) {
-				Monster monsBoss = MonsterFactory.getFactory().buildMonster(pattern.getBoss());
-				monsBoss.setPosition(pattern.getBossPosition());
-				ret.setBoss(monsBoss);
+			ret = setUpPattern(x, pattern);
+			if (pattern instanceof PreludeArena) {
+				x = new Respawner(6, 100);
+				x.setSelector(new RespawnAI());
+				ret.setRespawner(x);
+				overrideLevelNumber = true;
+				ret.setLevelNumber(1);
 			}
-			if (pattern.getUnleashers() != null) {
-				ret.setUnleashers(pattern.getUnleashers());
+			if (pattern instanceof BigTown) {
+				x = new Respawner(6, 100);
+				x.setSelector(new RespawnAI());
+				ret.setRespawner(x);
 			}
-			ret.setMapLocationKey(pattern.getMapKey());
-		}
-
-		if (levelID.startsWith("PRELUDE_ARENA")) {
-			x = new Respawner(6, 100);
-			x.setSelector(new RespawnAI());
-			ret.setRespawner(x);
-			overrideLevelNumber = true;
-			ret.setLevelNumber(1);
-		}
-		if (levelID.startsWith("TOWN")) {
-			x = new Respawner(6, 100);
-			x.setSelector(new RespawnAI());
-			ret.setRespawner(x);
 		}
 
 		if (levelID.startsWith("CHARRIOT_W")) {
 			BeginningLevelGenerator clg = new BeginningLevelGenerator();
 			clg.init("FOREST_TREE", "FOREST_GRASS", "FOREST_DIRT");
 			ret = clg.generateLevel(Util.rand(40, 50), Util.rand(50, 70), false);
-			// ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			ret.setDescription("Dark Forest");
 			ret.setMusicKeyMorning("");
@@ -204,7 +75,6 @@ public class LevelMaster {
 			overrideLevelNumber = true;
 			ret.setMapLocationKey("FOREST");
 			ret.setID("CHARRIOT_W");
-			// ret.setIsCandled(true);
 			ret.setRutinary(false);
 
 		} else if (levelID.startsWith("FOREST")) {
@@ -225,11 +95,9 @@ public class LevelMaster {
 			ret.setLevelNumber(1);
 			overrideLevelNumber = true;
 			ret.setMapLocationKey("FOREST");
-			// ret.setIsCandled(true);
 		} else if (levelID.startsWith("MAIN_HALL")) {
 			Entrance.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
-			//// ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(Entrance.spawnInfo);
 			ret.setRespawner(x);
 			ret.setDescription("Marble Hall");
@@ -240,11 +108,9 @@ public class LevelMaster {
 					new MonsterSpawnInfo("APE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 20), });
 			ret.setMapLocationKey("HALL");
 			hasHostage = Util.chance(10);
-			// ret.setIsCandled(true);
 		} else if (levelID.startsWith("MOAT")) {
 			Moat.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
-			// ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(Moat.spawnInfo);
 			ret.setRespawner(x);
 			ret.setDescription("Moat");
@@ -255,12 +121,10 @@ public class LevelMaster {
 							new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.UNDERGROUND, 80), });
 			ret.setMapLocationKey("HALL");
 			hasHostage = Util.chance(40);
-			// ret.setIsCandled(true);
 		} else if (levelID.startsWith("BAT_HALL")) {
 			PatternGenerator.getGenerator().resetFeatures();
 			BatLair.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
-			// ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(BatLair.spawnInfo);
 			ret.setRespawner(x);
 			Monster monsBoss = MonsterFactory.getFactory().buildMonster(BatLair.boss);
@@ -296,13 +160,11 @@ public class LevelMaster {
 							new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80), });
 			ret.setMapLocationKey("LAB");
 			hasHostage = Util.chance(30);
-			// ret.setIsCandled(true);
 			lightCandles(ret);
 		} else if (levelID.startsWith("RUINS")) {
 			RuinLevelGenerator rlg = new RuinLevelGenerator();
 			rlg.init("RUINS_WALL", "RUINS_FLOOR", "RUINS_DOOR");
 			ret = rlg.generateLevel(Util.rand(40, 50), Util.rand(40, 50), Util.rand(10, 30));
-			// ret.setInhabitants(Ruins.getInhabitants(0));
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			if (Util.chance(15))
@@ -319,7 +181,6 @@ public class LevelMaster {
 					new MonsterSpawnInfo("SKELETON_PANTHER", MonsterSpawnInfo.UNDERGROUND, 80) });
 			ret.setMapLocationKey("RUINS");
 			hasHostage = Util.chance(40);
-			// ret.setIsCandled(true);
 		} else if (levelID.startsWith("CAVES")) {
 
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
@@ -349,7 +210,6 @@ public class LevelMaster {
 				firstCave = false;
 			}
 			hasHostage = Util.chance(60);
-			// ret.setIsCandled(true);
 		} else if (levelID.startsWith("DRAGON_KING_LAIR")) {
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_FLOOR", "CAVE_WATER");
@@ -386,30 +246,13 @@ public class LevelMaster {
 							new MonsterSpawnInfo("SPEAR_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
 							new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.UNDERGROUND, 50), });
 			ret.setMapLocationKey("WAREHOUSE");
-            ret.populate();
+			ret.populate();
 			ret.setRutinary(true);
 			if (levelID.equals("WAREHOUSEX0")) {
 				Position p = ret.getExitFor("_BACK");
 				ret.removeExit("_BACK");
 				ret.addExit(p, "CAVE_FORK0");
 			}
-			/*
-			 * 
-			 * int xsize = Util.rand(15,17); int ysize = Util.rand(15,17); int entrance =
-			 * Util.rand(2,xsize-2); int exit = Util.rand(2,xsize-2); int roomSize = 5;
-			 * GirdLevelGenerator glg = new GirdLevelGenerator(); glg.init("WAREHOUSE_WALL",
-			 * "WAREHOUSE_FLOOR"); glg.setCandles(30); ret = glg.generateLevel(new
-			 * Position(xsize,ysize), entrance, exit, roomSize, roomSize, false);
-			 * ret.setDispatcher(new Dispatcher()); ret.setRespawner(x);
-			 * ret.setInhabitants(new MonsterSpawnInfo[]{ new
-			 * MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.BORDER, 80), });
-			 * ret.setDescription("Warehouse"); ret.setMusicKeyMorning("WAREHOUSE");
-			 * ret.setDwellersInfo(new String[]{"ZELDO", "GARGOYLE", "SPEAR_SKELETON",
-			 * "VAMPIRE_BAT"}); ret.setMapLocationKey("WAREHOUSE"); if
-			 * (levelID.equals("WAREHOUSEX0")){ Position p = ret.getExitFor("_BACK");
-			 * ret.removeExit("_BACK"); ret.addExit(p, "CAVE_FORK0"); }
-			 * ret.setIsCandled(true);
-			 */
 		} else if (levelID.startsWith("CATACOMBS")) {
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_FLOOR", "LAVA");
@@ -427,7 +270,6 @@ public class LevelMaster {
 							new MonsterSpawnInfo("DEMON_LORD", MonsterSpawnInfo.UNDERGROUND, 10),
 							new MonsterSpawnInfo("HEAT_SHADE", MonsterSpawnInfo.UNDERGROUND, 80), });
 			ret.setMapLocationKey("CATACOMBS");
-			// ret.setIsCandled(true);
 		} else if (levelID.startsWith("RESERVOIR")) {
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_WATER", "CAVE_FLOOR");
@@ -445,7 +287,6 @@ public class LevelMaster {
 							new MonsterSpawnInfo("FROZEN_SHADE", MonsterSpawnInfo.UNDERGROUND, 80),
 							new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.WATER, 80), });
 			ret.setMapLocationKey("RESERVOIR");
-			// ret.setIsCandled(true);
 			if (levelID.equals("RESERVOIR0")) {
 				Position p = ret.getExitFor("_BACK");
 				ret.removeExit("_BACK");
@@ -474,7 +315,6 @@ public class LevelMaster {
 				ret.removeExit("_BACK");
 				ret.addExit(p, "QUARTERS_FORK0"); // Add the correspondant fork
 			}
-			// lightCandles(ret);
 			ret.setRutinary(true);
 		} else if (levelID.startsWith("DUNGEON")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
@@ -498,7 +338,7 @@ public class LevelMaster {
 							new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 50), });
 
 			ret.setMapLocationKey("DUNGEON");
-            ret.populate();
+			ret.populate();
 			ret.setRutinary(true);
 		} else if (levelID.startsWith("CLOCK_BASE")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
@@ -519,7 +359,7 @@ public class LevelMaster {
 					new MonsterSpawnInfo("BONE_MUSKET", MonsterSpawnInfo.UNDERGROUND, 40),
 					new MonsterSpawnInfo("LILITH", MonsterSpawnInfo.UNDERGROUND, 50), });
 			ret.setMapLocationKey("CLOCKTOWER");
-            ret.populate();
+			ret.populate();
 			ret.setRutinary(true);
 		} else if (levelID.startsWith("SEWERS")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
@@ -600,9 +440,37 @@ public class LevelMaster {
 
 	}
 
-	/*
-	 * public static Dispatcher getCurrentDispatcher() { return currentDispatcher; }
-	 */
+	private static Level setUpPattern(Respawner respawner, StaticPattern pattern) throws CRLException {
+		Level ret;
+		pattern.setup(StaticGenerator.getGenerator());
+		ret = StaticGenerator.getGenerator().createLevel();
+		ret.setRutinary(pattern.isRutinary());
+		if (pattern.isHaunted()) {
+			ret.setHaunted(true);
+			ret.setNightRespawner(respawner);
+			ret.savePop();
+			ret.getMonsters().removeAll();
+			ret.getDispatcher().removeAll();
+		}
+		ret.setRespawner(respawner);
+		ret.setInhabitants(pattern.getSpawnInfo());
+		ret.setDwellersInfo(pattern.getDwellers());
+		ret.setDescription(pattern.getDescription());
+		ret.setHostageSafe(pattern.isHostageSafe());
+		ret.setMusicKeyMorning(pattern.getMusicKeyMorning());
+		ret.setMusicKeyNoon(pattern.getMusicKeyNoon());
+
+		if (pattern.getBoss() != null) {
+			Monster monsBoss = MonsterFactory.getFactory().buildMonster(pattern.getBoss());
+			monsBoss.setPosition(pattern.getBossPosition());
+			ret.setBoss(monsBoss);
+		}
+		if (pattern.getUnleashers() != null) {
+			ret.setUnleashers(pattern.getUnleashers());
+		}
+		ret.setMapLocationKey(pattern.getMapKey());
+		return ret;
+	}
 
 	protected int placeKeys(Level ret) {
 		Debug.enterMethod(this, "placeKeys");
@@ -631,7 +499,6 @@ public class LevelMaster {
 
 	public static void placeItems(Level ret, Player player) {
 		int items = Util.rand(8, 12);
-		// int items = 300;
 		for (int i = 0; i < items; i++) {
 			Item item = ItemFactory.getItemFactory().createItemForLevel(ret, player);
 			if (item == null)
@@ -667,7 +534,6 @@ public class LevelMaster {
 
 	private static ArrayList<crl.levelgen.featureCarve.Feature> getInnerQuartersRooms() {
 		int rooms = Util.rand(12, 15);
-		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
 		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String wall = "QUARTERS_WALL";
@@ -700,7 +566,6 @@ public class LevelMaster {
 
 	private static ArrayList<crl.levelgen.featureCarve.Feature> getDungeonRooms() {
 		int rooms = Util.rand(12, 15);
-		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
 		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String floor = "DUNGEON_FLOOR";
@@ -726,7 +591,6 @@ public class LevelMaster {
 
 	private static ArrayList<crl.levelgen.featureCarve.Feature> getClockTowerRooms() {
 		int rooms = Util.rand(12, 15);
-		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
 		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String wall = "TOWER_WALL";
@@ -795,7 +659,7 @@ public class LevelMaster {
 				break;
 			case 2:
 				room = new RingRoom(Util.rand(6, 12), Util.rand(6, 12), floor, column);
-                break;
+				break;
 			}
 			ret.add(room);
 		}
@@ -818,11 +682,83 @@ public class LevelMaster {
 				break;
 			case 2:
 				room = new RingRoom(Util.rand(6, 12), Util.rand(6, 12), floor, column);
-                break;
+				break;
 			}
 			ret.add(room);
 		}
 
 		return ret;
+	}
+
+	static StaticPattern checkIfStatic(String levelID) {
+		if (levelID.startsWith("TOWN")) {
+			return new BigTown();
+		} else if (levelID.startsWith("CASTLE_BRIDGE")) {
+			return new CastleBridge();
+		} else if (levelID.startsWith("MEDUSA_LAIR")) {
+			return new MedusaLair();
+		} else if (levelID.startsWith("FRANK_LAIR")) {
+			return new FrankLair();
+		} else if (levelID.startsWith("TOWER_TOP")) {
+			return new TowerTop();
+		} else if (levelID.startsWith("KEEP")) {
+			return new Keep();
+		} else if (levelID.startsWith("VOID")) {
+			return new DimensionalVoid();
+		} else if (levelID.startsWith("PROLOGUE_KEEP")) {
+			return new PrologueKeep();
+		} else if (levelID.startsWith("CHAPEL")) {
+			return new RoyalChapel();
+			// hasHostage = true;
+		} else if (levelID.startsWith("GARDEN")) {
+			return new Garden();
+		} else if (levelID.startsWith("MUMMIES_LAIR")) {
+			return new MummiesLair();
+		} else if (levelID.startsWith("COURTYARD")) {
+			return new Courtyard();
+		} else if (levelID.startsWith("TOWER")) {
+			return new Tower();
+		} else if (levelID.startsWith("VILLA")) {
+			return new Villa();
+		} else if (levelID.startsWith("TRAINING")) {
+			return new TrainingArea();
+		} else if (levelID.startsWith("PRELUDE_ARENA")) {
+			return new PreludeArena();
+		} else if (levelID.startsWith("TELEPAD")) {
+			return new Telepad();
+		} else if (levelID.startsWith("DEATH_HALL")) {
+			return new DeathHall();
+		} else if (levelID.startsWith("LEGION_LAIR")) {
+			return new LegionLair();
+		} else if (levelID.startsWith("CAVE_FORK")) {
+			return new CaveFork();
+		} else if (levelID.startsWith("DEEP_FORK")) {
+			return new DeepFork();
+		} else if (levelID.startsWith("WATER_DRAGON_LAIR")) {
+			return new WaterDragonLair();
+		} else if (levelID.startsWith("DINING_HALL")) {
+			return new CastleCenter();
+		} else if (levelID.startsWith("QUARTERS_FORK")) {
+			return new QuartersFork();
+		} else if (levelID.startsWith("QUARTERS_PRIZE")) {
+			return new QuartersPrize();
+		} else if (levelID.startsWith("PRIZE_CATACOMBS")) {
+			return new CatacombsPrize();
+		} else if (levelID.startsWith("PRIZE_RESERVOIR")) {
+			return new ReservoirPrize();
+		} else if (levelID.startsWith("SPECIAL_RESERVOIR_TELEPAD")) {
+			return new ReservoirTelepad();
+		} else if (levelID.startsWith("VINDELITH_MEETING")) {
+			return new VindelithMeeting();
+		} else if (levelID.startsWith("CLARA_MEETING")) {
+			return new ClaraMeeting();
+		} else if (levelID.startsWith("BADBELMONT")) {
+			return new BadBelmontLair();
+		} else if (levelID.startsWith("SPECIAL_SEWERS_ENTRANCE")) {
+			return new SewersEntrance();
+		} else if (levelID.startsWith("PRIZE_SEWERS")) {
+			return new SewersBottom();
+		}
+		return null;
 	}
 }

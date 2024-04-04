@@ -435,7 +435,7 @@ public class GFXDisplay extends Display {
 		while (x.code != CharKey.Y && x.code != CharKey.y && x.code != CharKey.N && x.code != CharKey.n)
 			x = si.inkey();
 
-		boolean ret = (x.code == CharKey.Y || x.code == CharKey.y);
+		boolean ret = x.code == CharKey.Y || x.code == CharKey.y;
 		addornedTextArea.setVisible(false);
 		return ret;
 	}
@@ -460,8 +460,6 @@ public class GFXDisplay extends Display {
 			}
 		}
 	}
-
-	// private Color TRANSPARENT_BLUE = new Color(100,100,100,200);
 
 	public void showChat(String chatID, Game game) {
 		si.saveBuffer();
@@ -489,7 +487,6 @@ public class GFXDisplay extends Display {
 		si.saveBuffer();
 		String screenText = (String) pScreen;
 		showTextBox(screenText, this.configuration.getScreenWidth() - 370, 70, 340, 375);
-		// si.waitKey(CharKey.SPACE);
 		si.restore();
 	}
 
@@ -581,7 +578,6 @@ public class GFXDisplay extends Display {
 	public void showMonsterScreen(Monster who, Player player) {
 		((GFXUserInterface) UserInterface.getUI()).messageBox.setVisible(false);
 		GFXAppearance app = (GFXAppearance) who.getAppearance();
-		// si.saveBuffer();
 		si.drawImage(IMG_LEVEL_UP);
 		si.print(8, 2, who.getDescription(), GFXDisplay.COLOR_BOLD);
 		si.drawImage(15, 40, app.getImage());

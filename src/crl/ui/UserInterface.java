@@ -1,15 +1,25 @@
 package crl.ui;
 
+import crl.Visible;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.actor.Message;
+import crl.feature.Feature;
+import crl.game.GameFiles;
+import crl.game.STMusicManagerNew;
+import crl.item.Item;
 import crl.item.Merchant;
+import crl.level.Cell;
 import crl.level.Level;
+import crl.monster.Monster;
 import crl.npc.NPC;
 import crl.player.Player;
 import crl.ui.effects.Effect;
+import sz.csi.CharKey;
 import sz.csi.textcomponents.ListItem;
+import sz.csi.textcomponents.MenuItem;
 import sz.util.Debug;
+import sz.util.Position;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,9 +29,12 @@ import java.util.List;
  * Shows the level Informs the Actions and Commands of the player. Must be
  * listening to a System Interface
  */
-
 public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	// Attributes
+	protected int xrange;
+	protected int yrange;
+	protected Monster lockedMonster;
+
 	// private String[] quitMessages;
 	protected String[] quitMessages = new String[] { "Do you really want to abandon Transylvania?",
 			"Quit now, and let the evil count roam the world free?",
@@ -64,8 +77,6 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 			"Mediocre(3)", "Trained(1)", "Trained(2)", "Trained(3)", "Skilled(1)", "Skilled(2)", "Skilled(3)",
 			"Master" };
 
-	// private final int WEAPONCODE = CharKey.SPACE;
-
 	private boolean[][] FOVMask;
 
 	// Interactive Methods
@@ -94,9 +105,9 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	}
 
 	public void init(UserCommand[] gameCommands) {
-		// uiSelector = selector;
 		FOVMask = new boolean[80][25];
-        for (UserCommand gameCommand : gameCommands) this.gameCommands.put(gameCommand.getKeyCode() + "", gameCommand);
+		for (UserCommand gameCommand : gameCommands)
+			this.gameCommands.put(gameCommand.getKeyCode() + "", gameCommand);
 		addCommandListener(this);
 	}
 
@@ -121,9 +132,9 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 
 	protected void informPlayerCommand(int command) {
 		Debug.enterMethod(this, "informPlayerCommand", command + "");
-        for (CommandListener commandListener : commandListeners) {
-            commandListener.commandSelected(command);
-        }
+		for (CommandListener commandListener : commandListeners) {
+			commandListener.commandSelected(command);
+		}
 		Debug.exitMethod();
 	}
 
@@ -145,13 +156,15 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 
 	public abstract void refresh();
 
-	// This method can be invoked from any thread and won't cause rendering issues.
-	// Provided mostly so that the Swing implementation can refresh the UI from
-	// non UI threads safely.
+	/**
+	 * This method can be invoked from any thread and won't cause rendering issues.
+	 * Provided mostly so that the Swing implementation can refresh the UI from non
+	 * UI threads safely.
+	 */
 	public abstract void safeRefresh();
 
 	/**
-	 * Shows a message inmediately; useful for system messages.
+	 * Shows a message immediately; useful for system messages.
 	 * 
 	 * @param x the message to be shown
 	 */
@@ -160,7 +173,7 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	public abstract void showImportantMessage(String x);
 
 	/**
-	 * Shows a message inmediately; useful for system messages. Waits for a key
+	 * Shows a message immediately; useful for system messages. Waits for a key
 	 * press or something.
 	 * 
 	 * @param x the message to be shown
@@ -179,44 +192,6 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	public abstract Action showInventory() throws ActionCancelException;
 
 	public abstract Action showSkills() throws ActionCancelException;
-
-	public void commandSelected(int commandCode) {
-		switch (commandCode) {
-		case CommandListener.PROMPTQUIT:
-			processQuit();
-			break;
-		case CommandListener.PROMPTSAVE:
-			processSave();
-			break;
-		case CommandListener.HELP:
-			Display.thus.showHelp();
-			break;
-		case CommandListener.LOOK:
-			doLook();
-			break;
-		case CommandListener.SHOWSTATS:
-			showPlayerStats();
-			break;
-		case CommandListener.SHOWINVEN:
-			try {
-				actionSelectedByCommand = showInventory();
-			} catch (ActionCancelException ace) {
-
-			}
-			break;
-		case CommandListener.SHOWSKILLS:
-			try {
-				if (!player.isSwimming()) {
-					actionSelectedByCommand = showSkills();
-				} else {
-					player.getLevel().addMessage("You can't do that!");
-				}
-			} catch (ActionCancelException ace) {
-
-			}
-			break;
-		}
-	}
 
 	private boolean gameOver;
 
@@ -247,4 +222,198 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	public abstract void setPersistantMessage(String description);
 
 	public abstract void showVersionDialog(String description, boolean stop);
+
+	protected abstract Item pickItem(String prompt) throws ActionCancelException;
+
+	protected abstract Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException;
+
+	protected abstract int pickDirection(String prompt) throws ActionCancelException;
+
+	protected abstract Item pickEquipedItem(String prompt) throws ActionCancelException;
+
+	protected abstract ArrayList<MenuItem> pickMultiItems(String prompt) throws ActionCancelException;
+
+	protected abstract Item pickUnderlyingItem(String prompt) throws ActionCancelException;
+
+	protected void setActionTargets(Action a, Action target) throws ActionCancelException {
+		if (a.needsItem())
+			a.setItem(pickItem(a.getPromptItem()));
+		if (a.needsDirection()) {
+			a.setDirection(pickDirection(a.getPromptDirection()));
+		}
+		if (a.needsPosition()) {
+			if (a == target)
+				a.setPosition(pickPosition(a.getPromptPosition(), CharKey.f));
+			else
+				a.setPosition(pickPosition(a.getPromptPosition(), CharKey.SPACE));
+		}
+		if (a.needsEquipedItem())
+			a.setEquipedItem(pickEquipedItem(a.getPromptEquipedItem()));
+		if (a.needsMultiItems()) {
+			a.setMultiItems(pickMultiItems(a.getPromptMultiItems()));
+		}
+		if (a.needsSpirits()) {
+			a.setMultiItems(pickSpirits(a));
+		}
+		if (a.needsUnderlyingItem()) {
+			a.setItem(pickUnderlyingItem(a.getPrompUnderlyingItem()));
+		}
+	}
+
+	protected abstract List<MenuItem> pickSpirits(Action a) throws ActionCancelException;
+
+	protected static int calculate(int hits) {
+		return (hits - 1) / 20 + 1;
+	}
+
+	protected static int calculateRest(int hits) {
+		return (hits - 1) % 20 + 1;
+	}
+
+	protected static boolean checkVisible(Visible visibleThing) {
+		return visibleThing != null && visibleThing.isVisible();
+	}
+
+	protected void adjustOffset(Position offset) {
+		if (offset.x >= getXrange())
+			offset.x = getXrange();
+		if (offset.x <= -getXrange())
+			offset.x = -getXrange();
+		if (offset.y >= getYrange())
+			offset.y = getYrange();
+		if (offset.y <= -getYrange())
+			offset.y = -getYrange();
+	}
+
+	protected int getXrange() {
+		return xrange;
+	}
+
+	protected int getYrange() {
+		return yrange;
+	}
+
+	protected void switchMusic() {
+		boolean enabled = STMusicManagerNew.thus.isEnabled();
+		if (enabled) {
+			showMessage("Turn off music");
+			STMusicManagerNew.thus.stopMusic();
+			STMusicManagerNew.thus.setEnabled(false);
+		} else {
+			showMessage("Turn on music");
+			STMusicManagerNew.thus.setEnabled(true);
+			if (!level.isDay() && level.hasNoonMusic())
+				STMusicManagerNew.thus.playKey(level.getMusicKeyNoon());
+			else
+				STMusicManagerNew.thus.playKey(level.getMusicKeyMorning());
+		}
+	}
+
+	protected abstract void examineLevelMap();
+
+	public void commandSelected(int commandCode) {
+		switch (commandCode) {
+		case CommandListener.PROMPTQUIT:
+			processQuit();
+			break;
+		case CommandListener.PROMPTSAVE:
+			processSave();
+			break;
+		case CommandListener.HELP:
+			doHelp();
+			break;
+		case CommandListener.LOOK:
+			doLook();
+			break;
+		case CommandListener.SHOWSTATS:
+			showPlayerStats();
+			break;
+		case CommandListener.SHOWINVEN:
+			try {
+				actionSelectedByCommand = showInventory();
+			} catch (ActionCancelException ace) {
+				doShowInventory();
+			}
+			break;
+		case CommandListener.SHOWSKILLS:
+			try {
+				if (!player.isSwimming()) {
+					actionSelectedByCommand = showSkills();
+				} else {
+					player.getLevel().addMessage("You can't do that!");
+					throw new ActionCancelException();
+				}
+			} catch (ActionCancelException ace) {
+				doShowSkills();
+			}
+			break;
+		case CommandListener.SHOWMESSAGEHISTORY:
+			showMessageHistory();
+			break;
+		case CommandListener.SHOWMAP:
+			Display.thus.showMap(level.getMapLocationKey(), level.getDescription());
+			break;
+		case CommandListener.SWITCHMUSIC:
+			switchMusic();
+			break;
+		case CommandListener.EXAMINELEVELMAP:
+			examineLevelMap();
+			break;
+		case CommandListener.CHARDUMP:
+			GameFiles.saveChardump(player);
+			showMessage("Character File Dumped.");
+			break;
+		}
+	}
+
+	protected abstract void doShowSkills();
+
+	protected void doShowInventory() {
+		// Do nothing
+	}
+
+	protected void doHelp() {
+		Display.thus.showHelp();
+	}
+
+	protected Position establishDefaultTarget(Position nearest) {
+		Position defaultTarget;
+		defaultTarget = nearest;
+		if (lockedMonster != null) {
+			if (!player.sees(lockedMonster) || lockedMonster.isDead()) {
+				lockedMonster = null;
+			} else {
+				defaultTarget = new Position(lockedMonster.getPosition());
+			}
+		}
+		return defaultTarget;
+	}
+	
+	protected Position establishOffset(Position defaultTarget, int pcX, int pcY) {
+		Position offset = new Position(0, 0);
+		if (defaultTarget != null) {
+			offset = new Position(defaultTarget.x - player.getPosition().x, defaultTarget.y - player.getPosition().y);
+		}
+		if (!insideViewPort(pcX + offset.x, pcY + offset.y)) {
+			offset = new Position(0, 0);
+		}
+		return offset;
+	}
+	
+	protected String establishLooked(Position browser, Cell choosen, Feature feat, Item item, Actor actor) {
+		String looked = "";
+		if (choosen != null)
+			looked += choosen.getDescription();
+		if (level.getBloodAt(browser) != null)
+			looked += "{bloody}";
+		if (feat != null)
+			looked += ", " + feat.getDescription();
+		if (actor != null)
+			looked += ", " + actor.getDescription();
+		if (item != null)
+			looked += ", " + item.getDescription();
+		return looked;
+	}
+
+	public abstract boolean insideViewPort(int i, int j);
 }

@@ -158,12 +158,10 @@ public class BorderedMenuBox {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW || key.code == CharKey.N8)
-				if (currentPage > 0)
-					currentPage--;
-			if (key.code == CharKey.DARROW || key.code == CharKey.N2)
-				if (currentPage < pages - 1)
-					currentPage++;
+			if (key.code == CharKey.UARROW || key.code == CharKey.N8 && currentPage > 0)
+				currentPage--;
+			if (key.code == CharKey.DARROW || key.code == CharKey.N2 && currentPage < pages - 1)
+				currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
 				return shownItems.get(key.code - CharKey.A);
@@ -188,12 +186,10 @@ public class BorderedMenuBox {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW || key.code == CharKey.N8)
-				if (currentPage > 0)
-					currentPage--;
-			if (key.code == CharKey.DARROW || key.code == CharKey.N2)
-				if (currentPage < pages - 1)
-					currentPage++;
+			if (key.code == CharKey.UARROW || key.code == CharKey.N8 && currentPage > 0)
+				currentPage--;
+			if (key.code == CharKey.DARROW || key.code == CharKey.N2 && currentPage < pages - 1)
+				currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
 				return shownItems.get(key.code - CharKey.A);

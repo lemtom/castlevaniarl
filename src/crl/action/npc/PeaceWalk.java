@@ -7,37 +7,40 @@ import crl.level.Level;
 import crl.monster.Monster;
 
 public class PeaceWalk extends Action {
-private static final long serialVersionUID = 1L;
-	public String getID(){
+	private static final long serialVersionUID = 1L;
+
+	public String getID() {
 		return "PeaceWalk";
 	}
-	
+
 	@Override
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
-	public void execute(){
+	public void execute() {
 
-        Position var = directionToVariation(targetDirection);
-        Position destinationPoint = Position.add(performer.getPosition(), var);
-        Level aLevel = performer.getLevel();
-        if (!aLevel.isValidCoordinate(destinationPoint))
-        	return;
-        Cell destinationCell = aLevel.getMapCell(destinationPoint);
-        Cell currentCell = aLevel.getMapCell(performer.getPosition());
-        Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
-        //SmartFeature standing = aLevel.getSmartFeature(performer.getPosition());
-        if (destinationCell != null)
-			if (!destinationCell.isSolid())
-				if (destinationMonster == null)
-					if (currentCell == null || destinationCell.getHeight() == currentCell.getHeight())
-						if (!destinationCell.isWater() && !destinationCell.isShallowWater())
-							if (!aLevel.getPlayer().getPosition().equals(destinationPoint))
-								if (destinationCell.isEthereal())
-									performer.setPosition(aLevel.getDeepPosition(destinationPoint));
-								else
-									performer.setPosition(destinationPoint);
+		Position variation = directionToVariation(targetDirection);
+		Position destinationPoint = Position.add(performer.getPosition(), variation);
+		Level aLevel = performer.getLevel();
+		if (!aLevel.isValidCoordinate(destinationPoint))
+			return;
+		Cell destinationCell = aLevel.getMapCell(destinationPoint);
+		Cell currentCell = aLevel.getMapCell(performer.getPosition());
+		Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
+		if (checkEligibility(destinationPoint, aLevel, destinationCell, currentCell, destinationMonster))
+			if (destinationCell.isEthereal())
+				performer.setPosition(aLevel.getDeepPosition(destinationPoint));
+			else
+				performer.setPosition(destinationPoint);
+	}
+
+	private boolean checkEligibility(Position destinationPoint, Level aLevel, Cell destinationCell, Cell currentCell,
+			Monster destinationMonster) {
+		return destinationCell != null && !destinationCell.isSolid() && destinationMonster == null
+				&& (currentCell == null || destinationCell.getHeight() == currentCell.getHeight())
+				&& !destinationCell.isWater() && !destinationCell.isShallowWater()
+				&& !aLevel.getPlayer().getPosition().equals(destinationPoint);
 	}
 
 }

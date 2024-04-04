@@ -12,7 +12,7 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class MonsterMissile extends Action {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private int range;
 	private String message;
 	private String effectType;
@@ -21,133 +21,147 @@ private static final long serialVersionUID = 1L;
 	private String effectWav;
 	private int damage;
 	private String type;
-	
-	public String getEffectWav(){
+
+	public String getEffectWav() {
 		return effectWav;
 	}
+
 	public static final String TYPE_AXE = "AXE", TYPE_STRAIGHT = "STRAIGHT", TYPE_DIRECT = "DIRECT";
 
-    public void set(String pType, String pStatusEffect, int pRange, String pMessage, String pEffectType, String pEffectID, int damage, String pEffectWav){
+	public void set(String pType, String pStatusEffect, int pRange, String pMessage, String pEffectType,
+			String pEffectID, int damage, String pEffectWav) {
 		type = pType;
 		range = pRange;
 		statusEffect = pStatusEffect;
 		message = pMessage;
 		effectType = pEffectType;
 		effectID = pEffectID;
-		effectWav =  pEffectWav;
+		effectWav = pEffectWav;
 		this.damage = damage;
 	}
 
-	
-	public String getID(){
+	public String getID() {
 		return "MONSTER_MISSILE";
 	}
-	
+
 	@Override
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
-
-	public void execute(){
+	public void execute() {
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to throw a bone");
 		Monster aMonster = (Monster) performer;
-        Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
-        int targetDirection = solveDirection(performer.getPosition(), targetPosition);
-        if (effectWav != null){
-        	SFXManager.play(effectWav);
-        }
-        switch (effectType) {
-            case "beam":
-                drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
-                break;
-            case "melee":
-                drawEffect(EffectFactory.getSingleton().createDirectionalEffect(aMonster.getPosition(), targetDirection, range, effectID));
-                break;
-            case "missile":
-                drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
-                break;
-            case "directionalmissile":
-                drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
-                break;
-        }
-        Line line = new Line(aMonster.getPosition(), targetPosition);
-        boolean hits = false;
-        for (int i=0; i<range; i++){
+		Level aLevel = performer.getLevel();
+		Player aPlayer = aLevel.getPlayer();
+		int targetDirection = solveDirection(performer.getPosition(), targetPosition);
+		renderEffect(aMonster, targetDirection);
+		Line line = new Line(aMonster.getPosition(), targetPosition);
+		boolean hits = false;
+		for (int i = 0; i < range; i++) {
 			Position destinationPoint = line.next();
-			if (aPlayer.getPosition().equals(destinationPoint)){
-				int penalty = Position.distance(aMonster.getPosition(), aPlayer.getPosition())/4;
+			if (aPlayer.getPosition().equals(destinationPoint)) {
+				int penalty = Position.distance(aMonster.getPosition(), aPlayer.getPosition()) / 4;
 				int attack = aMonster.getAttack();
 				attack -= penalty;
-				if (attack < 1)
+				if (attack < 1) {
 					attack = 1;
-                switch (type) {
-                    case TYPE_DIRECT:
-                        hits = true;
-                        break;
-                    case TYPE_STRAIGHT:
-                        //if (monsterCell.getHeight() == playerCell.getHeight()){
-                        hits = aMonster.getStandingHeight() == aPlayer.getStandingHeight();
-                        break;
-                    case TYPE_AXE:
-                        if (i > (range / 4) && i < (3 * (range / 4))) {
-                            //if (playerCell.getHeight() == monsterCell.getHeight()+2 || playerCell.getHeight() == monsterCell.getHeight()+3){
-                            hits = aMonster.getStandingHeight() + 2 == aPlayer.getStandingHeight() || aMonster.getStandingHeight() + 3 == aPlayer.getStandingHeight();
-                        } else {
-                            hits = aMonster.getStandingHeight() == aPlayer.getStandingHeight();
-                        }
-                        break;
-                }
-				if (hits){
+				}
+				hits = determineType(aMonster, aPlayer, hits, i);
+				if (hits) {
 					aLevel.addBlood(destinationPoint, 1);
-					if (aPlayer.damage("The "+aMonster.getDescription()+ " hits you!", aMonster, new Damage((damage==0?aMonster.getAttack():damage), false))) {
-						if (statusEffect != null){
-                            switch (statusEffect) {
-                                case Player.STATUS_STUN:
-                                    aLevel.addMessage("You are stunned!");
-                                    aPlayer.setStun(8);
-                                    break;
-                                case Player.STATUS_POISON:
-                                    aLevel.addMessage("Your blood is poisoned!");
-                                    aPlayer.setPoison(15);
-                                    break;
-                                case Player.STATUS_PETRIFY:
-                                    aLevel.addMessage("Your skin petrifies!");
-                                    aPlayer.setPetrify(10);
-                                    break;
-                            }
-						}
-					}
+					determineDamageAndEffect(aMonster, aLevel, aPlayer);
 				}
 				break;
 			}
 		}
-		aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
+		aLevel.addMessage("The " + aMonster.getDescription() + " " + message + ".");
 	}
-	
-	private int solveDirection(Position old, Position newP){
-		if (newP.x() == old.x()){
-			if (newP.y() > old.y()){
+
+	private boolean determineType(Monster aMonster, Player aPlayer, boolean hits, int i) {
+		switch (type) {
+		case TYPE_DIRECT:
+			return true;
+		case TYPE_STRAIGHT:
+			return aMonster.getStandingHeight() == aPlayer.getStandingHeight();
+		case TYPE_AXE:
+			if (i > (range / 4) && i < (3 * (range / 4))) {
+				return aMonster.getStandingHeight() + 2 == aPlayer.getStandingHeight()
+						|| aMonster.getStandingHeight() + 3 == aPlayer.getStandingHeight();
+			} else {
+				return aMonster.getStandingHeight() == aPlayer.getStandingHeight();
+			}
+		default:
+			return hits;
+		}
+	}
+
+	private void determineDamageAndEffect(Monster aMonster, Level aLevel, Player aPlayer) {
+		if (aPlayer.damage("The " + aMonster.getDescription() + " hits you!", aMonster,
+				new Damage(damage == 0 ? aMonster.getAttack() : damage, false)) && statusEffect != null) {
+			switch (statusEffect) {
+			case Player.STATUS_STUN:
+				aLevel.addMessage("You are stunned!");
+				aPlayer.setStun(8);
+				break;
+			case Player.STATUS_POISON:
+				aLevel.addMessage("Your blood is poisoned!");
+				aPlayer.setPoison(15);
+				break;
+			case Player.STATUS_PETRIFY:
+				aLevel.addMessage("Your skin petrifies!");
+				aPlayer.setPetrify(10);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private void renderEffect(Monster aMonster, int targetDirection) {
+		if (effectWav != null) {
+			SFXManager.play(effectWav);
+		}
+		switch (effectType) {
+		case "beam":
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition,
+					effectID, range));
+			break;
+		case "melee":
+			drawEffect(EffectFactory.getSingleton().createDirectionalEffect(aMonster.getPosition(), targetDirection,
+					range, effectID));
+			break;
+		case "missile":
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition,
+					effectID, range));
+			break;
+		case "directionalmissile":
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aMonster.getPosition(), targetPosition,
+					effectID, range));
+			break;
+		}
+	}
+
+	private int solveDirection(Position old, Position newP) {
+		if (newP.x() == old.x()) {
+			if (newP.y() > old.y()) {
 				return Action.DOWN;
 			} else {
-                 return Action.UP;
+				return Action.UP;
 			}
-		} else
-		if (newP.y() == old.y()){
-			if (newP.x() > old.x()){
+		} else if (newP.y() == old.y()) {
+			if (newP.x() > old.x()) {
 				return Action.RIGHT;
 			} else {
 				return Action.LEFT;
 			}
-		} else
-		if (newP.x() < old.x()){
+		} else if (newP.x() < old.x()) {
 			if (newP.y() > old.y())
 				return Action.DOWNLEFT;
 			else
 				return Action.UPLEFT;
 		} else {
-            if (newP.y() > old.y())
+			if (newP.y() > old.y())
 				return Action.DOWNRIGHT;
 			else
 				return Action.UPRIGHT;
@@ -155,9 +169,9 @@ private static final long serialVersionUID = 1L;
 	}
 
 	@Override
-	public int getCost(){
+	public int getCost() {
 		Monster m = (Monster) performer;
-		if (m.getAttackCost() == 0){
+		if (m.getAttackCost() == 0) {
 			Debug.say("quickie monster");
 			return 10;
 		}

@@ -12,7 +12,6 @@ public class SwingConsoleFrame extends javax.swing.JFrame {
 
 	public void init(Font f, int xdim, int ydim) {
 		initComponents();
-		// setBounds(0,0, (int)((xdim) * f.getSize() * 0.7), (ydim + 1) * f.getSize());
 		swingConsolePanel.init(f, xdim, ydim);
 	}
 
@@ -24,7 +23,6 @@ public class SwingConsoleFrame extends javax.swing.JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		getContentPane().add(swingConsolePanel);
 		setCursor(null);
-		// swingConsolePanel.setBounds(0, 0, 0, 0);
 		pack();
 	}
 

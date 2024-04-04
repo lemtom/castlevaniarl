@@ -3,19 +3,20 @@ package crl.item;
 import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
-
+import crl.Visible;
 import crl.player.Consts;
 import crl.player.Player;
 import crl.ui.*;
 import crl.ui.consoleUI.CharAppearance;
 import crl.ui.graphicsUI.GFXAppearance;
 
-public class Item implements Serializable, MenuItem, GFXMenuItem {
+public class Item implements Serializable, MenuItem, GFXMenuItem, Visible {
 	private static final long serialVersionUID = 1L;
 	private transient ItemDefinition definition;
 	private String defID;
@@ -49,12 +50,6 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	public void reload() {
 		setRemainingTurnsToReload(getDefinition().getReloadTurns());
 	}
-
-	/*
-	 * public ListItem getSightListItem() {
-	 * ((BasicListItem)getDefinition().getSightListItem()).setRow(getDescription());
-	 * return getDefinition().getSightListItem(); }
-	 */
 
 	public boolean isVisible() {
 		return !getDefinition().getAppearance().getID().equals("VOID");
@@ -194,10 +189,6 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 		return getDefinition().getEffectOnAcquire();
 	}
 
-	/*
-	 * public String getEffectOnStep() { return getDefinition().getEffectOnStep(); }
-	 */
-
 	public String getEffectOnUse() {
 		return getDefinition().getEffectOnUse();
 	}
@@ -225,10 +216,6 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	public boolean isSlicesThrough() {
 		return getDefinition().isSlicesThrough() || modifiersSliceThru();
 	}
-
-	/*
-	 * public String getThrowMessage() { return getDefinition().getThrowMessage(); }
-	 */
 
 	public int getThrowRange() {
 		return getDefinition().getThrowRange();
@@ -320,7 +307,7 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 		return getDefinition().getWeaponCategory();
 	}
 
-	protected Hashtable<String, Integer> hashCounters = new Hashtable<>();
+	protected Map<String, Integer> hashCounters = new HashMap<>();
 
 	public void setCounter(String counterID, int turns) {
 		hashCounters.put(counterID, turns);
@@ -339,10 +326,9 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}
 
 	public void reduceCounters(Player p) {
-		Enumeration<String> countersKeys = hashCounters.keys();
-		while (countersKeys.hasMoreElements()) {
-			String key = countersKeys.nextElement();
-			Integer counter = hashCounters.get(key);
+		for (Entry<String, Integer> entry : hashCounters.entrySet()) {
+			Integer counter = entry.getValue();
+			String key = entry.getKey();
 			if (counter == 0) {
 				if (key.equals(Consts.C_WEAPON_ENCHANTMENT)) {
 					p.getLevel().addMessage("Your " + getDescription() + " stops glowing.");

@@ -10,7 +10,6 @@ public class StrokeInformer implements KeyListener, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int bufferCode;
-	// private transient UserInterface aUI;
 	private transient Thread keyListener;
 
 	public StrokeInformer() {
@@ -25,13 +24,8 @@ public class StrokeInformer implements KeyListener, Serializable {
 		return bufferCode;
 	}
 
-	/*
-	 * public void setUI(UserInterface pUI){ aUI = pUI; }
-	 */
-
 	public void keyPressed(KeyEvent e) {
 		bufferCode = charCode(e);
-		// if (!e.isShiftDown())
 		keyListener.interrupt();
 	}
 
@@ -56,7 +50,6 @@ public class StrokeInformer implements KeyListener, Serializable {
 		switch (x.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
 			return CharKey.SPACE;
-
 		case KeyEvent.VK_COMMA:
 			return CharKey.COMMA;
 		case KeyEvent.VK_PERIOD:
@@ -98,14 +91,16 @@ public class StrokeInformer implements KeyListener, Serializable {
 			return CharKey.LARROW;
 		case KeyEvent.VK_RIGHT:
 			return CharKey.RARROW;
-
+		default:
+			return CharKey.NONE;
 		}
-		return CharKey.NONE;
 	}
 
 	public void keyReleased(KeyEvent e) {
+		// Void
 	}
 
 	public void keyTyped(KeyEvent e) {
+		// Void
 	}
 }

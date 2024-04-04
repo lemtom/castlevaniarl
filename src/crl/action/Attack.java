@@ -46,11 +46,6 @@ public class Attack extends Action {
 			return;
 		}
 
-		/*
-		 * if (player.hasCounter(Consts.C_WOLFMORPH) ||
-		 * player.hasCounter(Consts.C_WOLFMORPH2)) weapon = null;
-		 */
-
 		if (weapon == null || weapon.getDefinition().getWeaponCategory().equals(ItemDefinition.CAT_UNARMED)) {
 			if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.getPosition()) == null) {
 				aLevel.addMessage("Don't hit yourself");
@@ -93,11 +88,9 @@ public class Attack extends Action {
 		int startHeight = aLevel.getMapCell(player.getPosition()).getHeight() + player.getHoverHeight();
 		ItemDefinition weaponDef = weapon.getDefinition();
 
-		if (weapon.getReloadTurns() > 0)
-			if (weapon.getRemainingTurnsToReload() == 0) {
-				if (!reload(weapon, player))
-					return;
-			}
+		if (weapon.getReloadTurns() > 0 && weapon.getRemainingTurnsToReload() == 0 && !reload(weapon, player)) {
+			return;
+		}
 
 		String[] sfx = weaponDef.getAttackSFX().split(" ");
 		if (sfx.length > 0)
@@ -105,32 +98,11 @@ public class Attack extends Action {
 				Effect me = EffectFactory.getSingleton().createDirectionalEffect(performer.getPosition(),
 						targetDirection, weapon.getRange(), "SFX_WP_" + weaponDef.getID());
 				aLevel.addEffect(me);
-			} else if (sfx[0].equals("BEAM")) {
+			} else if (sfx[0].equals("BEAM") || sfx[0].equals("MISSILE")) {
 				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
 						"SFX_WP_" + weaponDef.getID(), weapon.getRange());
-				aLevel.addEffect(me);
-			} else if (sfx[0].equals("MISSILE")) {
-				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
-						"SFX_WP_" + weaponDef.getID(), weapon.getRange());
-				if (!weapon.isSlicesThrough()) {
-					int i = 0;
-					for (i = 0; i < weapon.getRange(); i++) {
-						Position destinationPoint = Position.add(performer.getPosition(), Position.mul(var, i + 1));
-						Cell destinationCell = aLevel.getMapCell(destinationPoint);
-						Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-						if (destinationFeature != null && destinationFeature.isDestroyable())
-							break;
-						Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-						if (targetMonster != null && !(targetMonster.isInWater() && targetMonster.canSwim())
-								&& (destinationCell.getHeight() == aLevel.getMapCell(player.getPosition()).getHeight()
-										|| destinationCell.getHeight() - 1 == aLevel.getMapCell(player.getPosition())
-												.getHeight()
-										|| destinationCell.getHeight() == aLevel.getMapCell(player.getPosition())
-												.getHeight() - 1))
-							break;
-					}
-					me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
-							"SFX_WP_" + weaponDef.getID(), i);
+				if (sfx[0].equals("MISSILE") && !weapon.isSlicesThrough()) {
+					me = handleSlice(var, player, aLevel, weaponDef);
 				}
 				aLevel.addEffect(me);
 			}
@@ -140,7 +112,6 @@ public class Attack extends Action {
 		for (int i = 0; i < weapon.getRange(); i++) {
 			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(var, i + 1));
 			Cell destinationCell = aLevel.getMapCell(destinationPoint);
-			/* aLevel.addMessage("You hit the "+destinationCell.getID()); */
 
 			String message = "";
 
@@ -189,8 +160,6 @@ public class Attack extends Action {
 						hitMsg.append("You hit something!");
 				}
 
-				// targetMonster.damage(player.getWhipLevel());
-
 				targetMonster.damageWithWeapon(hitMsg, attack);
 				aLevel.addMessage(hitMsg.toString());
 			}
@@ -209,15 +178,11 @@ public class Attack extends Action {
 			Cell targetMapCell = aLevel.getMapCell(destinationPoint);
 			if (targetMapCell != null && targetMapCell.isSolid()) {
 				hitsSomebody = true;
-				// aLevel.addMessage("You hit the "+targetMapCell.getShortDescription());
 			}
 
 			if (hitsSomebody && !weapon.isSlicesThrough())
 				break;
 		}
-		/*
-		 * if (!hitsSomebody) aLevel.addMessage("You swing at the air!");
-		 */
 		if (!hitsSomebody && player.hasCounter(Consts.C_FIREBALL_WHIP)) {
 			Action fireball = new WhipFireball();
 			fireball.setPerformer(performer);
@@ -238,6 +203,27 @@ public class Attack extends Action {
 					player.setWeapon(null);
 			}
 		}
+	}
+
+	private Effect handleSlice(Position var, Player player, Level aLevel, ItemDefinition weaponDef) {
+		Effect me;
+		int i = 0;
+		for (i = 0; i < weapon.getRange(); i++) {
+			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(var, i + 1));
+			Cell destinationCell = aLevel.getMapCell(destinationPoint);
+			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+			if (destinationFeature != null && destinationFeature.isDestroyable())
+				break;
+			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+			if (targetMonster != null && !(targetMonster.isInWater() && targetMonster.canSwim())
+					&& (destinationCell.getHeight() == aLevel.getMapCell(player.getPosition()).getHeight()
+							|| destinationCell.getHeight() - 1 == aLevel.getMapCell(player.getPosition()).getHeight()
+							|| destinationCell.getHeight() == aLevel.getMapCell(player.getPosition()).getHeight() - 1))
+				break;
+		}
+		me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
+				"SFX_WP_" + weaponDef.getID(), i);
+		return me;
 	}
 
 	@Override
@@ -338,16 +324,13 @@ public class Attack extends Action {
 		}
 		if (player.getWeapon() != null && player.getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_BOWS)) {
 			Monster nearest = player.getNearestMonster();
-			if (nearest != null) {
-				if (Position.distance(nearest.getPosition(), player.getPosition()) < 2) {
-					invalidationMessage = "You can't aim your " + player.getWeapon().getDescription()
-							+ " this close to the enemy, get away!";
-					return false;
-				}
+			if (nearest != null && Position.distance(nearest.getPosition(), player.getPosition()) < 2) {
+				invalidationMessage = "You can't aim your " + player.getWeapon().getDescription()
+						+ " this close to the enemy, get away!";
+				return false;
 			}
 		}
 		return true;
-
 	}
 
 	static class WhipFireball extends ProjectileSkill {

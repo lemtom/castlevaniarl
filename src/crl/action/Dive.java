@@ -7,7 +7,8 @@ import crl.level.Level;
 import crl.player.Player;
 
 public class Dive extends Action {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "DIVE";
 	}
@@ -16,19 +17,16 @@ private static final long serialVersionUID = 1L;
 		Player aPlayer = (Player) performer;
 		Level aLevel = aPlayer.getLevel();
 		Cell currentCell = aLevel.getMapCell(aPlayer.getPosition());
-		if (currentCell.isShallowWater()) {
-			if (aPlayer.getPosition().z != aLevel.getDepth() - 1) {
-				Position deep = new Position(aPlayer.getPosition());
-				deep.z++;
-				if (!aLevel.getMapCell(deep).isSolid()) {
-					aLevel.addMessage("You dive into the water");
-					aPlayer.landOn(deep, false);
-				} else {
-					aLevel.addMessage("You can't dive lower");
-				}
+		if (currentCell.isShallowWater() && aPlayer.getPosition().z != aLevel.getDepth() - 1) {
+			Position deep = new Position(aPlayer.getPosition());
+			deep.z++;
+			if (!aLevel.getMapCell(deep).isSolid()) {
+				aLevel.addMessage("You dive into the water");
+				aPlayer.landOn(deep, false);
+			} else {
+				aLevel.addMessage("You can't dive lower");
 			}
 		}
-
 	}
 
 	@Override

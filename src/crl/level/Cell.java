@@ -55,9 +55,8 @@ public class Cell implements Cloneable, Serializable {
 	}
 
 	public Appearance getAppearance() {
-		if (appearance == null) {
-			if (appearanceID != null)
-				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
+		if (appearance == null && appearanceID != null) {
+			appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
 		}
 		return appearance;
 	}

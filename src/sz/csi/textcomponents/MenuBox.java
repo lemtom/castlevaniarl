@@ -119,12 +119,10 @@ public class MenuBox extends TextComponent {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW)
-				if (currentPage > 0)
-					currentPage--;
-			if (key.code == CharKey.DARROW)
-				if (currentPage < pages - 1)
-					currentPage++;
+			if (key.code == CharKey.UARROW && currentPage > 0)
+				currentPage--;
+			if (key.code == CharKey.DARROW && currentPage < pages - 1)
+				currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
 				return shownItems.get(key.code - CharKey.A);
@@ -152,12 +150,10 @@ public class MenuBox extends TextComponent {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW)
-				if (currentPage > 0)
-					currentPage--;
-			if (key.code == CharKey.DARROW)
-				if (currentPage < pages - 1)
-					currentPage++;
+			if (key.code == CharKey.UARROW && currentPage > 0)
+				currentPage--;
+			if (key.code == CharKey.DARROW && currentPage < pages - 1)
+				currentPage++;
 
 			if (isOneOf(key.code, keys))
 				throw new AdditionalKeysSignal(key.code);
@@ -178,12 +174,10 @@ public class MenuBox extends TextComponent {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW)
-				if (currentPage > 0)
-					currentPage--;
-			if (key.code == CharKey.DARROW)
-				if (currentPage < pages - 1)
-					currentPage++;
+			if (key.code == CharKey.UARROW && currentPage > 0)
+				currentPage--;
+			if (key.code == CharKey.DARROW && currentPage < pages - 1)
+				currentPage++;
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
 				return shownItems.get(key.code - CharKey.A);

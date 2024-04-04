@@ -1,7 +1,7 @@
 package crl.monster;
 
 import sz.util.*;
-
+import crl.Visible;
 import crl.action.*;
 import crl.item.*;
 import crl.level.Emerger;
@@ -15,7 +15,7 @@ import crl.player.Consts;
 import crl.player.Player;
 import crl.actor.*;
 
-public class Monster extends Actor implements Cloneable {
+public class Monster extends Actor implements Cloneable, Visible {
 	private static final long serialVersionUID = 1L;
 
 	// Attributes

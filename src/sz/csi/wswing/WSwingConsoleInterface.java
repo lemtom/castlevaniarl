@@ -10,11 +10,11 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.BufferedReader;
 
+/**
+ * Provides Console IO. Returns keystrokes as CharKeys. Shows the characters in
+ * a Frame
+ */
 public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable, ComponentListener {
-	/**
-	 * Provides Console IO. Returns keystrokes as CharKeys. Shows the characters in
-	 * a Frame
-	 */
 
 	// Relations
 	private SwingConsoleFrame targetFrame; // To get the keypresses from the AWT Model
@@ -28,7 +28,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 	private boolean autorefresh;
 
 	// Static Attributes
-    public static Font consoleFont;
+	public static Font consoleFont;
 	public static int xdim = 80;
 	public static int ydim = 25;
 
@@ -47,7 +47,6 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		int fontSize = defineFontSize(initialSize.height, initialSize.width);
 		String strConsoleFont = loadFont();
 		consoleFont = new Font(strConsoleFont, Font.PLAIN, fontSize);
-		// targetFrame.setUndecorated(true);
 		targetFrame.init(consoleFont, xdim, ydim);
 
 		colors = new int[xdim][ydim];
@@ -60,7 +59,6 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		targetFrame.addComponentListener(this);
 
 		targetFrame.setSize((int) (fontSize * xdim * 0.7 * 1.05), (int) (fontSize * ydim * 1.15));
-		// targetFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		targetFrame.setLocation(0, 0);
 		locate(1, 1);
 		targetFrame.setVisible(true);
@@ -72,10 +70,6 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 
 	public void cls() {
 		targetPanel.cls();
-		/*
-		 * for (int i = 0; i< xdim; i++){ for (int j = 0; j< ydim; j++){
-		 * targetPanel.plot(' ', i, j) ; } } /
-		 */
 	}
 
 	public void locate(int x, int y) {
@@ -83,17 +77,8 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		ypos = y;
 	}
 
-	/*
-	 * public void refresh(Thread t) { refresh(); t.interrupt(); }
-	 */
-	// int rcount;
 	public void refresh() {
-		// System.out.println("Count "+ (rcount++) );
 		targetFrame.repaint();
-		/*
-		 * try { Thread.currentThread().sleep(1000); } catch (InterruptedException ie){
-		 * }
-		 */
 	}
 
 	public void print(int x, int y, String what, int color) {
@@ -328,10 +313,10 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		int byWidth = (int) (scrWidth / (xdim * 0.8));
 
 		return Math.min(byHeight, byWidth);
-
 	}
 
 	public void run() {
+		// Void
 	}
 
 	public boolean isInsideBounds(Position p) {
@@ -349,12 +334,10 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void componentResized(ComponentEvent e) {
@@ -363,7 +346,6 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		consoleFont = new Font(strConsoleFont, Font.PLAIN, fontSize);
 		targetFrame.setFont(consoleFont);
 		targetPanel.setFont(consoleFont);
-
 	}
 
 	public void componentShown(ComponentEvent e) {
@@ -378,11 +360,6 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 	}
 
 	public void restore() {
-		/*
-		 * for (int i = 0; i < colors.length; i++){ System.arraycopy(colorsBuffer[i], 0,
-		 * colors[i], 0, colors[i].length-1); System.arraycopy(charsBuffer[i], 0,
-		 * chars[i], 0, colors[i].length-1); }
-		 */
 		for (int x = 0; x < colors.length; x++)
 			for (int y = 0; y < colors[0].length; y++)
 				this.print(x, y, charsBuffer[x][y], colorsBuffer[x][y]);

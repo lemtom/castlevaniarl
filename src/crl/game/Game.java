@@ -38,23 +38,20 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		return canSave;
 	}
 
-	private HashMap /* Level */<String, Level> storedLevels = new HashMap<>();
+	private HashMap<String, Level> storedLevels = new HashMap<>();
 	private boolean endGame;
 	private long turns;
 	private boolean isDay = true;
 	private int timeSwitch;
 	private HashMap<String, LevelMetaData> levelMetadata = new HashMap<>();
-	// private String[] levelPath;
 
 	public void commandSelected(int commandCode) {
 		if (commandCode == CommandListener.QUIT) {
 			finishGame();
-		} else if (commandCode == CommandListener.SAVE) {
-			if (canSave()) {
-				freezeUniqueRegister();
-				GameFiles.saveGame(this, player);
-				exitGame();
-			}
+		} else if (commandCode == CommandListener.SAVE && canSave()) {
+			freezeUniqueRegister();
+			GameFiles.saveGame(this, player);
+			exitGame();
 		}
 	}
 
@@ -88,9 +85,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 			if (actor == player) {
 				if (currentLevel != null)
 					currentLevel.updateLevelStatus();
-				// ui.refresh();
 				turns++;
-				// player.addScore(1);
 				checkTimeSwitch();
 			}
 			Debug.exitMethod();
@@ -194,7 +189,6 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		Display.thus.showIntro(player);
 
 		loadLevel("CHARRIOT_W", 0);
-		// loadLevel("DRAGON_KING_LAIR", 15);
 		turns = 0;
 		timeSwitch = DAY_LENGTH;
 		run();
@@ -211,7 +205,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		ui.addCommandListener(this);
 		ui.setGameOver(false);
 		player.setPlayerEventListener(this);
-        LevelMetaData md = new LevelMetaData();
+		LevelMetaData md = new LevelMetaData();
 		md.setLevelID("TRAINING");
 		levelMetadata.put("TRAINING", md);
 
@@ -270,18 +264,18 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		ArrayList<Object> levels = new ArrayList<>(5);
 		ArrayList<String> numbered = new ArrayList<>(5);
 		int levelCount = startLevelNumber;
-        for (String[] strings : order) {
-            int n = Util.rand(3, 6);
-            if (strings[1].contains("ONE"))
-                n = 1;
-            for (int j = 0; j < n; j++) {
-                levels.add(strings[0] + j);
-                if (!strings[1].contains("NONUMBER"))
-                    numbered.add("yes");
-                else
-                    numbered.add("no");
-            }
-        }
+		for (String[] strings : order) {
+			int n = Util.rand(3, 6);
+			if (strings[1].contains("ONE"))
+				n = 1;
+			for (int j = 0; j < n; j++) {
+				levels.add(strings[0] + j);
+				if (!strings[1].contains("NONUMBER"))
+					numbered.add("yes");
+				else
+					numbered.add("no");
+			}
+		}
 
 		for (int i = 0; i < levels.size(); i++) {
 			LevelMetaData md = new LevelMetaData();
@@ -380,7 +374,6 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		md.setLevelID("VILLA");
 		levelMetadata.put("VILLA", md);
 
-		// levelPath = (String[]) levels.toArray(new String[levels.size()]);
 		storedLevels = new HashMap<>();
 	}
 
@@ -418,10 +411,6 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 			ui.showSystemMessage("Your body collapses!  [Press Space to continue]");
 			finishGame();
 			break;
-		/*
-		 * case Player.EVT_NEXT_LEVEL: loadNextLevel(); break; case
-		 * Player.EVT_BACK_LEVEL: loadBackLevel(); break;
-		 */
 		case Player.EVT_GOTO_LEVEL:
 			loadLevel((String) param);
 			break;
@@ -458,10 +447,6 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		Debug.exitMethod();
 	}
 
-	/*
-	 * private void endGame(){ Display.thus.showEndgame(player); }
-	 */
-
 	private void finishGame() {
 		if (!player.isDoNotRecordScore()) {
 			GameFiles.updateGraveyard(Main.getMonsterRecord(), player.getGameSessionInfo());
@@ -475,7 +460,6 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 	}
 
 	public void exitGame() {
-		// levelNumber = -1;
 		currentLevel.disableTriggers();
 		currentLevel = null;
 		ui.removeCommandListener(this);
@@ -497,7 +481,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		Display.thus.showEndgame(player);
 		player.getGameSessionInfo().setDeathCause(GameSessionInfo.ASCENDED);
 		finishGame();
-    }
+	}
 
 	private boolean loadLevel(String levelID, int targetLevelNumber) {
 		Debug.enterMethod(this, "loadLevel", levelID + "," + targetLevelNumber);
@@ -506,7 +490,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 			if (currentLevel.getBoss() != null && !currentLevel.getBoss().isDead())
 				return false;
 			formerLevelID = currentLevel.getID();
-            storedLevels.computeIfAbsent(formerLevelID, k -> currentLevel);
+			storedLevels.computeIfAbsent(formerLevelID, k -> currentLevel);
 		} else {
 			formerLevelID = "_BACK";
 		}
@@ -537,7 +521,6 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 				crash("Error while creating level " + levelID, crle);
 			}
 		}
-		// currentLevel.setLevelNumber(targetLevelNumber);
 		player.setLevel(currentLevel);
 
 		if (currentLevel.getExitFor(formerLevelID) != null) {
@@ -548,24 +531,22 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 			player.setPosition(currentLevel.getAnExit());
 		}
 
-		if (currentLevel.isHostageSafe()) {
-			if (player.hasHostage()) {
-				// player.setPosition(currentLevel.getExitFor("_NEXT"));
-				Hostage h = player.getHostage();
-				player.setHostage(null);
-				h.setPosition(player.getPosition().x - 3, player.getPosition().y, player.getPosition().z);
-				h.setRescued(true);
-				currentLevel.addMonster(h);
-				player.addHistoricEvent("brought " + h.getDescription() + " to safety");
-				Display.thus.showHostageRescue(h);
-				player.addGold(h.getReward());
-				Item reward = h.getItemReward();
-				if (reward != null)
-					if (player.canCarry())
-						player.addItem(reward);
-					else
-						player.getLevel().addItem(player.getPosition(), reward);
-			}
+		if (currentLevel.isHostageSafe() && player.hasHostage()) {
+			Hostage h = player.getHostage();
+			player.setHostage(null);
+			h.setPosition(player.getPosition().x - 3, player.getPosition().y, player.getPosition().z);
+			h.setRescued(true);
+			currentLevel.addMonster(h);
+			player.addHistoricEvent("brought " + h.getDescription() + " to safety");
+			Display.thus.showHostageRescue(h);
+			player.addGold(h.getReward());
+			Item reward = h.getItemReward();
+			if (reward != null)
+				if (player.canCarry())
+					player.addItem(reward);
+				else
+					player.getLevel().addItem(player.getPosition(), reward);
+
 		}
 		dispatcher = currentLevel.getDispatcher();
 		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()) {
@@ -599,7 +580,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
 		}
 
-        ui.levelChange();
+		ui.levelChange();
 
 	}
 

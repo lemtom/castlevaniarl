@@ -1,9 +1,10 @@
 package crl.feature;
 
+import crl.Visible;
 import crl.actor.*;
 import crl.ui.*;
 
-public class SmartFeature extends Actor implements Cloneable {
+public class SmartFeature extends Actor implements Cloneable, Visible {
 	private static final long serialVersionUID = 1L;
 
 	private boolean destroyable;
@@ -63,9 +64,8 @@ public class SmartFeature extends Actor implements Cloneable {
 
 	@Override
 	public Appearance getAppearance() {
-		if (appearance == null) {
-			if (appearanceID != null)
-				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
+		if (appearance == null && appearanceID != null) {
+			appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
 		}
 		return appearance;
 	}

@@ -27,14 +27,6 @@ public class GirdLevelGenerator extends LevelGenerator {
 		this.baseFloor = baseFloor;
 	}
 
-	private void printVisited() {
-		/*
-		 * for (int y = 0; y < visitedRooms[0].length; y++){ for (int x = 0; x <
-		 * visitedRooms.length; x++) if (visitedRooms[x][y]) System.out.print("."); else
-		 * System.out.print("X"); Debug.say(""); }
-		 */
-	}
-
 	private void lightCandles(Level l) {
 		for (int i = 0; i < candles; i++) {
 			int xrnd = Util.rand(1, getWidth() * roomWidth - 1);
@@ -66,7 +58,6 @@ public class GirdLevelGenerator extends LevelGenerator {
 		this.horizontal = horizontal;
 
 		setVisitedRooms();
-		// printVisited();
 		Level ret = plotLevel();
 		lightCandles(ret);
 

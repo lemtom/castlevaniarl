@@ -5,8 +5,6 @@ import crl.actor.Actor;
 import crl.actor.Message;
 import crl.feature.Feature;
 import crl.feature.SmartFeature;
-import crl.game.GameFiles;
-import crl.game.STMusicManagerNew;
 import crl.item.Item;
 import crl.item.ItemDefinition;
 import crl.item.Merchant;
@@ -39,9 +37,8 @@ import java.util.Map;
  */
 public class ConsoleUserInterface extends UserInterface implements CommandListener, Runnable {
 	// Attributes
-	private int xrange = 25;
-	private int yrange = 9;
-	private Monster lockedMonster;
+	protected int xrange = 25;
+	protected int yrange = 9;
 
 	// Components
 	private TextInformBox messageBox;
@@ -55,14 +52,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	// Relations
 
 	private transient ConsoleSystemInterface si;
-
-	// Setters
-	/**
-	 * Sets the object which will be informed of the player commands. this
-	 * corresponds to the Game object
-	 */
-
-	// Getters
 
 	// Smart Getters
 	public Position getAbsolutePosition(Position insideLevel) {
@@ -81,42 +70,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.saveBuffer();
 		Monster lookedMonster = null;
 		while (true) {
-			Position browser = Position.add(player.getPosition(), offset);
-			String looked = "";
-			si.restore();
-			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
-				Cell choosen = level.getMapCell(browser);
-				Feature feat = level.getFeatureAt(browser);
-				List<MenuItem> items = level.getItemsAt(browser);
-				Item item = null;
-				if (items != null) {
-					item = (Item) items.get(0);
-				}
-				Actor actor = level.getActorAt(browser);
-				if (choosen != null)
-					looked += choosen.getDescription();
-				if (level.getBloodAt(browser) != null)
-					looked += "{bloody}";
-				if (feat != null)
-					looked += ", " + feat.getDescription();
-				if (item != null)
-					if (items.size() == 1)
-						looked += ", " + item.getDescription();
-					else
-						looked += ", " + item.getDescription() + " and some items";
-				if (actor != null) {
-					if (actor instanceof Monster) {
-						looked += ", " + actor.getDescription() + " ['m' for extended info]";
-						lookedMonster = (Monster) actor;
-					} else {
-						looked += ", " + actor.getDescription();
-					}
-				}
-			}
-			messageBox.setText(looked);
-			messageBox.draw();
-			si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_', ConsoleSystemInterface.RED);
-			si.refresh();
+			lookedMonster = look(offset, lookedMonster);
 			CharKey x = new CharKey(CharKey.NONE);
 			while (x.code != CharKey.SPACE && x.code != CharKey.m && x.code != CharKey.ESC && !x.isArrow())
 				x = si.inkey();
@@ -129,19 +83,37 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					Display.thus.showMonsterScreen(lookedMonster, player);
 			} else {
 				offset.add(Action.directionToVariation(Action.toIntDirection(x)));
-
-				if (offset.x >= xrange)
-					offset.x = xrange;
-				if (offset.x <= -xrange)
-					offset.x = -xrange;
-				if (offset.y >= yrange)
-					offset.y = yrange;
-				if (offset.y <= -yrange)
-					offset.y = -yrange;
+				adjustOffset(offset);
 			}
 		}
 		messageBox.setText("Look mode off");
 		refresh();
+	}
+
+	private Monster look(Position offset, Monster lookedMonster) {
+		Position browser = Position.add(player.getPosition(), offset);
+		String looked = "";
+		si.restore();
+		if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
+			Cell choosen = level.getMapCell(browser);
+			Feature feat = level.getFeatureAt(browser);
+			List<MenuItem> items = level.getItemsAt(browser);
+			looked += ConsoleUtils.determineLooked(choosen, feat, items, level.getBloodAt(browser));
+			Actor actor = level.getActorAt(browser);
+			if (actor != null) {
+				if (actor instanceof Monster) {
+					looked += ", " + actor.getDescription() + " ['m' for extended info]";
+					lookedMonster = (Monster) actor;
+				} else {
+					looked += ", " + actor.getDescription();
+				}
+			}
+		}
+		messageBox.setText(looked);
+		messageBox.draw();
+		si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_', ConsoleSystemInterface.RED);
+		si.refresh();
+		return lookedMonster;
 	}
 
 	public void launchMerchant(Merchant who) {
@@ -188,7 +160,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			else {
 				menuBox.setPrompt("Too bad... May I interest you in something else?");
 			}
-			// menuBox.draw();
 		}
 		Equipment.eqMode = false;
 		Item.shopMode = false;
@@ -237,17 +208,14 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	// Drawing Methods
 	public void drawEffect(Effect what) {
-		// Debug.enterMethod(this, "drawEffect", what);
 		if (what == null)
 			return;
-		// drawLevel();
 		if (insideViewPort(getAbsolutePosition(what.getPosition()))) {
 			si.refresh();
 			si.setAutoRefresh(true);
 			((CharEffect) what).drawEffect(this, si);
 			si.setAutoRefresh(false);
 		}
-		// Debug.exitMethod();
 	}
 
 	@Override
@@ -333,7 +301,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private void determineSmartFeature(Position runner, int x, int y) {
 		SmartFeature sfeat = level.getSmartFeature(runner);
-		if (sfeat != null && sfeat.isVisible()) {
+		if (checkVisible(sfeat)) {
 			CharAppearance featApp = (CharAppearance) sfeat.getAppearance();
 			si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, featApp.getChar(), featApp.getColor());
 		}
@@ -341,7 +309,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private void determineFeature(Position runner, int x, int y) {
 		Feature feat = level.getFeatureAt(runner);
-		if (feat != null && feat.isVisible()) {
+		if (checkVisible(feat)) {
 			BasicListItem li = sightListItems.get(feat.getID());
 			if (li == null) {
 				Debug.say("Adding " + feat.getID() + " to the HashMap");
@@ -364,10 +332,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			cellColor = ConsoleSystemInterface.DARK_BLUE;
 		}
 		if (bloodLevel != null) {
-			cellColor = determineCellColorByBloodLevel(bloodLevel, cellColor);
+			cellColor = ConsoleUtils.determineCellColorByBloodLevel(bloodLevel, cellColor, !level.isDay());
 		}
 		if (vcells[x][y].isWater()) {
-			cellColor = determineCellColorByWater(runner);
+			cellColor = ConsoleUtils.determineCellColorByWater(level.canFloatUpward(runner));
 		}
 
 		char cellChar = cellApp.getChar();
@@ -392,7 +360,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					if (level.getFrostAt(runner) != 0) {
 						cellChar = '#';
 					}
-					// if (!level.isVisible(runner.x, runner.y))
 					if (vcells[x][y] == null)
 						si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, cellChar, ConsoleSystemInterface.GRAY);
 				} else if (vcells[x][y] == null || vcells[x][y].getID().equals("AIR"))
@@ -407,7 +374,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private void determineMonsters(Position runner, int x, int y) {
 		Monster monster = level.getMonsterAt(runner);
-		if (monster != null && monster.isVisible()) {
+		if (checkVisible(monster)) {
 			BasicListItem li = null;
 			if (monster instanceof NPC) {
 				li = sightListItems.get(monster.getDescription());
@@ -448,56 +415,21 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		if (items != null) {
 			item = (Item) items.get(0);
 		}
-		if (item != null) {
-			if (item.isVisible()) {
-				CharAppearance itemApp = (CharAppearance) item.getAppearance();
-				si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, itemApp.getChar(), itemApp.getColor());
-				BasicListItem li = sightListItems.get(item.getDefinition().getID());
-				if (li == null) {
-					// Debug.say("Adding "+item.getDefinition().getID()+" to the HashMap");
-					sightListItems.put(item.getDefinition().getID(),
-							new BasicListItem(((CharAppearance) item.getAppearance()).getChar(),
-									((CharAppearance) item.getAppearance()).getColor(),
-									item.getDefinition().getDescription()));
-					li = sightListItems.get(item.getDefinition().getID());
-				}
-				if (!itemsOnSight.contains(li))
-					itemsOnSight.add(li);
+		if (checkVisible(item)) {
+			CharAppearance itemApp = (CharAppearance) item.getAppearance();
+			si.print(PC_POS.x - xrange + x, PC_POS.y - yrange + y, itemApp.getChar(), itemApp.getColor());
+			BasicListItem li = sightListItems.get(item.getDefinition().getID());
+			if (li == null) {
+				sightListItems.put(item.getDefinition().getID(),
+						new BasicListItem(((CharAppearance) item.getAppearance()).getChar(),
+								((CharAppearance) item.getAppearance()).getColor(),
+								item.getDefinition().getDescription()));
+				li = sightListItems.get(item.getDefinition().getID());
 			}
-		}
-	}
+			if (!itemsOnSight.contains(li))
+				itemsOnSight.add(li);
 
-	private int determineCellColorByWater(Position runner) {
-		int cellColor;
-		if (level.canFloatUpward(runner)) {
-			cellColor = ConsoleSystemInterface.BLUE;
-		} else {
-			cellColor = ConsoleSystemInterface.DARK_BLUE;
 		}
-		return cellColor;
-	}
-
-	private int determineCellColorByBloodLevel(String bloodLevel, int cellColor) {
-		switch (Integer.parseInt(bloodLevel)) {
-		case 0:
-			if (!level.isDay()) {
-				cellColor = ConsoleSystemInterface.DARK_RED;
-			} else {
-				cellColor = ConsoleSystemInterface.RED;
-			}
-			break;
-		case 1:
-			if (!level.isDay()) {
-				cellColor = ConsoleSystemInterface.PURPLE;
-			} else {
-				cellColor = ConsoleSystemInterface.DARK_RED;
-			}
-			break;
-		case 8:
-			cellColor = ConsoleSystemInterface.LEMON;
-			break;
-		}
-		return cellColor;
 	}
 
 	@Override
@@ -530,7 +462,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	}
 
-	public static class ForeBackColorTuple {
+	class ForeBackColorTuple {
 		private final int foreColor;
 		private final int backColor;
 
@@ -568,10 +500,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		default:
 			return new ForeBackColorTuple(ConsoleSystemInterface.PURPLE, ConsoleSystemInterface.BROWN);
 		}
-	}
-
-	private int calculate(int hits) {
-		return (hits - 1) / 20 + 1;
 	}
 
 	private void drawPlayerStatus() {
@@ -654,8 +582,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			si.print(43, 0, fill(
 					"STAGE   " + player.getLevel().getLevelNumber() + " " + player.getLevel().getDescription(), 35));
 
-		// si.print(43+"STAGE ".length(),0);
-
 		si.print(31, 1, "v       ", ConsoleSystemInterface.RED);
 		si.print(33, 1, "- " + player.getHearts());
 		si.print(39, 1, "k     ", ConsoleSystemInterface.YELLOW);
@@ -681,10 +607,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				+ " " + player.getStatusString(), 70));
 
 		Debug.exitMethod();
-	}
-
-	private int calculateRest(int hits) {
-		return (hits - 1) % 20 + 1;
 	}
 
 	private String fill(String str, int limit) {
@@ -729,11 +651,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		persistantMessageBox.setForeColor(ConsoleSystemInterface.WHITE);
 		persistantMessageBox.setTitle("Tutorial");
 
-		/*
-		 * monstersList.setPosition(2, 4); monstersList.setWidth(27);
-		 * monstersList.setHeight(10);
-		 */
-
 		idList.setPosition(52, 4);
 		idList.setWidth(27);
 		idList.setHeight(18);
@@ -746,9 +663,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	 * Checks if the point, relative to the console coordinates, is inside the
 	 * ViewPort
 	 */
-
 	public boolean insideViewPort(int x, int y) {
-		// return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
 		return (x >= 0 && x < FOVMask.length && y >= 0 && y < FOVMask[0].length) && FOVMask[x][y];
 	}
 
@@ -760,7 +675,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return insideViewPort(getAbsolutePosition(who.getPosition()));
 	}
 
-	private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException {
+	protected Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException {
 		Debug.enterMethod(this, "pickPosition");
 		messageBox.setForeColor(ConsoleSystemInterface.BLUE);
 		messageBox.setText(prompt);
@@ -770,35 +685,15 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 		Position defaultTarget = null;
 		Position nearest = getNearestMonsterPosition();
-		defaultTarget = nearest;
 
 		Position browser = null;
-		Position offset = new Position(0, 0);
-		if (lockedMonster != null) {
-			if (!player.sees(lockedMonster) || lockedMonster.isDead())
-				lockedMonster = null;
-			else
-				defaultTarget = new Position(lockedMonster.getPosition());
-		}
-		if (!insideViewPort(PC_POS.x + offset.x, PC_POS.y + offset.y)) {
-			offset = new Position(0, 0);
-		}
+		defaultTarget = establishDefaultTarget(nearest);
+		Position offset = establishOffset(defaultTarget, PC_POS.x, PC_POS.y);
 
-		if (defaultTarget == null) {
-			offset = new Position(0, 0);
-		} else {
-			offset = new Position(defaultTarget.x - player.getPosition().x, defaultTarget.y - player.getPosition().y);
-		}
 		while (true) {
 			si.restore();
 			String looked = "";
 			browser = Position.add(player.getPosition(), offset);
-
-			/*
-			 * if (PC_POS.x + offset.x < 0 || PC_POS.x + offset.x >= FOVMask.length ||
-			 * PC_POS.y + offset.y < 0 || PC_POS.y + offset.y >=FOVMask[0].length){ offset =
-			 * new Position (0,0); browser = Position.add(player.getPosition(), offset); }
-			 */
 
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
@@ -811,16 +706,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				Actor actor = level.getActorAt(browser);
 				si.restore();
 
-				if (choosen != null)
-					looked += choosen.getDescription();
-				if (level.getBloodAt(browser) != null)
-					looked += "{bloody}";
-				if (feat != null)
-					looked += ", " + feat.getDescription();
-				if (actor != null)
-					looked += ", " + actor.getDescription();
-				if (item != null)
-					looked += ", " + item.getDescription();
+				looked = establishLooked(browser, choosen, feat, item, actor);
 			}
 			messageBox.setText(prompt + " " + looked);
 			messageBox.draw();
@@ -841,26 +727,16 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				return browser;
 			}
 			offset.add(Action.directionToVariation(Action.toIntDirection(x)));
-
-			if (offset.x >= xrange)
-				offset.x = xrange;
-			if (offset.x <= -xrange)
-				offset.x = -xrange;
-			if (offset.y >= yrange)
-				offset.y = yrange;
-			if (offset.y <= -yrange)
-				offset.y = -yrange;
+			adjustOffset(offset);
 		}
 
 	}
 
-	private int pickDirection(String prompt) throws ActionCancelException {
+	protected int pickDirection(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickDirection");
-		// refresh();
 		messageBox.setText(prompt);
 		messageBox.draw();
 		si.refresh();
-		// refresh();
 
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code == CharKey.NONE)
@@ -877,7 +753,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 	}
 
-	private Item pickEquipedItem(String prompt) throws ActionCancelException {
+	protected Item pickEquipedItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickEquipedItem");
 		ArrayList<MenuItem> equipped = new ArrayList<>();
 		if (player.getArmor() != null)
@@ -887,7 +763,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		if (player.getShield() != null)
 			equipped.add(player.getShield());
 		MenuBox menuBox = new MenuBox(si);
-		// menuBox.setBounds(26,6,30,11);
 		menuBox.setBounds(10, 3, 60, 18);
 		menuBox.setPromptSize(2);
 		menuBox.setMenuItems(equipped);
@@ -906,7 +781,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return equiped;
 	}
 
-	private Item pickItem(String prompt) throws ActionCancelException {
+	protected Item pickItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickItem");
 		List<MenuItem> inventory = player.getInventory();
 		MenuBox menuBox = new MenuBox(si);
@@ -928,7 +803,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return equipment.getItem();
 	}
 
-	private Item pickUnderlyingItem(String prompt) throws ActionCancelException {
+	protected Item pickUnderlyingItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickUnderlyingItem");
 		List<MenuItem> items = level.getItemsAt(player.getPosition());
 		if (items == null)
@@ -954,7 +829,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return item;
 	}
 
-	private ArrayList<MenuItem> pickMultiItems(String prompt) {
+	protected ArrayList<MenuItem> pickMultiItems(String prompt) {
 		Equipment.eqMode = true;
 		List<MenuItem> inventory = player.getInventory();
 		MenuBox menuBox = new MenuBox(si);
@@ -990,7 +865,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return ret;
 	}
 
-	private ArrayList<MenuItem> pickSpirits() {
+	protected ArrayList<MenuItem> pickSpirits(Action a) {
 		List<MenuItem> originalInventory = player.getInventory();
 		List<MenuItem> inventory = new ArrayList<>();
 		for (MenuItem menuItem : originalInventory) {
@@ -1095,7 +970,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	}
 
 	public void refresh() {
-		// cleanViewPort();
 		drawPlayerStatus();
 		drawLevel();
 		if (showPersistantMessageBox) {
@@ -1113,29 +987,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	}
 
 	public void setTargets(Action a) throws ActionCancelException {
-		if (a.needsItem())
-			a.setItem(pickItem(a.getPromptItem()));
-		if (a.needsDirection()) {
-			a.setDirection(pickDirection(a.getPromptDirection()));
-		}
-		if (a.needsPosition()) {
-			if (a == target) {
-				a.setPosition(pickPosition(a.getPromptPosition(), CharKey.f));
-			} else {
-				a.setPosition(pickPosition(a.getPromptPosition(), CharKey.SPACE));
-			}
-		}
-		if (a.needsEquipedItem())
-			a.setEquipedItem(pickEquipedItem(a.getPromptEquipedItem()));
-		if (a.needsMultiItems()) {
-			a.setMultiItems(pickMultiItems(a.getPromptMultiItems()));
-		}
-		if (a.needsSpirits()) {
-			a.setMultiItems(pickSpirits());
-		}
-		if (a.needsUnderlyingItem()) {
-			a.setItem(pickUnderlyingItem(a.getPrompUnderlyingItem()));
-		}
+		setActionTargets(a, target);
 	}
 
 	private ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
@@ -1201,8 +1053,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				selected = eqs.getItem();
 			} catch (AdditionalKeysSignal aks) {
 				switch (aks.getKeyCode()) {
-				case CharKey.N1:
-					// Unequip Weapon
+				case CharKey.N1: // Unequip Weapon
 					if (player.getWeapon() != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
@@ -1212,8 +1063,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					} else {
 						continue;
 					}
-				case CharKey.N2:
-					// Unequip Secondary Weapon
+				case CharKey.N2: // Unequip Secondary Weapon
 					if (player.getSecondaryWeapon() != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
@@ -1223,8 +1073,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					} else {
 						continue;
 					}
-				case CharKey.N3:
-					// Unequip Armor
+				case CharKey.N3: // Unequip Armor
 					if (player.getArmor() != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
@@ -1234,8 +1083,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					} else {
 						continue;
 					}
-				case CharKey.N4:
-					// Unequip Shield
+				case CharKey.N4: // Unequip Shield
 					if (player.getShield() != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
@@ -1285,8 +1133,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					si.restore();
 					throwx.setPosition(pickPosition("Throw where?", CharKey.SPACE));
 					return throwx;
-				case 5: // Cancel
-
+				default: // Cancel
 					break;
 				}
 			}
@@ -1295,7 +1142,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			itemDescription.clearBox();
 
 		} while (selected != null);
-//		si.waitKey(CharKey.SPACE);
 		si.restore();
 		Equipment.eqMode = false;
 		return null;
@@ -1382,13 +1228,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 		si.print(1, 11, "Experience  " + player.getXp() + "/" + player.getNextXP());
 
-		/*
-		 * si.print(1,2, "Skills", ConsoleSystemInterface.RED); ArrayList skills =
-		 * player.getAvailableSkills(); int cont = 0; for (int i = 0; i < skills.size();
-		 * i++){ if (i % 10 == 0) cont++; si.print((cont-1) * 25 + 1, 3 + i - ((cont-1)
-		 * * 10), ((Skill)skills.get(i)).getMenuDescription()); }
-		 */
-
 		si.print(1, 13, "Weapon Profficiences", ConsoleSystemInterface.RED);
 		si.print(1, 14, "Hand to hand             Whips                    Projectiles", ConsoleSystemInterface.RED);
 		si.print(1, 15, "Daggers                  Maces                    Bows/Xbows", ConsoleSystemInterface.RED);
@@ -1455,7 +1294,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		else
 			level.addMessage(selectedAction.getInvalidationMessage());
 
-		// si.refresh();
 		Debug.exitMethod(selectedAction);
 		return selectedAction;
 	}
@@ -1496,81 +1334,22 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return ret;
 	}
 
-	@Override
-	public void commandSelected(int commandCode) {
-		switch (commandCode) {
-		case CommandListener.PROMPTQUIT:
-			processQuit();
-			break;
-		case CommandListener.PROMPTSAVE:
-			processSave();
-			break;
-		case CommandListener.HELP:
-			si.saveBuffer();
-			Display.thus.showHelp();
-			si.restore();
-			break;
-		case CommandListener.LOOK:
-			doLook();
-			break;
-		case CommandListener.SHOWSTATS:
-			showPlayerStats();
-			break;
-		case CommandListener.SHOWINVEN:
-			try {
-				actionSelectedByCommand = showInventory();
-			} catch (ActionCancelException ace) {
+	protected void doShowSkills() {
+		addMessage(new Message("- Cancelled", player.getPosition()));
+		eraseOnArrival = true;
+		si.refresh();
+		actionSelectedByCommand = null;
+	}
 
-			}
-			break;
-		case CommandListener.SHOWSKILLS:
-			try {
-				if (!player.isSwimming()) {
-					actionSelectedByCommand = showSkills();
-				} else {
-					player.getLevel().addMessage("You can't do that!");
-					throw new ActionCancelException();
-				}
-			} catch (ActionCancelException ace) {
-				addMessage(new Message("- Cancelled", player.getPosition()));
-				eraseOnArrival = true;
-				si.refresh();
-				actionSelectedByCommand = null;
-			}
-			break;
-		case CommandListener.SHOWMESSAGEHISTORY:
-			showMessageHistory();
-			break;
-		case CommandListener.SHOWMAP:
-			Display.thus.showMap(level.getMapLocationKey(), level.getDescription());
-			break;
-		case CommandListener.SWITCHMUSIC:
-			boolean enabled = STMusicManagerNew.thus.isEnabled();
-			if (enabled) {
-				showMessage("Turn off music");
-				STMusicManagerNew.thus.stopMusic();
-				STMusicManagerNew.thus.setEnabled(false);
-			} else {
-				showMessage("Turn on music");
-				STMusicManagerNew.thus.setEnabled(true);
-				if (!level.isDay() && level.hasNoonMusic())
-					STMusicManagerNew.thus.playKey(level.getMusicKeyNoon());
-				else
-					STMusicManagerNew.thus.playKey(level.getMusicKeyMorning());
-			}
-			break;
-		case EXAMINELEVELMAP:
-			examineLevelMap();
-			break;
-		case CommandListener.CHARDUMP:
-			GameFiles.saveChardump(player);
-			showMessage("Character File Dumped.");
-			break;
-		}
+	protected void doHelp() {
+		si.saveBuffer();
+		Display.thus.showHelp();
+		si.restore();
 	}
 
 //	Runnable interface
 	public void run() {
+		// Void
 	}
 
 //	IO Utility    
@@ -1619,13 +1398,12 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			return messageHistory;
 	}
 
-	private void examineLevelMap() {
+	protected void examineLevelMap() {
 		si.saveBuffer();
 		si.cls();
 		int lw = level.getWidth();
 		int lh = level.getHeight();
 		int remnantx = (int) ((80 - (lw)) / 2.0d);
-		// int remnanty = (int)((25 - (lh))/2.0d);
 
 		int pages = (lh - 1) / 23 + 1;
 		int cellColor = 0;
@@ -1639,38 +1417,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				runner.y = y;
 				runner.x = 0;
 				for (int x = 0; x < level.getWidth(); x++, runner.x++) {
-					if (!level.remembers(x, y))
-						cellColor = ConsoleSystemInterface.BLACK;
-					else {
-						Cell current = level.getMapCell(x, y, player.getPosition().z);
-						Feature currentF = level.getFeatureAt(x, y, player.getPosition().z);
-						if (level.isVisible(x, y)) {
-							if (current == null)
-								cellColor = ConsoleSystemInterface.BLACK;
-							else if (level.getExitOn(runner) != null)
-								cellColor = ConsoleSystemInterface.RED;
-							else if (current.isSolid() || (currentF != null && currentF.isSolid()))
-								cellColor = ConsoleSystemInterface.BROWN;
-							else
-								cellColor = ConsoleSystemInterface.LIGHT_GRAY;
-
-						} else {
-							if (current == null)
-								cellColor = ConsoleSystemInterface.BLACK;
-							else if (level.getExitOn(runner) != null)
-								cellColor = ConsoleSystemInterface.RED;
-							else if (current.isSolid() || (currentF != null && currentF.isSolid()))
-								cellColor = ConsoleSystemInterface.BROWN;
-							else
-								cellColor = ConsoleSystemInterface.GRAY;
-						}
-						if (player.getPosition().x == x && player.getPosition().y == y)
-							cellColor = ConsoleSystemInterface.RED;
-					}
+					cellColor = findCellColor(runner, y, x);
 					si.safeprint(remnantx + x, ii, '.', cellColor);
-
 				}
-
 			}
 			si.print(5, 24, "Page " + i, ConsoleSystemInterface.RED);
 			si.refresh();
@@ -1681,4 +1430,29 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.refresh();
 
 	}
+
+	private int findCellColor(Position runner, int y, int x) {
+		if (!level.remembers(x, y))
+			return ConsoleSystemInterface.BLACK;
+		else {
+			Cell current = level.getMapCell(x, y, player.getPosition().z);
+			Feature currentF = level.getFeatureAt(x, y, player.getPosition().z);
+			int cellColor = ConsoleUtils.findCurrentCellColor(current, currentF, level.isVisible(x, y),
+					level.getExitOn(runner));
+			if (player.getPosition().x == x && player.getPosition().y == y)
+				cellColor = ConsoleSystemInterface.RED;
+			return cellColor;
+		}
+	}
+
+	@Override
+	protected int getXrange() {
+		return xrange;
+	}
+
+	@Override
+	protected int getYrange() {
+		return yrange;
+	}
+
 }

@@ -78,10 +78,9 @@ public class CircularRoom extends Feature {
 		Debug.say("Check");
 		// Carve
 		List<Position> circlePoints = circle.getPoints();
-        for (Position p : circlePoints) {
-            // canvas[p.x][p.y]=floor;
-            mask[p.x][p.y] = true;
-        }
+		for (Position p : circlePoints) {
+			mask[p.x][p.y] = true;
+		}
 
 		Debug.say("Check");
 		boolean startPainting = false;
@@ -119,10 +118,6 @@ public class CircularRoom extends Feature {
 		mask[start.x + width - 1][start.y + midHeight] = false;
 		mask[start.x + midWidth][start.y] = false;
 		mask[start.x + midWidth][start.y + height - 1] = false;
-		/*
-		 * for (int i = 0; i < circlePoints.size(); i++){ Position p =
-		 * (Position)circlePoints.get(i); canvas[p.x][p.y]=wall; }
-		 */
 
 		return true;
 	}
