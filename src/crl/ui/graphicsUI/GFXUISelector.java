@@ -82,7 +82,6 @@ public class GFXUISelector extends UISelector
 			if (useMouse && mousePosition != null) {
 				mouseDirection = -1;
 				if (level.isValidCoordinate(mousePosition)) {
-					// if (level.getMonsterAt(mousePosition) != null){
 					if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 						ret = player.getMysticAction();
 						try {
@@ -123,7 +122,6 @@ public class GFXUISelector extends UISelector
 						}
 
 					}
-					// }
 				}
 				mousePosition = null;
 			}
@@ -139,8 +137,7 @@ public class GFXUISelector extends UISelector
 
 				Monster vMonster = player.getLevel()
 						.getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
-				if (vMonster != null && vMonster.getStandingHeight() == player.getStandingHeight()
-						&& (!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC) vMonster).isHostile()))) {
+				if (evaluateMonster(vMonster)) {
 					if (attack.canPerform(player)) {
 						attack.setDirection(direction);
 						Debug.exitMethod(attack);
@@ -150,21 +147,7 @@ public class GFXUISelector extends UISelector
 						si.refresh();
 					}
 				} else {
-					advance.setDirection(direction);
-					Debug.exitMethod(advance);
-					switch (direction) {
-					case Action.UPLEFT:
-					case Action.LEFT:
-					case Action.DOWNLEFT:
-						ui().setFlipFacing(true);
-						break;
-					case Action.UPRIGHT:
-					case Action.RIGHT:
-					case Action.DOWNRIGHT:
-						ui().setFlipFacing(false);
-						break;
-					}
-					return advance;
+					return doAdvance(direction);
 				}
 			} else if (input.code == WEAPON_KEY) {
 				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
@@ -184,7 +167,7 @@ public class GFXUISelector extends UISelector
 					} catch (ActionCancelException ace) {
 						ui().addMessage(new Message("- Cancelled", player.getPosition()));
 						si.refresh();
-                        ret = null;
+						ret = null;
 					}
 				} else {
 					ret = target;
@@ -207,9 +190,6 @@ public class GFXUISelector extends UISelector
 				}
 			} else {
 				ret = getRelatedAction(input.code);
-				/*
-				 * if (ret == target){ defaultTarget = player.getNearestMonsterPosition(); }
-				 */
 				try {
 					if (ret != null) {
 						ret.setPerformer(player);
@@ -224,14 +204,36 @@ public class GFXUISelector extends UISelector
 					}
 
 				} catch (ActionCancelException ace) {
-                    ui().addMessage(new Message("- Cancelled", player.getPosition()));
+					ui().addMessage(new Message("- Cancelled", player.getPosition()));
 					ret = null;
 				}
-				// refresh();
 			}
 		}
 		Debug.exitMethod("null");
 		return null;
+	}
+
+	private Action doAdvance(int direction) {
+		advance.setDirection(direction);
+		Debug.exitMethod(advance);
+		switch (direction) {
+		case Action.UPLEFT:
+		case Action.LEFT:
+		case Action.DOWNLEFT:
+			ui().setFlipFacing(true);
+			break;
+		case Action.UPRIGHT:
+		case Action.RIGHT:
+		case Action.DOWNRIGHT:
+			ui().setFlipFacing(false);
+			break;
+		}
+		return advance;
+	}
+
+	private boolean evaluateMonster(Monster vMonster) {
+		return vMonster != null && vMonster.getStandingHeight() == player.getStandingHeight()
+				&& (!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC) vMonster).isHostile()));
 	}
 
 	public String getID() {
@@ -316,10 +318,6 @@ public class GFXUISelector extends UISelector
 			si.setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
 			break;
 		}
-		/*
-		 * if (isCursorEnabled && updateCursorPosition(e.getPoint().x, e.getPoint().y))
-		 * drawCursor();
-		 */
 	}
 
 	private int defineQuadrant(int x, int y) {
@@ -353,29 +351,6 @@ public class GFXUISelector extends UISelector
 		tempRel.x = bigx - ui().PC_POS.x - 1;
 		tempRel.y = bigy - ui().PC_POS.y - 1;
 		mousePosition = Position.add(player.getPosition(), tempRel);
-	}
-
-	private Position tempCursorPosition = new Position(0, 0);
-	private Position tempCursorPositionScr = new Position(0, 0);
-
-	private boolean updateCursorPosition(int x, int y) {
-		int bigx = (int) Math.ceil(x / 32.0);
-		int bigy = (int) Math.ceil(y / 32.0);
-		tempRel.x = bigx - ui().PC_POS.x - 1;
-		tempRel.y = bigy - ui().PC_POS.y - 1;
-		if (tempCursorPosition != null) {
-			if (tempCursorPosition.x == player.getPosition().x + bigx - ui().PC_POS.x - 1
-					&& tempCursorPosition.y == player.getPosition().y + bigy - ui().PC_POS.y - 1) {
-				return false;
-			}
-			tempCursorPosition.x = player.getPosition().x + bigx - ui().PC_POS.x - 1;
-			tempCursorPosition.y = player.getPosition().y + bigy - ui().PC_POS.y - 1;
-		}
-		if (tempCursorPositionScr != null) {
-			tempCursorPositionScr.x = tempRel.x;
-			tempCursorPositionScr.y = tempRel.y;
-		}
-		return true;
 	}
 
 	public static int toIntDirection(Position what) {

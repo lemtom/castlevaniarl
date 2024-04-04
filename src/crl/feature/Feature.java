@@ -6,6 +6,7 @@ import crl.ui.*;
 
 import java.io.Serializable;
 
+import crl.Keycostable;
 import crl.Visible;
 import crl.game.SFXManager;
 import crl.monster.Monster;
@@ -15,7 +16,7 @@ import crl.player.*;
  * A feature is something that stays inside the level but may be moved,
  * destroyed or otherwise affected.
  */
-public class Feature implements Cloneable, Serializable, Visible {
+public class Feature implements Cloneable, Serializable, Visible, Keycostable {
 
 	private static final long serialVersionUID = 1L;
 

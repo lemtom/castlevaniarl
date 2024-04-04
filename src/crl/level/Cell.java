@@ -4,9 +4,10 @@ import sz.util.*;
 
 import java.io.Serializable;
 
+import crl.Keycostable;
 import crl.ui.*;
 
-public class Cell implements Cloneable, Serializable {
+public class Cell implements Cloneable, Serializable, Keycostable {
 	private static final long serialVersionUID = 1L;
 	private boolean isStair;
 	private boolean isSolid;

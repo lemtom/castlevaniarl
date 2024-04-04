@@ -3,6 +3,7 @@ package crl.action;
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Keycostable;
 import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.item.Merchant;
@@ -36,8 +37,8 @@ public class Walk extends Action {
 			aPlayer.getLevel().addMessage("You stand alert.");
 			return;
 		}
-		Position var = directionToVariation(targetDirection);
-		Position destinationPoint = Position.add(performer.getPosition(), var);
+		Position variation = directionToVariation(targetDirection);
+		Position destinationPoint = Position.add(performer.getPosition(), variation);
 		Level aLevel = performer.getLevel();
 		Cell destinationCell = aLevel.getMapCell(destinationPoint);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
@@ -70,95 +71,117 @@ public class Walk extends Action {
 		if (destinationCell.getHeight() > currentCell.getHeight() + 2 && !aPlayer.isEthereal() && !aPlayer.isFlying())
 			aLevel.addMessage("You can't climb it.");
 		else {
-			if (destinationCell.getHeight() < currentCell.getHeight())
-				aLevel.addMessage("You descend");
-			if (destinationCell.isSolid() && !aPlayer.isEthereal()) {
-				if (destinationCell.getID().startsWith("SIGNPOST")) {
-					// aLevel.addMessage("The signpost reads : "+destinationCell.getDescription());
-					UserInterface.getUI().setPersistantMessage(destinationCell.getDescription());
-				} else {
-					aLevel.addMessage("You bump into the " + destinationCell.getShortDescription());
-				}
-			} else if (destinationFeature != null && destinationFeature.isSolid() && !aPlayer.isEthereal())
-				aLevel.addMessage("You bump into the " + destinationFeature.getDescription());
-			else if (!aLevel.isWalkable(destinationPoint) && !aPlayer.isEthereal())
-				aLevel.addMessage("Your way is blocked");
-			else if (destinationCell.getKeyCost() > aPlayer.getKeys())
-				aLevel.addMessage(
-						"You need " + (destinationCell.getKeyCost() - aPlayer.getKeys()) + " more keys to enter");
-			else if (destinationFeature != null && destinationFeature.getKeyCost() > aPlayer.getKeys())
-				aLevel.addMessage(
-						"You need " + (destinationFeature.getKeyCost() - aPlayer.getKeys()) + " more keys to enter");
-			else {
-				Actor aActor = aLevel.getActorAt(destinationPoint);
-				if (aActor != null && aActor.getStandingHeight() == aPlayer.getStandingHeight()) {
-					if (aActor instanceof Merchant && !((Merchant) aActor).isHostile()) {
-						aPlayer.informPlayerEvent(Player.EVT_MERCHANT, aActor);
-					} else {
-						if (aActor instanceof NPC && !((NPC) aActor).isHostile()) {
-							if (((NPC) aActor).getNPCID().equals("LARDA")) {
-								aPlayer.informPlayerEvent(Player.EVT_INN, aActor);
-							} else {
-								aPlayer.informPlayerEvent(Player.EVT_CHAT, aActor);
-								if (((NPC) aActor).isPriest()) {
-									if (!aPlayer.getFlag("HEALED_BY_" + ((NPC) aActor).getNPCID())) {
-										aPlayer.heal();
-										aPlayer.setFlag("HEALED_BY_" + ((NPC) aActor).getNPCID(), true);
-									}
-								}
-								if (aActor instanceof Hostage && !aPlayer.hasHostage()
-										&& !((Hostage) aActor).isRescued()) {
-									aPlayer.setHostage((Hostage) aActor);
-									aPlayer.addHistoricEvent(
-											"found " + aActor.getDescription() + " at the " + aLevel.getDescription());
-									aLevel.removeMonster((Monster) aActor);
+			tryToInteract(variation, destinationPoint, aLevel, destinationCell, destinationFeature, currentCell);
+		}
+		Debug.exitMethod();
+	}
 
-								}
-							}
-						} else {
-							if (aActor instanceof Monster) {
-								if (aPlayer.isInvincible()) {
-									// aLevel.addMessage("You are hit by the "+aMonster.getDescription()+"!");
-								} else {
-									Monster aMonster = (Monster) aActor;
-									if (aPlayer.hasEnergyField()) {
-										StringBuilder buff = new StringBuilder(
-												"You shock the " + aMonster.getDescription() + "!");
-										aMonster.damage(buff, aPlayer.getAttack());
-										aLevel.addMessage(buff.toString());
-									} else {
-										if (aPlayer.damage("You bump with the " + aMonster.getDescription() + "!",
-												aMonster, new Damage(aMonster.getAttack(), false))) {
-											aLevel.getPlayer().bounceBack(Position.mul(var, -1), 2);
-											if (aPlayer.getPosition().equals(aMonster.getPosition())) {
-												// The player wasnt bounced back..
-											} else {
-												aLevel.addMessage("You are bounced back by the "
-														+ aMonster.getDescription() + "!");
-											}
-										}
-									}
-								}
-							} else {
-								if (aLevel.getBloodAt(aPlayer.getPosition()) != null && Util.chance(30))
-									aLevel.addBlood(destinationPoint, Util.rand(0, 1));
-								aPlayer.landOn(destinationPoint);
-							}
-						}
-					}
+	private void tryToInteract(Position variation, Position destinationPoint, Level aLevel, Cell destinationCell,
+			Feature destinationFeature, Cell currentCell) {
+		if (destinationCell.getHeight() < currentCell.getHeight())
+			aLevel.addMessage("You descend");
+		if (isSolid(destinationCell)) {
+			tryToBump(aLevel, destinationCell);
+		} else if (isSolid(destinationFeature))
+			aLevel.addMessage("You bump into the " + destinationFeature.getDescription());
+		else if (!aLevel.isWalkable(destinationPoint) && !aPlayer.isEthereal())
+			aLevel.addMessage("Your way is blocked");
+		else if (checkKeyCost(destinationCell))
+			aLevel.addMessage("You need " + (destinationCell.getKeyCost() - aPlayer.getKeys()) + " more keys to enter");
+		else if (destinationFeature != null && checkKeyCost(destinationFeature))
+			aLevel.addMessage(
+					"You need " + (destinationFeature.getKeyCost() - aPlayer.getKeys()) + " more keys to enter");
+		else {
+			Actor aActor = aLevel.getActorAt(destinationPoint);
+			if (compareHeight(aActor)) {
+				interactWithActor(variation, destinationPoint, aLevel, aActor);
+			} else {
+				if (shouldAddBlood(aLevel))
+					aLevel.addBlood(destinationPoint, Util.rand(0, 1));
+				aPlayer.landOn(destinationPoint);
+			}
+		}
+	}
+
+	private void interactWithActor(Position variation, Position destinationPoint, Level aLevel, Actor aActor) {
+		if (aActor instanceof Merchant && !((Merchant) aActor).isHostile()) {
+			aPlayer.informPlayerEvent(Player.EVT_MERCHANT, aActor);
+		} else {
+			if (aActor instanceof NPC && !((NPC) aActor).isHostile()) {
+				interactWithNPC(aLevel, (NPC) aActor);
+			} else {
+				if (aActor instanceof Monster) {
+					interactWithMonster(variation, aLevel, (Monster) aActor);
 				} else {
-					if (aLevel.getBloodAt(aPlayer.getPosition()) != null && Util.chance(30))
+					if (shouldAddBlood(aLevel))
 						aLevel.addBlood(destinationPoint, Util.rand(0, 1));
 					aPlayer.landOn(destinationPoint);
-
 				}
 			}
 		}
-		Debug.exitMethod();
+	}
+
+	private boolean shouldAddBlood(Level aLevel) {
+		return aLevel.getBloodAt(aPlayer.getPosition()) != null && Util.chance(30);
+	}
+
+	private void interactWithNPC(Level aLevel, NPC aActor) {
+		if (aActor.getNPCID().equals("LARDA")) {
+			aPlayer.informPlayerEvent(Player.EVT_INN, aActor);
+		} else {
+			aPlayer.informPlayerEvent(Player.EVT_CHAT, aActor);
+			if (aActor.isPriest() && !aPlayer.getFlag("HEALED_BY_" + aActor.getNPCID())) {
+				aPlayer.heal();
+				aPlayer.setFlag("HEALED_BY_" + aActor.getNPCID(), true);
+			}
+			if (aActor instanceof Hostage && !aPlayer.hasHostage() && !((Hostage) aActor).isRescued()) {
+				aPlayer.setHostage((Hostage) aActor);
+				aPlayer.addHistoricEvent("found " + aActor.getDescription() + " at the " + aLevel.getDescription());
+				aLevel.removeMonster(aActor);
+			}
+		}
+	}
+
+	private void interactWithMonster(Position variation, Level aLevel, Monster aMonster) {
+		if (!aPlayer.isInvincible()) {
+			if (aPlayer.hasEnergyField()) {
+				StringBuilder buff = new StringBuilder("You shock the " + aMonster.getDescription() + "!");
+				aMonster.damage(buff, aPlayer.getAttack());
+				aLevel.addMessage(buff.toString());
+			} else {
+				if (aPlayer.damage("You bump with the " + aMonster.getDescription() + "!", aMonster,
+						new Damage(aMonster.getAttack(), false))) {
+					aLevel.getPlayer().bounceBack(Position.mul(variation, -1), 2);
+					if (!aPlayer.getPosition().equals(aMonster.getPosition())) {
+						aLevel.addMessage("You are bounced back by the " + aMonster.getDescription() + "!");
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public int getCost() {
 		return aPlayer.getWalkCost();
+	}
+	
+	private boolean compareHeight(Actor aActor) {
+		return aActor != null && aActor.getStandingHeight() == aPlayer.getStandingHeight();
+	}
+	
+	private boolean isSolid(Keycostable destination) {
+		return destination != null && destination.isSolid() && !aPlayer.isEthereal();
+	}
+
+	private static void tryToBump(Level aLevel, Cell destinationCell) {
+		if (destinationCell.getID().startsWith("SIGNPOST")) {
+			UserInterface.getUI().setPersistantMessage(destinationCell.getDescription());
+		} else {
+			aLevel.addMessage("You bump into the " + destinationCell.getShortDescription());
+		}
+	}
+
+	private boolean checkKeyCost(Keycostable destination) {
+		return destination.getKeyCost() > aPlayer.getKeys();
 	}
 }

@@ -30,7 +30,7 @@ public class Attack extends Action {
 	private Item weapon;
 
 	public void execute() {
-		Position var = directionToVariation(targetDirection);
+		Position variation = directionToVariation(targetDirection);
 		Player player = null;
 		reloadTime = 0;
 		try {
@@ -51,31 +51,7 @@ public class Attack extends Action {
 				aLevel.addMessage("Don't hit yourself");
 				return;
 			}
-			Position targetPosition = Position.add(player.getPosition(), Action.directionToVariation(targetDirection));
-			Monster targetMonster = aLevel.getMonsterAt(targetPosition);
-			String attackDescription = player.getPunchDescription();
-			int punchDamage = player.getPunchDamage();
-			int push = player.getPunchPush();
-
-			if (targetMonster != null && targetMonster.getStandingHeight() == player.getStandingHeight()) {
-				StringBuilder buff = new StringBuilder(
-						"You " + attackDescription + " the " + targetMonster.getDescription() + "!");
-				targetMonster.damageWithWeapon(buff, punchDamage);
-				aLevel.addMessage(buff.toString());
-				if (push != 0)
-					pushMonster(targetMonster, aLevel, push);
-
-			}
-			Feature targetFeature = aLevel.getFeatureAt(targetPosition);
-			if (targetFeature != null && targetFeature.isDestroyable()) {
-				aLevel.addMessage("You " + attackDescription + " the " + targetFeature.getDescription());
-				targetFeature.damage(player, punchDamage);
-			}
-
-			Cell targetMapCell = aLevel.getMapCell(targetPosition);
-			if (targetMapCell != null && targetMapCell.isSolid()) {
-				aLevel.addMessage("You " + attackDescription + " the " + targetMapCell.getShortDescription());
-			}
+			tryToDamage(player, aLevel);
 			return;
 		}
 
@@ -92,80 +68,46 @@ public class Attack extends Action {
 			return;
 		}
 
-		String[] sfx = weaponDef.getAttackSFX().split(" ");
-		if (sfx.length > 0)
-			if (sfx[0].equals("MELEE")) {
-				Effect me = EffectFactory.getSingleton().createDirectionalEffect(performer.getPosition(),
-						targetDirection, weapon.getRange(), "SFX_WP_" + weaponDef.getID());
-				aLevel.addEffect(me);
-			} else if (sfx[0].equals("BEAM") || sfx[0].equals("MISSILE")) {
-				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
-						"SFX_WP_" + weaponDef.getID(), weapon.getRange());
-				if (sfx[0].equals("MISSILE") && !weapon.isSlicesThrough()) {
-					me = handleSlice(var, player, aLevel, weaponDef);
-				}
-				aLevel.addEffect(me);
-			}
+		createEffects(variation, player, aLevel, weaponDef);
 
-		boolean hitsSomebody = false;
+		boolean hitsSomebody = tryToHitSomebody(variation, player, aLevel, startHeight);
+		attemptFireballWHip(player, hitsSomebody);
+		if (weapon.getReloadTurns() > 0 && weapon.getRemainingTurnsToReload() > 0)
+			weapon.setRemainingTurnsToReload(weapon.getRemainingTurnsToReload() - 1);
+		if (weaponDef.isSingleUse()) {
+			handleSingleUseWeapon(player);
+		}
+	}
+
+	private void attemptFireballWHip(Player player, boolean hitsSomebody) {
+		if (!hitsSomebody && player.hasCounter(Consts.C_FIREBALL_WHIP)) {
+			Action fireball = new WhipFireball();
+			fireball.setPerformer(performer);
+			fireball.setPosition(targetPosition);
+			fireball.execute();
+		}
+	}
+
+	private boolean tryToHitSomebody(Position variation, Player player, Level aLevel, int startHeight) {
 		boolean hits = false;
+		boolean hitsSomebody = false;
 		for (int i = 0; i < weapon.getRange(); i++) {
-			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(var, i + 1));
-			Cell destinationCell = aLevel.getMapCell(destinationPoint);
+			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(variation, i + 1));
 
 			String message = "";
 
 			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-			message = "";
 
-			if (targetMonster != null) {
-				if ((targetMonster.isInWater() && targetMonster.canSwim())
-						|| destinationCell.getHeight() < startHeight - 1) {
-					if (targetMonster.wasSeen())
-						aLevel.addMessage("The attack passes over the " + targetMonster.getDescription());
-				} else {
-					if (destinationCell.getHeight() > startHeight + 1) {
-						if (weapon.getVerticalRange() > 0) {
-							hits = true;
-						} else {
-							if (targetMonster.wasSeen()) {
-								aLevel.addMessage("The attack passes under the " + targetMonster.getDescription());
-							}
-						}
-					} else {
-						hits = true;
-					}
-				}
-			}
+			hits = tryToHit(aLevel, startHeight, hits, aLevel.getMapCell(destinationPoint), targetMonster);
 
 			if (hits) {
 				hits = false;
 				hitsSomebody = true;
-				int penalty = Position.distance(targetMonster.getPosition(), player.getPosition()) / 4;
-				int attack = player.getWeaponAttack() + Util.rand(0, 2);
-				attack -= penalty;
-				if (attack < 1)
-					attack = 1;
-				StringBuilder hitMsg = new StringBuilder();
-				if (weapon.isHarmsUndead() && targetMonster.isUndead()) {
-					attack *= 2;
-					if (targetMonster.wasSeen())
-						hitMsg.append("You critically damage the ").append(targetMonster.getDescription()).append("!");
-					else
-						hitMsg.append("You hit something!");
-				} else {
-					if (targetMonster.wasSeen())
-						hitMsg.append("You hit the ").append(targetMonster.getDescription());
-					else
-						hitMsg.append("You hit something!");
-				}
-
-				targetMonster.damageWithWeapon(hitMsg, attack);
-				aLevel.addMessage(hitMsg.toString());
+				dealDamage(player, aLevel, targetMonster);
 			}
 
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			if (isDestroyable(destinationFeature)) {
 				hitsSomebody = true;
 				if (player.sees(destinationPoint))
 					message = "You hit the " + destinationFeature.getDescription();
@@ -183,25 +125,114 @@ public class Attack extends Action {
 			if (hitsSomebody && !weapon.isSlicesThrough())
 				break;
 		}
-		if (!hitsSomebody && player.hasCounter(Consts.C_FIREBALL_WHIP)) {
-			Action fireball = new WhipFireball();
-			fireball.setPerformer(performer);
-			fireball.setPosition(targetPosition);
-			fireball.execute();
-		}
-		if (weapon.getReloadTurns() > 0 && weapon.getRemainingTurnsToReload() > 0)
-			weapon.setRemainingTurnsToReload(weapon.getRemainingTurnsToReload() - 1);
-		if (weaponDef.isSingleUse()) {
-			if (weapon.getReloadTurns() > 0) {
-				if (weapon.getRemainingTurnsToReload() == 0) {
-					player.setWeapon(null);
-				}
-			} else {
-				if (player.hasItem(weapon))
-					player.reduceQuantityOf(weapon);
-				else
-					player.setWeapon(null);
+		return hitsSomebody;
+	}
+
+	private boolean isDestroyable(Feature feature) {
+		return feature != null && feature.isDestroyable();
+	}
+
+	private void handleSingleUseWeapon(Player player) {
+		if (weapon.getReloadTurns() > 0) {
+			if (weapon.getRemainingTurnsToReload() == 0) {
+				player.setWeapon(null);
 			}
+		} else {
+			if (player.hasItem(weapon))
+				player.reduceQuantityOf(weapon);
+			else
+				player.setWeapon(null);
+		}
+	}
+
+	private void dealDamage(Player player, Level aLevel, Monster targetMonster) {
+		int penalty = Position.distance(targetMonster.getPosition(), player.getPosition()) / 4;
+		int attack = player.getWeaponAttack() + Util.rand(0, 2);
+		attack -= penalty;
+		if (attack < 1)
+			attack = 1;
+		StringBuilder hitMsg = new StringBuilder();
+		if (weapon.isHarmsUndead() && targetMonster.isUndead()) {
+			attack *= 2;
+			if (targetMonster.wasSeen())
+				hitMsg.append("You critically damage the ").append(targetMonster.getDescription()).append("!");
+			else
+				hitMsg.append("You hit something!");
+		} else {
+			if (targetMonster.wasSeen())
+				hitMsg.append("You hit the ").append(targetMonster.getDescription());
+			else
+				hitMsg.append("You hit something!");
+		}
+
+		targetMonster.damageWithWeapon(hitMsg, attack);
+		aLevel.addMessage(hitMsg.toString());
+	}
+
+	private boolean tryToHit(Level aLevel, int startHeight, boolean hits, Cell destinationCell, Monster targetMonster) {
+		if (targetMonster != null) {
+			if ((targetMonster.isInWater() && targetMonster.canSwim())
+					|| destinationCell.getHeight() < startHeight - 1) {
+				if (targetMonster.wasSeen())
+					aLevel.addMessage("The attack passes over the " + targetMonster.getDescription());
+			} else {
+				if (destinationCell.getHeight() > startHeight + 1) {
+					if (weapon.getVerticalRange() > 0) {
+						hits = true;
+					} else {
+						if (targetMonster.wasSeen()) {
+							aLevel.addMessage("The attack passes under the " + targetMonster.getDescription());
+						}
+					}
+				} else {
+					hits = true;
+				}
+			}
+		}
+		return hits;
+	}
+
+	private void createEffects(Position var, Player player, Level aLevel, ItemDefinition weaponDef) {
+		String[] sfx = weaponDef.getAttackSFX().split(" ");
+		if (sfx.length > 0)
+			if (sfx[0].equals("MELEE")) {
+				Effect me = EffectFactory.getSingleton().createDirectionalEffect(performer.getPosition(),
+						targetDirection, weapon.getRange(), "SFX_WP_" + weaponDef.getID());
+				aLevel.addEffect(me);
+			} else if (sfx[0].equals("BEAM") || sfx[0].equals("MISSILE")) {
+				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
+						"SFX_WP_" + weaponDef.getID(), weapon.getRange());
+				if (sfx[0].equals("MISSILE") && !weapon.isSlicesThrough()) {
+					me = handleSlice(var, player, aLevel, weaponDef);
+				}
+				aLevel.addEffect(me);
+			}
+	}
+
+	private void tryToDamage(Player player, Level aLevel) {
+		Position targetPosition = Position.add(player.getPosition(), Action.directionToVariation(targetDirection));
+		Monster targetMonster = aLevel.getMonsterAt(targetPosition);
+		String attackDescription = player.getPunchDescription();
+		int punchDamage = player.getPunchDamage();
+		int push = player.getPunchPush();
+
+		if (targetMonster != null && targetMonster.getStandingHeight() == player.getStandingHeight()) {
+			StringBuilder buff = new StringBuilder(
+					"You " + attackDescription + " the " + targetMonster.getDescription() + "!");
+			targetMonster.damageWithWeapon(buff, punchDamage);
+			aLevel.addMessage(buff.toString());
+			if (push != 0)
+				pushMonster(targetMonster, aLevel, push);
+		}
+		Feature targetFeature = aLevel.getFeatureAt(targetPosition);
+		if (isDestroyable(targetFeature)) {
+			aLevel.addMessage("You " + attackDescription + " the " + targetFeature.getDescription());
+			targetFeature.damage(player, punchDamage);
+		}
+
+		Cell targetMapCell = aLevel.getMapCell(targetPosition);
+		if (targetMapCell != null && targetMapCell.isSolid()) {
+			aLevel.addMessage("You " + attackDescription + " the " + targetMapCell.getShortDescription());
 		}
 	}
 
@@ -212,7 +243,7 @@ public class Attack extends Action {
 			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(var, i + 1));
 			Cell destinationCell = aLevel.getMapCell(destinationPoint);
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (destinationFeature != null && destinationFeature.isDestroyable())
+			if (isDestroyable(destinationFeature))
 				break;
 			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 			if (targetMonster != null && !(targetMonster.isInWater() && targetMonster.canSwim())

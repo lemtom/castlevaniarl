@@ -137,10 +137,10 @@ public class MonsterWalk extends Action {
 	}
 
 	private boolean canChangeDirection(Monster aMonster, Cell destinationCell) {
-		return destinationCell == null || destinationCell.isSolid()
-				|| (destinationCell.isEthereal() && !aMonster.isFlying())
-						&& (aMonster.getSelector() instanceof BasicMonsterAI
-								&& (((BasicMonsterAI) aMonster.getSelector()).getPatrolRange() > 0));
+		return (destinationCell == null || destinationCell.isSolid()
+				|| (destinationCell.isEthereal()) && !aMonster.isFlying())
+				&& (aMonster.getSelector() instanceof BasicMonsterAI
+						&& (((BasicMonsterAI) aMonster.getSelector()).getPatrolRange() > 0));
 	}
 
 	@Override

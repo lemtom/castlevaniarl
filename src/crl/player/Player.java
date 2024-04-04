@@ -82,10 +82,7 @@ public class Player extends Actor {
 	private HashMap<String, Counter> weaponSkillsCounters = new HashMap<>();
 	private HashMap<String, Counter> weaponSkills = new HashMap<>();
 	private HashMap<String, String> customMessages = new HashMap<>();
-	/*
-	 * private int[] weaponSkillsCounters = new int[13]; private int[] weaponSkills
-	 * = new int[13];
-	 */
+
 	private boolean justJumped = false;
 	private Position previousPosition;
 
@@ -271,10 +268,6 @@ public class Player extends Actor {
 	private int getIncreaseOnEnemies(int level) {
 		if (level == 1)
 			return 0;
-		/*
-		 * 0000029: Change level up schema to acquire skills quickly if (level == 2)
-		 * return 20; else return getIncreaseOnEnemies(level-1)+5;
-		 */
 		return 25;
 	}
 
@@ -284,10 +277,6 @@ public class Player extends Actor {
 		else
 			return getAvgXP(level - 1) + 50;
 	}
-
-	/*
-	 * public void finishLevel(){ playerEventListener.informEvent(EVT_FORWARD); }
-	 */
 
 	public int getScore() {
 		return score;
@@ -549,7 +538,7 @@ public class Player extends Actor {
 			return false;
 		}
 
-		if (getShield() != null && (getWeapon() == null || (getWeapon() != null && !getWeapon().isTwoHanded()))) {
+		if (evaluateShield()) {
 			int blockChance = getShieldBlockChance();
 			int coverageChance = getShieldCoverageChance();
 
@@ -894,16 +883,7 @@ public class Player extends Actor {
 
 	@Override
 	public void updateStatus() {
-
-		if (getCounter(Consts.C_BATMORPH) == 1 || getCounter(Consts.C_BATMORPH2) == 1) {
-			level.addMessage("You regain your human shape!");
-			land();
-		}
-
-		if (getCounter(Consts.C_MYSTMORPH) == 1 || getCounter(Consts.C_MYSTMORPH2) == 1
-				|| getCounter(Consts.C_BEARMORPH) == 1 || getCounter(Consts.C_LUPINEMORPH) == 1
-				|| getCounter(Consts.C_BEASTMORPH) == 1 || getCounter(Consts.C_DEMONMORPH) == 1
-				|| getCounter(Consts.C_WEREWOLFMORPH) == 1) {
+		if (checkShape()) {
 			level.addMessage("You regain your human shape!");
 			land();
 		}
@@ -923,6 +903,38 @@ public class Player extends Actor {
 
 		super.updateStatus();
 
+		manageCounters();
+
+		if (isPoisoned() && Util.chance(40)) {
+			selfDamage("You feel the poison coursing through your veins!", Player.DAMAGE_POISON, new Damage(3, true));
+
+		}
+		if (getHoverHeight() > 0 && !checkBat())
+			setHoverHeight(getHoverHeight() - 4);
+		if (checkWater()) {
+			if (getFlag("PLAYER_SWIMMING")) {
+				if (getCounter("OXYGEN") == 0) {
+					drown();
+				} else if (getCounter("OXYGEN") == 5) {
+					level.addMessage("You are almost drowned!");
+				} else if (getCounter("OXYGEN") == 15) {
+					level.addMessage("You are drowning!");
+				}
+			} else {
+				setCounter("OXYGEN", getBreathing());
+				level.addMessage("You start swimming!");
+				setFlag("PLAYER_SWIMMING", true);
+			}
+		} else {
+			setFlag("PLAYER_SWIMMING", false);
+		}
+	}
+
+	private boolean checkWater() {
+		return level.getMapCell(getPosition()) != null && level.getMapCell(getPosition()).isWater();
+	}
+
+	private void manageCounters() {
 		if (hasIncreasedDefense())
 			defenseCounter--;
 		if (isInvisible())
@@ -945,31 +957,18 @@ public class Player extends Actor {
 			petrifyCount--;
 		if (isFainted())
 			faintCount--;
+	}
 
-		if (isPoisoned() && Util.chance(40)) {
-			selfDamage("You feel the poison coursing through your veins!", Player.DAMAGE_POISON, new Damage(3, true));
+	private boolean checkBat() {
+		return hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2);
+	}
 
-		}
-		if (getHoverHeight() > 0 && (!(hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2))))
-			setHoverHeight(getHoverHeight() - 4);
-		if (level.getMapCell(getPosition()) != null && level.getMapCell(getPosition()).isWater()) {
-			if (getFlag("PLAYER_SWIMMING")) {
-				if (getCounter("OXYGEN") == 0) {
-					drown();
-				} else if (getCounter("OXYGEN") == 5) {
-					level.addMessage("You are almost drown!");
-				} else if (getCounter("OXYGEN") == 15) {
-					level.addMessage("You are drowning!");
-				}
-			} else {
-				setCounter("OXYGEN", getBreathing());
-				level.addMessage("You start swimming!");
-				setFlag("PLAYER_SWIMMING", true);
-			}
-		} else {
-			setFlag("PLAYER_SWIMMING", false);
-		}
-		// regen();
+	private boolean checkShape() {
+		return getCounter(Consts.C_BATMORPH) == 1 || getCounter(Consts.C_BATMORPH2) == 1
+				|| getCounter(Consts.C_MYSTMORPH) == 1 || getCounter(Consts.C_MYSTMORPH2) == 1
+				|| getCounter(Consts.C_BEARMORPH) == 1 || getCounter(Consts.C_LUPINEMORPH) == 1
+				|| getCounter(Consts.C_BEASTMORPH) == 1 || getCounter(Consts.C_DEMONMORPH) == 1
+				|| getCounter(Consts.C_WEREWOLFMORPH) == 1;
 	}
 
 	private void levelUp() {
@@ -1106,11 +1105,9 @@ public class Player extends Actor {
 			}
 
 		}
-		if (destinationCell.getDamageOnStep() > 0) {
-			if (!isInvincible()) {
-				selfDamage("You are injured by the " + destinationCell.getShortDescription(),
-						Player.DAMAGE_WALKED_ON_LAVA, new Damage(2, false));
-			}
+		if (destinationCell.getDamageOnStep() > 0 && !isInvincible()) {
+			selfDamage("You are injured by the " + destinationCell.getShortDescription(), Player.DAMAGE_WALKED_ON_LAVA,
+					new Damage(2, false));
 		}
 
 		if (step && destinationCell.getHeightMod() != 0) {
@@ -1128,13 +1125,7 @@ public class Player extends Actor {
 				level.addMessage("There are several items here");
 		}
 
-		Actor aActor = level.getActorAt(destinationPoint);
-		if (aActor instanceof Hostage && !hasHostage() && !((Hostage) aActor).isRescued()) {
-			setHostage((Hostage) aActor);
-			addHistoricEvent("rescued " + aActor.getDescription() + " from the " + level.getDescription());
-			level.removeMonster((Monster) aActor);
-
-		}
+		checkHostages(destinationPoint);
 
 		Feature[] destinationFeatures = level.getFeaturesAt(destinationPoint);
 		Feature destinationFeature = null;
@@ -1144,7 +1135,6 @@ public class Player extends Actor {
 				destinationFeature = feature;
 				if (destinationFeature.getKeyCost() > 0) {
 					reduceKeys(destinationFeature.getKeyCost());
-					// Debug.say("I destroy the "+destinationFeature);
 					level.destroyFeature(destinationFeature);
 				}
 
@@ -1178,124 +1168,110 @@ public class Player extends Actor {
 				if (destinationFeature.getHeightMod() != 0) {
 					setPosition(Position.add(destinationPoint, new Position(0, 0, destinationFeature.getHeightMod())));
 				}
-				if (destinationFeature.getHeartPrize() > 0) {
-					level.addMessage("You get " + destinationFeature.getHeartPrize() + " hearts");
-					addHearts(destinationFeature.getHeartPrize());
-					level.destroyFeature(destinationFeature);
-					if (!played) {
-						played = true;
-						SFXManager.play("wav/pickup.wav");
+				played = checkForPrizes(destinationPoint, destinationFeature, played);
 
-					}
-				}
+				played = checkForEffects(destinationFeature, played);
 
-				if (destinationFeature.getScorePrize() > 0) {
-					level.addMessage("You pickup the " + destinationFeature.getDescription() + ".");
-					addGold(destinationFeature.getScorePrize());
-					level.destroyFeature(destinationFeature);
-					if (!played) {
-						played = true;
-						SFXManager.play("wav/bonusblp.wav");
-					}
-				}
-
-				if (destinationFeature.getKeyPrize() > 0) {
-					level.addMessage("You find " + destinationFeature.getKeyPrize() + " castle key!");
-					addKeys(destinationFeature.getKeyPrize());
-					level.destroyFeature(destinationFeature);
-					if (!played) {
-						played = true;
-						SFXManager.play("wav/bonusblp.wav");
-					}
-				}
-				if (destinationFeature.getUpgradePrize() > 0) {
-					if (whipLevel < 2)
-						increaseWhip();
-					level.destroyFeature(destinationFeature);
-					if (!played) {
-						played = true;
-						SFXManager.play("wav/bonusblp.wav");
-					}
-				}
-
-				if (destinationFeature.getMysticWeaponPrize() != -1) {
-					if (getMysticWeapon() != -1) {
-						Position tryp = getFreeSquareAround(destinationPoint);
-						if (tryp != null) {
-							level.addFeature(getFeatureNameForMystic(getMysticWeapon()), tryp);
-						}
-					}
-					level.addMessage(
-							"You get the " + Player.weaponName(destinationFeature.getMysticWeaponPrize()) + "!");
-					setMysticWeapon(destinationFeature.getMysticWeaponPrize());
-					level.destroyFeature(destinationFeature);
-					if (!played) {
-						played = true;
-						SFXManager.play("wav/bonusblp.wav");
-					}
-				}
-
-				if (destinationFeature.getHealPrize() > 0) {
-					level.addMessage("You eat the " + destinationFeature.getDescription() + "!");
-					setHits(getHits() + destinationFeature.getHealPrize());
-					level.destroyFeature(destinationFeature);
-					if (!played) {
-						played = true;
-						SFXManager.play("wav/bonusblp.wav");
-					}
-				}
-
-				if (destinationFeature.getEffect() != null)
-					if (destinationFeature.getEffect().equals("ROSARY")) {
-						invokeRosary();
-						level.destroyFeature(destinationFeature);
-					} else if (destinationFeature.getEffect().equals("SPAWN_TREASURE")) {
-						level.addMessage("A treasure rises from the ground!");
-						level.spawnTreasure();
-						level.destroyFeature(destinationFeature);
-					} else if (destinationFeature.getEffect().equals("MUPGRADE")) {
-						level.addMessage("Your " + getWeaponDescription() + " gets stronger");
-						increaseShot();
-						level.destroyFeature(destinationFeature);
-						if (!played) {
-							played = true;
-							SFXManager.play("wav/bonusblp.wav");
-						}
-					} else if (destinationFeature.getEffect().equals("INVISIBILITY")) {
-						level.addMessage("You drink the potion of invisibility!");
-						setInvisible(30);
-						level.destroyFeature(destinationFeature);
-						if (!played) {
-							played = true;
-							SFXManager.play("wav/bonusblp.wav");
-						}
-					}
-
-				/*
-				 * if (destinationFeature.getTrigger() != null) if
-				 * (destinationFeature.getTrigger().equals("ENDGAME")) ; /*if (aPlayer.getKeys()
-				 * == 10) aPlayer.informPlayerEvent(Player.OPENEDCASTLE);
-				 */
 				Feature pred = destinationFeature;
 				destinationFeature = level.getFeatureAt(destinationPoint);
 				if (destinationFeature == pred)
 					destinationFeature = null;
 			}
 		}
-
 		if (level.isExit(getPosition())) {
 			String exit = level.getExitOn(getPosition());
-			if (exit.equals("_START") || exit.startsWith("#")) {
-				// Do nothing. This must be changed with startsWith("_");
-			} /*
-				 * else if (exit.equals("_NEXT")){ informPlayerEvent(Player.EVT_NEXT_LEVEL); }
-				 * else if (exit.equals("_BACK")){ informPlayerEvent(Player.EVT_BACK_LEVEL); }
-				 */else {
+			if (!(exit.equals("_START") || exit.startsWith("#"))) {
 				informPlayerEvent(Player.EVT_GOTO_LEVEL, exit);
 			}
-
 		}
 		Debug.exitMethod();
+	}
+
+	private boolean checkForEffects(Feature feature, boolean played) {
+		if (feature.getEffect() != null)
+			if (feature.getEffect().equals("ROSARY")) {
+				invokeRosary();
+				level.destroyFeature(feature);
+			} else if (feature.getEffect().equals("SPAWN_TREASURE")) {
+				level.addMessage("A treasure rises from the ground!");
+				level.spawnTreasure();
+				level.destroyFeature(feature);
+			} else if (feature.getEffect().equals("MUPGRADE")) {
+				level.addMessage("Your " + getWeaponDescription() + " gets stronger");
+				increaseShot();
+				return finalizeBonus(feature, played);
+			} else if (feature.getEffect().equals("INVISIBILITY")) {
+				level.addMessage("You drink the potion of invisibility!");
+				setInvisible(30);
+				return finalizeBonus(feature, played);
+			}
+		return played;
+	}
+
+	private void checkHostages(Position destinationPoint) {
+		Actor aActor = level.getActorAt(destinationPoint);
+		if (aActor instanceof Hostage && !hasHostage() && !((Hostage) aActor).isRescued()) {
+			setHostage((Hostage) aActor);
+			addHistoricEvent("rescued " + aActor.getDescription() + " from the " + level.getDescription());
+			level.removeMonster((Monster) aActor);
+		}
+	}
+
+	private boolean checkForPrizes(Position destinationPoint, Feature destinationFeature, boolean played) {
+		if (destinationFeature.getHeartPrize() > 0) {
+			level.addMessage("You get " + destinationFeature.getHeartPrize() + " hearts");
+			addHearts(destinationFeature.getHeartPrize());
+			played = finalizePickup(destinationFeature, played, "wav/pickup.wav");
+		}
+
+		if (destinationFeature.getScorePrize() > 0) {
+			level.addMessage("You pickup the " + destinationFeature.getDescription() + ".");
+			addGold(destinationFeature.getScorePrize());
+			played = finalizeBonus(destinationFeature, played);
+		}
+
+		if (destinationFeature.getKeyPrize() > 0) {
+			level.addMessage("You find " + destinationFeature.getKeyPrize() + " castle key!");
+			addKeys(destinationFeature.getKeyPrize());
+			played = finalizeBonus(destinationFeature, played);
+		}
+		if (destinationFeature.getUpgradePrize() > 0) {
+			if (whipLevel < 2)
+				increaseWhip();
+			played = finalizeBonus(destinationFeature, played);
+		}
+
+		if (destinationFeature.getMysticWeaponPrize() != -1) {
+			if (getMysticWeapon() != -1) {
+				Position tryp = getFreeSquareAround(destinationPoint);
+				if (tryp != null) {
+					level.addFeature(getFeatureNameForMystic(getMysticWeapon()), tryp);
+				}
+			}
+			level.addMessage("You get the " + Player.weaponName(destinationFeature.getMysticWeaponPrize()) + "!");
+			setMysticWeapon(destinationFeature.getMysticWeaponPrize());
+			played = finalizeBonus(destinationFeature, played);
+		}
+
+		if (destinationFeature.getHealPrize() > 0) {
+			level.addMessage("You eat the " + destinationFeature.getDescription() + "!");
+			setHits(getHits() + destinationFeature.getHealPrize());
+			played = finalizeBonus(destinationFeature, played);
+		}
+		return played;
+	}
+
+	private boolean finalizeBonus(Feature feature, boolean played) {
+		return finalizePickup(feature, played, "wav/bonusblp.wav");
+	}
+
+	private boolean finalizePickup(Feature feature, boolean played, String soundEffect) {
+		level.destroyFeature(feature);
+		if (!played) {
+			played = true;
+			SFXManager.play(soundEffect);
+		}
+		return played;
 	}
 
 	private void drown() {
@@ -1570,11 +1546,6 @@ public class Player extends Actor {
 		keys -= k;
 	}
 
-	/*
-	 * public void regen() { if (regenRate > 0) regenCont++; if (regenCont >
-	 * regenRate){ regenCont = 0; recoverHits(1); } }
-	 */
-
 	public void setPlayerClass(int value) {
 		playerClass = value;
 		switch (playerClass) {
@@ -1629,12 +1600,8 @@ public class Player extends Actor {
 		else {
 			Appearance ret = super.getAppearance();
 			if (ret == null) {
-				if (getSex() == Player.MALE)
-					setAppearance(AppearanceFactory.getAppearanceFactory()
-							.getAppearance(PlayerGenerator.getClassID(getPlayerClass())));
-				else
-					setAppearance(AppearanceFactory.getAppearanceFactory()
-							.getAppearance(PlayerGenerator.getClassID(getPlayerClass()) + "_W"));
+				String classId = PlayerGenerator.getClassID(getPlayerClass()) + (getSex() == Player.MALE ? "" : "_W");
+				setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(classId));
 				ret = super.getAppearance();
 			}
 			return ret;
@@ -1742,9 +1709,6 @@ public class Player extends Actor {
 				availableSkills.add(skills.get("SUMMON_TIGER"));
 			if (getFlag("SKILL_INVOKEDRAGON"))
 				availableSkills.add(skills.get("SUMMON_DRAGON"));
-
-			// availableSkills.add(skills.get("MAJOR_JINX"));
-
 		} else if (playerClass == CLASS_MANBEAST) {
 			if (getFlag("SKILL_POWERBLOW3"))
 				availableSkills.add(skills.get("IMPACT_BLOW3"));
@@ -1861,11 +1825,6 @@ public class Player extends Actor {
 
 		skills.put("DODGE", new Skill("Dodge"));
 		skills.put("DODGE2", new Skill("Mirror Dodge"));
-
-		/*
-		 * skills.put("MYSTIC_WEAPON", new Skill("Mystic Weapons"));
-		 * skills.put("HMYSTIC_WEAPON", new Skill("Sacred Mystics"));
-		 */
 
 		// Vampire Killer Skills
 		skills.put("MYSTIC_DAGGER", new Skill("Mystic Dagger"));
@@ -2115,11 +2074,6 @@ public class Player extends Actor {
 		else
 			return MYSTIC_ACTIONS[getMysticWeapon()];
 	}
-
-	/*
-	 * public boolean deservesHighMystics(){ return score > 20000 && playerLevel >
-	 * 6; }
-	 */
 
 	@Override
 	public String getDescription() {
@@ -2615,12 +2569,6 @@ public class Player extends Actor {
 				|| hasCounter(Consts.C_WOLFMORPH2) || hasCounter(Consts.C_MYSTMORPH) || hasCounter(Consts.C_MYSTMORPH2);
 	}
 
-	private boolean standsOnPlace() {
-		return hasCounter(Consts.C_LUPINEMORPH) || hasCounter(Consts.C_BEARMORPH) || hasCounter(Consts.C_BEASTMORPH)
-				|| hasCounter(Consts.C_DEMONMORPH) || hasCounter(Consts.C_WEREWOLFMORPH)
-				|| hasCounter(Consts.C_MYSTMORPH) || hasCounter(Consts.C_MYSTMORPH2);
-	}
-
 	public int stareMonster(Monster who) {
 		if (who.getPosition().z != getPosition().z)
 			return -1;
@@ -2820,7 +2768,7 @@ public class Player extends Actor {
 
 	public int getShieldBlockChance() {
 		int blockChance = 0;
-		if (getShield() != null && (getWeapon() == null || (getWeapon() != null && !getWeapon().isTwoHanded()))) {
+		if (evaluateShield()) {
 			if (getPlayerClass() == CLASS_KNIGHT) {
 				blockChance = getShield().getCoverage();
 			} else {
@@ -2834,8 +2782,8 @@ public class Player extends Actor {
 	}
 
 	public int getShieldCoverageChance() {
-		if (getShield() != null && (getWeapon() == null || (getWeapon() != null && !getWeapon().isTwoHanded()))) {
-			int coverageChance = 0;
+		int coverageChance = 0;
+		if (evaluateShield()) {
 			if (getPlayerClass() == CLASS_KNIGHT) {
 				coverageChance = 70;
 			} else {
@@ -2845,6 +2793,10 @@ public class Player extends Actor {
 		} else {
 			return 0;
 		}
+	}
+
+	private boolean evaluateShield() {
+		return getShield() != null && (getWeapon() == null || (getWeapon() != null && !getWeapon().isTwoHanded()));
 	}
 
 	public void increaseCoolness(int x) {
