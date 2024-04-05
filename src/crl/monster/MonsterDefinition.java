@@ -20,7 +20,8 @@ public class MonsterDefinition {
 	private boolean canFly;
 	private int bloodContent;
 	private boolean undead;
-	private int minLevel, maxLevel;
+	private int minLevel;
+	private int maxLevel;
 	private int attackCost = 50, walkCost = 50;
 	private int evadeChance;
 	private String evadeMessage;

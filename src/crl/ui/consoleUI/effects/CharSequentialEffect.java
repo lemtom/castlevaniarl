@@ -7,7 +7,7 @@ import sz.util.Position;
 import java.util.ArrayList;
 
 public class CharSequentialEffect extends CharEffect {
-	private ArrayList<Position> sequence;
+	private final ArrayList<Position> sequence;
 	private String tiles;
 	private int color;
 

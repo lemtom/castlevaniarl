@@ -32,40 +32,48 @@ public class DraculaAI extends MonsterAI {
 		Monster aMonster = (Monster) who;
 		if (onBattle) {
 			if (isVanished) {
-				if (appearCounter < 0) {
-
-					isVanished = false;
-					vanishCounter = 3 + Util.rand(0, 2);
-					return new Materialize();
-				} else {
-					if (Util.chance(70)) {
-						aMonster.getLevel().addMessage("You hear a creepy voice booming around the place: 'HAHAHAHA!'");
-						SFXManager.play("wav/dracula_laugh.wav");
-					}
-					appearCounter--;
-					return null;
-				}
+				return handleVanish(aMonster);
 			} else {
-				if (vanishCounter < 0) {
-					isVanished = true;
-					appearCounter = Util.rand(2, 5);
-					return new Vanish();
-				} else {
-					vanishCounter--;
-					if (playerOnLine(aMonster)) {
-						int directionToPlayer = starePlayer(aMonster);
-						Action ret = new ShadowFlare();
-						ret.setDirection(directionToPlayer);
-						return ret;
-					} else {
-						if (Util.chance(50))
-							return new ShadowExtinction();
-						else
-							return null;
-					}
-				}
+				return considerVanishing(aMonster);
 			}
 		} else {
+			return null;
+		}
+	}
+
+	private Action considerVanishing(Monster aMonster) {
+		if (vanishCounter < 0) {
+			isVanished = true;
+			appearCounter = Util.rand(2, 5);
+			return new Vanish();
+		} else {
+			vanishCounter--;
+			if (playerOnLine(aMonster)) {
+				int directionToPlayer = starePlayer(aMonster);
+				Action ret = new ShadowFlare();
+				ret.setDirection(directionToPlayer);
+				return ret;
+			} else {
+				if (Util.chance(50))
+					return new ShadowExtinction();
+				else
+					return null;
+			}
+		}
+	}
+
+	private Action handleVanish(Monster aMonster) {
+		if (appearCounter < 0) {
+
+			isVanished = false;
+			vanishCounter = 3 + Util.rand(0, 2);
+			return new Materialize();
+		} else {
+			if (Util.chance(70)) {
+				aMonster.getLevel().addMessage("You hear a creepy voice booming around the place: 'HAHAHAHA!'");
+				SFXManager.play("wav/dracula_laugh.wav");
+			}
+			appearCounter--;
 			return null;
 		}
 	}

@@ -11,7 +11,8 @@ import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
 public class Dragon extends HeartAction {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public int getHeartCost() {
 		return 8;
 	}
@@ -113,11 +114,10 @@ private static final long serialVersionUID = 1L;
 		StringBuilder message = new StringBuilder();
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
-        UserInterface.getUI()
+		UserInterface.getUI()
 				.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_DRAGONFIRE"));
-		// aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+		if (checkIfDestroyable(destinationFeature)) {
 			message.append("The dragon crushes the ").append(destinationFeature.getDescription());
 
 			Feature prize = destinationFeature.damage(aPlayer, damage);

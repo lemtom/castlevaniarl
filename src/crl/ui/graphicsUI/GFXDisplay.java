@@ -386,23 +386,6 @@ public class GFXDisplay extends Display {
 		si.refresh();
 		((GFXUserInterface) UserInterface.getUI()).messageBox.setVisible(true);
 		return advancements.get(choice);
-
-		/*
-		 * si.saveBuffer(); ItemDefinition[] defs = new ItemDefinition[soulIds.size()];
-		 * for (int i = 0; i < defs.length; i++){ defs[i] =
-		 * ItemFactory.getItemFactory().getDefinition((String)soulIds.get(i)); }
-		 * si.drawImage(IMG_LEVEL_UP); si.print(2,5, "Please pick a spiritual memento",
-		 * COLOR_BOLD);
-		 * 
-		 * for (int i = 0; i < defs.length; i++){ si.print(2,7+i, (char)('a'+i) + ") ",
-		 * COLOR_BOLD); si.drawImage(5*10,(6+i)*24+10,
-		 * ((GFXAppearance)defs[i].getAppearance()).getImage()); si.print(7,7+i,
-		 * defs[i].getDescription() + ": " + defs[i].getMenuDescription(), COLOR_BOLD);
-		 * } si.refresh();
-		 * 
-		 * int choice = readAlphaToNumber(defs.length); si.restore(); si.refresh();
-		 * return choice;
-		 */
 	}
 
 	public void showTextBox(String text, int consoleX, int consoleY, int consoleW, int consoleH) {
@@ -490,7 +473,7 @@ public class GFXDisplay extends Display {
 		si.restore();
 	}
 
-	private HashMap<String, Position> locationKeys;
+	private final HashMap<String, Position> locationKeys;
 	{
 		locationKeys = new HashMap<>();
 		locationKeys.put("TOWN", new Position(130, 206));
@@ -586,12 +569,12 @@ public class GFXDisplay extends Display {
 		t1.setText(who.getLongDescription());
 		si.add(t1);
 		si.setFont(FNT_TEXT);
-		MonsterRecord record = Main.getMonsterRecordFor(who.getID());
+		MonsterRecord monsterRecord = Main.getMonsterRecordFor(who.getID());
 		long baseKilled = 0;
 		long baseKillers = 0;
-		if (record != null) {
-			baseKilled = record.getKilled();
-			baseKillers = record.getKillers();
+		if (monsterRecord != null) {
+			baseKilled = monsterRecord.getKilled();
+			baseKillers = monsterRecord.getKillers();
 		}
 		si.print(2, 17, "You have killed " + (baseKilled + player.getGameSessionInfo().getDeathCountFor(who)) + " "
 				+ who.getDescription() + "s", Color.WHITE);

@@ -17,7 +17,7 @@ public class GFXButton extends JPanel implements MouseListener {
 	private boolean habilitado = true;
 	private boolean hovering;
 
-	private ArrayList<ActionListener> objListeners = new ArrayList<>();
+	private final ArrayList<ActionListener> objListeners = new ArrayList<>();
 
 	public GFXButton(GFXButton base) {
 		imgActivado = base.imgActivado;

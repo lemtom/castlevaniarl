@@ -48,7 +48,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 
-	private Map<String, BasicListItem> sightListItems = new HashMap<>();
+	private final Map<String, BasicListItem> sightListItems = new HashMap<>();
 	// Relations
 
 	private transient ConsoleSystemInterface si;
@@ -438,7 +438,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		showPersistantMessageBox = true;
 	}
 
-	private ArrayList<String> messageHistory = new ArrayList<>();
+	private final ArrayList<String> messageHistory = new ArrayList<>();
 
 	public void addMessage(Message message) {
 		Debug.enterMethod(this, "addMessage", message);
@@ -462,7 +462,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	}
 
-	class ForeBackColorTuple {
+	static class ForeBackColorTuple {
 		private final int foreColor;
 		private final int backColor;
 
@@ -616,7 +616,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			return str + spaces(limit - str.length());
 	}
 
-	private Map<Object, String> hashSpaces = new HashMap<>();
+	private final Map<Object, String> hashSpaces = new HashMap<>();
 
 	private String spaces(int n) {
 		StringBuilder ret = new StringBuilder(hashSpaces.get(n + ""));
@@ -990,7 +990,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		setActionTargets(a, target);
 	}
 
-	private ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
+	private final ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
 	{
 		vecItemUsageChoices.add(new SimpleMenuItem('*', "(u)se", 1));
 		vecItemUsageChoices.add(new SimpleMenuItem('*', "(e)quip", 2));
@@ -1341,6 +1341,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		actionSelectedByCommand = null;
 	}
 
+	@Override
 	protected void doHelp() {
 		si.saveBuffer();
 		Display.thus.showHelp();

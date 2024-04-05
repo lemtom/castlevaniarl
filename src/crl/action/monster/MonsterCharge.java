@@ -39,7 +39,7 @@ private static final long serialVersionUID = 1L;
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to JumpOver");
 		Monster aMonster = (Monster) performer;
 		targetDirection = aMonster.starePlayer();
-        Position var = directionToVariation(targetDirection);
+        Position variation = directionToVariation(targetDirection);
         Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
         aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
@@ -48,7 +48,7 @@ private static final long serialVersionUID = 1L;
         if (effectWav != null)
         	SFXManager.play(effectWav);
         for (int i=0; i<range; i++){
-			destinationPoint = Position.add(aMonster.getPosition(), var);
+			destinationPoint = Position.add(aMonster.getPosition(), variation);
 			if (!aLevel.isValidCoordinate(destinationPoint))
 				break;
 			Position deepPoint  = aLevel.getDeepPosition(destinationPoint);

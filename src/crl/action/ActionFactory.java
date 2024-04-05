@@ -6,7 +6,7 @@ import sz.util.Debug;
 
 public class ActionFactory {
 	private static final ActionFactory singleton = new ActionFactory();
-	private HashMap<String, Action> definitions = new HashMap<>(20);
+	private final HashMap<String, Action> definitions = new HashMap<>(20);
 
 	public static ActionFactory getActionFactory(){
 		return singleton;

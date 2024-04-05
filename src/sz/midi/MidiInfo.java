@@ -1,17 +1,7 @@
 package sz.midi;
 
-//MidiInfo.java
+//MidiInfo.java 
 //Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
-
-/* Hold a single midi sequence, and allow it to be played,
-stopped, paused, resumed, and made to loop.
-
-Looping is controlled by MidisLoader by calling tryLooping().
-
-MidisLoader passes a reference to its sequencer to each
-MidiInfo object, so that it can play its sequence.
-*/
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
@@ -20,6 +10,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Hold a single midi sequence, and allow it to be played, stopped, paused,
+ * resumed, and made to loop.
+ * <p>
+ * Looping is controlled by MidisLoader by calling tryLooping().
+ * <p>
+ * MidisLoader passes a reference to its sequencer to each MidiInfo object, so
+ * that it can play its sequence.
+ */
 public class MidiInfo {
 	private static final String SOUND_DIR = "";
 
@@ -43,7 +42,6 @@ public class MidiInfo {
 		try {
 			URL x = getClass().getResource(filename);
 			File file = new File(filename);
-			// seq = MidiSystem.getSequence( getClass().getResource(filename) );
 			seq = MidiSystem.getSequence(file);
 		} catch (InvalidMidiDataException e) {
 			System.out.println("Unreadable/unsupported midi file: " + filename);
@@ -118,8 +116,6 @@ public class MidiInfo {
 		}
 		return false;
 	}
-
-// -------------- other access methods -------------------
 
 	public String getName() {
 		return name;

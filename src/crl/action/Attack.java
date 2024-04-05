@@ -107,7 +107,7 @@ public class Attack extends Action {
 			}
 
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (isDestroyable(destinationFeature)) {
+			if (checkIfDestroyable(destinationFeature)) {
 				hitsSomebody = true;
 				if (player.sees(destinationPoint))
 					message = "You hit the " + destinationFeature.getDescription();
@@ -126,10 +126,6 @@ public class Attack extends Action {
 				break;
 		}
 		return hitsSomebody;
-	}
-
-	private boolean isDestroyable(Feature feature) {
-		return feature != null && feature.isDestroyable();
 	}
 
 	private void handleSingleUseWeapon(Player player) {
@@ -192,7 +188,7 @@ public class Attack extends Action {
 		return hits;
 	}
 
-	private void createEffects(Position var, Player player, Level aLevel, ItemDefinition weaponDef) {
+	private void createEffects(Position variation, Player player, Level aLevel, ItemDefinition weaponDef) {
 		String[] sfx = weaponDef.getAttackSFX().split(" ");
 		if (sfx.length > 0)
 			if (sfx[0].equals("MELEE")) {
@@ -203,7 +199,7 @@ public class Attack extends Action {
 				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
 						"SFX_WP_" + weaponDef.getID(), weapon.getRange());
 				if (sfx[0].equals("MISSILE") && !weapon.isSlicesThrough()) {
-					me = handleSlice(var, player, aLevel, weaponDef);
+					me = handleSlice(variation, player, aLevel, weaponDef);
 				}
 				aLevel.addEffect(me);
 			}
@@ -225,7 +221,7 @@ public class Attack extends Action {
 				pushMonster(targetMonster, aLevel, push);
 		}
 		Feature targetFeature = aLevel.getFeatureAt(targetPosition);
-		if (isDestroyable(targetFeature)) {
+		if (checkIfDestroyable(targetFeature)) {
 			aLevel.addMessage("You " + attackDescription + " the " + targetFeature.getDescription());
 			targetFeature.damage(player, punchDamage);
 		}
@@ -236,14 +232,14 @@ public class Attack extends Action {
 		}
 	}
 
-	private Effect handleSlice(Position var, Player player, Level aLevel, ItemDefinition weaponDef) {
+	private Effect handleSlice(Position variation, Player player, Level aLevel, ItemDefinition weaponDef) {
 		Effect me;
 		int i = 0;
 		for (i = 0; i < weapon.getRange(); i++) {
-			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(var, i + 1));
+			Position destinationPoint = Position.add(performer.getPosition(), Position.mul(variation, i + 1));
 			Cell destinationCell = aLevel.getMapCell(destinationPoint);
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (isDestroyable(destinationFeature))
+			if (checkIfDestroyable(destinationFeature))
 				break;
 			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 			if (targetMonster != null && !(targetMonster.isInWater() && targetMonster.canSwim())

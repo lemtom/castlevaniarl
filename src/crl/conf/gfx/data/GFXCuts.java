@@ -49,7 +49,7 @@ public class GFXCuts {
 		thus = new GFXCuts();
 	}
 
-	private HashMap<String, GFXChat> hashCuts = new HashMap<>();
+	private final HashMap<String, GFXChat> hashCuts = new HashMap<>();
 	{
 		GFXChat temp = null;
 		temp = new GFXChat();

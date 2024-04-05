@@ -16,7 +16,7 @@ public class GFXMeleeEffect extends GFXDirectionalEffect{
 		Image icon = null;
 		si.saveBuffer();
 		setAnimationDelay(animationDelay);
-		Position var = Action.directionToVariation(direction);
+		Position variation = Action.directionToVariation(direction);
 		switch (direction){
 		case Action.RIGHT:
 			icon = missile[0];
@@ -51,7 +51,7 @@ public class GFXMeleeEffect extends GFXDirectionalEffect{
 			
 		Position runner = new Position(getPosition());
 		for (int i = 0; i < depth; i++){
-			runner.add(var);
+			runner.add(variation);
 			int height = 0;
 			if (ui.getPlayer().getLevel().getMapCell(runner) != null)
 				height = ui.getPlayer().getLevel().getMapCell(runner).getHeight();

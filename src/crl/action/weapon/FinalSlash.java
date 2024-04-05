@@ -94,7 +94,7 @@ private static final long serialVersionUID = 1L;
 		Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
         Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
+        if (checkIfDestroyable(destinationFeature)){
 	       	message.append("You slash through the ").append(destinationFeature.getDescription());
 			aLevel.addMessage(message.toString());
         	return true;

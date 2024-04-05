@@ -24,7 +24,9 @@ import java.util.Properties;
 
 public class GFXUISelector extends UISelector
 		implements ActionSelector, MouseListener, MouseMotionListener, Serializable {
+
 	private static final long serialVersionUID = 1L;
+	private static final String CANCELLED = "- Cancelled";
 
 	private transient SwingSystemInterface si;
 	private boolean useMouse = false;
@@ -61,10 +63,7 @@ public class GFXUISelector extends UISelector
 				continue;
 			ret = ((GFXUserInterface) getUI()).selectCommand(input);
 			if (ret != null) {
-				if (ret.canPerform(player))
-					return ret;
-				else
-					return null;
+				return tryToPerform(ret);
 			}
 			if (input.code == DONOTHING1_KEY) {
 				Debug.exitMethod("null");
@@ -86,37 +85,19 @@ public class GFXUISelector extends UISelector
 						ret = player.getMysticAction();
 						try {
 							if (ret != null) {
-								ret.setPerformer(player);
-								if (ret.canPerform(player))
-									ret.setPosition(mousePosition);
-								else {
-									level.addMessage(ret.getInvalidationMessage());
-									throw new ActionCancelException();
-								}
-								Debug.exitMethod(ret);
-								mousePosition = null;
-								return ret;
+								return tryToPerformFromPosition(ret);
 							}
 						} catch (ActionCancelException ace) {
-							ui().addMessage(new Message("- Cancelled", player.getPosition()));
+							ui().addMessage(new Message(CANCELLED, player.getPosition()));
 							si.refresh();
 							ret = null;
 						}
 					} else {
 						ret = target;
 						try {
-							ret.setPerformer(player);
-							if (ret.canPerform(player))
-								ret.setPosition(mousePosition);
-							else {
-								level.addMessage(ret.getInvalidationMessage());
-								throw new ActionCancelException();
-							}
-							Debug.exitMethod(ret);
-							mousePosition = null;
-							return ret;
+							return tryToPerformFromPosition(ret);
 						} catch (ActionCancelException ace) {
-							ui().addMessage(new Message("- Cancelled", player.getPosition()));
+							ui().addMessage(new Message(CANCELLED, player.getPosition()));
 							si.refresh();
 							ret = null;
 						}
@@ -126,7 +107,7 @@ public class GFXUISelector extends UISelector
 				mousePosition = null;
 			}
 
-			if (isArrow(input) || (useMouse && mousePosition == null && mouseDirection != -1)) {
+			if (usesArrows(input)) {
 				int direction = -1;
 				if (useMouse && mouseDirection != -1) {
 					direction = mouseDirection;
@@ -154,35 +135,19 @@ public class GFXUISelector extends UISelector
 					ret = player.getMysticAction();
 					try {
 						if (ret != null) {
-							ret.setPerformer(player);
-							if (ret.canPerform(player))
-								ui().setTargets(ret);
-							else {
-								level.addMessage(ret.getInvalidationMessage());
-								throw new ActionCancelException();
-							}
-							Debug.exitMethod(ret);
-							return ret;
+							return tryToPerformAndSetTarget(ret);
 						}
 					} catch (ActionCancelException ace) {
-						ui().addMessage(new Message("- Cancelled", player.getPosition()));
+						ui().addMessage(new Message(CANCELLED, player.getPosition()));
 						si.refresh();
 						ret = null;
 					}
 				} else {
 					ret = target;
 					try {
-						ret.setPerformer(player);
-						if (ret.canPerform(player))
-							ui().setTargets(ret);
-						else {
-							level.addMessage(ret.getInvalidationMessage());
-							throw new ActionCancelException();
-						}
-						Debug.exitMethod(ret);
-						return ret;
+						return tryToPerformAndSetTarget(ret);
 					} catch (ActionCancelException ace) {
-						ui().addMessage(new Message("- Cancelled", player.getPosition()));
+						ui().addMessage(new Message(CANCELLED, player.getPosition()));
 						si.refresh();
 						ret = null;
 					}
@@ -192,25 +157,53 @@ public class GFXUISelector extends UISelector
 				ret = getRelatedAction(input.code);
 				try {
 					if (ret != null) {
-						ret.setPerformer(player);
-						if (ret.canPerform(player))
-							ui().setTargets(ret);
-						else {
-							level.addMessage(ret.getInvalidationMessage());
-							throw new ActionCancelException();
-						}
-						Debug.exitMethod(ret);
-						return ret;
+						return tryToPerformAndSetTarget(ret);
 					}
 
 				} catch (ActionCancelException ace) {
-					ui().addMessage(new Message("- Cancelled", player.getPosition()));
+					ui().addMessage(new Message(CANCELLED, player.getPosition()));
 					ret = null;
 				}
 			}
 		}
 		Debug.exitMethod("null");
 		return null;
+	}
+
+	private boolean usesArrows(CharKey input) {
+		return isArrow(input) || (useMouse && mousePosition == null && mouseDirection != -1);
+	}
+
+	private Action tryToPerformAndSetTarget(Action ret) throws ActionCancelException {
+		ret.setPerformer(player);
+		if (ret.canPerform(player))
+			ui().setTargets(ret);
+		else {
+			level.addMessage(ret.getInvalidationMessage());
+			throw new ActionCancelException();
+		}
+		Debug.exitMethod(ret);
+		return ret;
+	}
+
+	private Action tryToPerformFromPosition(Action ret) throws ActionCancelException {
+		ret.setPerformer(player);
+		if (ret.canPerform(player))
+			ret.setPosition(mousePosition);
+		else {
+			level.addMessage(ret.getInvalidationMessage());
+			throw new ActionCancelException();
+		}
+		Debug.exitMethod(ret);
+		mousePosition = null;
+		return ret;
+	}
+
+	private Action tryToPerform(Action ret) {
+		if (ret.canPerform(player))
+			return ret;
+		else
+			return null;
 	}
 
 	private Action doAdvance(int direction) {

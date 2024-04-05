@@ -56,7 +56,7 @@ private static final long serialVersionUID = 1L;
 		"---wwwwwwwwwwwwwwwwwwwwwwwwwwwwww---"
 	};
 	
-	private HashMap<String, String> charMap = new HashMap<>();
+	private final HashMap<String, String> charMap = new HashMap<>();
 	{
 		charMap.put("o", "RUINS_COLUMN");
 		charMap.put(".", "RUINS_FLOOR");

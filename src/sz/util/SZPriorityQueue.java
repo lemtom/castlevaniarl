@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SZPriorityQueue implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<PriorityEnqueable> list;
+	private final ArrayList<PriorityEnqueable> list;
 
 	public SZPriorityQueue() {
 		list = new ArrayList<>(40);

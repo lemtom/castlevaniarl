@@ -26,7 +26,7 @@ public class ShadowExtinction extends Action {
 			int yvar = Util.rand(-10, 10);
 			int xgo = performer.getPosition().x + xvar - 3;
 			int ygo = performer.getPosition().y + yvar - 3;
-            drawEffect(
+			drawEffect(
 					EffectFactory.getSingleton()
 							.createLocatedEffect(new Position(xvar + performer.getPosition().x,
 									yvar + performer.getPosition().y, performer.getPosition().z),
@@ -48,7 +48,7 @@ public class ShadowExtinction extends Action {
 		Player aPlayer = aLevel.getPlayer();
 		Position destinationPoint = new Position(x, y, z);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+		if (checkIfDestroyable(destinationFeature)) {
 			message = "The " + destinationFeature.getDescription() + " is hit by dark energy!";
 			Feature prize = destinationFeature.damage(aPlayer, 4);
 			if (prize != null) {

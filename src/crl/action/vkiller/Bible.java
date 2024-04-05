@@ -38,7 +38,7 @@ public class Bible extends HeartAction {
 			Position destinationPoint = Position.add(performer.getPosition(), step);
 			StringBuilder message = new StringBuilder();
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			if (checkIfDestroyable(destinationFeature)) {
 				message.append("The ").append(destinationFeature.getDescription()).append(" is slashed");
 				Feature prize = destinationFeature.damage(aLevel.getPlayer(), damage);
 				if (prize != null) {

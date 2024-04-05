@@ -7,6 +7,7 @@ import sz.csi.textcomponents.MenuItem;
 import sz.util.OutParameter;
 import sz.util.Position;
 import crl.actor.Actor;
+import crl.feature.Feature;
 import crl.item.Item;
 import crl.player.Player;
 import crl.ui.UserInterface;
@@ -324,5 +325,9 @@ public abstract class Action implements java.io.Serializable {
 			Thread.sleep(150);
 		} catch (Exception e) {
 		}
+	}
+	
+	protected static boolean checkIfDestroyable(Feature feature) {
+		return feature != null && feature.isDestroyable();
 	}
 }

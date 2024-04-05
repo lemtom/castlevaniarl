@@ -93,7 +93,6 @@ public class JLayerMP3Player implements Runnable {
 		new Thread(new JLayerMP3Player()).start();
 		JLayerMP3Player.setMP3("music/Wyvern - upbeat.mp3");
 
-//        JLayerMP3Player.setMP3("music/Craig Stern - Exploring the Depths.mp3");
 		JLayerMP3Player.setInstruction(INS_LOAD);
 
 		try {

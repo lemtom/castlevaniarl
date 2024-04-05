@@ -8,7 +8,7 @@ public class LevelFeature {
 	// private ArrayList subFeatures; //Class AssignedFeature
 	private Dimension size;
 
-	private ArrayList<String[][]> layouts = new ArrayList<>(); // Class String[]
+	private final ArrayList<String[][]> layouts = new ArrayList<>(); // Class String[]
 
 	/*
 	 * public void draw(Position where, Level canvas){ //Draw all its subfeatures in

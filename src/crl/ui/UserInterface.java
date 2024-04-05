@@ -147,7 +147,7 @@ public abstract class UserInterface implements CommandListener/* , Runnable */ {
 	}
 
 	protected HashMap<String, UserCommand> gameCommands = new HashMap<>();
-	private ArrayList<CommandListener> commandListeners = new ArrayList<>(5); // Class CommandListener
+	private final ArrayList<CommandListener> commandListeners = new ArrayList<>(5); // Class CommandListener
 
 	/**
 	 * Prompts for Yes or NO

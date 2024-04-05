@@ -12,7 +12,7 @@ public class PatternGenerator extends LevelGenerator {
 	private static PatternGenerator singleton = new PatternGenerator();
 
 	private Map<String, String> charMap;
-	private ArrayList<AssignedFeature> assignedFeatures = new ArrayList<>();
+	private final ArrayList<AssignedFeature> assignedFeatures = new ArrayList<>();
 	private LevelFeature baseFeature;
 	private boolean hasBoss;
 

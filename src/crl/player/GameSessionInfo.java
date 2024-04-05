@@ -16,7 +16,7 @@ private static final long serialVersionUID = 1L;
 	private int deathLevel;
 	private String deathLevelDescription;
 
-	private ArrayList<String> history = new ArrayList<>();
+	private final ArrayList<String> history = new ArrayList<>();
 
 	public void addHistoryItem(String desc) {
 		history.add(desc);
@@ -41,7 +41,7 @@ private static final long serialVersionUID = 1L;
 	public static final int ENDLESS_PIT = 7;
 	public static final int POISONED_TO_DEATH = 8;
 
-	private Map<String, MonsterDeath> deathCount = new HashMap<>();
+	private final Map<String, MonsterDeath> deathCount = new HashMap<>();
 
 	public Player getPlayer() {
 		return player;

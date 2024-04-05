@@ -8,7 +8,7 @@ import sz.util.Position;
 import java.util.HashMap;
 
 public class CharEffectFactory extends EffectFactory {
-	private HashMap<String, Effect> effects = new HashMap<>();
+	private final HashMap<String, Effect> effects = new HashMap<>();
 
 	public void setEffects(Effect[] effectsA) {
         for (Effect effect : effectsA) {

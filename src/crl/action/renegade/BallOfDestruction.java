@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class BallOfDestruction extends Action {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "BallOfDestruction";
 	}
@@ -27,7 +28,7 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public void execute() {
-		Position var = directionToVariation(targetDirection);
+		Position variation = directionToVariation(targetDirection);
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
 		if (aPlayer.getHearts() < 4) {
@@ -80,12 +81,12 @@ private static final long serialVersionUID = 1L;
 		Position var2 = directionToVariation(otherDir2);
 		int i = 0;
 		for (; i < 20; i++) {
-			Position destinationPoint = Position.add(aPlayer.getPosition(), Position.mul(var, i + 1));
+			Position destinationPoint = Position.add(aPlayer.getPosition(), Position.mul(variation, i + 1));
 			if (hit(destinationPoint, i))
 				break;
 		}
 		if (i == 20)
-            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition()), "SFX_RENEGADE_BOD", 20));
 		// -----
 		i = 0;
@@ -95,7 +96,7 @@ private static final long serialVersionUID = 1L;
 				break;
 		}
 		if (i == 20)
-            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition(), otherDir1), "SFX_RENEGADE_BOD", 20));
 		// -----
 		i = 0;
@@ -105,7 +106,7 @@ private static final long serialVersionUID = 1L;
 				break;
 		}
 		if (i == 20)
-            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition(), otherDir2), "SFX_RENEGADE_BOD", 20));
 
 	}
@@ -122,9 +123,9 @@ private static final long serialVersionUID = 1L;
 		Player aPlayer = aLevel.getPlayer();
 
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+		if (checkIfDestroyable(destinationFeature)) {
 			message.append("The fireball hits the ").append(destinationFeature.getDescription());
-            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition()), "SFX_RENEGADE_BOD", i));
 			Feature prize = destinationFeature.damage(aPlayer, 1);
 			if (prize != null) {
@@ -144,7 +145,7 @@ private static final long serialVersionUID = 1L;
 				message.append("The fireball burns the ").append(targetMonster.getDescription());
 			// targetMonster.damage(player.getWhipLevel());
 			targetMonster.damage(message, 1 + aPlayer.getSoulPower() * 2);
-            drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
+			drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 					this.getPositionalDirectionFrom(aPlayer.getPosition()), "SFX_RENEGADE_BOD", i));
 			aLevel.addMessage(message.toString());
 

@@ -15,7 +15,8 @@ import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 
 public class CrossBack extends Action {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "Cross";
 	}
@@ -25,7 +26,6 @@ private static final long serialVersionUID = 1L;
 		return true;
 	}
 
-	
 	public void execute() {
 		Level aLevel = performer.getLevel();
 		aLevel.addMessage("The cross comes back!");
@@ -55,7 +55,7 @@ private static final long serialVersionUID = 1L;
 			}
 
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			if (checkIfDestroyable(destinationFeature)) {
 				aLevel.addMessage("The cross cuts the " + destinationFeature.getDescription());
 				destinationFeature.damage(aLevel.getPlayer(), damage);
 			}
@@ -64,23 +64,7 @@ private static final long serialVersionUID = 1L;
 			Cell destinationCell = performer.getLevel().getMapCell(destinationPoint);
 
 			if (targetMonster != null) {
-				if ((targetMonster.isInWater() && targetMonster.canSwim())
-						|| destinationCell.getHeight() < startHeight - 1) {
-					if (targetMonster.wasSeen())
-						aLevel.addMessage("The cross flies over the " + targetMonster.getDescription());
-				} else if (destinationCell.getHeight() > startHeight + 1) {
-					if (targetMonster.wasSeen())
-						aLevel.addMessage("The cross flies under the " + targetMonster.getDescription());
-				} else {
-					StringBuilder buff = new StringBuilder();
-					if (targetMonster.wasSeen())
-						buff.append("The cross slashes the ").append(targetMonster.getDescription());
-					targetMonster.damage(buff, damage);
-					aLevel.addMessage(buff.toString());
-					if (targetMonster.isDead()) {
-						performer.getLevel().removeMonster(targetMonster);
-					}
-				}
+				handleMonster(aLevel, damage, startHeight, targetMonster, destinationCell);
 			}
 		}
 
@@ -89,6 +73,25 @@ private static final long serialVersionUID = 1L;
 		crossEffect.setPosition(performer.getLevel().getPlayer().getPosition());
 		drawEffect(crossEffect);
 
+	}
+
+	private void handleMonster(Level aLevel, int damage, int startHeight, Monster targetMonster, Cell destinationCell) {
+		if ((targetMonster.isInWater() && targetMonster.canSwim()) || destinationCell.getHeight() < startHeight - 1) {
+			if (targetMonster.wasSeen())
+				aLevel.addMessage("The cross flies over the " + targetMonster.getDescription());
+		} else if (destinationCell.getHeight() > startHeight + 1) {
+			if (targetMonster.wasSeen())
+				aLevel.addMessage("The cross flies under the " + targetMonster.getDescription());
+		} else {
+			StringBuilder buff = new StringBuilder();
+			if (targetMonster.wasSeen())
+				buff.append("The cross slashes the ").append(targetMonster.getDescription());
+			targetMonster.damage(buff, damage);
+			aLevel.addMessage(buff.toString());
+			if (targetMonster.isDead()) {
+				performer.getLevel().removeMonster(targetMonster);
+			}
+		}
 	}
 
 	@Override

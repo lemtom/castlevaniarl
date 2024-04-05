@@ -23,7 +23,7 @@ public class CharCuts {
 		thus = new CharCuts();
 	}
 
-	private HashMap<String, CharChat> hashCuts = new HashMap<>();
+	private final HashMap<String, CharChat> hashCuts = new HashMap<>();
 	{
 		CharChat temp = null;
 		temp = new CharChat();

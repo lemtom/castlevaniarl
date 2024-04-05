@@ -18,7 +18,8 @@ public class Cell implements Cloneable, Serializable, Keycostable {
 	private transient Appearance appearance;
 	private String appearanceID;
 	private String ID;
-	private String description, shortDescription;
+	private String description;
+	private String shortDescription;
 	private int height;
 	private int heightMod;
 
@@ -137,4 +138,15 @@ public class Cell implements Cloneable, Serializable, Keycostable {
 	public void setShallowWater(boolean shallowWater) {
 		this.shallowWater = shallowWater;
 	}
+
+    @Override
+    public Cell clone() {
+        try {
+            Cell clone = (Cell) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

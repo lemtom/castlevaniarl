@@ -93,7 +93,7 @@ private static final long serialVersionUID = 1L;
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+		if (checkIfDestroyable(destinationFeature)) {
 			message.append("The drakefire burns the ").append(destinationFeature.getDescription());
 			destinationFeature.damage(aPlayer, damage);
 			aLevel.addMessage(message.toString());

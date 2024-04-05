@@ -26,11 +26,11 @@ public class CharMeleeEffect extends CharDirectionalEffect{
 		}
 			
 		char whippy = directionMissileChars.charAt(direction);
-		Position var = Action.directionToVariation(direction);
+		Position variation = Action.directionToVariation(direction);
 		Position abs = ui.getAbsolutePosition(getPosition());
 		for (int j = 0; j<depth; j++){
 			Position toPrint = Position.add(abs,
-			Position.mul(var, j+1));
+			Position.mul(variation, j+1));
 			si.safeprint(toPrint.x, toPrint.y, whippy, color);
 			animationPause();
 		}

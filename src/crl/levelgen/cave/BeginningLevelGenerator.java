@@ -17,10 +17,10 @@ import crl.level.Cell;
 import crl.level.Dispatcher;
 import crl.level.Level;
 import crl.level.MapCellFactory;
-import crl.levelgen.LevelGenerator;
 import crl.levelgen.StaticGenerator;
+import crl.levelgen.LockableLevelGenerator;
 
-public class BeginningLevelGenerator extends LevelGenerator {
+public class BeginningLevelGenerator extends LockableLevelGenerator {
 	private String baseWall;
 	private String baseFloor;
 	private String baseLava;
@@ -71,20 +71,8 @@ public class BeginningLevelGenerator extends LevelGenerator {
 		WispSim.setWisps(new Wisp(start, 10, 40, 5), new Wisp(end, 10, 40, 5));
 		WispSim.run(intMap);
 
-		String[][] tiles = new String[intMap.length][intMap[0].length];
 		Level ret = new Level();
-		for (int x = 0; x < intMap.length; x++)
-			for (int y = 0; y < intMap[0].length; y++)
-				if (intMap[x][y] == 0)
-					tiles[x][y] = baseFloor;
-				else if (intMap[x][y] == 1)
-					tiles[x][y] = baseWall;
-				else if (intMap[x][y] == 2)
-					tiles[x][y] = baseLava;
-				else if (intMap[x][y] == 4) {
-					tiles[x][y] = baseFloor;
-					// ret.addBlood(new Position(x,y,0), 8);
-				}
+		String[][] tiles = generateTiles(intMap);
 
 		Cell[][] cells = renderLevel(tiles);
 
@@ -115,12 +103,27 @@ public class BeginningLevelGenerator extends LevelGenerator {
 						.getMapCell("FOREST_TREE_2");
 		}
 
-		// ret.addExit(start, "_START");
 		ret.addExit(end, "FOREST0");
 		return ret;
 	}
 
-	private HashMap<String, String> charMap = new HashMap<>();
+	private String[][] generateTiles(int[][] intMap) {
+		String[][] tiles = new String[intMap.length][intMap[0].length];
+		for (int x = 0; x < intMap.length; x++)
+			for (int y = 0; y < intMap[0].length; y++)
+				if (intMap[x][y] == 0)
+					tiles[x][y] = baseFloor;
+				else if (intMap[x][y] == 1)
+					tiles[x][y] = baseWall;
+				else if (intMap[x][y] == 2)
+					tiles[x][y] = baseLava;
+				else if (intMap[x][y] == 4) {
+					tiles[x][y] = baseFloor;
+				}
+		return tiles;
+	}
+
+	private final HashMap<String, String> charMap = new HashMap<>();
 
 	{
 		charMap.put("&", "FOREST_TREE");
@@ -144,7 +147,7 @@ public class BeginningLevelGenerator extends LevelGenerator {
 		return (String[][]) Util.randomElementOf(STARTING_MAPS);
 	}
 
-	private String[][][] STARTING_MAPS = new String[][][] {
+	private final String[][][] STARTING_MAPS = new String[][][] {
 			{ { "                    ", "             ---    ", "  wwwwww     ->-    ", "  w--b-w     ---    ",
 					"  w----w            ", "  w----w     ---    ", "  ---www     ---    ", "         --  ---    ",
 					"   ---  --          ", "            wwwwww  ", "            w----w  ", "            w----w  ",
@@ -162,7 +165,7 @@ public class BeginningLevelGenerator extends LevelGenerator {
 
 			} };
 
-	private Unleasher[][] STARTING_UNLEASHERS = new Unleasher[][] { { new Intro1(), new Intro2(), new Intro3() },
+	private final Unleasher[][] STARTING_UNLEASHERS = new Unleasher[][] { { new Intro1(), new Intro2(), new Intro3() },
 
 	};
 

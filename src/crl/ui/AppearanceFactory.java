@@ -5,8 +5,8 @@ import sz.util.Debug;
 import java.util.HashMap;
 
 public class AppearanceFactory {
-	private HashMap<String, Appearance> definitions;
-	private static AppearanceFactory singleton = new AppearanceFactory();
+	private final HashMap<String, Appearance> definitions;
+	private static final AppearanceFactory singleton = new AppearanceFactory();
 
     public static AppearanceFactory getAppearanceFactory(){
 		return singleton;

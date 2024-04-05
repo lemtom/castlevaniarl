@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class SelectorFactory {
 	private static final SelectorFactory singleton = new SelectorFactory();
-	private HashMap<String, ActionSelector> definitions;
+	private final HashMap<String, ActionSelector> definitions;
 
 	/*
 	 * public ActionSelector buildSelector (String id){ Cell x = (Cell)

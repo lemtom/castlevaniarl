@@ -2,6 +2,7 @@ package crl.level;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.Map.Entry;
 
 import sz.csi.textcomponents.MenuItem;
 import sz.fov.*;
@@ -32,7 +33,7 @@ public class Level implements FOVMap, Serializable {
 	private boolean[][][] remembered;
 	private VMonster monsters;
 	private VFeatures features;
-	private HashMap<String, SmartFeature> smartFeatures = new HashMap<>();
+	private final HashMap<String, SmartFeature> smartFeatures = new HashMap<>();
 	private Player player;
 	private SZQueue messagesneffects;
 	private Dispatcher dispatcher;
@@ -45,18 +46,18 @@ public class Level implements FOVMap, Serializable {
 	private MonsterSpawnInfo[] inhabitants;
 	private MonsterSpawnInfo[] dwellersInfo;
 
-	private HashMap<String, String> bloods = new HashMap<>();
-	private Hashtable<String, Counter> frosts = new Hashtable<>();
-	private HashMap<String, ArrayList<MenuItem>> items = new HashMap<>();
-	private Hashtable<String, Position> exits = new Hashtable<>();
-	private HashMap<String, String> exitPositions = new HashMap<>();
+	private final Map<String, String> bloods = new HashMap<>();
+	private final Map<String, Counter> frosts = new HashMap<>();
+	private final Map<String, ArrayList<MenuItem>> items = new HashMap<>();
+	private final Map<String, Position> exits = new HashMap<>();
+	private final Map<String, String> exitPositions = new HashMap<>();
 
-	private Hashtable<String, Counter> hashCounters = new Hashtable<>();
+	private final Map<String, Counter> hashCounters = new HashMap<>();
 
 	private String mapLocationKey;
 
-	private ArrayList<Feature> doomedFeatures = new ArrayList<>();
-	private ArrayList<Feature> lightSources = new ArrayList<>();
+	private final ArrayList<Feature> doomedFeatures = new ArrayList<>();
+	private final ArrayList<Feature> lightSources = new ArrayList<>();
 
 	public void addExit(Position where, String levelID) {
 		exits.put(levelID, where);
@@ -68,7 +69,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public Position getAnExit() {
-		return exits.get(exits.keys().nextElement());
+		return exits.entrySet().iterator().next().getValue();
 	}
 
 	public void addItem(Position where, Item what) {
@@ -120,21 +121,14 @@ public class Level implements FOVMap, Serializable {
 			return 0;
 	}
 
-	// private VEffect effects;
-
 	public Level() {
 		monsters = new VMonster(20);
 		features = new VFeatures(20);
-		// effects = new VEffect(10);
 		messagesneffects = new SZQueue(50);
 	}
 
 	public void addMessage(Message what) {
-		/*
-		 * what = null; what.getText();
-		 */
 		UserInterface.getUI().addMessage(what);
-		// dispatcher.addActor(what, true, what);
 	}
 
 	public void addMessage(String what) {
@@ -198,9 +192,6 @@ public class Level implements FOVMap, Serializable {
 		List<PriorityEnqueable> actors = dispatcher.getActors();
 		for (PriorityEnqueable actor : actors) {
 			Actor a = (Actor) actor;
-			/*
-			 * Debug.say(a); Debug.say(a.getPosition());
-			 */
 			if (a.getPosition().equals(x))
 				return (Actor) actor;
 		}
@@ -212,7 +203,6 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void destroyFeature(Feature what) {
-		// if (what.getLight()>0){
 		if (lightSources.contains(what)) {
 			lightSources.remove(what);
 			lightAt(what.getPosition(), what.getLight(), false);
@@ -231,9 +221,6 @@ public class Level implements FOVMap, Serializable {
 
 	public boolean isWalkable(Position where) {
 		return getMapCell(where) != null && !getMapCell(where).isSolid();
-
-		// &&(!getMapCell(where).isWater() || getFrostAt(where) != 0);
-
 	}
 
 	public boolean isItemPlaceable(Position where) {
@@ -266,10 +253,6 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	private Respawner respawner;
-	// private int keyCounter;
-	/*
-	 * public void keyInminent(){ keyCounter = Util.rand(1,5); }
-	 */
 
 	public void setRespawner(Respawner what) {
 		Debug.enterMethod(this, "setRespawner", what);
@@ -286,9 +269,6 @@ public class Level implements FOVMap, Serializable {
 	public void createMonster(String who, Position where/* , String feat */) {
 		Monster x = MonsterFactory.getFactory().buildMonster(who);
 		x.setPosition(where);
-		/*
-		 * if (!feat.equals("")) x.setFeaturePrize(feat);
-		 */
 		addMonster(x);
 	}
 
@@ -368,7 +348,6 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void addFeature(String featureID, Position location) {
-		// Debug.say("Add"+featureID);
 		Feature x = FeatureFactory.getFactory().buildFeature(featureID);
 		x.setPosition(location.x, location.y, location.z);
 		addFeature(x);
@@ -388,10 +367,6 @@ public class Level implements FOVMap, Serializable {
 		player.setLevel(this);
 	}
 
-	/*
-	 * public java.util.ArrayList getMonsters(){ return monsters; }
-	 */
-
 	public Cell[][][] getCells() {
 		return map;
 	}
@@ -406,22 +381,10 @@ public class Level implements FOVMap, Serializable {
 		for (int ix = xstart; ix <= xend; ix++) {
 			int py = 0;
 			for (int iy = ystart; iy <= yend; iy++) {
-				if (ix >= 0 && ix < map[0].length && iy >= 0 && iy < map[0][0].length && isVisible(ix, iy)) {
-					// darken(ix, iy);
+				if (evaluateVisibleCells(ix, iy)) {
 					ret[px][py] = map[z][ix][iy];
-					/* Las celdas de abajo */
-					if (isValidCoordinate(ix, iy, z)
-							&& (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"))) {
-						int pz = z;
-						while (pz < getDepth() - 1) {
-							if (map[pz + 1][ix][iy] == null || map[pz + 1][ix][iy].getID().equals("AIR")) {
-								pz++;
-							} else {
-								ret[px][py] = map[pz + 1][ix][iy];
-								// remembered[pz+1][ix][iy]= true;
-								break;
-							}
-						}
+					if (evaluateCellsBelow(z, ix, iy)) {
+						loopOverCellsBelow(z, ret, px, ix, py, iy, true);
 					}
 				}
 				py++;
@@ -429,6 +392,22 @@ public class Level implements FOVMap, Serializable {
 			px++;
 		}
 		return ret;
+	}
+
+	private boolean evaluateVisibleCells(int ix, int iy) {
+		return evaluateCells(ix, iy) && isVisible(ix, iy);
+	}
+
+	private boolean evaluateMemoryCells(int ix, int iy) {
+		return evaluateCells(ix, iy) && remembers(ix, iy);
+	}
+
+	private boolean evaluateCells(int ix, int iy) {
+		return ix >= 0 && ix < map[0].length && iy >= 0 && iy < map[0][0].length;
+	}
+
+	private boolean evaluateCellsBelow(int z, int ix, int iy) {
+		return isValidCoordinate(ix, iy, z) && (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"));
 	}
 
 	public Cell[][] getMemoryCellsAround(int x, int y, int z, int xspan, int yspan) {
@@ -441,22 +420,11 @@ public class Level implements FOVMap, Serializable {
 		for (int ix = xstart; ix <= xend; ix++) {
 			int py = 0;
 			for (int iy = ystart; iy <= yend; iy++) {
-				if (ix >= 0 && ix < map[0].length && iy >= 0 && iy < map[0][0].length && remembers(ix, iy)) {
+				if (evaluateMemoryCells(ix, iy)) {
 					ret[px][py] = map[z][ix][iy];
 				}
-				/* Las celdas de abajo */
-				// if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null ||
-				// map[z][ix][iy].getID().equals("AIR"))){
-				if (isValidCoordinate(ix, iy, z) && (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"))) {
-					int pz = z;
-					while (pz < getDepth() - 1 && remembers(ix, iy, pz + 1)) {
-						if (map[pz + 1][ix][iy] == null || map[pz + 1][ix][iy].getID().equals("AIR")) {
-							pz++;
-						} else {
-							ret[px][py] = map[pz + 1][ix][iy];
-							break;
-						}
-					}
+				if (evaluateCellsBelow(z, ix, iy)) {
+					loopOverCellsBelow(z, ret, px, ix, py, iy, false);
 				}
 				py++;
 			}
@@ -464,16 +432,18 @@ public class Level implements FOVMap, Serializable {
 		}
 		return ret;
 	}
-	/*
-	 * public Cell[][] getCellsAround(int x, int y, int z, int xspan, int yspan){
-	 * int xstart = x - xspan; int ystart = y - yspan; int xend = x + xspan; int
-	 * yend = y + yspan; Cell [][] ret = new Cell [2 * xspan + 1][2 * yspan + 1];
-	 * int px = 0; for (int ix = xstart; ix <=xend; ix++){ int py = 0; for (int iy =
-	 * ystart ; iy <= yend; iy++){ //Debug.say("px " + px+" py"+py);
-	 * //Debug.say("ix " +ix+" iy"+iy+"z"+z); if (ix >= 0 && ix < map[0].length &&
-	 * iy >= 0 && iy<map[0][0].length) ret[px][py] = map[z][ix][iy]; py++; } px++; }
-	 * return ret; }
-	 */
+
+	private void loopOverCellsBelow(int z, Cell[][] ret, int px, int ix, int py, int iy, boolean notMemory) {
+		int pz = z;
+		while (pz < getDepth() - 1 && (notMemory || remembers(ix, iy, pz + 1))) {
+			if (map[pz + 1][ix][iy] == null || map[pz + 1][ix][iy].getID().equals("AIR")) {
+				pz++;
+			} else {
+				ret[px][py] = map[pz + 1][ix][iy];
+				break;
+			}
+		}
+	}
 
 	public Player getPlayer() {
 		return player;
@@ -560,7 +530,7 @@ public class Level implements FOVMap, Serializable {
 				add.y = Util.rand(-10, 10);
 				nearPlayer = Position.add(player.getPosition(), add);
 				validate(nearPlayer);
-				if (getMapCell(nearPlayer) == null || (!getMapCell(nearPlayer).isWater()))
+				if (getMapCell(nearPlayer) == null || !getMapCell(nearPlayer).isWater())
 					continue;
 				ok = true;
 				break;
@@ -613,21 +583,13 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void updateLevelStatus() {
-		/*
-		 * if (boss != null && boss.isDead())
-		 * player.informPlayerEvent(Player.EVT_FORWARD);
-		 */
 		if (!hashCounters.isEmpty()) {
-			for (int i = 0; i < hashCounters.size(); i++) {
-				(hashCounters.elements().nextElement()).reduce();
+			for (Counter counter : hashCounters.values()) {
+				counter.reduce();
 			}
 		}
 		reduceFrosts();
-		/*
-		 * for (int i = 0; i < doomedFeatures.size(); i++){ Feature f = (Feature)
-		 * doomedFeatures.get(i); f.setFaint(f.getFaint()-1); if (f.getFaint() <= 0){
-		 * doomedFeatures.remove(f); destroyFeature(f); } }
-		 */
+
 		for (Feature f : doomedFeatures) {
 			f.setFaint(f.getFaint() - 1);
 		}
@@ -642,30 +604,19 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	private void reduceFrosts() {
-		Enumeration<Counter> counters = frosts.elements();
-		while (counters.hasMoreElements()) {
-			Counter counter = counters.nextElement();
+		for (Counter counter : frosts.values()) {
 			counter.reduce();
 		}
-
-		Enumeration<String> keys = frosts.keys();
-		while (keys.hasMoreElements()) {
-			Object key = keys.nextElement();
-			if ((frosts.get(key)).isOver()) {
+		for (Entry<String, Counter> entry : frosts.entrySet()) {
+			if (entry.getValue().isOver()) {
 				addMessage("The ice melts away!");
 				player.land();
-				frosts.remove(key);
+				frosts.remove(entry.getKey());
 			}
 		}
 	}
 
 	private Monster boss;
-	// private Position startPosition, endPosition;
-
-	/*
-	 * public void setPositions(Position start, Position end) { startPosition =
-	 * start; endPosition = end; }
-	 */
 
 	public void setInhabitants(MonsterSpawnInfo[] value) {
 		inhabitants = value;
@@ -722,11 +673,6 @@ public class Level implements FOVMap, Serializable {
 	public SmartFeature getSmartFeature(Position where) {
 		return smartFeatures.get(where.toString());
 	}
-	/*
-	 * public Position getStartPosition() { return startPosition; }
-	 * 
-	 * public Position getEndPosition() { return endPosition; }
-	 */
 
 	public void signal(Position center, int range, String message) {
 		List<PriorityEnqueable> actors = dispatcher.getActors();
@@ -952,7 +898,7 @@ public class Level implements FOVMap, Serializable {
 		return null;
 	}
 
-	private HashMap<String, Boolean> hashFlags = new HashMap<>();
+	private final HashMap<String, Boolean> hashFlags = new HashMap<>();
 
 	public void setFlag(String flagID, boolean value) {
 		hashFlags.remove(flagID);

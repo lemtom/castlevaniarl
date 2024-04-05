@@ -24,7 +24,7 @@ public class SwingSystemInterface implements SystemInterface, Runnable {
 	private SwingInterfacePanel sip;
 	private StrokeNClickInformer aStrokeInformer;
 	private Position caretPosition = new Position(0, 0);
-	private Map<String, Image> images = new HashMap<>();
+	private final Map<String, Image> images = new HashMap<>();
 
 	// private JTextArea invTextArea;
 	private JFrame frameMain;
@@ -222,8 +222,7 @@ public class SwingSystemInterface implements SystemInterface, Runnable {
 			this.wait();
 		} catch (InterruptedException ie) {
 		}
-		CharKey ret = new CharKey(aStrokeInformer.getInkeyBuffer());
-		return ret;
+		return new CharKey(aStrokeInformer.getInkeyBuffer());
 	}
 
 	public Graphics2D getGraphics2D() {

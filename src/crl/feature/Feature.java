@@ -56,56 +56,12 @@ public class Feature implements Cloneable, Serializable, Visible, Keycostable {
 
 		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 			if (Util.chance(10)) {
-				// Will get a mystic weapon
-				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(50))
-					prizeList = new String[] { "CRYSTALWP" };
-				else if (p.getFlag("MYSTIC_FIST") && Util.chance(50))
-					prizeList = new String[] { "FISTWP" };
-				else if (p.getFlag("MYSTIC_CROSS") && Util.chance(50))
-					prizeList = new String[] { "CROSSWP" };
-				else if (p.getFlag("MYSTIC_STOPWATCH") && Util.chance(50))
-					prizeList = new String[] { "STOPWATCHWP" };
-				else if (p.getFlag("MYSTIC_HOLY_WATER") && Util.chance(50))
-					prizeList = new String[] { "HOLYWP" };
-				else if (p.getFlag("MYSTIC_HOLY_BIBLE") && Util.chance(50))
-					prizeList = new String[] { "BIBLEWP" };
-				else
-					prizeList = new String[] { "AXEWP", "DAGGERWP" };
-			} else if (Util.chance(40))
-				if (Util.chance(30))
-					if (Util.chance(10))
-						if (Util.chance(10))
-							if (Util.chance(10))
-								prizeList = new String[] { "WHITE_MONEY_BAG" };
-							else
-								prizeList = new String[] { "POT_ROAST" };
-						else
-							prizeList = new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
-					else
-						prizeList = new String[] { "RED_MONEY_BAG" };
-				else
-					prizeList = new String[] { "BIGHEART" };
-			else
-				prizeList = new String[] { "SMALLHEART" };
+				prizeList = Util.getMysticWeapon(p, 50);
+			} else
+				prizeList = Util.getOtherPrize(40, 30, false);
 		} else {
-			if (Util.chance(50))
-				if (Util.chance(40))
-					if (Util.chance(10))
-						if (Util.chance(10))
-							if (Util.chance(10))
-								prizeList = new String[] { "WHITE_MONEY_BAG" };
-							else
-								prizeList = new String[] { "POT_ROAST" };
-						else
-							prizeList = new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
-					else
-						prizeList = new String[] { "RED_MONEY_BAG" };
-				else
-					prizeList = new String[] { "BIGHEART" };
-			else
-				prizeList = new String[] { "SMALLHEART" };
+			prizeList = Util.getOtherPrize(50, 40, false);
 		}
-		// return FeatureFactory.getFactory().buildFeature("ROSARY");
 		if (prizeList != null)
 			return FeatureFactory.getFactory().buildFeature(Util.randomElementOf(prizeList));
 		else
@@ -155,7 +111,7 @@ public class Feature implements Cloneable, Serializable, Visible, Keycostable {
 		currentResistance = resistance;
 		this.faint = faint;
 		this.light = light;
-        Debug.doAssert(pApp != null, "No se especifico apariencia pa la featura");
+		Debug.doAssert(pApp != null, "No se especifico apariencia pa la featura");
 	}
 
 	public void setPosition(int x, int y, int z) {
@@ -163,9 +119,8 @@ public class Feature implements Cloneable, Serializable, Visible, Keycostable {
 	}
 
 	public Appearance getAppearance() {
-		if (appearance == null) {
-			if (appearanceID != null)
-				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
+		if (appearance == null && appearanceID != null) {
+			appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
 		}
 		return appearance;
 	}

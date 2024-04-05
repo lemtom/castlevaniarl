@@ -54,7 +54,7 @@ public abstract class ProjectileSkill extends HeartAction {
 		return true;
 	}
 
-	private ArrayList<Monster> hitMonsters = new ArrayList<>(10);
+	private final ArrayList<Monster> hitMonsters = new ArrayList<>(10);
 
 	public List<Monster> getHitMonsters() {
 		return hitMonsters;
@@ -148,10 +148,6 @@ public abstract class ProjectileSkill extends HeartAction {
 			}
 		}
 		drawEffectIfPierced(aPlayer, hit);
-	}
-
-	private boolean checkIfDestroyable(Feature destinationFeature) {
-		return destinationFeature != null && destinationFeature.isDestroyable();
 	}
 
 	private boolean checkDirectPathToMonster(int projectileHeight, int monsterHeight) {

@@ -511,14 +511,14 @@ public class GameFiles {
 			}
 		}
 		if (gsi.getKillerMonster() != null) {
-			MonsterRecord record = graveyard.get(gsi.getKillerMonster().getID());
-			if (record == null) {
-				record = new MonsterRecord();
-				record.setMonsterID(gsi.getKillerMonster().getID());
-				record.setKillers(1);
-				graveyard.put(gsi.getKillerMonster().getID(), record);
+			MonsterRecord monsterRecord = graveyard.get(gsi.getKillerMonster().getID());
+			if (monsterRecord == null) {
+				monsterRecord = new MonsterRecord();
+				monsterRecord.setMonsterID(gsi.getKillerMonster().getID());
+				monsterRecord.setKillers(1);
+				graveyard.put(gsi.getKillerMonster().getID(), monsterRecord);
 			} else {
-				record.setKillers(record.getKillers() + 1);
+				monsterRecord.setKillers(monsterRecord.getKillers() + 1);
 			}
 		}
 

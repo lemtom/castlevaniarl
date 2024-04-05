@@ -4,14 +4,15 @@ import crl.ui.Appearance;
 
 import java.awt.*;
 
-public class GFXAppearance extends Appearance{
+public class GFXAppearance extends Appearance {
 	private Image img;
 	private Image darkImage;
 	private Image niteImage;
 	private Image darkniteImage;
 	private Image iconImage;
-	private int superWidth, superHeight;
-	
+	private int superWidth;
+	private int superHeight;
+
 	public int getSuperHeight() {
 		return superHeight;
 	}
@@ -31,8 +32,9 @@ public class GFXAppearance extends Appearance{
 		this(ID, pimg, superWidth, superHeight);
 		this.iconImage = iconImage;
 	}
-	
-	public GFXAppearance(String ID, Image pimg, Image darkImage, Image niteImage, Image darkniteImage, int superWidth, int superHeight) {
+
+	public GFXAppearance(String ID, Image pimg, Image darkImage, Image niteImage, Image darkniteImage, int superWidth,
+			int superHeight) {
 		super(ID);
 		img = pimg;
 		this.darkImage = darkImage;
@@ -41,20 +43,20 @@ public class GFXAppearance extends Appearance{
 		this.superHeight = superHeight;
 		this.superWidth = superWidth;
 	}
-	
-	public Image getImage(){
+
+	public Image getImage() {
 		return img;
 	}
 
 	public Image getDarkImage() {
 		return darkImage;
 	}
-	
+
 	public Image getNiteImage() {
 		return niteImage;
 	}
-	
-	public Image getDarkniteImage(){
+
+	public Image getDarkniteImage() {
 		return darkniteImage;
 	}
 
@@ -62,7 +64,7 @@ public class GFXAppearance extends Appearance{
 		if (iconImage != null) {
 			return iconImage;
 		}
-        return img;
+		return img;
 	}
 
 }

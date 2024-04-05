@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.List;
 
 public class GFXSequentialEffect extends GFXEffect {
-	private List<Position> sequence;
+	private final List<Position> sequence;
 	private Image[] tiles;
 
 	public GFXSequentialEffect(String id, List<Position> sequence, Image[] tiles, int delay,

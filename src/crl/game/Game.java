@@ -43,7 +43,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 	private long turns;
 	private boolean isDay = true;
 	private int timeSwitch;
-	private HashMap<String, LevelMetaData> levelMetadata = new HashMap<>();
+	private final HashMap<String, LevelMetaData> levelMetadata = new HashMap<>();
 
 	public void commandSelected(int commandCode) {
 		if (commandCode == CommandListener.QUIT) {
@@ -115,28 +115,31 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 			player.setFlag(Consts.ENV_FOG, fog);
 			player.setFlag(Consts.ENV_SUNNY, sunnyDay);
 
-			if (isDay) {
-				if (currentLevel.hasNoonMusic()) {
-					STMusicManagerNew.thus.stopMusic();
-					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
-					STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
-				} else {
-					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
-				}
-			} else {
-
-				if (currentLevel.hasNoonMusic()) {
-					STMusicManagerNew.thus.stopMusic();
-					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
-					STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
-				} else {
-					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
-				}
-			}
+			showTimeChange(rain, thunderstorm, fog, sunnyDay);
 			isDay = !isDay;
 			currentLevel.setIsDay(isDay);
 			timeSwitch = DAY_LENGTH;
 			currentLevel.setTimecounter(timeSwitch);
+		}
+	}
+
+	private void showTimeChange(boolean rain, boolean thunderstorm, boolean fog, boolean sunnyDay) {
+		if (isDay) {
+			if (currentLevel.hasNoonMusic()) {
+				STMusicManagerNew.thus.stopMusic();
+				Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
+				STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
+			} else {
+				Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
+			}
+		} else {
+			if (currentLevel.hasNoonMusic()) {
+				STMusicManagerNew.thus.stopMusic();
+				Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
+				STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
+			} else {
+				Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
+			}
 		}
 	}
 
@@ -613,7 +616,7 @@ public class Game implements CommandListener, PlayerEventListener, Serializable 
 		System.exit(-1);
 	}
 
-	private static ArrayList<String> reports = new ArrayList<>(20);
+	private static final ArrayList<String> reports = new ArrayList<>(20);
 
 	public static void addReport(String report) {
 		reports.add(report);

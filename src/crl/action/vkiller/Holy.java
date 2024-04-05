@@ -89,7 +89,7 @@ public class Holy extends HeartAction {
 			for (int y = flameOrigin.y - 1; y <= flameOrigin.y + 1; y++) {
 				Position destinationPoint = new Position(x, y, flameOrigin.z);
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-				if (destinationFeature != null && destinationFeature.isDestroyable()) {
+				if (checkIfDestroyable(destinationFeature)) {
 					StringBuilder message = new StringBuilder();
 					message.append("The ").append(destinationFeature.getDescription()).append(" burns");
 					Feature prize = destinationFeature.damage(aPlayer, damage);

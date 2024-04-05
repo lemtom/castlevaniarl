@@ -483,7 +483,7 @@ public class CharDisplay extends Display {
 		si.restore();
 	}
 
-	private HashMap<String, Position> locationKeys;
+	private final HashMap<String, Position> locationKeys;
 	{
 		locationKeys = new HashMap<>();
 		locationKeys.put("TOWN", new Position(15, 15));

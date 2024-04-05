@@ -10,71 +10,69 @@ import crl.monster.Monster;
 import crl.player.Player;
 
 public class SpinningSlice extends Action {
-private static final long serialVersionUID = 1L;
-	public String getID(){
+	private static final long serialVersionUID = 1L;
+
+	public String getID() {
 		return "SpinningSlice";
 	}
-	
-	public void execute(){
-		Player aPlayer = (Player) performer;
-        Level aLevel = performer.getLevel();
-        if (!checkHearts(8))
-        	return;
-  		if (aPlayer.getWeapon() == null){
-  			aLevel.addMessage("You can't slice without a proper weapon");
-  			return;
-  		}
 
-  		Position runner = new Position(aPlayer.getPosition().x-1, aPlayer.getPosition().y-1, aPlayer.getPosition().z);
-        for (; runner.x <= aPlayer.getPosition().x+1; runner.x++){
-        	for (; runner.y <= aPlayer.getPosition().y+1; runner.y++) {
+	public void execute() {
+		Player aPlayer = (Player) performer;
+		Level aLevel = performer.getLevel();
+		if (!checkHearts(8))
+			return;
+		if (aPlayer.getWeapon() == null) {
+			aLevel.addMessage("You can't slice without a proper weapon");
+			return;
+		}
+
+		Position runner = new Position(aPlayer.getPosition().x - 1, aPlayer.getPosition().y - 1,
+				aPlayer.getPosition().z);
+		for (; runner.x <= aPlayer.getPosition().x + 1; runner.x++) {
+			for (; runner.y <= aPlayer.getPosition().y + 1; runner.y++) {
 				Cell destinationCell = aLevel.getMapCell(runner);
-				//aLevel.addBlood(runner, 8);
-	        	if (destinationCell == null)
-	        		continue;
+				// aLevel.addBlood(runner, 8);
+				if (destinationCell == null)
+					continue;
 				hit(runner, aLevel, aPlayer);
 			}
-			runner.y = aPlayer.getPosition().y-1;
+			runner.y = aPlayer.getPosition().y - 1;
 		}
 	}
 
-	private void hit(Position destinationPoint, Level aLevel, Player player){
+	private void hit(Position destinationPoint, Level aLevel, Player player) {
 		StringBuilder message = new StringBuilder();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()){
+		if (checkIfDestroyable(destinationFeature)) {
 			message.append("You slice the ").append(destinationFeature.getDescription());
 			Feature prize = destinationFeature.damage(player, player.getWeapon().getAttack());
-			if (prize != null){
-		       	message.append(", and cut it apart!");
+			if (prize != null) {
+				message.append(", and cut it apart!");
 			}
 			aLevel.addMessage(message.toString());
 		}
 
 		Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 		message = new StringBuilder();
-		if (
-			targetMonster != null &&
-			!(targetMonster.isInWater() && targetMonster.canSwim())
-		){
+		if (targetMonster != null && !(targetMonster.isInWater() && targetMonster.canSwim())) {
 			message.append("You slice the ").append(targetMonster.getDescription());
-			targetMonster.damageWithWeapon(message, player.getWeaponAttack()+player.getAttack());
-        	if (targetMonster.isDead()){
-	        	message.append(", and cut it apart!");
-				//performer.getLevel().removeMonster(targetMonster);
+			targetMonster.damageWithWeapon(message, player.getWeaponAttack() + player.getAttack());
+			if (targetMonster.isDead()) {
+				message.append(", and cut it apart!");
 			}
-        	if (targetMonster.wasSeen())
-        		aLevel.addMessage(message.toString());
+			if (targetMonster.wasSeen())
+				aLevel.addMessage(message.toString());
 		}
 	}
-	
+
 	@Override
-	public boolean canPerform(Actor a){
+	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
-        Level aLevel = performer.getLevel();
-        if (aPlayer.getHearts() < 8){
-        	invalidationMessage = "You need more energy!";
-            return false;
+		Level aLevel = performer.getLevel();
+		if (aPlayer.getHearts() < 8) {
+			invalidationMessage = "You need more energy!";
+			return false;
 		}
-        return true;
+		return true;
 	}
 }

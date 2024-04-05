@@ -57,12 +57,6 @@ public class BorderedMenuBox {
 		this.items = items;
 	}
 
-	/*
-	 * private static Color TRANSPARENT_BLUE = new Color(0,0,0,250); private static
-	 * Color COLOR_BORDER_IN = new Color(160,160,160); private static Color
-	 * COLOR_BORDER_OUT = new Color(80,80,255);
-	 */
-
 	private Color backgroundColor;
 	private Color borderIn;
 	private Color borderOut;
@@ -86,23 +80,14 @@ public class BorderedMenuBox {
 		si.getGraphics2D().drawRect(realPosX + 6, realPosY + 6, realW - 14, realH - 14);
 		si.getGraphics2D().setColor(borderIn);
 		si.getGraphics2D().drawRect(realPosX + 8, realPosY + 8, realW - 18, realH - 18);
-		/*
-		 * si.getGraphics2D().drawImage(borders[0], 0,0, null);
-		 * si.getGraphics2D().drawImage(borders[1], realW-inset,0, null);
-		 * si.getGraphics2D().drawImage(borders[2], 0, realH - inset,null);
-		 * si.getGraphics2D().drawImage(borders[3], realW -inset, realH - inset,null);
-		 */
+
 		si.drawImage(realPosX, realPosY, border2);
 		si.drawImage(realPosX + realW - inset, realPosY, border1);
 		si.drawImage(realPosX, realPosY + realH - inset, border4);
 		si.drawImage(realPosX + realW - inset, realPosY + realH - inset, border3);
 
-		// pages = (int)(Math.floor((items.size()-1) / inHeight) +1);
 		pages = (int) (Math.floor((items.size() - 1) / (double) (itemsPerPage)) + 1);
-		/*
-		 * System.out.println("items.size() "+items.size());
-		 * System.out.println("inHeight "+inHeight);
-		 */
+
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
 		List<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
 
@@ -129,11 +114,6 @@ public class BorderedMenuBox {
 				si.printAtPixel((xpos + 6) * 10, (ypos + 1) * 24 + i * gap + 18, detail, Color.WHITE);
 			}
 		}
-		// si.print(inPosition.x, inPosition.y, inHeight+" "+pageElements+" "+pages);
-		/*
-		 * for (; i < inHeight-promptSize; i++){ si.print(inPosition.x,
-		 * inPosition.y+i+promptSize+1, spaces); }
-		 */
 		si.refresh();
 	}
 
@@ -158,10 +138,7 @@ public class BorderedMenuBox {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW || key.code == CharKey.N8 && currentPage > 0)
-				currentPage--;
-			if (key.code == CharKey.DARROW || key.code == CharKey.N2 && currentPage < pages - 1)
-				currentPage++;
+			changePage(key);
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
 				return shownItems.get(key.code - CharKey.A);
@@ -186,10 +163,8 @@ public class BorderedMenuBox {
 				key = si.inkey();
 			if (key.code == CharKey.SPACE)
 				return null;
-			if (key.code == CharKey.UARROW || key.code == CharKey.N8 && currentPage > 0)
-				currentPage--;
-			if (key.code == CharKey.DARROW || key.code == CharKey.N2 && currentPage < pages - 1)
-				currentPage++;
+
+			changePage(key);
 
 			if (key.code >= CharKey.A && key.code <= CharKey.A + shownItems.size() - 1)
 				return shownItems.get(key.code - CharKey.A);
@@ -200,6 +175,13 @@ public class BorderedMenuBox {
 			si.restore();
 
 		}
+	}
+
+	private void changePage(CharKey key) {
+		if (key.code == CharKey.UARROW || key.code == CharKey.N8 && currentPage > 0)
+			currentPage--;
+		if (key.code == CharKey.DARROW || key.code == CharKey.N2 && currentPage < pages - 1)
+			currentPage++;
 	}
 
 	public void setTitle(String s) {

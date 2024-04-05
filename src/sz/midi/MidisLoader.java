@@ -40,7 +40,7 @@ public class MidisLoader implements MetaEventListener {
 
 	private Sequencer sequencer;
 
-	private HashMap<String, MidiInfo> midisMap;
+	private final HashMap<String, MidiInfo> midisMap;
 	private MidiInfo currentMidi = null;
 	// reference to currently playing MidiInfo object
 
@@ -101,7 +101,9 @@ public class MidisLoader implements MetaEventListener {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			// BufferedReader br = new BufferedReader( new FileReader(sndsFNm));
 			StringTokenizer tokens;
-			String line, name, fnm;
+			String line;
+			String name;
+			String fnm;
 			while ((line = br.readLine()) != null) {
 				if (line.isEmpty()) // blank line
 					continue;

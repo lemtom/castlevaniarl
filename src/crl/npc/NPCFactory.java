@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 public class NPCFactory {
 	private static final NPCFactory singleton = new NPCFactory();
-	private HashMap<String, NPCDefinition> definitions;
-	private ArrayList<String> hostages = new ArrayList<>();
+	private final HashMap<String, NPCDefinition> definitions;
+	private final ArrayList<String> hostages = new ArrayList<>();
 
 	public static NPCFactory getFactory() {
 		return singleton;
@@ -51,7 +51,7 @@ public class NPCFactory {
 		definitions = new HashMap<>(40);
 	}
 
-	private static String[][] hostageArtifacts = new String[][] { { "HOLBEIN_DAGGER", "SHOTEL" },
+	private static final String[][] hostageArtifacts = new String[][] { { "HOLBEIN_DAGGER", "SHOTEL" },
 			{ "WEREBANE", "ALCARDE_SPEAR", "ETHANOS_BLADE" }, { "FIREBRAND", "GURTHANG", "HADOR" },
 			{ "ICEBRAND", "MORMEGIL", "VORPAL_BLADE" }, { "GRAM", "CRISSAEGRIM" },
 			{ "KAISER_KNUCKLE", "OSAFUNE", "MASAMUNE" } };

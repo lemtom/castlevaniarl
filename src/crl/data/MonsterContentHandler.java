@@ -24,7 +24,7 @@ import crl.ai.monster.boss.MedusaAI;
 import crl.monster.MonsterDefinition;
 
 public class MonsterContentHandler implements ContentHandler {
-	private HashMap<String, MonsterDefinition> hashMonsters;
+	private final HashMap<String, MonsterDefinition> hashMonsters;
 
 	MonsterContentHandler(HashMap<String, MonsterDefinition> hashMonsters) {
 		this.hashMonsters = hashMonsters;

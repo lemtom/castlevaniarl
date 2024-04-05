@@ -10,15 +10,15 @@ import sz.util.*;
 public class ItemFactory {
 	private static ItemFactory singleton = new ItemFactory();
 
-	private HashMap<String, ItemDefinition> definitions = new HashMap<>();
+	private final HashMap<String, ItemDefinition> definitions = new HashMap<>();
 
 	private ArrayList<ItemDefinition> vDefinitions;
 
-	private ArrayList<ItemDefinition> weaponDefinitions = new ArrayList<>();
+	private final ArrayList<ItemDefinition> weaponDefinitions = new ArrayList<>();
 
-	private ArrayList<ItemDefinition> armorDefinitions = new ArrayList<>();
+	private final ArrayList<ItemDefinition> armorDefinitions = new ArrayList<>();
 
-	private ArrayList<ItemDefinition> generalItemsDefinitions = new ArrayList<>();
+	private final ArrayList<ItemDefinition> generalItemsDefinitions = new ArrayList<>();
 
 	public static ItemFactory getItemFactory() {
 		return singleton;
@@ -108,23 +108,13 @@ public class ItemFactory {
 	}
 
 	public Item createItemForLevel(Level level, Player player) {
-		/*
-		 * String[] itemIDs = level.getSpawnItemsIDs(); String itemID =
-		 * Util.randomElementOf(itemIDs); ItemDefinition def = getDefinition(itemID);
-		 */
 		if (level.getLevelNumber() == -1)
 			return null;
 		int tries = 150;
 		int i = 0;
 		ItemDefinition def = null;
 		while (i < tries) {
-			int pin = Util.rand(0, 100);
-			if (pin > 15)
-				def = (ItemDefinition) Util.randomElementOf(generalItemsDefinitions);
-			else if (pin > 5)
-				def = (ItemDefinition) Util.randomElementOf(weaponDefinitions);
-			else
-				def = (ItemDefinition) Util.randomElementOf(armorDefinitions);
+			def = generateDef();
 			int pinLevel = def.getPinLevel();
 			if (pinLevel == 0)
 				continue;
@@ -165,11 +155,28 @@ public class ItemFactory {
 
 		if (def == null)
 			return null;
+		return generateItem(level, player, def);
+	}
+
+	private ItemDefinition generateDef() {
+		ItemDefinition def;
+		int pin = Util.rand(0, 100);
+		if (pin > 15)
+			def = (ItemDefinition) Util.randomElementOf(generalItemsDefinitions);
+		else if (pin > 5)
+			def = (ItemDefinition) Util.randomElementOf(weaponDefinitions);
+		else
+			def = (ItemDefinition) Util.randomElementOf(armorDefinitions);
+		return def;
+	}
+
+	private Item generateItem(Level level, Player player, ItemDefinition def) {
 		Item item = new Item(def);
 		player.reduceCoolness(def.getCoolness());
 		if (def.isUnique())
 			return item;
-		if (def.getEquipCategory() == ItemDefinition.EQUIP_WEAPON) {
+		if (def.getEquipCategory() == ItemDefinition.EQUIP_WEAPON
+				|| def.getEquipCategory() == ItemDefinition.EQUIP_SHIELD) {
 			if (!def.isFixedMaterial())
 				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
 			if (Util.chance(20))
@@ -181,16 +188,9 @@ public class ItemFactory {
 			if (Util.chance(10))
 				setArmorModifiers(item, level.getLevelNumber());
 			return item;
-		} else if (def.getEquipCategory() == ItemDefinition.EQUIP_SHIELD) {
-			if (!def.isFixedMaterial())
-				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
-			if (Util.chance(20))
-				setWeaponModifiers(item, level.getLevelNumber());
-			return item;
 		} else {
 			return item;
 		}
-
 	}
 
 	public static final Modifier[] MOD_ARMOR_STRENGTH = new Modifier[] { new Modifier("WEAKENED", "Weakened ", 10),
@@ -285,11 +285,11 @@ public class ItemFactory {
 
 	}
 
-	public void setMaterial(Item weapon, int levelNumber, Modifier[] MATERIALS) {
-		Modifier material = MATERIALS[0];
+	public void setMaterial(Item weapon, int levelNumber, Modifier[] materials) {
+		Modifier material = materials[0];
 		int tries = 3;
 		while (tries > 0) {
-			Modifier rand = (Modifier) Util.randomElementOf(MATERIALS);
+			Modifier rand = (Modifier) Util.randomElementOf(materials);
 			int chance = rand.getChance() + levelNumber;
 			if (Util.chance(chance)) {
 				material = rand;
@@ -359,26 +359,21 @@ public class ItemFactory {
 
 	public Item createWeapon(Modifier strength, Modifier magic, Modifier material, String baseID, Modifier additional) {
 		Item weapon = createItem(baseID);
-		if (weapon != null)
+		if (weapon != null) {
 			weapon.addPreModifier(strength);
-		if (magic != null)
-			weapon.addPreModifier(magic);
-		weapon.addPreModifier(material);
-		if (additional != null)
-			weapon.addPostModifier(additional);
+			if (magic != null) {
+				weapon.addPreModifier(magic);
+			}
+			weapon.addPreModifier(material);
+			if (additional != null) {
+				weapon.addPostModifier(additional);
+			}
+		}
 		return weapon;
 	}
 
 	public Item createArmor(Modifier strength, Modifier magic, Modifier material, String baseID, Modifier additional) {
-		Item weapon = createItem(baseID);
-		if (weapon != null)
-			weapon.addPreModifier(strength);
-		if (magic != null)
-			weapon.addPreModifier(magic);
-		weapon.addPreModifier(material);
-		if (additional != null)
-			weapon.addPostModifier(additional);
-		return weapon;
+		return createWeapon(strength, magic, material, baseID, additional);
 	}
 
 }

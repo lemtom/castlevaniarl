@@ -122,7 +122,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 
 				if (destinationHeight == projectileHeight) {
 					Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-					if (destinationFeature != null && destinationFeature.isDestroyable()) {
+					if (checkIfDestroyable(destinationFeature)) {
 						if (!piercesThru()) {
 							drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint,
 									getSFXID(), i));

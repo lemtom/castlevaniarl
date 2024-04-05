@@ -28,7 +28,7 @@ public class Hostage extends NPC {
 			return rescuedMessage;
 	}
 	
-	private static String[] HOSTAGE_TIPS = new String[] {
+	private static final String[] HOSTAGE_TIPS = new String[] {
 		"If you dont kill the Aluras quickly, you are dead",
 		"The Nova Skeleton has a deadly secret, dont let him let you know about it",
 		"It is better to run from Iron Golems!",

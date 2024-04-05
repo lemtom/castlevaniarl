@@ -50,16 +50,9 @@ public class SmartFeature extends Actor implements Cloneable, Visible {
 
 	@Override
 	public Object clone() {
-		// try {
 		SmartFeature x = (SmartFeature) super.clone();
 		x.setSelector(selector.derive());
 		return x;
-		/*
-		 * } catch (CloneNotSupportedException cnse){ Debug.doAssert(false,
-		 * "failed class cast, Feature.clone()");
-		 */
-//		}                        */
-//		return null;
 	}
 
 	@Override

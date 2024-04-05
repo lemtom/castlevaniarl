@@ -9,8 +9,8 @@ public class LevelMetaData implements Serializable {
 private static final long serialVersionUID = 1L;
 	private String levelID;
 	private int levelNumber = -1;
-	private ArrayList<String> exits = new ArrayList<>();
-	private HashMap<String, String> hexits = new HashMap<>();
+	private final ArrayList<String> exits = new ArrayList<>();
+	private final HashMap<String, String> hexits = new HashMap<>();
 
 	public List<String> getExits() {
 		return exits;

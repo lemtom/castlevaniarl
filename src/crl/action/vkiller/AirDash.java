@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class AirDash extends HeartAction {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public int getHeartCost() {
 		return 5;
 	}
@@ -50,8 +51,6 @@ private static final long serialVersionUID = 1L;
 		boolean hit = false;
 		Line fireLine = new Line(performer.getPosition(), targetPosition);
 
-		boolean curved = false;
-		int flyStart = 0, flyEnd = 0;
 		Position previousPoint = aPlayer.getPosition();
 		int projectileHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
 		for (int i = 0; i < 4; i++) {
@@ -63,29 +62,18 @@ private static final long serialVersionUID = 1L;
 				return;
 			}
 
-			String message = "";
-
 			int destinationHeight = aLevel.getMapCell(destinationPoint).getHeight();
 
 			if (destinationHeight == projectileHeight) {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-				if (destinationFeature != null && destinationFeature.isDestroyable()) {
-					message = "You hit the " + destinationFeature.getDescription();
-					drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
-							targetPosition, "SFX_AIRDASH", i));
-					Feature prize = destinationFeature.damage(aPlayer, damage);
-					if (prize != null) {
-						message += " and destroys it.";
-					}
-					aLevel.addMessage(message);
-					aPlayer.landOn(previousPoint);
+				if (checkIfDestroyable(destinationFeature)) {
+					tryToDestroy(aPlayer, aLevel, damage, previousPoint, i, destinationFeature);
 					return;
 				}
 			}
 			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
 
 			if (targetMonster != null) {
-				// int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
 				if (projectileHeight == monsterHeight) {
 					if (targetMonster.tryMagicHit(aPlayer, damage, 100, targetMonster.wasSeen(), "dash", false,
@@ -93,26 +81,11 @@ private static final long serialVersionUID = 1L;
 						drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(),
 								targetPosition, "SFX_AIRDASH", i));
 						hit = true;
-						Position runner = new Position(destinationPoint);
-						for (int ii = 0; ii < 2; ii++) {
-							Cell fly = aLevel.getMapCell(runner);
-							if (fly == null)
-								break;
-							if (!fly.isSolid()) {
-								targetMonster.setPosition(runner);
-							} else {
-								StringBuilder byff = new StringBuilder("You smash the " + targetMonster.getDescription()
-										+ " against the " + fly.getDescription() + "!");
-								targetMonster.damage(byff, damage);
-								aLevel.addMessage(byff.toString());
-							}
-							// runner.add(varP);
-							runner = fireLine.next();
-						}
+						loopOverRunner(aLevel, damage, fireLine, destinationPoint, targetMonster);
 						aPlayer.landOn(previousPoint);
 						return;
 					}
-                } else if (projectileHeight < monsterHeight) {
+				} else if (projectileHeight < monsterHeight) {
 					aLevel.addMessage("You dash under the " + targetMonster.getDescription());
 				} else {
 					aLevel.addMessage("You dash over the " + targetMonster.getDescription());
@@ -124,6 +97,38 @@ private static final long serialVersionUID = 1L;
 		drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition,
 				"SFX_AIRDASH", 4));
 		aPlayer.landOn(previousPoint);
+	}
+
+	private void tryToDestroy(Player aPlayer, Level aLevel, int damage, Position previousPoint, int i,
+			Feature destinationFeature) {
+		String message = "You hit the " + destinationFeature.getDescription();
+		drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition,
+				"SFX_AIRDASH", i));
+		Feature prize = destinationFeature.damage(aPlayer, damage);
+		if (prize != null) {
+			message += " and destroys it.";
+		}
+		aLevel.addMessage(message);
+		aPlayer.landOn(previousPoint);
+	}
+
+	private void loopOverRunner(Level aLevel, int damage, Line fireLine, Position destinationPoint,
+			Monster targetMonster) {
+		Position runner = new Position(destinationPoint);
+		for (int ii = 0; ii < 2; ii++) {
+			Cell fly = aLevel.getMapCell(runner);
+			if (fly == null)
+				break;
+			if (!fly.isSolid()) {
+				targetMonster.setPosition(runner);
+			} else {
+				StringBuilder byff = new StringBuilder("You smash the " + targetMonster.getDescription()
+						+ " against the " + fly.getDescription() + "!");
+				targetMonster.damage(byff, damage);
+				aLevel.addMessage(byff.toString());
+			}
+			runner = fireLine.next();
+		}
 	}
 
 	@Override

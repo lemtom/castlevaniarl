@@ -10,7 +10,6 @@ import crl.feature.FeatureFactory;
 import crl.game.*;
 
 public abstract class LevelGenerator {
-	//public abstract Level generateLevel(String param, Dispatcher dispa);
 
 	protected Cell[][] renderLevel(String[][] cellIds) throws CRLException{
 		Debug.enterMethod(this, "renderLevel");
@@ -81,5 +80,5 @@ public abstract class LevelGenerator {
 		}
 		Debug.exitMethod();
 	}
-
+	
 }

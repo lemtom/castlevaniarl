@@ -17,12 +17,13 @@ public class FeatureCarveGenerator extends LevelGenerator {
 	private boolean[][] mask;
 	private String[][] preLevelB;
 	private boolean[][] maskB;
-	private ArrayList<Position> hotspots = new ArrayList<>();
-	private ArrayList<Position> roomHotspots = new ArrayList<>();
+	private final ArrayList<Position> hotspots = new ArrayList<>();
+	private final ArrayList<Position> roomHotspots = new ArrayList<>();
 	private String solidCell;
 	private String corridor;
 	private List<Feature> levelFeatures;
-	private String backExit, nextExit;
+	private String backExit;
+	private String nextExit;
 
 	public void initialize(List<Feature> levelFeatures, String solidCell, int xdim, int ydim, String corridor,
 			String backExit, String nextExit) {

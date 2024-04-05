@@ -23,7 +23,6 @@ import crl.feature.FeatureFactory;
 import crl.game.*;
 
 public class LevelMaster {
-	// private static Dispatcher currentDispatcher;
 	private static boolean firstCave = true;
 
 	public static Level createLevel(LevelMetaData metadata, Player player) throws CRLException {
@@ -60,41 +59,25 @@ public class LevelMaster {
 		if (levelID.startsWith("CHARRIOT_W")) {
 			BeginningLevelGenerator clg = new BeginningLevelGenerator();
 			clg.init("FOREST_TREE", "FOREST_GRASS", "FOREST_DIRT");
-			ret = clg.generateLevel(Util.rand(40, 50), Util.rand(50, 70), false);
-			ret.setRespawner(x);
-			ret.setDescription("Dark Forest");
-			ret.setMusicKeyMorning("");
-			ret.setMusicKeyNoon(null);
-			ret.setDwellersInfo(new MonsterSpawnInfo[] { new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
-					new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
+			MonsterSpawnInfo[] monsterSpawnInfos = new MonsterSpawnInfo[] {
 					new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
-					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70), });
-			ret.setInhabitants(new MonsterSpawnInfo[] { new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
-					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 40) });
-			ret.setLevelNumber(0);
-			overrideLevelNumber = true;
-			ret.setMapLocationKey("FOREST");
+					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 40) };
+			ret = generateLockableLevel(x, clg, Util.rand(40, 50), Util.rand(50, 70), "", null, 0, monsterSpawnInfos);
 			ret.setID("CHARRIOT_W");
 			ret.setRutinary(false);
+			overrideLevelNumber = true;
 
 		} else if (levelID.startsWith("FOREST")) {
 			ForestLevelGenerator clg = new ForestLevelGenerator();
 			clg.init("FOREST_TREE", "FOREST_GRASS", "FOREST_DIRT");
-			ret = clg.generateLevel(Util.rand(50, 60), Util.rand(50, 60), false);
+			MonsterSpawnInfo[] monsterSpawnInfos = new MonsterSpawnInfo[] {
+					new MonsterSpawnInfo("BAT", MonsterSpawnInfo.BORDER, 100),
+					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 60) };
+			ret = generateLockableLevel(x, clg, Util.rand(50, 60), Util.rand(50, 60), "DAY_TRANSYLVANIA",
+					"NIGHT_TRANSYLVANIA", 1, monsterSpawnInfos);
 			ret.setDispatcher(new Dispatcher());
-			ret.setRespawner(x);
-			ret.setDescription("Dark Forest");
-			ret.setMusicKeyMorning("DAY_TRANSYLVANIA");
-			ret.setMusicKeyNoon("NIGHT_TRANSYLVANIA");
-			ret.setDwellersInfo(new MonsterSpawnInfo[] { new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
-					new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
-					new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
-					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70), });
-			ret.setInhabitants(new MonsterSpawnInfo[] { new MonsterSpawnInfo("BAT", MonsterSpawnInfo.BORDER, 100),
-					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 60) });
-			ret.setLevelNumber(1);
 			overrideLevelNumber = true;
-			ret.setMapLocationKey("FOREST");
+
 		} else if (levelID.startsWith("MAIN_HALL")) {
 			Entrance.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
@@ -182,7 +165,6 @@ public class LevelMaster {
 			ret.setMapLocationKey("RUINS");
 			hasHostage = Util.chance(40);
 		} else if (levelID.startsWith("CAVES")) {
-
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_FLOOR", "CAVE_WATER");
 			ret = clg.generateLevel(Util.rand(40, 50), Util.rand(40, 50), true, false);
@@ -309,7 +291,6 @@ public class LevelMaster {
 							new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 80),
 							new MonsterSpawnInfo("SPEAR_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 20), });
 			ret.setMapLocationKey("INNER_QUARTERS");
-			// ret.setIsCandled(true);
 			if (levelID.equals("INNER_QUARTERS0")) {
 				Position p = ret.getExitFor("_BACK");
 				ret.removeExit("_BACK");
@@ -402,17 +383,7 @@ public class LevelMaster {
 		}
 
 		if (hasHostage) {
-			Hostage hostage = NPCFactory.getFactory().buildHostage();
-			hostage.setReward(100 * (Util.rand(100, 150) / 100));
-			while (true) {
-				Position rand = new Position(Util.rand(5, ret.getWidth()), Util.rand(5, ret.getHeight()),
-						Util.rand(0, ret.getDepth()));
-				if (ret.isItemPlaceable(rand)) {
-					hostage.setPosition(rand);
-					break;
-				}
-			}
-			ret.addMonster(hostage);
+			ret.addMonster(generateHostage(ret));
 		}
 		ret.setID(levelID);
 		if (!overrideLevelNumber)
@@ -438,6 +409,39 @@ public class LevelMaster {
 		Debug.exitMethod(ret);
 		return ret;
 
+	}
+
+	private static Hostage generateHostage(Level ret) {
+		Hostage hostage = NPCFactory.getFactory().buildHostage();
+		hostage.setReward(100 * (Util.rand(100, 150) / 100));
+		while (true) {
+			Position rand = new Position(Util.rand(5, ret.getWidth()), Util.rand(5, ret.getHeight()),
+					Util.rand(0, ret.getDepth()));
+			if (ret.isItemPlaceable(rand)) {
+				hostage.setPosition(rand);
+				break;
+			}
+		}
+		return hostage;
+	}
+
+	private static Level generateLockableLevel(Respawner x, LockableLevelGenerator clg, int xdim, int ydim,
+			String morningMusic, String noonMusic, int number, MonsterSpawnInfo[] monsterSpawnInfos)
+			throws CRLException {
+		Level ret;
+		ret = clg.generateLevel(xdim, ydim, false);
+		ret.setRespawner(x);
+		ret.setDescription("Dark Forest");
+		ret.setMusicKeyMorning(morningMusic);
+		ret.setMusicKeyNoon(noonMusic);
+		ret.setDwellersInfo(new MonsterSpawnInfo[] { new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
+				new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
+				new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
+				new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70), });
+		ret.setInhabitants(monsterSpawnInfos);
+		ret.setLevelNumber(number);
+		ret.setMapLocationKey("FOREST");
+		return ret;
 	}
 
 	private static Level setUpPattern(Respawner respawner, StaticPattern pattern) throws CRLException {
@@ -617,7 +621,6 @@ public class LevelMaster {
 
 	private static ArrayList<crl.levelgen.featureCarve.Feature> getWareHouseRooms() {
 		int rooms = Util.rand(12, 15);
-		// rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
 
 		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();

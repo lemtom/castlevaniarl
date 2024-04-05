@@ -10,7 +10,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class SlideKick extends HeartAction {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public int getHeartCost() {
 		return 2;
 	}
@@ -60,7 +61,7 @@ private static final long serialVersionUID = 1L;
 
 			if (destinationHeight == projectileHeight) {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-				if (destinationFeature != null && destinationFeature.isDestroyable()) {
+				if (checkIfDestroyable(destinationFeature)) {
 					message = "You hit the " + destinationFeature.getDescription();
 					drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(),
 							targetPosition, "SFX_SLIDEKICK", i));
@@ -85,7 +86,7 @@ private static final long serialVersionUID = 1L;
 						aPlayer.landOn(previousPoint);
 						return;
 					}
-                } else if (projectileHeight < monsterHeight) {
+				} else if (projectileHeight < monsterHeight) {
 					aLevel.addMessage("You slide under the " + targetMonster.getDescription());
 				} else {
 					aLevel.addMessage("You slide over the " + targetMonster.getDescription());

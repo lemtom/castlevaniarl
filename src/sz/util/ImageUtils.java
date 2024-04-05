@@ -8,77 +8,69 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class ImageUtils {
-	public static  BufferedImage createImage (String filename) throws Exception {
-        BufferedImage im =  ImageIO.read(new File(filename));
-         return im;
+	public static BufferedImage createImage(String filename) throws Exception {
+		return ImageIO.read(new File(filename));
+	}
 
-    }
+	public static Image crearImagen(String filename, Component tracker) throws Exception {
+		if (!FileUtil.fileExists(filename)) {
+			Exception e = new Exception("Archivo Inexistente " + filename);
+			Debug.exitExceptionally(e);
+			throw e;
+		}
+		Image image = Toolkit.getDefaultToolkit().getImage(filename);
+		MediaTracker mediaTracker = new MediaTracker(tracker);
+		mediaTracker.addImage(image, 0);
+		try {
+			mediaTracker.waitForID(0);
+		} catch (InterruptedException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return image;
+	}
 
-    public static Image crearImagen(String filename, Component tracker) throws Exception{
-        if (!FileUtil.fileExists(filename)){
-    		Exception e = new Exception("Archivo Inexistente " +filename);
-    		Debug.exitExceptionally(e);
-    		throw e;
-    	}
-        Image image = Toolkit.getDefaultToolkit().getImage(filename);
-        MediaTracker mediaTracker = new MediaTracker(tracker);
-        mediaTracker.addImage(image, 0);
-        try{
-            mediaTracker.waitForID(0);
-        }catch(InterruptedException ex){
-        	System.out.println(ex.getMessage());
-        }
-        //Debug.exitMethod(image);
-        return image;
-    }
-	
-	private static Image tempImage; 
-	
-	public static BufferedImage crearImagen(String filename, int x, int y, int width, int height) throws Exception{
-		//tempImage = crearImagen(filename);
+	private static Image tempImage;
+
+	public static BufferedImage crearImagen(String filename, int x, int y, int width, int height) throws Exception {
 		BufferedImage tempImage = createImage(filename);
 		return crearImagen(tempImage, x, y, width, height);
-		        
-		//return Toolkit.getDefaultToolkit().createImage(new FilteredImageSource(tempImage.getSource(), new CropImageFilter(x, y, width, height)));
-    }
-	
-	public static BufferedImage crearImagen(BufferedImage tempImage, int x, int y, int width, int height) throws Exception{
+	}
+
+	public static BufferedImage crearImagen(BufferedImage tempImage, int x, int y, int width, int height)
+			throws Exception {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    GraphicsConfiguration gc = ge.getDefaultScreenDevice( ).getDefaultConfiguration( );
+		GraphicsConfiguration gc = ge.getDefaultScreenDevice().getDefaultConfiguration();
 
-	    int transparency = tempImage.getColorModel( ).getTransparency( );
+		int transparency = tempImage.getColorModel().getTransparency();
 
-	    BufferedImage ret =gc.createCompatibleImage(width,height,transparency);
-        // create a graphics context
-        Graphics2D retGC = ret.createGraphics();
+		BufferedImage ret = gc.createCompatibleImage(width, height, transparency);
+		// create a graphics context
+		Graphics2D retGC = ret.createGraphics();
 
-        // copy image
-        retGC.drawImage(tempImage,
-                    0,0, width,height, x,y,x+width,y+height,null);
-        retGC.dispose();
-        return ret;
+		// copy image
+		retGC.drawImage(tempImage, 0, 0, width, height, x, y, x + width, y + height, null);
+		retGC.dispose();
+		return ret;
+	}
 
-		//return Toolkit.getDefaultToolkit().createImage(new FilteredImageSource(tempImage.getSource(), new CropImageFilter(x, y, width, height)));
-    }
-
-	public static BufferedImage hFlip(BufferedImage image){
+	public static BufferedImage hFlip(BufferedImage image) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -image.getHeight(null));
-	    AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-	    return op.filter(image, null);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		return op.filter(image, null);
 	}
-	
-	public static BufferedImage vFlip(BufferedImage image){
+
+	public static BufferedImage vFlip(BufferedImage image) {
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
 		tx.translate(-image.getWidth(null), 0);
-	    AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-	    return op.filter(image, null);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		return op.filter(image, null);
 	}
-	
-	public static BufferedImage rotate(BufferedImage bufferedImage, double radians){
+
+	public static BufferedImage rotate(BufferedImage bufferedImage, double radians) {
 		AffineTransform tx = new AffineTransform();
-	    tx.rotate(radians, bufferedImage.getWidth()/2, bufferedImage.getHeight()/2);
-	    AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-	    return op.filter(bufferedImage, null);
+		tx.rotate(radians, bufferedImage.getWidth() / 2, bufferedImage.getHeight() / 2);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		return op.filter(bufferedImage, null);
 	}
 }

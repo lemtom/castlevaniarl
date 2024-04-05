@@ -8,7 +8,8 @@ import sz.util.Debug;
 import sz.util.Position;
 
 public class CircularRoom extends Feature {
-	protected int width, height;
+	protected int width;
+	protected int height;
 	private String floor, wall;
 	protected Position start;
 

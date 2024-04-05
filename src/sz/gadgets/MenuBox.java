@@ -72,12 +72,8 @@ public class MenuBox {
 		si.getGraphics2D().setColor(COLOR_BORDER_IN);
 		si.getGraphics2D().drawRect(realPosX + 8, realPosY + 8, realW - 18, realH - 18);
 
-		// pages = (int)(Math.floor((items.size()-1) / inHeight) +1);
 		pages = (int) ((double) ((items.size() - 1) / (itemsPerPage)) + 1);
-		/*
-		 * System.out.println("items.size() "+items.size());
-		 * System.out.println("inHeight "+inHeight);
-		 */
+
 		si.print(xpos, ypos, title, GFXDisplay.COLOR_BOLD);
 		List<MenuItem> shownItems = Util.page(items, itemsPerPage, currentPage);
 
@@ -87,7 +83,6 @@ public class MenuBox {
 
 		int i = 0;
 		for (; i < shownItems.size(); i++) {
-
 			GFXMenuItem item = (GFXMenuItem) shownItems.get(i);
 			if (!ordinal) {
 				si.printAtPixel(xpos * 10, (ypos + 1) * 24 + i * gap, ((char) (97 + i)) + ".", GFXDisplay.COLOR_BOLD);
@@ -111,11 +106,7 @@ public class MenuBox {
 			}
 		}
 		ordinal = false;
-		// si.print(inPosition.x, inPosition.y, inHeight+" "+pageElements+" "+pages);
-		/*
-		 * for (; i < inHeight-promptSize; i++){ si.print(inPosition.x,
-		 * inPosition.y+i+promptSize+1, spaces); }
-		 */
+
 		si.refresh();
 	}
 

@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import crl.player.Player;
+
 public class Util {
 	private static Random rand = new Random(System.currentTimeMillis());
 
 	public static int rand(int low, int hi) {
-        return (int) ((rand.nextDouble() * (hi - low + 1)) + low);
+		return (int) (rand.nextDouble() * (hi - low + 1) + low);
 	}
 
 	public static int greater(int a, int b) {
@@ -24,12 +26,10 @@ public class Util {
 	}
 
 	public static boolean chance(int p) {
-		return Util.rand(1, 100) <= p;
+		return rand(1, 100) <= p;
 	}
 
 	public static List<MenuItem> page(List<MenuItem> source, int elementsOnPage, int pageNumber) {
-		// System.out.println("elements on page"+elementsOnPage+" page
-		// Number"+pageNumber);
 		if (source.isEmpty())
 			return source;
 		if ((pageNumber + 1) * elementsOnPage > source.size())
@@ -52,5 +52,43 @@ public class Util {
 
 	public static int sign(int n) {
 		return Integer.compare(n, 0);
+	}
+
+	public static String[] getOtherPrize(int firstChance, int secondChance, boolean withCoin) {
+		if (chance(firstChance))
+			if (chance(secondChance))
+				if (chance(10))
+					if (chance(10))
+						if (chance(10))
+							return new String[] { "WHITE_MONEY_BAG" };
+						else
+							return new String[] { "POT_ROAST" };
+					else
+						return new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
+				else
+					return new String[] { "RED_MONEY_BAG" };
+			else
+				return new String[] { "BIGHEART" };
+		else if (withCoin) {
+			return new String[] { "SMALLHEART", "COIN" };
+		}
+		return new String[] { "SMALLHEART" };
+	}
+
+	public static String[] getMysticWeapon(Player p, int chance) {
+		if (p.getFlag("MYSTIC_CRYSTAL") && chance(chance))
+			return new String[] { "CRYSTALWP" };
+		else if (p.getFlag("MYSTIC_FIST") && chance(chance))
+			return new String[] { "FISTWP" };
+		else if (p.getFlag("MYSTIC_CROSS") && chance(chance))
+			return new String[] { "CROSSWP" };
+		else if (p.getFlag("MYSTIC_STOPWATCH") && chance(chance))
+			return new String[] { "STOPWATCHWP" };
+		else if (p.getFlag("MYSTIC_HOLY_WATER") && chance(chance))
+			return new String[] { "HOLYWP" };
+		else if (p.getFlag("MYSTIC_HOLY_BIBLE") && chance(chance))
+			return new String[] { "BIBLEWP" };
+		else
+			return new String[] { "AXEWP", "DAGGERWP" };
 	}
 }

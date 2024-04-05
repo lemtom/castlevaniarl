@@ -87,46 +87,42 @@ public class Monster extends Actor implements Cloneable, Visible {
 		}
 	}
 
-	/*
-	 * public boolean playerInRow(){ Position pp = level.getPlayer().getPosition();
-	 * /*if (!playerInRange()) return false; //Debug.say("pp"+pp);
-	 * //Debug.say(getPosition()); if (pp.x == getPosition().x || pp.y ==
-	 * getPosition().y) return true; if (pp.x - getPosition().x == pp.y -
-	 * getPosition().y) return true; return false; }
-	 */
-
 	/** returns the direction in which the player is seen */
 	public int starePlayer() {
 		if (level.getPlayer() == null || level.getPlayer().isInvisible()
 				|| level.getPlayer().getPosition().z != getPosition().z)
 			return -1;
 		if (Position.flatDistance(level.getPlayer().getPosition(), getPosition()) <= getDefinition().getSightRange()) {
-			Position pp = level.getPlayer().getPosition();
-			if (pp.x == getPosition().x) {
-				if (pp.y > getPosition().y) {
-					return Action.DOWN;
-				} else {
-					return Action.UP;
-				}
-			} else if (pp.y == getPosition().y) {
-				if (pp.x > getPosition().x) {
-					return Action.RIGHT;
-				} else {
-					return Action.LEFT;
-				}
-			} else if (pp.x < getPosition().x) {
-				if (pp.y > getPosition().y)
-					return Action.DOWNLEFT;
-				else
-					return Action.UPLEFT;
-			} else {
-				if (pp.y > getPosition().y)
-					return Action.DOWNRIGHT;
-				else
-					return Action.UPRIGHT;
-			}
+			return determinePosition();
 		}
 		return -1;
+	}
+
+	private int determinePosition() {
+		Position pp = level.getPlayer().getPosition();
+		if (pp.x == getPosition().x) {
+			if (pp.y > getPosition().y) {
+				return Action.DOWN;
+			} else {
+				return Action.UP;
+			}
+		} else if (pp.y == getPosition().y) {
+			if (pp.x > getPosition().x) {
+				return Action.RIGHT;
+			} else {
+				return Action.LEFT;
+			}
+		} else if (pp.x < getPosition().x) {
+			if (pp.y > getPosition().y)
+				return Action.DOWNLEFT;
+			else
+				return Action.UPLEFT;
+		} else {
+			if (pp.y > getPosition().y)
+				return Action.DOWNRIGHT;
+			else
+				return Action.UPRIGHT;
+		}
 	}
 
 	public void damageWithWeapon(StringBuilder message, int dam) {
@@ -171,20 +167,14 @@ public class Monster extends Actor implements Cloneable, Visible {
 
 		if (isDead()) {
 			if (this == level.getBoss()) {
-				// if (!level.isWalkable(getPosition())){
-				// level.addMessage("You get a castle key!");
 				level.getPlayer().addKeys(1);
-				/*
-				 * } else setFeaturePrize("KEY");
-				 */
-                level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
+				level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
 				level.addMessage("The whole level trembles with holy energy!");
 				level.removeBoss();
 				level.getPlayer().addHistoricEvent(
 						"vanquished the " + this.getDescription() + " on the " + level.getDescription());
 				level.anihilate();
 				level.removeRespawner();
-				// level.getPlayer().addSoulPower(Util.rand(10,20)*level.getLevelNumber());
 			} else {
 				level.getPlayer().increaseMUpgradeCount();
 				setPrize();
@@ -208,7 +198,6 @@ public class Monster extends Actor implements Cloneable, Visible {
 			die();
 			level.getPlayer().addScore(getDefinition().getScore());
 			level.getPlayer().addXP(getDefinition().getScore());
-			// level.getPlayer().addSoulPower(Util.rand(0,3));
 			level.getPlayer().getGameSessionInfo().addDeath(getDefinition());
 		}
 	}
@@ -290,10 +279,6 @@ public class Monster extends Actor implements Cloneable, Visible {
 		return false;
 	}
 
-	/*
-	 * public ListItem getSightListItem(){ return definition.getSightListItem(); }
-	 */
-
 	private void setPrize() {
 		Player p = level.getPlayer();
 		String[] prizeList = null;
@@ -311,55 +296,11 @@ public class Monster extends Actor implements Cloneable, Visible {
 
 		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 			if (Util.chance(20)) {
-				// Will get a mystic weapon
-				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(20))
-					prizeList = new String[] { "CRYSTALWP" };
-				else if (p.getFlag("MYSTIC_FIST") && Util.chance(20))
-					prizeList = new String[] { "FISTWP" };
-				else if (p.getFlag("MYSTIC_CROSS") && Util.chance(20))
-					prizeList = new String[] { "CROSSWP" };
-				else if (p.getFlag("MYSTIC_STOPWATCH") && Util.chance(20))
-					prizeList = new String[] { "STOPWATCHWP" };
-				else if (p.getFlag("MYSTIC_HOLY_WATER") && Util.chance(20))
-					prizeList = new String[] { "HOLYWP" };
-				else if (p.getFlag("MYSTIC_HOLY_BIBLE") && Util.chance(20))
-					prizeList = new String[] { "BIBLEWP" };
-				else
-					prizeList = new String[] { "AXEWP", "DAGGERWP" };
+				prizeList = Util.getMysticWeapon(p, 20);
 			} else if (Util.chance(50))
-				if (Util.chance(40))
-					if (Util.chance(10))
-						if (Util.chance(10))
-							if (Util.chance(10))
-								if (Util.chance(10))
-									prizeList = new String[] { "WHITE_MONEY_BAG" };
-								else
-									prizeList = new String[] { "POT_ROAST" };
-							else
-								prizeList = new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
-						else
-							prizeList = new String[] { "RED_MONEY_BAG" };
-					else
-						prizeList = new String[] { "BIGHEART" };
-				else
-					prizeList = new String[] { "SMALLHEART", "COIN" };
+				prizeList = Util.getOtherPrize(40, 10, true);
 		} else {
-			if (Util.chance(50))
-				if (Util.chance(50))
-					if (Util.chance(10))
-						if (Util.chance(10))
-							if (Util.chance(10))
-								prizeList = new String[] { "WHITE_MONEY_BAG" };
-							else
-								prizeList = new String[] { "POT_ROAST" };
-						else
-							prizeList = new String[] { "INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG" };
-					else
-						prizeList = new String[] { "RED_MONEY_BAG" };
-				else
-					prizeList = new String[] { "BIGHEART" };
-			else
-				prizeList = new String[] { "SMALLHEART", "COIN" };
+			prizeList = Util.getOtherPrize(50, 50, true);
 		}
 
 		if (prizeList != null)
@@ -438,7 +379,6 @@ public class Monster extends Actor implements Cloneable, Visible {
 		if (Util.chance(evasion)) {
 			if (showMsg)
 				level.addMessage("The " + getDescription() + " evades the " + attackDesc + "!");
-			// moveRandomly();
 			return false;
 		} else {
 			if (hasCounter("SLEEP")) {
@@ -447,29 +387,33 @@ public class Monster extends Actor implements Cloneable, Visible {
 			}
 			int baseDamage = magicalDamage;
 			double damageMod = 1;
-			StringBuilder hitDesc = new StringBuilder();
-			int damage = (int) (baseDamage * damageMod);
-			double percent = (double) damage / (double) getDefinition().getMaxHits();
-			if (percent > 1.0d)
-				hitDesc.append("The ").append(attackDesc).append(" whacks the ").append(getDescription())
-						.append(" apart!!");
-			else if (percent > 0.7d)
-				hitDesc.append("The ").append(attackDesc).append(" smashes the ").append(getDescription()).append("!");
-			else if (percent > 0.5d)
-				hitDesc.append("The ").append(attackDesc).append(" grievously hits the ").append(getDescription())
-						.append("!");
-			else if (percent > 0.3d)
-				hitDesc.append("The ").append(attackDesc).append(" hits the ").append(getDescription()).append(".");
-			else
-				hitDesc.append("The ").append(attackDesc).append(" barely scratches the ").append(getDescription())
-						.append("...");
+			StringBuilder hitDesc = determineHitDesc(attackDesc, baseDamage, damageMod);
 
 			damage(hitDesc, (int) (baseDamage * damageMod));
 			if (showMsg)
 				level.addMessage(hitDesc.toString());
-			// attacker.setLastWalkingDirection(Action.SELF);
 			return true;
 		}
+	}
+
+	private StringBuilder determineHitDesc(String attackDesc, int baseDamage, double damageMod) {
+		StringBuilder hitDesc = new StringBuilder();
+		int damage = (int) (baseDamage * damageMod);
+		double percent = (double) damage / (double) getDefinition().getMaxHits();
+		if (percent > 1.0d)
+			hitDesc.append("The ").append(attackDesc).append(" whacks the ").append(getDescription())
+					.append(" apart!!");
+		else if (percent > 0.7d)
+			hitDesc.append("The ").append(attackDesc).append(" smashes the ").append(getDescription()).append("!");
+		else if (percent > 0.5d)
+			hitDesc.append("The ").append(attackDesc).append(" grievously hits the ").append(getDescription())
+					.append("!");
+		else if (percent > 0.3d)
+			hitDesc.append("The ").append(attackDesc).append(" hits the ").append(getDescription()).append(".");
+		else
+			hitDesc.append("The ").append(attackDesc).append(" barely scratches the ").append(getDescription())
+					.append("...");
+		return hitDesc;
 	}
 
 	public String getLongDescription() {
@@ -562,10 +506,8 @@ public class Monster extends Actor implements Cloneable, Visible {
 	public boolean tryHit(Monster attacker) {
 		setEnemy(attacker);
 		int evasion = getEvadeChance();
-		// level.addMessage("Evasion "+evasion);
 		if (hasCounter("SLEEP"))
 			evasion = 0;
-		// level.addMessage("Evasion "+evasion);
 		// see if evades it
 		int weaponAttack = attacker.getDefinition().getAttack();
 		if (Util.chance(evasion)) {

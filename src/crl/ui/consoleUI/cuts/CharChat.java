@@ -3,8 +3,8 @@ package crl.ui.consoleUI.cuts;
 import java.util.ArrayList;
 
 public class CharChat {
-	private ArrayList<String> conversations = new ArrayList<>(5);
-	private ArrayList<String> names = new ArrayList<>(5);
+	private final ArrayList<String> conversations = new ArrayList<>(5);
+	private final ArrayList<String> names = new ArrayList<>(5);
 	
 	public void add(String name, String conversation){
 		names.add(name);

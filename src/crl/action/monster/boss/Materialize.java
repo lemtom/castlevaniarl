@@ -8,20 +8,20 @@ import crl.monster.Monster;
 import crl.ui.effects.EffectFactory;
 
 public class Materialize extends Action {
-private static final long serialVersionUID = 1L;
-	public String getID(){
+	private static final long serialVersionUID = 1L;
+
+	public String getID() {
 		return "MATERIALIZE";
 	}
-	
-	public void execute(){
-        Level aLevel = performer.getLevel();
-        aLevel.addMessage("Dracula materializes!");
-        Monster mon = (Monster)performer;
-        mon.setVisible(true);
-        Position var = new Position(Util.rand(-5,5),Util.rand(-5,5));
-        Position pum =Position.add(aLevel.getPlayer().getPosition(), var);
-        mon.setPosition(pum);
-        //drawEffect(new SplashEffect(pum, "Oo.", Appearance.WHITE));
-        drawEffect(EffectFactory.getSingleton().createLocatedEffect(pum, "SFX_MATERIALIZE"));
+
+	public void execute() {
+		Level aLevel = performer.getLevel();
+		aLevel.addMessage("Dracula materializes!");
+		Monster mon = (Monster) performer;
+		mon.setVisible(true);
+		Position variation = new Position(Util.rand(-5, 5), Util.rand(-5, 5));
+		Position pum = Position.add(aLevel.getPlayer().getPosition(), variation);
+		mon.setPosition(pum);
+		drawEffect(EffectFactory.getSingleton().createLocatedEffect(pum, "SFX_MATERIALIZE"));
 	}
 }

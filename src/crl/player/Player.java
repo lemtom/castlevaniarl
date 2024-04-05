@@ -42,7 +42,7 @@ public class Player extends Actor {
 	private static final long serialVersionUID = 1L;
 	private Game game;
 	private boolean doNotRecordScore = false;
-	private static int HITMAX = 60;
+	private static final int HITMAX = 60;
 	public static final Advancement ADV_MERCURY = new AdvMercury();
 	public static final Advancement ADV_VENUS = new AdvVenus();
 	public static final Advancement ADV_TERRA = new AdvTerra();
@@ -79,9 +79,9 @@ public class Player extends Actor {
 	private int breathing = 25;
 	private int gold;
 	private int soulPower;
-	private HashMap<String, Counter> weaponSkillsCounters = new HashMap<>();
-	private HashMap<String, Counter> weaponSkills = new HashMap<>();
-	private HashMap<String, String> customMessages = new HashMap<>();
+	private final HashMap<String, Counter> weaponSkillsCounters = new HashMap<>();
+	private final HashMap<String, Counter> weaponSkills = new HashMap<>();
+	private final HashMap<String, String> customMessages = new HashMap<>();
 
 	private boolean justJumped = false;
 	private Position previousPosition;
@@ -428,9 +428,7 @@ public class Player extends Actor {
 		if (c.getCount() > s.getCount() * 80 + 10) {
 			c.reset();
 			if (s.getCount() == 9) {
-				if (getFlag("WEAPON_MASTER") && getPlayerClass() != CLASS_KNIGHT) {
-
-				} else {
+				if (!(getFlag("WEAPON_MASTER") && getPlayerClass() != CLASS_KNIGHT)) {
 					UserInterface.getUI().showImportantMessage(
 							"You have become a master with " + ItemDefinition.getCategoryDescription(category) + "!");
 					s.increase();
@@ -446,9 +444,9 @@ public class Player extends Actor {
 
 	public void increaseWeaponSkillLevel(String category) {
 
-		Counter c = (weaponSkillsCounters.get(category));
+		Counter c = weaponSkillsCounters.get(category);
 
-		Counter s = (weaponSkills.get(category));
+		Counter s = weaponSkills.get(category);
 		c.reset();
 		if (s.getCount() < 10) {
 			s.increase();
@@ -588,7 +586,7 @@ public class Player extends Actor {
 		currentMysticWeapon = value;
 	}
 
-	private Hashtable<String, MenuItem> inventory = new Hashtable<>();
+	private final Map<String, MenuItem> inventory = new HashMap<>();
 
 	public String getSecondaryWeaponDescription() {
 		if (getPlayerClass() == CLASS_VAMPIREKILLER) {
@@ -685,9 +683,9 @@ public class Player extends Actor {
 
 	public int getItemCount() {
 		int eqCount = 0;
-		Enumeration<MenuItem> en = inventory.elements();
-		while (en.hasMoreElements())
-			eqCount += ((Equipment) en.nextElement()).getQuantity();
+		for (MenuItem item : inventory.values()) {
+			eqCount += ((Equipment) item).getQuantity();
+		}
 		return eqCount;
 	}
 
@@ -711,16 +709,8 @@ public class Player extends Actor {
 		return inventory.containsKey(itemID);
 	}
 
-	/*
-	 * public void removeItem(Item toRemove){
-	 * inventory.remove(toRemove.getDefinition().getID()); }
-	 */
-
 	public List<MenuItem> getInventory() {
-		ArrayList<MenuItem> ret = new ArrayList<>();
-		Enumeration<MenuItem> x = inventory.elements();
-		while (x.hasMoreElements())
-			ret.add(x.nextElement());
+        ArrayList<MenuItem> ret = new ArrayList<>(inventory.values());
 		return ret;
 	}
 
@@ -800,18 +790,15 @@ public class Player extends Actor {
 		}
 	}
 
-	public void bounceBack(Position var, int dep) {
-		Debug.enterMethod(this, "bounceBack", var + "," + dep);
+	public void bounceBack(Position variation, int dep) {
+		Debug.enterMethod(this, "bounceBack", variation + "," + dep);
 		int startingHeight = level.getMapCell(getPosition()).getHeight();
 		for (int i = 1; i < dep; i++) {
-			Position destinationPoint = Position.add(getPosition(), var);
+			Position destinationPoint = Position.add(getPosition(), variation);
 			Cell destinationCell = level.getMapCell(destinationPoint);
-			/*
-			 * if (destinationCell == null) break out;
-			 */
 			if (destinationCell == null) {
 				if (!level.isValidCoordinate(destinationPoint)) {
-					destinationPoint = Position.subs(destinationPoint, var);
+					destinationPoint = Position.subs(destinationPoint, variation);
 					landOn(destinationPoint);
 					break;
 				}
@@ -1524,7 +1511,6 @@ public class Player extends Actor {
 
 	public boolean isEthereal() {
 		return hasCounter(Consts.C_MYSTMORPH) || hasCounter(Consts.C_MYSTMORPH2);
-		// return false;
 	}
 
 	public boolean isFlying() {
@@ -1608,7 +1594,7 @@ public class Player extends Actor {
 		}
 	}
 
-	private ArrayList<MenuItem> availableSkills = new ArrayList<>(10);
+	private final ArrayList<MenuItem> availableSkills = new ArrayList<>(10);
 
 	public List<MenuItem> getAvailableSkills() {
 		availableSkills.clear();
@@ -2405,7 +2391,7 @@ public class Player extends Actor {
 				} };
 	}
 
-	private List<Advancement> tmpAvailableAdvancements = new ArrayList<>();
+	private final List<Advancement> tmpAvailableAdvancements = new ArrayList<>();
 
 	public List<Advancement> getAvailableAdvancements() {
 		tmpAvailableAdvancements.clear();
@@ -2619,7 +2605,7 @@ public class Player extends Actor {
 		this.bannedArmors = bannedArmors;
 	}
 
-	private HashMap<String, Integer> lastIncrements = new HashMap<>();
+	private final HashMap<String, Integer> lastIncrements = new HashMap<>();
 
 	public void addLastIncrement(String key, int value) {
 		Integer current = lastIncrements.get(key);
@@ -2652,7 +2638,7 @@ public class Player extends Actor {
 		this.breathing = breathing;
 	}
 
-	private ArrayList<MenuItem> counteredItems = new ArrayList<>();
+	private final ArrayList<MenuItem> counteredItems = new ArrayList<>();
 
 	public void addCounteredItem(Item i) {
 		counteredItems.add(i);

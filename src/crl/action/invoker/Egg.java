@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class Egg extends HeartAction {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public int getHeartCost() {
 		return 1;
 	}
@@ -26,7 +27,7 @@ private static final long serialVersionUID = 1L;
 	}
 
 	@Override
-	
+
 	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
@@ -68,7 +69,7 @@ private static final long serialVersionUID = 1L;
 			for (int y = flameOrigin.y - 1; y <= flameOrigin.y + 1; y++) {
 				Position destinationPoint = new Position(x, y, flameOrigin.z);
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-				if (destinationFeature != null && destinationFeature.isDestroyable()) {
+				if (checkIfDestroyable(destinationFeature)) {
 					message.append("The ").append(destinationFeature.getDescription()).append(" is scratched");
 					Feature prize = destinationFeature.damage(aPlayer, damage);
 					if (prize != null) {

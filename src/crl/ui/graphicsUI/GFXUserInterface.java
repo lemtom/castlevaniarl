@@ -67,7 +67,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	private boolean flipFacing;
-	private ArrayList<String> messageHistory = new ArrayList<>(10);
+	private final ArrayList<String> messageHistory = new ArrayList<>(10);
 
 	// Relations
 
@@ -153,6 +153,30 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private Position CAMERA = new Position(-32, -32); // TODO: Read from configuration
 	private int cameraScale = 2; // TODO: Read from configuration
+
+	private int getScrX(int x) {
+		return getScrX(x, 0);
+	}
+
+	private int getScrX(int x, GFXAppearance app) {
+		return getScrX(x, app.getSuperWidth());
+	}
+
+	private int getScrX(int x, int superWidth) {
+		return (PC_POS.x - xrange + x) * STANDARD_WIDTH - superWidth;
+	}
+
+	private int getScrY(int y, GFXAppearance app) {
+		return getScrY(y, app, 17);
+	}
+
+	private int getScrY(int y, int cellHeight, GFXAppearance app) {
+		return getScrY(y, app, 4 * cellHeight);
+	}
+
+	private int getScrY(int y, GFXAppearance app, int i) {
+		return (PC_POS.y - yrange + y) * STANDARD_WIDTH - i - app.getSuperHeight();
+	}
 
 	public void setFlipFacing(boolean val) {
 		flipFacing = val;
@@ -309,7 +333,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				}
 			}
 			messageBox.setText(looked);
-			drawImageVP((PC_POS.x + offset.x) * 32 - 2, (PC_POS.y + offset.y) * 32 - 2 - 4 * cellHeight, TILE_SCAN);
+			drawImageVP((PC_POS.x + offset.x) * STANDARD_WIDTH - 2,
+					(PC_POS.y + offset.y) * STANDARD_WIDTH - 2 - 4 * cellHeight, TILE_SCAN);
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
 			while (x.code != CharKey.SPACE && x.code != CharKey.m && x.code != CharKey.ESC && !x.isArrow())
@@ -438,115 +463,132 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 					drawIfEmptyOrAir(rcells, y, x);
 				} else {
 					cellHeight = vcells[x][y].getHeight();
-					FOVMask[PC_POS.x - xrange + x][PC_POS.y - yrange + y] = true;
-					String bloodLevel = level.getBloodAt(runner);
-					GFXAppearance cellApp = (GFXAppearance) vcells[x][y].getAppearance();
-
-					boolean frosty = level.getFrostAt(runner) != 0;
-					// TODO: Apply a blue tint
-					int depthFromPlayer = level.getDepthFromPlayer(player.getPosition().x - xrange + x,
-							player.getPosition().y - yrange + y);
-					if (depthFromPlayer != 0) {
-						drawImageVP((PC_POS.x - xrange + x) * 32,
-								(PC_POS.y - yrange + y) * 32 + depthFromPlayer * 10 - 17, cellApp.getDarkImage());
-					} else {
-						drawTimeOfDay(y, x, cellApp);
-					}
-					if (bloodLevel != null) {
-						drawBloodLevel(y, x, cellHeight, bloodLevel, cellApp);
-					}
+					drawOther(vcells, runner, y, x, cellHeight);
 				}
 				runner.x++;
 			}
 			runner.x = player.getPosition().x - xrange;
 			for (int x = 0; x < vcells.length; x++) {
-				int cellHeight = 0;
-				if (vcells[x][y] != null) {
-					cellHeight = vcells[x][y].getHeight();
-					Feature feat = level.getFeatureAt(runner);
-					if (checkVisible(feat)) {
-						GFXAppearance featApp = (GFXAppearance) feat.getAppearance();
-						drawImageVP((PC_POS.x - xrange + x) * 32 - featApp.getSuperWidth(),
-								(PC_POS.y - yrange + y) * 32 - 4 * cellHeight - featApp.getSuperHeight(),
-								featApp.getImage());
-
-					}
-
-					SmartFeature sfeat = level.getSmartFeature(runner);
-					if (checkVisible(sfeat)) {
-						GFXAppearance featApp = (GFXAppearance) sfeat.getAppearance();
-						drawImageVP((PC_POS.x - xrange + x) * 32 - featApp.getSuperWidth(),
-								(PC_POS.y - yrange + y) * 32 - 4 * cellHeight - featApp.getSuperHeight(),
-								featApp.getImage());
-
-					}
-
-					List<MenuItem> items = level.getItemsAt(runner);
-					Item item = null;
-					if (items != null) {
-						item = (Item) items.get(0);
-					}
-					if (checkVisible(item)) {
-						GFXAppearance itemApp = (GFXAppearance) item.getAppearance();
-						drawImageVP((PC_POS.x - xrange + x) * 32 - itemApp.getSuperWidth(),
-								(PC_POS.y - yrange + y) * 32 - 4 * cellHeight - itemApp.getSuperHeight(),
-								itemApp.getImage());
-
-					}
-
-					if (yrange == y && x == xrange) {
-						if (player.isInvisible()) {
-							drawImageVP(PC_POS.x * 32, PC_POS.y * 32 - 4 * cellHeight,
-									((GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance("SHADOW"))
-											.getImage());
-						} else {
-							GFXAppearance playerAppearance = (GFXAppearance) player.getAppearance();
-							BufferedImage playerImage = (BufferedImage) playerAppearance.getImage();
-							if (flipFacing) {
-								playerImage = ImageUtils.vFlip(playerImage);
-							}
-
-							int waterBonus = (level.getMapCell(player.getPosition()) != null
-									&& level.getMapCell(player.getPosition()).isShallowWater()) ? 16 : 0;
-							drawImageVP(PC_POS.x * 32 - playerAppearance.getSuperWidth(), PC_POS.y * 32
-									- 4 * player.getStandingHeight() - playerAppearance.getSuperHeight() + waterBonus,
-									playerImage);
-						}
-					}
-					Monster monster = level.getMonsterAt(runner);
-
-					if (checkVisible(monster)) {
-						GFXAppearance monsterApp = (GFXAppearance) monster.getAppearance();
-
-						int swimBonus = (monster.canSwim() && level.getMapCell(runner) != null
-								&& level.getMapCell(runner).isShallowWater()) ? 16 : 0; // TODO: Overlap water on the
-																						// monster, draw it lowly
-						drawImageVP((PC_POS.x - xrange + x) * 32 - monsterApp.getSuperWidth(),
-								(PC_POS.y - yrange + y) * 32 - 4 * cellHeight - monsterApp.getSuperHeight() + swimBonus,
-								monsterApp.getImage());
-					}
-					// Draw Masks
-					Color mask = null;
-
-					// Water
-					if (vcells[x][y].isWater()) {
-						if (level.canFloatUpward(runner)) {
-							mask = WATERCOLOR;
-						} else {
-							mask = WATERCOLOR_BLOCKED;
-
-						}
-					}
-					if (mask != null) {
-						si.getGraphics2D().setColor(mask);
-						si.getGraphics2D().fillRect((PC_POS.x - xrange + x) * STANDARD_WIDTH + CAMERA.x,
-								(PC_POS.y - yrange + y) * STANDARD_WIDTH + CAMERA.y, STANDARD_WIDTH, STANDARD_WIDTH);
-					}
-				}
+				drawCell(vcells, runner, y, x);
 				runner.x++;
 			}
 			runner.x = player.getPosition().x - xrange;
 			runner.y++;
+		}
+	}
+
+	private void drawCell(Cell[][] vcells, Position runner, int y, int x) {
+		int cellHeight = 0;
+		if (vcells[x][y] != null) {
+			cellHeight = vcells[x][y].getHeight();
+
+			drawFeatures(runner, y, x, cellHeight);
+			drawItem(runner, y, x, cellHeight);
+
+			if (yrange == y && x == xrange) {
+				drawPlayer(cellHeight);
+			}
+			drawMonster(runner, y, x, cellHeight);
+			drawMasks(vcells, runner, y, x);
+		}
+	}
+
+	private void drawMasks(Cell[][] vcells, Position runner, int y, int x) {
+		Color mask = null;
+
+		// Water
+		if (vcells[x][y].isWater()) {
+			if (level.canFloatUpward(runner)) {
+				mask = WATERCOLOR;
+			} else {
+				mask = WATERCOLOR_BLOCKED;
+
+			}
+		}
+		if (mask != null) {
+			si.getGraphics2D().setColor(mask);
+			si.getGraphics2D().fillRect((PC_POS.x - xrange + x) * STANDARD_WIDTH + CAMERA.x,
+					(PC_POS.y - yrange + y) * STANDARD_WIDTH + CAMERA.y, STANDARD_WIDTH, STANDARD_WIDTH);
+		}
+	}
+
+	private void drawMonster(Position runner, int y, int x, int cellHeight) {
+		Monster monster = level.getMonsterAt(runner);
+
+		if (checkVisible(monster)) {
+			GFXAppearance monsterApp = (GFXAppearance) monster.getAppearance();
+
+			int swimBonus = (monster.canSwim() && level.getMapCell(runner) != null
+					&& level.getMapCell(runner).isShallowWater()) ? 16 : 0;
+			// TODO: Overlap water on the monster, draw it lowly
+			drawImageVP(getScrX(x, monsterApp), getScrY(y, cellHeight, monsterApp) + swimBonus, monsterApp.getImage());
+		}
+	}
+
+	private void drawPlayer(int cellHeight) {
+		if (player.isInvisible()) {
+			drawImageVP(PC_POS.x * STANDARD_WIDTH, PC_POS.y * STANDARD_WIDTH - 4 * cellHeight,
+					((GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance("SHADOW")).getImage());
+		} else {
+			GFXAppearance playerAppearance = (GFXAppearance) player.getAppearance();
+			BufferedImage playerImage = (BufferedImage) playerAppearance.getImage();
+			if (flipFacing) {
+				playerImage = ImageUtils.vFlip(playerImage);
+			}
+
+			int waterBonus = level.getMapCell(player.getPosition()) != null
+					&& level.getMapCell(player.getPosition()).isShallowWater() ? 16 : 0;
+			drawImageVP(
+					PC_POS.x * STANDARD_WIDTH - playerAppearance.getSuperWidth(), PC_POS.y * STANDARD_WIDTH
+							- 4 * player.getStandingHeight() - playerAppearance.getSuperHeight() + waterBonus,
+					playerImage);
+		}
+	}
+
+	private void drawItem(Position runner, int y, int x, int cellHeight) {
+		List<MenuItem> items = level.getItemsAt(runner);
+		Item item = null;
+		if (items != null) {
+			item = (Item) items.get(0);
+		}
+		if (checkVisible(item)) {
+			GFXAppearance itemApp = (GFXAppearance) item.getAppearance();
+			drawImageVP(getScrX(x, itemApp), getScrY(y, cellHeight, itemApp), itemApp.getImage());
+
+		}
+	}
+
+	private void drawFeatures(Position runner, int y, int x, int cellHeight) {
+		Feature feat = level.getFeatureAt(runner);
+		if (checkVisible(feat)) {
+			GFXAppearance featApp = (GFXAppearance) feat.getAppearance();
+			drawImageVP(getScrX(x, featApp), getScrY(y, cellHeight, featApp), featApp.getImage());
+
+		}
+		SmartFeature sfeat = level.getSmartFeature(runner);
+		if (checkVisible(sfeat)) {
+			GFXAppearance featApp = (GFXAppearance) sfeat.getAppearance();
+			drawImageVP(getScrX(x, featApp), getScrY(y, cellHeight, featApp), featApp.getImage());
+		}
+	}
+
+	private void drawOther(Cell[][] vcells, Position runner, int y, int x, int cellHeight) {
+		FOVMask[PC_POS.x - xrange + x][PC_POS.y - yrange + y] = true;
+		String bloodLevel = level.getBloodAt(runner);
+		GFXAppearance cellApp = (GFXAppearance) vcells[x][y].getAppearance();
+
+		boolean frosty = level.getFrostAt(runner) != 0;
+		// TODO: Apply a blue tint
+		int depthFromPlayer = level.getDepthFromPlayer(player.getPosition().x - xrange + x,
+				player.getPosition().y - yrange + y);
+		if (depthFromPlayer != 0) {
+			drawImageVP(getScrX(x), (PC_POS.y - yrange + y) * STANDARD_WIDTH + depthFromPlayer * 10 - 17,
+					cellApp.getDarkImage());
+		} else {
+			drawTimeOfDay(y, x, cellApp);
+		}
+		if (bloodLevel != null) {
+			drawBloodLevel(y, x, cellHeight, bloodLevel, cellApp);
 		}
 	}
 
@@ -561,8 +603,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			break;
 		}
 		if (img != null) {
-			drawImageVP((PC_POS.x - xrange + x) * 32,
-					(PC_POS.y - yrange + y) * 32 - 4 * cellHeight - cellApp.getSuperHeight(), img);
+			drawImageVP(getScrX(x), getScrY(y, cellHeight, cellApp), img);
 		}
 	}
 
@@ -572,7 +613,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			img = cellApp.getImage();
 		else
 			img = cellApp.getNiteImage();
-		drawImageVP((PC_POS.x - xrange + x) * 32, (PC_POS.y - yrange + y) * 32 - 17 - cellApp.getSuperHeight(), img);
+		drawImageVP(getScrX(x), getScrY(y, cellApp), img);
 	}
 
 	private void drawIfEmptyOrAir(Cell[][] rcells, int y, int x) {
@@ -584,13 +625,11 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 					cellImage = app.getDarkImage();
 				else
 					cellImage = app.getDarkniteImage();
-				drawImageVP((PC_POS.x - xrange + x) * 32, (PC_POS.y - yrange + y) * 32 - 17 - app.getSuperHeight(),
-						cellImage);
+				drawImageVP(getScrX(x), getScrY(y, app), cellImage);
 			} catch (NullPointerException npe) {
 				Color c = si.getGraphics2D().getColor();
 				si.getGraphics2D().setColor(Color.RED);
-				si.getGraphics2D().fillRect((PC_POS.x - xrange + x) * STANDARD_WIDTH,
-						(PC_POS.y - yrange + y) * STANDARD_WIDTH - 17 - app.getSuperHeight(), STANDARD_WIDTH, 49);
+				si.getGraphics2D().fillRect(getScrX(x), getScrY(y, app), STANDARD_WIDTH, 49);
 				si.getGraphics2D().setColor(c);
 			}
 		}
@@ -618,7 +657,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private boolean isCursorEnabled = false;
 
-	class ForeBackImageTuple {
+	static class ForeBackImageTuple {
 		private final Image foreColor;
 		private final Image backColor;
 
@@ -863,11 +902,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			IMG_FIST = ImageUtils.crearImagen("gfx/crl_features.gif", 136, 0, 16, 16);
 			IMG_STOPWATCH = ImageUtils.crearImagen("gfx/crl_features.gif", 80, 0, 16, 16);
 
-			/*
-			 * COLOR_BORDER_IN = new Color(187,161,80); COLOR_BORDER_OUT = new
-			 * Color(92,78,36);
-			 */
-
 			BLOOD1 = (BufferedImage) ((GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance("BLOOD1"))
 					.getImage();
 			BLOOD2 = (BufferedImage) ((GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance("BLOOD2"))
@@ -891,7 +925,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		messageBox = new SwingInformBox();
 		/* idList = new ListBox(psi); */
 		messageBox.setBounds(16, this.configuration.getScreenHeight() - 10 * 24,
-				this.configuration.getScreenWidth() - 32, 10 * 24);
+				this.configuration.getScreenWidth() - STANDARD_WIDTH, 10 * 24);
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setBackground(Color.BLACK);
 		messageBox.setFont(FNT_MESSAGEBOX);
@@ -1014,7 +1048,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			messageBox.setText(prompt + " " + looked);
 			drawStepsTo(PC_POS.x + offset.x, PC_POS.y + offset.y, TILE_LINE_STEPS, cellHeight);
 
-			drawImageVP((PC_POS.x + offset.x) * 32 - 2, (PC_POS.y + offset.y) * 32 - 2 - 4 * cellHeight, TILE_LINE_AIM);
+			drawImageVP((PC_POS.x + offset.x) * STANDARD_WIDTH - 2,
+					(PC_POS.y + offset.y) * STANDARD_WIDTH - 2 - 4 * cellHeight, TILE_LINE_AIM);
 
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
@@ -1253,7 +1288,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return item;
 	}
 
-	private ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
+	private final ArrayList<MenuItem> vecItemUsageChoices = new ArrayList<>();
 	{
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[u]se", 1));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[e]quip", 2));
@@ -1271,7 +1306,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		enterScreen();
 		Equipment.menuDetail = true;
 		List<MenuItem> inventory = player.getInventory();
-		int xpos = 1, ypos = 0;
+		int xpos = 1;
+		int ypos = 0;
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
 		menuBox.setItemsPerPage(10);
@@ -1634,6 +1670,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		doShowInventory();
 	}
 
+	@Override
 	protected void doShowInventory() {
 		addMessage(new Message("- Cancelled", player.getPosition()));
 		eraseOnArrival = true;
@@ -1641,6 +1678,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		actionSelectedByCommand = null;
 	}
 
+	@Override
 	protected void doHelp() {
 		si.saveBuffer();
 		messageBox.setVisible(false);
@@ -1665,7 +1703,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Position tmp = line.next();
 		while (!tmp.equals(target)) {
 			tmp = line.next();
-			drawImageVP(tmp.x * 32 + 13, tmp.y * 32 + 14 - 4 * cellHeight, tile);
+			drawImageVP(tmp.x * STANDARD_WIDTH + 13, tmp.y * STANDARD_WIDTH + 14 - 4 * cellHeight, tile);
 		}
 
 	}
@@ -1673,7 +1711,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	class MerchantBox extends AddornedBorderPanel {
 		private static final long serialVersionUID = 1L;
 
-		private JList<MenuItem> lstMerchandise;
+		private final JList<MenuItem> lstMerchandise;
 		private GFXButton btnBuy;
 		private GFXButton btnExit;
 		private GFXButton btnYes;
@@ -1912,7 +1950,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	class MultiItemsBox extends AddornedBorderPanel {
 		private static final long serialVersionUID = 1L;
 
-		private JList<MenuItem> lstInventory;
+		private final JList<MenuItem> lstInventory;
 		private GFXButton btnExit;
 		private GFXButton btnOk;
 		private JLabel lblPrompt;
@@ -2064,7 +2102,6 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 	public ArrayList<String> getMessageBuffer() {
-		// return new ArrayList(messageHistory.subList(0,21));
 		if (messageHistory.size() > 20)
 			return new ArrayList<>(messageHistory.subList(messageHistory.size() - 21, messageHistory.size()));
 		else

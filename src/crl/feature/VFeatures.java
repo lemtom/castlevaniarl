@@ -6,25 +6,24 @@ import java.util.*;
 import sz.util.*;
 
 public class VFeatures implements Serializable {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	ArrayList<Feature> features;
 	HashMap<Position, Feature> mLocs;
 
-	private ArrayList<Feature> temp = new ArrayList<>();
+	private final ArrayList<Feature> temp = new ArrayList<>();
 
 	public void addFeature(Feature what) {
 		features.add(what);
-		// mLocs.put(what, what.getPosition());
 		mLocs.put(what.getPosition(), what);
 	}
 
 	public Feature[] getFeaturesAt(Position p) {
 		temp.clear();
-        for (Feature feature : features) {
-            if (feature.getPosition().equals(p)) {
-                temp.add(feature);
-            }
-        }
+		for (Feature feature : features) {
+			if (feature.getPosition().equals(p)) {
+				temp.add(feature);
+			}
+		}
 		if (temp.isEmpty()) {
 			return null;
 		} else {
@@ -33,13 +32,11 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public Feature getFeatureAt(Position p) {
-		// return (Feature) mLocs.get(p);
-        for (Feature feature : features) {
-            if (feature.getPosition().equals(p)) {
-                return feature;
-            }
-        }
-		// Debug.byebye("Feature not found! "+p);
+		for (Feature feature : features) {
+			if (feature.getPosition().equals(p)) {
+				return feature;
+			}
+		}
 		return null;
 	}
 
@@ -51,19 +48,19 @@ private static final long serialVersionUID = 1L;
 	public void removeFeature(Feature o) {
 		features.remove(o);
 		if (mLocs.containsValue(o)) {
-			mLocs.remove(o); // TODO Check, this seems weird
+			mLocs.values().remove(o);
 		}
 	}
 
-	private ArrayList<Feature> tempArrayList = new ArrayList<>();
+	private final ArrayList<Feature> tempArrayList = new ArrayList<>();
 
 	public List<Feature> getAllOf(String featureID) {
 		tempArrayList.clear();
-        for (Feature f : features) {
-            if (f.getID().equals(featureID)) {
-                tempArrayList.add(f);
-            }
-        }
+		for (Feature f : features) {
+			if (f.getID().equals(featureID)) {
+				tempArrayList.add(f);
+			}
+		}
 		return tempArrayList;
 	}
 

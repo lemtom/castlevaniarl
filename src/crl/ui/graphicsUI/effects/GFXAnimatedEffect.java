@@ -10,7 +10,8 @@ import java.awt.*;
 public class GFXAnimatedEffect extends GFXEffect{
 	private Image[] frames;
 	
-	private int xoff, yoff;
+	private int xoff;
+	private int yoff;
 	
 	public GFXAnimatedEffect(String ID, Image[] frames, int delay, GFXConfiguration configuration){
 		super (ID, delay, configuration);

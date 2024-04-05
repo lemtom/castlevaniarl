@@ -91,8 +91,8 @@ public class SerializableChecker extends ObjectOutputStream {
 			getNumObjFields = ObjectStreamClass.class.getDeclaredMethod("getNumObjFields", null);
 			getNumObjFields.setAccessible(true);
 
-			getObjFieldValues = ObjectStreamClass.class.getDeclaredMethod("getObjFieldValues",
-                    Object.class, Object[].class);
+			getObjFieldValues = ObjectStreamClass.class.getDeclaredMethod("getObjFieldValues", Object.class,
+					Object[].class);
 			getObjFieldValues.setAccessible(true);
 
 			fieldMethod = ObjectStreamField.class.getDeclaredMethod("getField", null);
@@ -101,7 +101,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			available = false;
 			throw new RuntimeException(e);
 		}
-    }
+	}
 
 	/**
 	 * Gets whether we can execute the tests. If false, calling
@@ -126,7 +126,7 @@ public class SerializableChecker extends ObjectOutputStream {
 	private Object root;
 
 	/** cache for classes - writeObject methods. */
-	private Map<Object, Boolean> writeObjectMethodCache = new HashMap<>();
+	private final Map<Object, Boolean> writeObjectMethodCache = new HashMap<>();
 
 	/** current full field description. */
 	private StringBuilder fieldDescription;
@@ -164,7 +164,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			throw new RuntimeException(e);
 		}
 
-        if (cls.isPrimitive()) {
+		if (cls.isPrimitive()) {
 			// skip
 		} else if (cls.isArray()) {
 			checked.assign(obj);
@@ -202,13 +202,9 @@ public class SerializableChecker extends ObjectOutputStream {
 				}
 			} else {
 				try {
-					writeObjectMethod = cls.getDeclaredMethod("writeObject",
-                            ObjectOutputStream.class);
-				} catch (SecurityException e) {
+					writeObjectMethod = cls.getDeclaredMethod("writeObject", ObjectOutputStream.class);
+				} catch (SecurityException | NoSuchMethodException e) {
 					// we can't access/ set accessible to true
-					writeObjectMethodCache.put(cls, Boolean.FALSE);
-				} catch (NoSuchMethodException e) {
-					// cls doesn't have that method
 					writeObjectMethodCache.put(cls, Boolean.FALSE);
 				}
 			}
@@ -276,7 +272,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			throw new RuntimeException(e);
 		}
 
-        if (numFields > 0) {
+		if (numFields > 0) {
 			ObjectStreamField[] fields = desc.getFields();
 			Object[] objVals = new Object[numFields];
 			int numPrimFields = fields.length - objVals.length;
@@ -285,7 +281,7 @@ public class SerializableChecker extends ObjectOutputStream {
 			} catch (IllegalAccessException | InvocationTargetException e) {
 				throw new RuntimeException(e);
 			}
-            for (int i = 0; i < objVals.length; i++) {
+			for (int i = 0; i < objVals.length; i++) {
 				Object val = objVals[i];
 				if (val instanceof String || val instanceof Boolean || val instanceof Class) {
 					// filter out common cases
@@ -305,7 +301,7 @@ public class SerializableChecker extends ObjectOutputStream {
 					throw new RuntimeException(e);
 				}
 
-                fieldDescription = new StringBuilder(field.toString());
+				fieldDescription = new StringBuilder(field.toString());
 				check(val);
 			}
 		}
@@ -323,13 +319,13 @@ public class SerializableChecker extends ObjectOutputStream {
 		result.append("Unable to serialize class: ");
 		result.append(type.getName());
 		result.append("\nField hierarchy is:");
-        for (TraceSlot traceSlot : traceStack) {
-            spaces.append("  ");
-            TraceSlot slot = traceSlot;
-            result.append('\n').append(spaces).append(slot.fieldDescription);
-            result.append(" [class=").append(slot.object.getClass().getName());
-            result.append(']');
-        }
+		for (TraceSlot traceSlot : traceStack) {
+			spaces.append("  ");
+			TraceSlot slot = traceSlot;
+			result.append('\n').append(spaces).append(slot.fieldDescription);
+			result.append(" [class=").append(slot.object.getClass().getName());
+			result.append(']');
+		}
 		result.append(" <----- field that is not serializable");
 		return result.toString();
 	}
@@ -387,7 +383,7 @@ public class SerializableChecker extends ObjectOutputStream {
 		/**
 		 * Construct.
 		 *
-         */
+		 */
 		public HandleTable(int initialCapacity, float loadFactor) {
 			this.loadFactor = loadFactor;
 			spine = new int[initialCapacity];
@@ -401,7 +397,7 @@ public class SerializableChecker extends ObjectOutputStream {
 		 * Assigns next available handle to given object, and returns handle value.
 		 * Handles are assigned in ascending order starting at 0.
 		 *
-         */
+		 */
 		public int assign(Object obj) {
 			if (size >= next.length) {
 				growEntries();
@@ -436,7 +432,7 @@ public class SerializableChecker extends ObjectOutputStream {
 		 * Looks up and returns handle associated with given object, or -1 if no mapping
 		 * found.
 		 *
-         */
+		 */
 		public int lookup(Object obj) {
 			if (size == 0) {
 				return -1;

@@ -1,8 +1,8 @@
 package crl.actor;
 
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import sz.util.Debug;
 import sz.util.Position;
@@ -26,32 +26,26 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	private /* transient */ int nextTime = 10;
 
 	public int getCost() {
-		// Debug.say("Cost of "+getDescription()+" "+ nextTime);
 		return nextTime;
 	}
 
 	public void reduceCost(int value) {
-		// Debug.say("Reducing cost of "+getDescription()+"by"+value+" (from
-		// "+nextTime+")");
 		nextTime = nextTime - value;
 	}
 
 	public void setNextTime(int value) {
-		// Debug.say("Next time for "+getDescription()+" "+ value);
 		nextTime = value;
 	}
 
 	protected Level level;
 
 	public void updateStatus() {
-		Enumeration<String> countersKeys = hashCounters.keys();
-		while (countersKeys.hasMoreElements()) {
-			String key = countersKeys.nextElement();
-			Integer counter = hashCounters.get(key);
+		for (Entry<String, Integer> entry : hashCounters.entrySet()) {
+			Integer counter = entry.getValue();
 			if (counter == 0) {
-				hashCounters.remove(key);
+				hashCounters.remove(entry.getKey());
 			} else {
-				hashCounters.put(key, counter - 1);
+				entry.setValue(counter - 1);
 			}
 		}
 	}
@@ -145,7 +139,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	public void message(String mess) {
 	}
 
-	protected Hashtable<String, Integer> hashCounters = new Hashtable<>();
+	protected Map<String, Integer> hashCounters = new HashMap<>();
 
 	public void setCounter(String counterID, int turns) {
 		hashCounters.put(counterID, turns);
@@ -163,7 +157,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return getCounter(counterID) > 0;
 	}
 
-	private HashMap<String, Boolean> hashFlags = new HashMap<>();
+	private final HashMap<String, Boolean> hashFlags = new HashMap<>();
 
 	public void setFlag(String flagID, boolean value) {
 		hashFlags.put(flagID, value);

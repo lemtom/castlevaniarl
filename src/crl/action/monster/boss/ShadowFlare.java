@@ -11,7 +11,8 @@ import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
 public class ShadowFlare extends Action {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
 	public String getID() {
 		return "SHADOWFLARE";
 	}
@@ -57,7 +58,7 @@ private static final long serialVersionUID = 1L;
 		Level aLevel = performer.getLevel();
 		Player aPlayer = aLevel.getPlayer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+		if (checkIfDestroyable(destinationFeature)) {
 			message = "The flares crush the " + destinationFeature.getDescription();
 			Feature prize = destinationFeature.damage(aPlayer, 4);
 			if (prize != null) {
@@ -68,5 +69,5 @@ private static final long serialVersionUID = 1L;
 		if (destinationPoint.equals(aPlayer.getPosition())) {
 			aPlayer.damage("You are burned by the shadow flare!", (Monster) performer, new Damage(3, false));
 		}
-    }
+	}
 }

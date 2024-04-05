@@ -4,9 +4,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GFXChat {
-	private ArrayList<Image> portraits = new ArrayList<>(10);
-	private ArrayList<String> names  = new ArrayList<>(10);
-	private ArrayList<String> conversations = new ArrayList<>(10);
+	private final ArrayList<Image> portraits = new ArrayList<>(10);
+	private final ArrayList<String> names  = new ArrayList<>(10);
+	private final ArrayList<String> conversations = new ArrayList<>(10);
 	
 	public void add(String name, String conversation, Image portrait){
 		names.add(name);
