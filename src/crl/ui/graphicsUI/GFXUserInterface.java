@@ -163,7 +163,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 	private int getScrX(int x, int superWidth) {
-		return (PC_POS.x - xrange + x) * STANDARD_WIDTH - superWidth;
+		return (PC_POS.x - xrange + x) * (STANDARD_WIDTH / 2) - superWidth;
 	}
 
 	private int getScrY(int y, GFXAppearance app) {
@@ -175,7 +175,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 	private int getScrY(int y, GFXAppearance app, int i) {
-		return (PC_POS.y - yrange + y) * STANDARD_WIDTH - i - app.getSuperHeight();
+		return (PC_POS.y - yrange + y) * (STANDARD_WIDTH / 2) - i - app.getSuperHeight();
 	}
 
 	public void setFlipFacing(boolean val) {
@@ -333,8 +333,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				}
 			}
 			messageBox.setText(looked);
-			drawImageVP((PC_POS.x + offset.x) * STANDARD_WIDTH - 2,
-					(PC_POS.y + offset.y) * STANDARD_WIDTH - 2 - 4 * cellHeight, TILE_SCAN);
+			drawImageVP((PC_POS.x + offset.x) * (STANDARD_WIDTH / 2) - 2,
+					(PC_POS.y + offset.y) * (STANDARD_WIDTH / 2) - 2 - 4 * cellHeight, TILE_SCAN);
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
 			while (x.code != CharKey.SPACE && x.code != CharKey.m && x.code != CharKey.ESC && !x.isArrow())
@@ -527,7 +527,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private void drawPlayer(int cellHeight) {
 		if (player.isInvisible()) {
-			drawImageVP(PC_POS.x * STANDARD_WIDTH, PC_POS.y * STANDARD_WIDTH - 4 * cellHeight,
+			drawImageVP(PC_POS.x * (STANDARD_WIDTH / 2), PC_POS.y * (STANDARD_WIDTH / 2) - 4 * cellHeight,
 					((GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance("SHADOW")).getImage());
 		} else {
 			GFXAppearance playerAppearance = (GFXAppearance) player.getAppearance();
@@ -539,7 +539,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			int waterBonus = level.getMapCell(player.getPosition()) != null
 					&& level.getMapCell(player.getPosition()).isShallowWater() ? 16 : 0;
 			drawImageVP(
-					PC_POS.x * STANDARD_WIDTH - playerAppearance.getSuperWidth(), PC_POS.y * STANDARD_WIDTH
+					PC_POS.x * (STANDARD_WIDTH / 2) - playerAppearance.getSuperWidth(), PC_POS.y * (STANDARD_WIDTH / 2)
 							- 4 * player.getStandingHeight() - playerAppearance.getSuperHeight() + waterBonus,
 					playerImage);
 		}
@@ -582,7 +582,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		int depthFromPlayer = level.getDepthFromPlayer(player.getPosition().x - xrange + x,
 				player.getPosition().y - yrange + y);
 		if (depthFromPlayer != 0) {
-			drawImageVP(getScrX(x), (PC_POS.y - yrange + y) * STANDARD_WIDTH + depthFromPlayer * 10 - 17,
+			drawImageVP(getScrX(x), (PC_POS.y - yrange + y) * (STANDARD_WIDTH / 2) + depthFromPlayer * 10 - 17,
 					cellApp.getDarkImage());
 		} else {
 			drawTimeOfDay(y, x, cellApp);
@@ -629,7 +629,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			} catch (NullPointerException npe) {
 				Color c = si.getGraphics2D().getColor();
 				si.getGraphics2D().setColor(Color.RED);
-				si.getGraphics2D().fillRect(getScrX(x), getScrY(y, app), STANDARD_WIDTH, 49);
+				si.getGraphics2D().fillRect((PC_POS.x - xrange + x) * STANDARD_WIDTH,
+						(PC_POS.y - yrange + y) * STANDARD_WIDTH - 17 - app.getSuperHeight(), STANDARD_WIDTH, 49);
 				si.getGraphics2D().setColor(c);
 			}
 		}
@@ -925,7 +926,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		messageBox = new SwingInformBox();
 		/* idList = new ListBox(psi); */
 		messageBox.setBounds(16, this.configuration.getScreenHeight() - 10 * 24,
-				this.configuration.getScreenWidth() - STANDARD_WIDTH, 10 * 24);
+				this.configuration.getScreenWidth() - (STANDARD_WIDTH / 2), 10 * 24);
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setBackground(Color.BLACK);
 		messageBox.setFont(FNT_MESSAGEBOX);
@@ -1048,8 +1049,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			messageBox.setText(prompt + " " + looked);
 			drawStepsTo(PC_POS.x + offset.x, PC_POS.y + offset.y, TILE_LINE_STEPS, cellHeight);
 
-			drawImageVP((PC_POS.x + offset.x) * STANDARD_WIDTH - 2,
-					(PC_POS.y + offset.y) * STANDARD_WIDTH - 2 - 4 * cellHeight, TILE_LINE_AIM);
+			drawImageVP((PC_POS.x + offset.x) * (STANDARD_WIDTH / 2) - 2,
+					(PC_POS.y + offset.y) * (STANDARD_WIDTH / 2) - 2 - 4 * cellHeight, TILE_LINE_AIM);
 
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
@@ -1703,7 +1704,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Position tmp = line.next();
 		while (!tmp.equals(target)) {
 			tmp = line.next();
-			drawImageVP(tmp.x * STANDARD_WIDTH + 13, tmp.y * STANDARD_WIDTH + 14 - 4 * cellHeight, tile);
+			drawImageVP(tmp.x * (STANDARD_WIDTH / 2) + 13, tmp.y * (STANDARD_WIDTH / 2) + 14 - 4 * cellHeight, tile);
 		}
 
 	}
